@@ -63,7 +63,7 @@ function Registration() {
                             <a href="#" className='navLink'>КОНТАКТЫ</a>
                         </div>
                         <div className="navButton" style={{ marginLeft: "80px" }}>
-                            <button>ВХОД</button>
+                            <Link to={"/login"}><button>ВХОД</button></Link>
                         </div>
                     </div>
                 </div>

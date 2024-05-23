@@ -16,7 +16,7 @@ const Navdash = (props) => {
             {props.cupCount}
         </div>
         <div className="rndsh gradeNum">
-            {props.gradeNum} класс
+            {props.gradeNum} Класс
         </div>
         <div className="rndsh langSelect">
             <div className="button b2" id="button-10">
