@@ -25,8 +25,8 @@ function Registration(){
             <div className="regPage">
                 <div className="regform">
                     <div className="formTitle">
-                        <h3 className='form-h3'>Создать Аккаунт для Вашего Ребенка</h3>
-                        <Link to="" className='formLink'>У меня уже есть аккаунт</Link>
+                        <h3 className='form-h3'>Создать Аккаунт</h3>
+                        <Link to={"/login"} className='formLink'>У меня уже есть аккаунт</Link>
                     </div>
                     
                     <form className='inputField' action='' method='get'>

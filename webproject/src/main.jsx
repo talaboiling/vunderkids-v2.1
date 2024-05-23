@@ -2,14 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import Heaven from './pages/Heaven.jsx'
-import Hell from './pages/Hell.jsx'
 import Registration from './pages/Registration.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Rating from './pages/dashboard_sections/Rating.jsx'
 import Progress from './pages/dashboard_sections/Pprogress.jsx'
 import Lessons from './pages/dashboard_sections/Lessons.jsx'
 import Games from './pages/dashboard_sections/Games.jsx'
+import Vhod from './pages/Login.jsx'
+
 
 import{
   createBrowserRouter,
@@ -25,6 +25,7 @@ const router = createBrowserRouter([
   {path: "/dashboard/progress", element: <Progress />},
   {path: "/dashboard/lessons", element: <Lessons/>},
   {path: "/dashboard/games", element: <Games/>},
+  {path: "/login", element: <Vhod/>}
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

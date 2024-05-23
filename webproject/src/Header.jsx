@@ -19,7 +19,7 @@ function Header() {
                         <a href="#" className='navLink'>КОНТАКТЫ</a>
                     </div>
                     <div className="navButton">
-                        <Link to={"/dashboard"}>
+                        <Link to={"/login"}>
                             <button>ВХОД</button>
                         </Link>
                         
