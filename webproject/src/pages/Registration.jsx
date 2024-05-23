@@ -1,14 +1,59 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import {Link} from "react-router-dom";
-import logoImg from "/src/assets/logo_blue.png"
-function Registration(){
-    return(
+import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+import logoImg from "/src/assets/logo_blue.png";
+
+function Registration() {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        phone: '',
+        first_name: '',
+        last_name: ''
+    });
+
+    const [responseMessage, setResponseMessage] = useState('');
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const body = {
+            email: formData.email,
+            password: formData.password,
+            phone_number: formData.phone,
+            first_name: formData.first_name,
+            last_name: formData.last_name
+        };
+
+        try {
+            const response = await fetch('http://localhost:8000/api/register-parent/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setResponseMessage(`Success: ${data.message}`);
+            } else {
+                setResponseMessage(`Error: ${data.message}`);
+            }
+        } catch (error) {
+            setResponseMessage(`Error: ${error.message}`);
+        }
+    };
+
+    return (
         <>
-        <div className="regacss">
-            <div className="navBar" style={{justifyContent:"space-around"}}>
-                    <Link to="/" style={{textDecoration:"none"}}>
-                        <img className="navLogo" src={logoImg} alt="logo" style={{marginRight:"100px"}}/>
+            <div className="regacss">
+                <div className="navBar" style={{ justifyContent: "space-around" }}>
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                        <img className="navLogo" src={logoImg} alt="logo" style={{ marginRight: "100px" }} />
                     </Link>
                     <div className="excLogo">
                         <div className="navList">
@@ -17,52 +62,44 @@ function Registration(){
                             <a href="#" className='navLink'>ОТЗЫВЫ</a>
                             <a href="#" className='navLink'>КОНТАКТЫ</a>
                         </div>
-                        <div className="navButton" style={{marginLeft:"80px"}}>
+                        <div className="navButton" style={{ marginLeft: "80px" }}>
                             <button>ВХОД</button>
                         </div>
                     </div>
-            </div>
-            <div className="regPage">
-                <div className="regform">
-                    <div className="formTitle">
-                        <h3 className='form-h3'>Создать Аккаунт</h3>
-                        <Link to={"/login"} className='formLink'>У меня уже есть аккаунт</Link>
+                </div>
+                <div className="regPage">
+                    <div className="regform">
+                        <div className="formTitle">
+                            <h3 className='form-h3'>Создать Аккаунт для Родителя</h3>
+                            <Link to="" className='formLink'>У меня уже есть аккаунт</Link>
+                        </div>
+                        <form className='inputField' onSubmit={handleSubmit}>
+                            <label htmlFor="first_name">Имя</label><br />
+                            <input type="text" id="first_name" name="first_name" placeholder='Мақсат' value={formData.first_name} onChange={handleInputChange} required /><br />
+                            
+                            <label htmlFor="last_name">Фамилия</label><br />
+                            <input type="text" id="last_name" name="last_name" placeholder='Бектұрғын' value={formData.last_name} onChange={handleInputChange} required /><br />
+                            
+                            <span className="gendemail">
+                                <span>
+                                    <label htmlFor="email">E-mail:</label><br />
+                                    <input type="email" id="email" name="email" placeholder='maksat01@example.com' value={formData.email} onChange={handleInputChange} required style={{ width: '350px' }} />
+                                </span>
+                                <span>
+                                    <label htmlFor="phone">Номер телефона</label><br />
+                                    <input type="phone" id="phone" name="phone" placeholder='+7 (777) 1234567' value={formData.phone} onChange={handleInputChange} required style={{ width: '350px' }} />
+                                </span>
+                            </span>
+                            <label htmlFor="password">Придумайте пароль:</label><br />
+                            <input type="password" id="password" name="password" placeholder='********' value={formData.password} onChange={handleInputChange} required /><br />
+                            <input type="submit" value="Регистрация" className='orangeButton' style={{ position: "relative", left: "325px", maxWidth: "200px", marginTop: "25px", marginBottom: "0" }} />
+                        </form>
+                        {responseMessage && <p>{responseMessage}</p>}
                     </div>
-                    
-                    <form className='inputField' action='' method='get'>
-                        <label for="fname">Имя Фамилия Ребенка</label><br/>
-                        <input type="text" id="fname" name="fname" placeholder='Мақсат Бектұрғын' required/><br/>
-                        <label for="birth">Дата рождения</label><br/>
-                        <input type="date" id="birth" name="birth" required/><br/>
-                        <span className="gendemail">
-                            <span>
-                                <label for="gender">Пол</label><br/>
-                                <input list="genders" name="gender" placeholder='Выбрать' required style={{maxWidth:"100px"}}/>
-                                    <datalist id='genders'>
-                                        <option value="Мальчик"/>
-                                        <option value="Девочка"/>
-                                    </datalist> <br />
-                            </span>
-                            <span>
-                                <label for="email">E-mail:</label><br/>
-                                <input type="email" id="email" name="email" placeholder='maksat01@example.com' required style={{width:'350px'}}/>
-                            </span>
-                            
-                            
-                        </span>
-                        
-                        <label for="password">Придумайте пароль:</label><br/>
-                        <input type="password" id="password" name="password" required placeholder='********'/><br/>
-                        
-                        <input type="submit" value="Регистрация" className='orangeButton' style={{position:"relative", left: "325px", maxWidth:"200px", marginTop:"25px", marginBottom:"0"}}/>
-                    </form>
-                </div> 
+                </div>
             </div>
-            
-        </div>
-            
         </>
-    )
+    );
 }
 
 export default Registration;
