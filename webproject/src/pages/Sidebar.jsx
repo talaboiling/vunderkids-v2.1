@@ -7,7 +7,10 @@ import { SidebarData } from './SidebarData';
 const Sidebar = () => {
   return (
     <div className='sidebar'>
-      <img src={logo} alt="logo" className="dashsidelogo" />
+      <Link to={"/"}>
+        <img src={logo} alt="logo" className="dashsidelogo" />
+      </Link>
+      
       <div className="excSideLogo">
         <ul className='sideItems'>
           {SidebarData.map((item, index) => {
