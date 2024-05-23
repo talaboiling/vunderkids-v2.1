@@ -16,7 +16,7 @@ const Navdash = (props) => {
             {props.cupCount}
         </div>
         <div className="rndsh gradeNum">
-            {props.gradeNum}
+            {props.gradeNum} класс
         </div>
         <div className="rndsh langSelect">
             <div className="button b2" id="button-10">
@@ -38,7 +38,7 @@ const Navdash = (props) => {
 Navdash.PropTypes={
     starCount: PropTypes.number,
     cupCount: PropTypes.number,
-    gradeNum: PropTypes.string,
+    gradeNum: PropTypes.number,
     langSelect: PropTypes.bool,
     notif: PropTypes.number,
 }
@@ -46,7 +46,7 @@ Navdash.PropTypes={
 Navdash.defaultProps={
     starCount: 0,
     cupCount: 0,
-    gradeNum: "0-1 класс",
+    gradeNum: 1,
     langSelect: false,
     notif: 0,
 }
