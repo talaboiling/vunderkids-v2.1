@@ -8,9 +8,26 @@ import mathIcon from '../../assets/calculator.png';
 import englishIcon from '../../assets/english.png';
 
 const Lessons = () => {
+  const [user, setUser] = useState({ first_name: 'Ученик', last_name: '' }); // Default values
   const [courses, setCourses] = useState([]); // State to store courses
 
   useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const accessToken = localStorage.getItem('access_token');
+      if (accessToken) {
+        try {
+          const response = await axios.get('http://localhost:8000/api/current-user', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          });
+          setUser(response.data.user);
+        } catch (error) {
+          console.error('Error fetching current user:', error);
+        }
+      }
+    };
+
     const fetchCourses = async () => {
       const accessToken = localStorage.getItem('access_token');
       if (accessToken) {
@@ -27,6 +44,7 @@ const Lessons = () => {
       }
     };
 
+    fetchCurrentUser();
     fetchCourses();
   }, []);
 
@@ -34,7 +52,7 @@ const Lessons = () => {
     <div className='rtdash'>
       <Sidebar />
       <div className="centralLessons">
-        <Navdash starCount={212} cupCount={515} notif={3} />
+        <Navdash starCount={user.stars} cupCount={user.cups} gradeNum={user.grade} notif={3} />
         <div className="mainContent">
           <div className="coursesCards">
             {courses.map(course => (

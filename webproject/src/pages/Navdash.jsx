@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import '/src/dashboard.css'
 import PropTypes from 'prop-types';
 import staricon from '../assets/navStars.png'
@@ -5,18 +7,39 @@ import cupicon from '../assets/navCups.png'
 import bellicon from '../assets/navBell.png'
 
 const Navdash = (props) => {
+    const [user, setUser] = useState({ first_name: 'Ученик', last_name: '' }); // Default values
+    useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const accessToken = localStorage.getItem('access_token');
+      if (accessToken) {
+        try {
+          const response = await axios.get('http://localhost:8000/api/current-user', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          });
+          setUser(response.data.user);
+        } catch (error) {
+          console.error('Error fetching current user:', error);
+        }
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+  
   return (
     <div className='navdashboard'>
         <div className="lndsh starCount">
             <img src={staricon} alt="stars" className='starIcon'/>
-            {props.starCount}
+            {user.stars} 
         </div>
         <div className="lndsh cupCount">
             <img src={cupicon} alt="cups" className="cupIcon" />
-            {props.cupCount}
+            {user.cups}
         </div>
         <div className="rndsh gradeNum">
-            {props.gradeNum} Класс
+            {user.grade} Класс
         </div>
         <div className="rndsh langSelect">
             <div className="button b2" id="button-10">
