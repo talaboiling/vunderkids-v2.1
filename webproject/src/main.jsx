@@ -5,6 +5,11 @@ import './index.css'
 import Heaven from './pages/Heaven.jsx'
 import Hell from './pages/Hell.jsx'
 import Registration from './pages/Registration.jsx'
+import Dashboard from './pages/Dashboard.jsx'
+import Rating from './pages/dashboard_sections/Rating.jsx'
+import Progress from './pages/dashboard_sections/Pprogress.jsx'
+import Lessons from './pages/dashboard_sections/Lessons.jsx'
+import Games from './pages/dashboard_sections/Games.jsx'
 
 import{
   createBrowserRouter,
@@ -14,9 +19,12 @@ import{
 
 const router = createBrowserRouter([
   {path: "/", element: <App />},
-  {path: "/heaven", element: <Heaven />},
-  {path: "/hell", element: <Hell />},
   {path: "/registration", element: <Registration />},
+  {path: "/dashboard", element: <Dashboard />},
+  {path: "/dashboard/rating", element: <Rating />},
+  {path: "/dashboard/progress", element: <Progress />},
+  {path: "/dashboard/lessons", element: <Lessons/>},
+  {path: "/dashboard/games", element: <Games/>},
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

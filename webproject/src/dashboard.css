@@ -1,0 +1,431 @@
+.rtdash{
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    color: #000000;
+    border: none;
+    margin:0;
+    padding:0;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-decoration: none;
+    height: 100vh;
+    width: 99vw;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+}
+
+.navdashboard{
+    font-weight: 700;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr 1fr 1fr;
+    width: 100%;
+    height: fit-content;
+    padding: 44px 77px;
+}
+
+.lndsh{
+    width: fit-content;
+    height: min-content;
+    padding: 5px 32px;
+    border-radius: 9px;
+    box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.rndsh{
+    width: fit-content;
+    height: min-content;
+    padding: 5px 20px;
+    border-radius: 9px;
+    background-color: #339CBD;
+    color: white;
+    display: grid;
+    justify-self: end;
+}
+
+.starCount{
+    position: relative;
+}
+
+.starIcon{
+    position: absolute;
+    top: -10px;
+    right: 70px;
+}
+
+.cupCount{
+    position: relative;
+}
+
+.cupIcon{
+    position: absolute;
+    top: -6px;
+    right: 70px;
+}
+
+.langSelect{
+    margin: 0;
+    padding: 0;
+}
+
+.notif{
+    position: relative;
+    padding: 5px 25px 5px 30px;
+}
+
+.bellIcon{
+    position: absolute;
+    top: -6px;
+    right: 45px;
+}
+
+
+.knobs {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.button {
+    position: relative;
+    
+    width: 120px;
+    height: 30px;
+    overflow: visible;
+}
+
+.button.b2 {
+    border-radius: 9px;
+    box-shadow: inset 0 2px 4px #0000007b;
+}
+
+.checkbox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.knobs {
+    z-index: 2;
+}
+
+#button-10 .knobs:before,
+#button-10 .knobs:after {
+    position: absolute;
+    width: 60px;
+    height: 105%;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 2px;
+    transition: 0.3s ease all;
+    
+}
+
+#button-10 .knobs span {
+    position: absolute;
+    padding: 5px 6px;
+}
+
+#button-10 .knobs:before {
+    content: "";
+    left: 0;
+    background-color: #ffffff;
+    box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.15);
+    border-radius: 9px;
+}
+
+#button-10 .knobs:after {
+    content: "РУС";
+    right: 0;
+    padding: 5px 0;
+    color: #ffffff;
+}
+
+#button-10 .knobs span {
+    display: inline-block;
+    left: 4px;
+    color: #3F4042;
+    z-index: 1;
+}
+
+#button-10 .checkbox:checked + .knobs span {
+    color: #fff;
+}   
+
+#button-10 .checkbox:checked + .knobs:before {
+    left: 60px;
+    background-color: #ffffff;
+}
+
+#button-10 .checkbox:checked + .knobs:after {
+    color: #3F4042;
+}
+
+.sidebar{
+    height: fit-content;
+    min-width: max-content;
+    border-radius: 55px;
+    background-color: #97D4E7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    padding-bottom: 33px;
+    margin: 50px;
+}
+
+.dashsidelogo{
+    max-width: 100%;
+    height: fit-content;
+    background-color: #2FB0D7;
+    border-radius: 20px;
+    padding: 18px 26px;
+}
+
+.linkbuttonVal{
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: white;
+    border-radius: 30px;
+    padding: 20px 30px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    align-items: center;
+    transition: .2s ease-in-out;
+}
+
+#active .linkbuttonVal{
+    background-color: #AFDEEC;
+    color:white;
+    opacity: 100%;
+}
+
+.linkbuttonVal #linktit{
+    opacity: 0;
+    transition: .2s ease-in-out
+}
+
+.linkbuttonVal:hover #linktit{
+    opacity: 100%;
+}
+
+#active .linkbuttonVal #linktit{
+    opacity: 100%;
+}
+
+.linkbuttonVal:hover {
+    background-color: #AFDEEC;
+    color:white;
+    opacity: 100%;
+}
+
+
+
+.excSideLogo{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+}
+
+.exitButton{
+    background-color: transparent;
+    font-weight: 700;
+    font-size: large;
+}
+
+.exitButton:hover{
+    background-color: transparent;
+}
+
+.sideItems{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.centralDash{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.dashProfile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 35px 50px;
+    width: fit-content;
+    gap: 2rem;
+}
+
+.settings{
+    text-decoration: none;
+    border: none;
+    width: 50px;
+    height: 50px;
+    outline: none; /* Remove outline */
+    caret-color: transparent; /* Remove text caret */
+    background-image: url(./assets/settings_icon.png); /* Add icon */
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+}
+
+.settings:hover{
+    text-decoration: none;
+}
+
+.prowfirst{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.sidepfp{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.sidepfp::before{
+    content: "";
+    fill: #339CBD;
+    background-color: #339CBD;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: -10px;
+}
+
+.league{
+    background-image: url(./assets/league_back.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 35px;
+    color: #1282A4;
+    padding: 25px;
+    width: 100%;
+    height: 100px;
+}
+
+.studentsList{
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    overflow-y: scroll;
+
+}
+
+.ratingItem{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 10px;
+    border-radius: 25px;
+    margin-bottom: 10px;
+}
+
+.pfprating{
+    margin-right: 15px;
+}
+
+.namePoints{
+    color: white;
+}
+
+.mainContent{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.helloContent{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #2fb0d73f;
+    border-radius: 35px;
+    margin-bottom: 35px;
+    position: relative;
+    overflow-y: visible;
+    background-image: url(./assets/helloContBack.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.helloCont{
+    padding:60px;
+
+}
+
+.courseItem{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 20px;
+    border-radius: 35px;
+    margin-bottom: 10px;
+    box-shadow: 0px 5px 12px #00000035;
+}
+
+.courseItemLeft{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-right: 30px;
+}
+
+.coursesCards{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: 20px
+}
+
+.progressChart{
+    align-self: center;
+}
+
+.ratinginfo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.ratingCentral{
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    gap: 5rem;
+}
+
+.ratingMain{
+    margin-left: 50px;
+}
+
+.rtrat{
+    display: grid;
+    grid-template-columns: 1.5fr 5fr 1fr;
+}
+
+.progcalendar{
+    box-shadow: none;
+}
