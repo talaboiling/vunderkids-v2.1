@@ -9,6 +9,7 @@ import Progress from './pages/dashboard_sections/Pprogress.jsx'
 import Lessons from './pages/dashboard_sections/Lessons.jsx'
 import Games from './pages/dashboard_sections/Games.jsx'
 import Vhod from './pages/Login.jsx'
+import Activate from './pages/Activate.jsx'
 
 
 import{
@@ -25,7 +26,8 @@ const router = createBrowserRouter([
   {path: "/dashboard/progress", element: <Progress />},
   {path: "/dashboard/lessons", element: <Lessons/>},
   {path: "/dashboard/games", element: <Games/>},
-  {path: "/login", element: <Vhod/>}
+  {path: "/login", element: <Vhod/>},
+  {path: "/activate/:activation_token", element: <Activate/>}
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

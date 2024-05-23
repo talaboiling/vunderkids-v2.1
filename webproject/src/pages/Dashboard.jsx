@@ -7,6 +7,8 @@ import Navdash from './Navdash';
 import Profile from './Profile';
 import lionimg from '../assets/lion_hellocont.png';
 import somechart from '../assets/temp_progres.png';
+import mathIcon from '../assets/calculator.png'
+import englishIcon from '../assets/english.png'
 
 const Dashboard = () => {
   const [user, setUser] = useState({ first_name: 'Ученик', last_name: '' }); // Default values
@@ -79,7 +81,7 @@ const Dashboard = () => {
                     <button style={{ backgroundColor: "#F8753D", fontWeight: "550", fontSize: "large", borderColor: "#FFB99C", boxShadow: "none" }}>Начать</button>
                   </Link>
                 </div>
-                <img src={course.name === "Математика" ? '../assets/calculator.png' : '../assets/english.png'} alt={course.name} style={{ backgroundColor: "#F8753D", border: "1px solid black", borderRadius: "21px" }} />
+                <img src={course.name === "Математика" ? mathIcon : englishIcon }alt={course.name} style={{ backgroundColor: "#F8753D", border: "1px solid black", borderRadius: "21px" }} />
               </div>
             ))}
           </div>
