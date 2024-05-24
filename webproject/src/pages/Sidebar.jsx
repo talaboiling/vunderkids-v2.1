@@ -12,6 +12,11 @@ const Sidebar = () => {
     navigate('/login'); // Redirect to the homepage or login page
   };
 
+  const goBack = () => {
+    //need to use condition to check if this is a parent or a child
+    navigate('/parent');
+  };
+
   return (
     <div className='sidebar'>
       <Link to={"/"}>
@@ -38,8 +43,8 @@ const Sidebar = () => {
             );
           })}
         </ul>
-        
-        <button className="exitButton" onClick={handleLogout}>Выйти</button>
+        <button className="exitButton" onClick={goBack}>Назад</button>
+        <button className="exitButton" onClick={handleLogout} style={{backgroundColor:"rgb(204, 47, 47)"}}>Выйти из аккаунта</button>
       </div>
     </div>
   );

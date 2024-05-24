@@ -240,6 +240,7 @@
     background-color: transparent;
     font-weight: 700;
     font-size: large;
+    margin-bottom: 20px;
 }
 
 .exitButton:hover{
@@ -335,7 +336,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px 10px;
+    padding: 5px 20px;
     border-radius: 25px;
     margin-bottom: 10px;
 }
@@ -396,6 +397,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    width:fit-content;
     flex-wrap: wrap;
     margin: 20px
 }
@@ -474,27 +476,22 @@
 
 dialog{
     border: none;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 45px;
     padding: 40px 60px;
-    animation: fadeIn .8s ease both;
+    animation: fadeIn .5s ease both;
+    backdrop-filter: blur(3px);
 }
-
+/*`parentdash ${showModal || showDeleteModal ? 'blurred' : ''}`*/
 dialog::backdrop{
     backdrop-filter: blur(3px);
-    animation: fadeIn .8s ease both;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    animation: fadeIn .5s ease both;
 
 }
-
-
 
 .gendgrade{
     display: flex;
@@ -519,15 +516,27 @@ dialog::backdrop{
 
 
 .childcard {
-    background-color: #ffffff70;
+    background-color: #ffffff;
     border-radius: 10px;
     padding: 20px;
     margin: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    gap: 1rem;
+  }
+
+  .childcardBtns{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin-top: 50px;
   }
   
-  .childcard img {
+  img.childcard  {
     border-radius: 50%;
     width: 100px;
     height: 100px;
@@ -551,10 +560,49 @@ dialog::backdrop{
   .addchildbtn img {
     margin-bottom: 10px;
   }
+
+  .modal-backdrop{
+    
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+  }
+
+  @keyframes fadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(3px);
+    }
+
+}
+
+.blurred {
+    filter: blur(3px);
+    transition: filter 0.3s ease;
+  }
+
+  .modal{
+    width: fit-content;
+    height: fit-content;
+    backdrop-filter: blur(3px);
+  }
   
   .modal-content {
     position: relative;
+    width: max-content;
+    height: max-content;
     padding: 20px;
+    animation: fadeIn .4s ease both;
+    backdrop-filter: blur(3px);
+    z-index: 1001;
+  }
+
+  .modal-content::backdrop{
+    backdrop-filter: blur(3px);
+    animation: fadeIn .4s ease both;
   }
   
   .modal-content .inputField {
@@ -562,16 +610,8 @@ dialog::backdrop{
     flex-direction: column;
   }
   
-  .modal-content .inputField label {
-    margin-top: 10px;
-  }
-  
-  .modal-content .inputField input {
-    margin-bottom: 10px;
-  }
   
   .modal-content .childavatar img {
-    margin-bottom: 10px;
     width: 100px;
     height: 100px;
     border-radius: 50%;
