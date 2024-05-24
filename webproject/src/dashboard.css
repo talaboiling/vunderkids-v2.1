@@ -396,6 +396,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    flex-wrap: wrap;
     margin: 20px
 }
 
@@ -428,4 +429,85 @@
 
 .progcalendar{
     box-shadow: none;
+}
+
+.parentdash{
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    background-image: url(./assets/parentdash_back.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-y: 80%;
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.mailname{
+    border: 1px solid rgb(205, 205, 205);
+    border-radius: 17px;
+    padding: 10px 30px;
+    font-weight: 700;
+}
+
+.addchildren{
+    margin: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+    justify-content: center;
+}
+
+.addchildbtn{
+    background-color: #ffffff70;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: blur(4px);
+    height: 70vh;
+    transition: ease-in-out 0.3s;
+}
+
+.addchildbtn:hover{
+    background-color: #ffffff70;
+    transform: scale(1.03);
+}
+
+dialog{
+    border: none;
+    border-radius: 45px;
+    padding: 40px 60px;
+    animation: fadeIn .8s ease both;
+}
+
+dialog::backdrop{
+    backdrop-filter: blur(3px);
+    animation: fadeIn .8s ease both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+
+.gendgrade{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    max-width: 90%;
+    justify-self: center;
+}
+
+.childavatar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 20px;
 }

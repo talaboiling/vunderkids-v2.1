@@ -35,7 +35,7 @@ function Login() {
 
 
                 setResponseMessage('Login successful!');
-                navigate('/dashboard'); // Redirect to dashboard
+                navigate('/parent'); // Redirect to dashboard
             } else {
                 setResponseMessage('Login failed!');
             }
@@ -53,10 +53,10 @@ function Login() {
                     </Link>
                     <div className="excLogo">
                         <div className="navList">
-                            <a href="#" className='navLink'>О ПЛАТФОРМЕ</a>
-                            <a href="#" className='navLink'>ОБУЧЕНИЕ</a>
-                            <a href="#" className='navLink'>ОТЗЫВЫ</a>
-                            <a href="#" className='navLink'>КОНТАКТЫ</a>
+                            <a href="/#oplatforme" className='navLink'>О ПЛАТФОРМЕ</a>
+                            <a href="/#obuchenie" className='navLink'>ОБУЧЕНИЕ</a>
+                            <a href="/#otzyvy" className='navLink'>ОТЗЫВЫ</a>
+                            <a href="/#contakty" className='navLink'>КОНТАКТЫ</a>
                         </div>
                     </div>
                 </div>

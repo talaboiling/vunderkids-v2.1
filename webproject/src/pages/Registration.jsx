@@ -57,10 +57,10 @@ function Registration() {
                     </Link>
                     <div className="excLogo">
                         <div className="navList">
-                            <a href="#" className='navLink'>О ПЛАТФОРМЕ</a>
-                            <a href="#" className='navLink'>ОБУЧЕНИЕ</a>
-                            <a href="#" className='navLink'>ОТЗЫВЫ</a>
-                            <a href="#" className='navLink'>КОНТАКТЫ</a>
+                            <a href="/#oplatforme" className='navLink'>О ПЛАТФОРМЕ</a>
+                            <a href="/#obuchenie" className='navLink'>ОБУЧЕНИЕ</a>
+                            <a href="/#otzyvy" className='navLink'>ОТЗЫВЫ</a>
+                            <a href="/#contakty" className='navLink'>КОНТАКТЫ</a>
                         </div>
                         <div className="navButton" style={{ marginLeft: "80px" }}>
                             <Link to={"/login"}><button>ВХОД</button></Link>
@@ -71,7 +71,7 @@ function Registration() {
                     <div className="regform">
                         <div className="formTitle">
                             <h3 className='form-h3'>Создать Аккаунт для Родителя</h3>
-                            <Link to="" className='formLink'>У меня уже есть аккаунт</Link>
+                            <Link to="/login" className='formLink'>У меня уже есть аккаунт</Link>
                         </div>
                         <form className='inputField' onSubmit={handleSubmit}>
                             <label htmlFor="first_name">Имя</label><br />
@@ -92,7 +92,7 @@ function Registration() {
                             </span>
                             <label htmlFor="password">Придумайте пароль:</label><br />
                             <input type="password" id="password" name="password" placeholder='********' value={formData.password} onChange={handleInputChange} required /><br />
-                            <input type="submit" value="Регистрация" className='orangeButton' style={{ position: "relative", left: "325px", maxWidth: "200px", marginTop: "25px", marginBottom: "0" }} />
+                            <input type="submit" value="Регистрация" className='orangeButton' style={{ position: "relative", maxWidth: "200px", float:"left", marginTop: "25px", marginBottom: "0" }} />
                         </form>
                         {responseMessage && <p>{responseMessage}</p>}
                     </div>

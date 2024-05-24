@@ -13,10 +13,10 @@ function Header() {
                 </Link>
                 <div className="excLogo">
                     <div className="navList">
-                        <a href="#" className='navLink'>О ПЛАТФОРМЕ</a>
-                        <a href="#" className='navLink'>ОБУЧЕНИЕ</a>
-                        <a href="#" className='navLink'>ОТЗЫВЫ</a>
-                        <a href="#" className='navLink'>КОНТАКТЫ</a>
+                        <a href="#oplatforme" className='navLink'>О ПЛАТФОРМЕ</a>
+                        <a href="#obuchenie" className='navLink'>ОБУЧЕНИЕ</a>
+                        <a href="#otzyvy" className='navLink'>ОТЗЫВЫ</a>
+                        <a href="#contakty" className='navLink'>КОНТАКТЫ</a>
                     </div>
                     <div className="navButton">
                         <Link to={"/login"}>
@@ -41,8 +41,10 @@ function Header() {
                             <span className='spanAnim'><h1>МАТЕМАТИКЕ И</h1></span>
                             <span className='spanAnim'><h1>АНГЛИЙСКОМУ ЯЗЫКУ</h1></span>
                         </div>
+                        <Link to={"/registration"}>
+                            <button style={{padding:"10px 17px", width:"60%", marginTop:"2rem", borderColor:'white'}}>ПОПРОБУЙТЕ БЕСПЛАТНО</button>
+                        </Link>
                         
-                        <button style={{padding:"10px 17px", width:"60%", marginTop:"2rem", borderColor:'white'}}>ПОПРОБУЙТЕ БЕСПЛАТНО</button>
                     </div>
 
                     <img src={mascotImg} alt="lionimg" style={{scale:"0.8"}} />

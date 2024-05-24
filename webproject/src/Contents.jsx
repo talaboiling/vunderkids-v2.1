@@ -11,7 +11,6 @@ import {motion} from 'framer-motion';
 import Offers from './Offers.jsx'
 import OffersBot from './OffersBot.jsx'
 import background from './assets/pngwing.png';
-import logo_bottom from './assets/logo_bottom.png';
 import icon_grad from './assets/icon_grad.png';
 import icon_school from './assets/icon_school.png';
 import offer_books from './assets/offer_books.png';
@@ -21,14 +20,15 @@ import offer_tablet from './assets/offer_tablet.png';
 import offer_progress from './assets/offer_progress.png';
 import offer_time from './assets/offer_time.png';
 import logoImg from './assets/logo_blue.png';
-import bottomBack from './assets/bottomcontimg.png'
+import {Link} from "react-router-dom";
+
 function Contents() {
     useEffect(() => {
         
     }, []);
     return (
         <>
-        <div className="contents">
+        <div className="contents" id='oplatforme'>
             <div className="beforeCont"></div>
             <div className="contLeft">
                 <ul style={{listStyleType: 'none', padding: 5, margin: 0, lineHeight: 1.5 }}>
@@ -81,7 +81,10 @@ function Contents() {
                         <img src={img_laptop} alt="img_laptop" style={{width:"120%", height:"100%"}}/>
                     </div>
                 </div>
-                <button className="orangeButton" style={{marginTop:"50px"}}>ПОПРОБОВАТЬ</button>
+                <Link to={"/registration"}>
+                    <button className="orangeButton" style={{marginTop:"50px"}}>ПОПРОБОВАТЬ</button>
+                </Link>
+                
                 <img src={icon_stars} alt="" style={{position:"absolute", marginLeft:"10px", marginTop:"70px", width:"4%"}}/>
             </div>           
         </div>
@@ -109,7 +112,7 @@ function Contents() {
                 <OffersBot num={6} text="Сертификат по окончанию курса" img={offer_certificate}/>
             </div>
         </div>
-        <div className="learnPlan">
+        <div className="learnPlan" id='obuchenie'>
             <div className="planLaptop">
                 <img src={laptops} alt="" className="planImg"/>
             </div>
@@ -167,7 +170,10 @@ function Contents() {
                         </div>
                     </li>
                 </ol>
-                <button className="orangeButton" style={{marginTop:"50px"}}>ПОПРОБОВАТЬ</button>
+                <Link to={"/registration"}>
+                    <button className="orangeButton" style={{marginTop:"50px"}}>ПОПРОБОВАТЬ</button>
+                </Link>
+                
             </div>
         </div>
         </>

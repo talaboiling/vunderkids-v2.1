@@ -5,7 +5,7 @@ import pfp from "./assets/icon_grad.png"
 const Reviews = () => {
   return (
     <>
-    <div className="rateus">
+    <div className="rateus" id="otzyvy">
         <h1>ЧТО ГОВОРЯТ О НАС</h1>
         <div className="reviewSect">
             <ReviewCard pfp={pfp} name={"Homunuculus"} subject={"English"} text={"Vunderkids is the best online school platform ever!!! The only problem is that I am depressed and need urgent help, but the school is amazing!!!!"} stars={4} date={"14.5.2024"}/>
