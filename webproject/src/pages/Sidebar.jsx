@@ -1,10 +1,17 @@
-import React from 'react'
-import '../dashboard.css'
-import logo from '../assets/NAV_LOGO.png'
-import {Link} from "react-router-dom";
+import React from 'react';
+import '../dashboard.css';
+import logo from '../assets/NAV_LOGO.png';
+import { Link, useNavigate } from "react-router-dom";
 import { SidebarData } from './SidebarData';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login'); // Redirect to the homepage or login page
+  };
+
   return (
     <div className='sidebar'>
       <Link to={"/"}>
@@ -16,30 +23,26 @@ const Sidebar = () => {
           {SidebarData.map((item, index) => {
             return (
               <li 
-              key={index} 
-              className='linkbuttons'
-              id={window.location.pathname == item.link ? "active" : ""}
-              onClick={() => {
-                window.location.pathname = item.link
-              
-              }}
+                key={index} 
+                className='linkbuttons'
+                id={window.location.pathname === item.link ? "active" : ""}
+                onClick={() => {
+                  window.location.pathname = item.link
+                }}
               >
                 <Link to={item.link} className='linkbuttonVal'>
                   {item.icon}
                   <span className='linkTitle' id='linktit'>{item.title}</span>
                 </Link>
               </li>
-            )
+            );
           })}
         </ul>
         
-        <Link to="/">
-          <button className="exitButton">Выйти</button>
-        </Link>
-        
+        <button className="exitButton" onClick={handleLogout}>Выйти</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

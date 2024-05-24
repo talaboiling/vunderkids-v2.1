@@ -6,7 +6,6 @@ function Header() {
 
     return (
         <div className="headerImg">
-            
             <div className="navBar">
                 <Link to="/" style={{textDecoration:"none"}}>
                     <img className="navLogo" src={logoImg} alt="logo"/>

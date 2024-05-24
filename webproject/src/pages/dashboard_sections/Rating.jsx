@@ -7,29 +7,39 @@ import Profile from '../Profile'
 import cupicon from '../../assets/navCups.png'
 import League from './League'
 import tempRating from '../../assets/tempMainRating.png'
+import placeholderPfp from '../../assets/placehoder_pfp.png'; // Import the placeholder image
+
 
 const Rating = () => {
   const [user, setUser] = useState({ first_name: 'Ученик', last_name: '' }); // Default values
+  const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
+    const fetchUserData = async () => {
       const accessToken = localStorage.getItem('access_token');
+      const childId = localStorage.getItem('child_id');
       if (accessToken) {
         try {
-          const response = await axios.get('http://localhost:8000/api/current-user', {
+          const userEndpoint = childId
+            ? `http://localhost:8000/api/children/${childId}`
+            : 'http://localhost:8000/api/current-user';
+          const response = await axios.get(userEndpoint, {
             headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           });
-          setUser(response.data.user);
+          if(localStorage.getItem("child_id")){
+            setUser(response.data);
+          }else{
+            setUser(response.data.user);
+          }
         } catch (error) {
-          console.error('Error fetching current user:', error);
-        }
+          console.error('Error fetching user data:', error);
+        } 
       }
     };
 
-
-    fetchCurrentUser();
+    fetchUserData();
   }, []);
 
 
@@ -51,7 +61,7 @@ const Rating = () => {
               </datalist>
             </div>
             <div className="sidepfp">
-              <img src="https://placehold.co/100" alt="pfp" className="pfp" style={{borderRadius:"50%", marginBottom:"15px"}}/>
+              <img src={avatarUrl} alt="pfp" className="pfp" style={{borderRadius:"50%", marginBottom:"15px" ,width: "100px", height: "100px"}}/>
               <p style={{fontSize:"x-large", fontWeight:"650", color:"#222222", margin:"0", padding:'0'}}>{user.first_name} {user.last_name}</p>
               <p style={{fontSize:"large", fontWeight:"450", color:"#222222", margin:"0", padding:'0'}}>Ученик</p>
             </div>

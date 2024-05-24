@@ -33,9 +33,16 @@ function Login() {
                 localStorage.setItem('refresh_token', data.refresh);
                 localStorage.setItem('user', JSON.stringify(data.user));
 
-
+                const user = data.user
                 setResponseMessage('Login successful!');
-                navigate('/parent'); // Redirect to dashboard
+                if(user.role === "parent"){
+                    navigate('/parent'); // Redirect parent to dashboard
+                }else if(user.role === "student"){
+                    navigate('/dashboard'); // Redirect to student dashboard
+                }else{
+                    navigate('/dashboard'); // Redirect to dashboard
+                }
+                
             } else {
                 setResponseMessage('Login failed!');
             }

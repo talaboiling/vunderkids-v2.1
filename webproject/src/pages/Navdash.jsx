@@ -8,25 +8,34 @@ import bellicon from '../assets/navBell.png'
 
 const Navdash = (props) => {
     const [user, setUser] = useState({ first_name: 'Ученик', last_name: '' }); // Default values
+  
     useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const accessToken = localStorage.getItem('access_token');
-      if (accessToken) {
-        try {
-          const response = await axios.get('http://localhost:8000/api/current-user', {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
+      const fetchUserData = async () => {
+        const accessToken = localStorage.getItem('access_token');
+        const childId = localStorage.getItem('child_id');
+        if (accessToken) {
+          try {
+            const userEndpoint = childId
+              ? `http://localhost:8000/api/children/${childId}`
+              : 'http://localhost:8000/api/current-user';
+            const response = await axios.get(userEndpoint, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
+            if(localStorage.getItem("child_id")){
+              setUser(response.data);
+            }else{
+              setUser(response.data.user);
             }
-          });
-          setUser(response.data.user);
-        } catch (error) {
-          console.error('Error fetching current user:', error);
+          } catch (error) {
+            console.error('Error fetching user data:', error);
+          } 
         }
-      }
-    };
-
-    fetchCurrentUser();
-  }, []);
+      };
+  
+      fetchUserData();
+    }, []);
   
   return (
     <div className='navdashboard'>

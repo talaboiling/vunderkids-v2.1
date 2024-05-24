@@ -12,30 +12,43 @@ const Lessons = () => {
   const [courses, setCourses] = useState([]); // State to store courses
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
+    const fetchUserData = async () => {
       const accessToken = localStorage.getItem('access_token');
+      const childId = localStorage.getItem('child_id');
       if (accessToken) {
         try {
-          const response = await axios.get('http://localhost:8000/api/current-user', {
+          const userEndpoint = childId
+            ? `http://localhost:8000/api/children/${childId}`
+            : 'http://localhost:8000/api/current-user';
+          const response = await axios.get(userEndpoint, {
             headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           });
-          setUser(response.data.user);
+          if(localStorage.getItem("child_id")){
+            setUser(response.data);
+          }else{
+            setUser(response.data.user);
+          }
+          console.log(user)
         } catch (error) {
-          console.error('Error fetching current user:', error);
-        }
+          console.error('Error fetching user data:');
+        } 
       }
     };
 
     const fetchCourses = async () => {
       const accessToken = localStorage.getItem('access_token');
+      const childId = localStorage.getItem('child_id');
       if (accessToken) {
         try {
-          const response = await axios.get('http://localhost:8000/api/courses', {
+          const coursesEndpoint = childId
+            ? `http://localhost:8000/api/courses?child_id=${childId}`
+            : 'http://localhost:8000/api/courses';
+          const response = await axios.get(coursesEndpoint, {
             headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           });
           setCourses(response.data);
         } catch (error) {
@@ -44,7 +57,7 @@ const Lessons = () => {
       }
     };
 
-    fetchCurrentUser();
+    fetchUserData();
     fetchCourses();
   }, []);
 
