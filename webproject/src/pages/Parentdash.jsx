@@ -160,7 +160,7 @@ const Parentdash = () => {
       <div className="addchildren">
         {children.map(child => (
           <div key={child.id} className="childcard">
-            <img src={child.avatar || pfplaceholder} alt="child avatar" />
+            <img src={child.avatar || pfplaceholder} alt="child avatar" style={{maxWidth:"100px", maxHeight:"100px"}}/>
             <p style={{fontSize:"x-large"}}>{child.first_name} {child.last_name}</p>
             <div className="rndsh" style={{marginBottom:"20px"}}>
                 

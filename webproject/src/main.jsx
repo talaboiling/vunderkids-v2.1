@@ -11,6 +11,8 @@ import Games from './pages/dashboard_sections/Games.jsx'
 import Vhod from './pages/Login.jsx'
 import Activate from './pages/Activate.jsx'
 import Parentdash from './pages/Parentdash.jsx'
+import Superdash from './pages/Superdash.jsx'
+import Superstudents from './pages/admin_sections/Students.jsx'
 
 
 import{
@@ -29,7 +31,9 @@ const router = createBrowserRouter([
   {path: "/dashboard/games", element: <Games/>},
   {path: "/login", element: <Vhod/>},
   {path: "/activate/:activation_token", element: <Activate/>},
-  {path: "/parent", element: <Parentdash/>}
+  {path: "/parent", element: <Parentdash/>},
+  {path: "/admindashboard", element: <Superdash/>},
+  {path: "/admindashboard/students", element: <Superstudents />},
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

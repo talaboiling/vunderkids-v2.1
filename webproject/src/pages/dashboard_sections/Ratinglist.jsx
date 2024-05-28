@@ -20,10 +20,10 @@ const Ratinglist = ({ ratings }) => {
               style={{borderRadius:"50%", marginBottom:"15px" ,width: "100px", height: "100px"}} 
             />
             <div className="namePoints">
-              <p style={{ fontSize: "large", fontWeight: "450", color: index > 2 ? "#222222" : "#fff", margin: "0", padding: '0', fontWeight: "600" }}>
+              <p style={{ fontSize: "large", color: index > 2 ? "#222222" : "#fff", margin: "0", padding: '0', fontWeight: "600" }}>
                 {student.first_name} {student.last_name}
               </p>
-              <p style={{ fontSize: "large", fontWeight: "450", color: index > 2 ? "#222222" : "#fff", margin: "0", padding: '0', fontWeight: "600" }}>
+              <p style={{ fontSize: "large", color: index > 2 ? "#222222" : "#fff", margin: "0", padding: '0', fontWeight: "600" }}>
                 {student.cups} очков
               </p>
             </div>
