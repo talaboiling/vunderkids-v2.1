@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
-import "../../superdash.css";
+import Superside from "../admin_components/Superside.jsx"
 
 const ClassDetails = () => {
   const { schoolId, classId } = useParams();
@@ -74,35 +74,48 @@ const ClassDetails = () => {
 
   return (
     <div className="spdash">
-      <div className="superMain">
-        <p>Идентификатор класса: {classId}</p>
-        <ul>
+      <Superside />
+      <div className="superMain schoolCont">
+        <h2>Идентификатор класса: {classId}</h2>
+        {students.length === 0 ? (
+          <div className="classList" style={{display:"flex", justifyContent:"center", alignItems:"center", marginBottom:"10px"}}>
+            <p style={{color:"lightgray"}}>Пока нет учеников в этом классе.</p>
+          </div>
+          
+        ) : (
+          <ul className="classList">
           {students.map((student) => (
-            <li key={student.id} className="studentItem">
-              {student.first_name} {student.last_name} - {student.email} -{" "}
-              {student.phone_number}
+            <li key={student.id} className="classItem">
+              <b>{student.user.first_name} {student.user.last_name}</b> <br /> {student.user.email} <br />
+              {student.user.phone_number}
             </li>
           ))}
         </ul>
-        <button onClick={() => setShowModal(true)}>Добавить ученика</button>
+        )}
+        
+        <button onClick={() => setShowModal(true)} style={{border: "none",
+                        borderRadius: "4px",
+                        backgroundColor: "#509CDB",
+                        fontSize: "large",
+                        fontWeight: "600"
+                      }}>Добавить ученика</button>
 
         {showModal && (
-          <dialog open className="modal">
+          <dialog open className="modal supermodal">
             <div className="modal-content">
               <button
                 style={{
                   border: "none",
                   float: "right",
+                  backgroundColor: "transparent",
+                  boxShadow:"none"
                 }}
                 onClick={() => setShowModal(false)}
               >
-                <CloseIcon />
+                <CloseIcon sx={{color:"gray"}}/>
               </button>
               <br />
-              <form
-                onSubmit={handleSubmit}
-                style={{ padding: "20px", fontSize: "large" }}
-              >
+              <form onSubmit={handleSubmit}>
                 <label htmlFor="first_name">Имя</label>
                 <input
                   type="text"
@@ -114,7 +127,7 @@ const ClassDetails = () => {
                   style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
                 <br />
-                <br />
+                
                 <label htmlFor="last_name">Фамилия</label>
                 <input
                   type="text"
@@ -126,7 +139,7 @@ const ClassDetails = () => {
                   style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
                 <br />
-                <br />
+                
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
@@ -138,7 +151,7 @@ const ClassDetails = () => {
                   style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
                 <br />
-                <br />
+                
                 <label htmlFor="gender">Пол</label>
                 <input
                   type="text"
@@ -150,7 +163,7 @@ const ClassDetails = () => {
                   style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
                 <br />
-                <br />
+                
                 <label htmlFor="phone_number">Телефон</label>
                 <input
                   type="text"
@@ -165,9 +178,9 @@ const ClassDetails = () => {
                 <br />
                 <button
                   type="submit"
-                  style={{ padding: "10px 20px", fontSize: "large" }}
+                  className="superBtn"
                 >
-                  Добавить ученика
+                  Добавить
                 </button>
               </form>
             </div>

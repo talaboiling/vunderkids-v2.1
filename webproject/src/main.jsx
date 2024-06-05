@@ -15,6 +15,7 @@ import Superdash from "./pages/Superdash.jsx";
 import Superstudents from "./pages/admin_sections/Students.jsx";
 import SchoolDetails from "./pages/school_details/SchoolDetails.jsx";
 import ClassDetails from "./pages/school_details/ClassDetails.jsx";
+import MathCourse from "./pages/courses/Math.jsx";
 
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
   { path: "/admindashboard/students", element: <Superstudents /> },
   { path: "/schools/:schoolId", element: <SchoolDetails /> },
   { path: "/schools/:schoolId/classes/:classId", element: <ClassDetails /> },
+  { path: "/dashboard/lessons/:lessonId", element: <MathCourse/> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

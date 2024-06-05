@@ -121,7 +121,7 @@ const Lessons = () => {
               </div>
             </div>
             <div className="sectCertificates">
-              <img src={certbanner} alt='Мои сертификаты' style={{marginBottom:"50px"}}/>
+              <img src={certbanner} alt='Мои сертификаты' style={{marginBottom:"20px", scale:"0.9"}}/>
               <div className="achievements">
                 <ul className="certificates">
                   <li className='certificate c90' id="active">
