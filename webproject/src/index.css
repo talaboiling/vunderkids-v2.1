@@ -138,6 +138,13 @@ span.spanAnim:nth-child(3) {
   }
 } 
 
+.defaultStyle{
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+  animation: none;
+}
+
 h3{
     color: white;
     font-size: 1.1rem;
@@ -190,10 +197,19 @@ li{
 
 ul{
   text-decoration: none;
+  list-style-type: none;
+  padding: 0;
 }
 
 ol{
   font-weight: 900;
+}
+
+hr{
+  
+  background: #aaa;
+  border-radius: 5px;
+  width: 200px;
 }
 
 button{

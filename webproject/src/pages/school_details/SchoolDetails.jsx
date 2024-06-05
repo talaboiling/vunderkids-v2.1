@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
-import "../../superdash.css";
+import Superside from "../admin_components/Superside.jsx"
 
 const SchoolDetails = () => {
   const { schoolId } = useParams();
@@ -89,39 +89,58 @@ const SchoolDetails = () => {
 
   return (
     <div className="spdash">
-      <div className="superMain">
+      <Superside />
+      <div className="superMain schoolCont">
         <h2>{school.name}</h2>
-        <p>Город: {school.city}</p>
-        <p>Email: {school.email}</p>
-        <p>Количество учеников: {school.student_number}</p>
+        <div className="schooldetails">
+          <p className="defaultStyle"><b>Город:</b> {school.city}</p>
+          <p className="defaultStyle"><b>Email:</b> {school.email}</p>
+          <p className="defaultStyle"><b>Количество учеников:</b> {school.student_number}</p>
+        </div>
+        
 
         <h3>Классы</h3>
-        <ul>
-          {classes.map((classItem) => (
-            <li
-              key={classItem.id}
-              onClick={() =>
-                navigate(`/schools/${schoolId}/classes/${classItem.id}`)
-              }
-              className="classItem"
-            >
-              Класс: {classItem.grade} {classItem.section}
-            </li>
-          ))}
-        </ul>
-        <button onClick={() => setShowModal(true)}>Добавить класс</button>
+        {classes.length === 0 ? (
+          <div className="classList" style={{display:"flex", justifyContent:"center", alignItems:"center", marginBottom:"10px"}}>
+            <p style={{color:"lightgray"}}>Классы еще не добавлены :(</p>
+          </div>
+          
+        ) : (
+          <ul className="classList">
+            {classes.map((classItem) => (
+              <li
+                key={classItem.id}
+                onClick={() =>
+                  navigate(`/schools/${schoolId}/classes/${classItem.id}`)
+                }
+                className="classItem"
+              >
+                Класс: <b>{classItem.grade} {classItem.section}</b>
+              </li>
+            ))}
+          </ul>
+        )}
+        <button onClick={() => setShowModal(true)} 
+                style={{border: "none",
+                        borderRadius: "4px",
+                        backgroundColor: "#509CDB",
+                        fontSize: "large",
+                        fontWeight: "600"
+                      }}>Добавить класс</button>
 
         {showModal && (
-          <dialog open className="modal">
+          <dialog open className="modal supermodal">
             <div className="modal-content">
               <button
                 style={{
                   border: "none",
                   float: "right",
+                  backgroundColor: "transparent",
+                  boxShadow:"none"
                 }}
                 onClick={() => setShowModal(false)}
               >
-                <CloseIcon />
+                <CloseIcon sx={{color:"gray"}}/>
               </button>
               <br />
               <form
@@ -154,9 +173,9 @@ const SchoolDetails = () => {
                 <br />
                 <button
                   type="submit"
-                  style={{ padding: "10px 20px", fontSize: "large" }}
+                  className="superBtn"
                 >
-                  Добавить класс
+                  Добавить
                 </button>
               </form>
             </div>

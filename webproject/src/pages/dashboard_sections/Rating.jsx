@@ -92,7 +92,10 @@ const Rating = () => {
               </div>
               <League />
             </div>
-            <Ratinglist ratings={ratings} />
+            <div className="listInRating">
+              <Ratinglist ratings={ratings} />
+            </div>
+            
           </div>
           
         

@@ -86,32 +86,18 @@ const Superdash = () => {
     <div className="spdash">
       <Superside />
       <div className="superMain">
-        <button
-          style={{
-            border: "none",
-            borderRadius: "4px",
-            backgroundColor: "transparent",
-            color: "#444",
-            fontSize: "large",
-            float: "right",
-          }}
-          onClick={handleLogout}
-        >
-          Выйти
-        </button>
+        <button className="superBtn" onClick={handleLogout} style={{float: "right"}}>Выйти</button>
         <p style={{ fontSize: "xx-large", fontWeight: "500", color: "#666" }}>
           Школы
         </p>
         <div className="addschool">
           <button
-            style={{
-              border: "none",
-              borderRadius: "4px",
-              backgroundColor: "#509CDB",
-              fontSize: "large",
-              fontWeight: "600",
-            }}
             onClick={() => setShowModal(true)}
+            style={{border: "none",
+            borderRadius: "4px",
+            backgroundColor: "#509CDB",
+            fontSize: "large",
+            fontWeight: "600"}}
           >
             Добавить школу
           </button>
@@ -159,18 +145,21 @@ const Superdash = () => {
       </div>
 
       {showModal && (
-        <dialog open className="modal">
+        <dialog open className="modal supermodal">
           <div className="modal-content">
             <button
               style={{
                 border: "none",
                 float: "right",
+                backgroundColor: "transparent",
+                boxShadow:"none"
               }}
               onClick={() => setShowModal(false)}
             >
-              <CloseIcon />
+              <CloseIcon sx={{color:"gray"}}/>
             </button>
             <br />
+            <h2 style={{animation:"none", color:"#4F4F4F", fontSize:"x-large"}}>Добавить школу</h2>
             <form
               onSubmit={handleSubmit}
               style={{ padding: "20px", fontSize: "large" }}
@@ -213,9 +202,9 @@ const Superdash = () => {
               <br />
               <button
                 type="submit"
-                style={{ padding: "10px 20px", fontSize: "large" }}
+                className="superBtn"
               >
-                Добавить школу
+                Дальше
               </button>
             </form>
           </div>
