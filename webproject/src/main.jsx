@@ -13,9 +13,11 @@ import Activate from "./pages/Activate.jsx";
 import Parentdash from "./pages/Parentdash.jsx";
 import Superdash from "./pages/Superdash.jsx";
 import Superstudents from "./pages/admin_sections/Students.jsx";
+import Tasks from "./pages/admin_sections/Tasks.jsx";
 import SchoolDetails from "./pages/school_details/SchoolDetails.jsx";
 import ClassDetails from "./pages/school_details/ClassDetails.jsx";
 import MathCourse from "./pages/courses/Math.jsx";
+import TaskSection from "./pages/admin_sections/Tasksection.jsx"
 
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 
@@ -32,9 +34,11 @@ const router = createBrowserRouter([
   { path: "/parent", element: <Parentdash /> },
   { path: "/admindashboard", element: <Superdash /> },
   { path: "/admindashboard/students", element: <Superstudents /> },
+  { path: "/admindashboard/tasks", element: <Tasks /> },
   { path: "/schools/:schoolId", element: <SchoolDetails /> },
   { path: "/schools/:schoolId/classes/:classId", element: <ClassDetails /> },
   { path: "/dashboard/lessons/:lessonId", element: <MathCourse/> },
+  { path: "/admindashboard/tasks/:courseId/:sectionId", element: <TaskSection/> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

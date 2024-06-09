@@ -16,6 +16,6 @@ export const SupersideData = [
     {
         title: 'Задания',
         icon: <BarChartIcon />,
-        link: '/adminddashboard/alltasks'
+        link: '/admindashboard/tasks'
     }
 ]
