@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import "/src/dashboard.css";
 import Sidebar from "./Sidebar";
 import Navdash from "./Navdash";
 import Profile from "./Profile";
+import Loader from "./Loader";
 import lionimg from "../assets/lion_hellocont.png";
 import mathIcon from "../assets/calculator.png";
 import englishIcon from "../assets/english.png";
@@ -19,6 +19,11 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import {
+  fetchUserData,
+  fetchCourses,
+  fetchWeeklyProgress,
+} from "../utils/apiService";
 
 ChartJS.register(
   CategoryScale,
@@ -34,75 +39,28 @@ const Dashboard = () => {
   const [user, setUser] = useState({ first_name: "Ученик", last_name: "" }); // Default values
   const [courses, setCourses] = useState([]); // State to store courses
   const [weeklyProgress, setWeeklyProgress] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const accessToken = localStorage.getItem("access_token");
+    const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
-      if (accessToken) {
-        try {
-          const userEndpoint = childId
-            ? `http://localhost:8000/api/children/${childId}`
-            : "http://localhost:8000/api/current-user";
-          const response = await axios.get(userEndpoint, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-          if (localStorage.getItem("child_id")) {
-            setUser(response.data);
-          } else {
-            setUser(response.data.user);
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
+      try {
+        const [userData, coursesData, weeklyProgressData] = await Promise.all([
+          fetchUserData(childId),
+          fetchCourses(childId),
+          fetchWeeklyProgress(childId),
+        ]);
+        setUser(userData);
+        setCourses(coursesData);
+        setWeeklyProgress(weeklyProgressData.weekly_progress);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    const fetchCourses = async () => {
-      const accessToken = localStorage.getItem("access_token");
-      const childId = localStorage.getItem("child_id");
-      if (accessToken) {
-        try {
-          const coursesEndpoint = childId
-            ? `http://localhost:8000/api/courses?child_id=${childId}`
-            : "http://localhost:8000/api/courses";
-          const response = await axios.get(coursesEndpoint, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-          setCourses(response.data);
-        } catch (error) {
-          console.error("Error fetching courses:", error);
-        }
-      }
-    };
-
-    const fetchWeeklyProgress = async () => {
-      const accessToken = localStorage.getItem("access_token");
-      const childId = localStorage.getItem("child_id");
-      if (accessToken) {
-        try {
-          const progressEndpoint = childId
-            ? `http://localhost:8000/api/progress/weekly?child_id=${childId}`
-            : "http://localhost:8000/api/progress/weekly";
-          const response = await axios.get(progressEndpoint, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-          setWeeklyProgress(response.data.weekly_progress);
-        } catch (error) {
-          console.error("Error fetching weekly progress:", error);
-        }
-      }
-    };
-
-    fetchUserData();
-    fetchCourses();
-    fetchWeeklyProgress();
+    fetchData();
   }, []);
 
   const daysInRussian = {
@@ -160,6 +118,10 @@ const Dashboard = () => {
     responsive: true,
     maintainAspectRatio: false,
   };
+
+  if (loading) {
+    return <Loader />; // Display loader while fetching data
+  }
 
   return (
     <div className="rtdash">
