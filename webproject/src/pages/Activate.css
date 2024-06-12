@@ -1,0 +1,56 @@
+/* Activate.css */
+
+.activate-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .activate-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #333;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .activate-message {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .activate-instruction {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .activate-home-button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #2575fc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .activate-home-button:hover {
+    background: #1a5bbf;
+  }
+  
+  .success .activate-card {
+    border-left: 5px solid #4caf50;
+  }
+  
+  .error .activate-card {
+    border-left: 5px solid #f44336;
+  }
+  

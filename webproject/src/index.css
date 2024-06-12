@@ -138,6 +138,16 @@ span.spanAnim:nth-child(3) {
   }
 } 
 
+.defaultStyle{
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+  animation: none;
+  text-decoration-color: none;
+}
+
+
+
 h3{
     color: white;
     font-size: 1.1rem;
@@ -190,10 +200,19 @@ li{
 
 ul{
   text-decoration: none;
+  list-style-type: none;
+  padding: 0;
 }
 
 ol{
   font-weight: 900;
+}
+
+hr{
+  
+  background: #aaa;
+  border-radius: 5px;
+  width: 200px;
 }
 
 button{
@@ -311,13 +330,13 @@ label{
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
   background-color: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(#86bcf9, #b69eff);
+  background-color: lightgray;
   width: 5px;
   border-radius: 5px;
 }
@@ -791,5 +810,5 @@ input{
   font-family: 'Montserrat', Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size:medium;
-  
+  outline: none;
 }

@@ -17,7 +17,7 @@ export const SidebarData = [
         link: '/dashboard/rating'
     },
     {
-        title: 'Уроки',
+        title: 'Сертификаты',
         icon: <img src={cert} alt="certificates" />,
         link: '/dashboard/lessons'
     },

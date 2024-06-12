@@ -17,12 +17,19 @@
     "@mui/material": "^5.15.18",
     "@mui/x-date-pickers": "^7.5.1",
     "axios": "^1.7.2",
+    "chart.js": "^4.4.3",
     "dayjs": "^1.11.11",
+    "file-saver": "^2.0.5",
     "framer-motion": "^11.1.9",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-drag-drop-files": "^2.3.10",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^6.22.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

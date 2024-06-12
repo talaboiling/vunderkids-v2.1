@@ -1,0 +1,423 @@
+.spdash {
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
+  color: #000000;
+  border: none;
+  margin: 0;
+  padding: 0;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: none;
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+}
+
+.superside {
+  background-color: #077ac2;
+  min-height: 100vh;
+}
+
+.slinkbuttonVal {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  text-decoration: none;
+  color: white;
+  border-radius: 4px;
+  padding: 20px 30px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  align-items: center;
+  transition: 0.2s ease-in-out;
+}
+
+#active .slinkbuttonVal {
+  background-color: #509cdb;
+  color: white;
+  opacity: 100%;
+}
+
+.slinkbuttonVal:hover {
+  background-color: #509cdb;
+  color: white;
+  opacity: 100%;
+}
+
+.supsideItems {
+  margin-top: 150px;
+}
+
+.addschool {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.schoolsList {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  list-style-type: none;
+  padding: 0;
+  overflow-y: scroll;
+  max-height: 280px;
+}
+
+.schoolItem {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid lightgray;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.superMain {
+  padding: 50px;
+}
+
+.superTable {
+  margin-top: 40px;
+}
+
+.superBtn {
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #444;
+  font-size: large;
+}
+
+.superBtn:hover {
+  color: #444;
+  background-color: transparent;
+}
+
+.schoolCont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.classList {
+  overflow-y: scroll;
+  border: 2px solid gray;
+  max-height: 280px;
+  min-height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.classItem {
+  padding: 30px;
+  border: 1px solid lightgray;
+}
+
+.classItem:hover {
+  background-color: #f5f5f5;
+}
+
+.schooldetails {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.coursesList {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  list-style-type: none;
+  padding: 0;
+  background-color: #eee;
+  border-radius: 35px;
+  padding: 30px;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+.courseAdder {
+  padding: 40px 60px;
+  background-color: #077ac224;
+  color: #077ac2;
+  border: 1px solid #077ac2;
+  box-shadow: none;
+  font-size: large;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  max-height: fit-content;
+}
+
+.courseAdder:hover {
+  background-color: #077ac23c;
+}
+
+.formCont {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.sectAdder {
+  display: flex;
+  flex-direction: row;
+  cursor: grab;
+  position: relative;
+  align-items: center;
+}
+
+.sectAdder:active {
+  cursor: grabbing;
+}
+
+.sectList {
+  max-height: 300px;
+  overflow-y: scroll;
+  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.transBtn {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  color: black;
+  font-size: large;
+  padding: 0;
+}
+
+.transBtn:hover {
+  background-color: transparent;
+}
+
+.addedCourses {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  border: 1px solid lightgray;
+  background-color: white;
+  border-radius: 20px;
+
+  min-height: 200px;
+  padding: 20px 0;
+}
+
+.sectionsInfo {
+  padding: 10px;
+  background-color: rgb(254, 254, 254);
+  border: 2px solid lightgray;
+
+  margin-left: 7px;
+  margin-bottom: 7px;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  align-items: center;
+}
+
+.sectListInfo {
+  width: 100%;
+  max-height: 150px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectCont {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 200px);
+  gap: 2rem;
+  padding: 40px 20%;
+  background-color: #eee;
+  border-radius: 20px;
+}
+
+.taskAdder {
+  background-color: #cbcbcb;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 140px;
+}
+
+.adderBtn {
+  background-color: #d9d9d9;
+  padding: 10px 25px;
+  color: #5b5b5b;
+  font-weight: 600;
+  font-size: large;
+  border-radius: 10px;
+  width: 100%;
+  border: none;
+  box-shadow: none;
+  transition: none;
+}
+
+.adderBtn:hover {
+  background-color: #ddd;
+}
+
+.formVideo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 40px;
+}
+
+.taskThumbnail {
+  padding: 7px;
+  max-height: 140px;
+  object-fit: cover;
+  background-position: center;
+  border-radius: 15px;
+}
+
+.vidBlock {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background-color: #f8753d;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: 7px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.vidBlock:hover {
+  transform: scale(0.98);
+}
+
+.taskHover {
+  display: none;
+  position: absolute;
+  bottom: 95%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  width: 200px;
+  border-radius: 5px;
+}
+
+.vidBlock:hover .taskHover {
+  display: flex;
+  flex-direction: column;
+}
+
+.deleteBtn {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  position: absolute;
+  top: 7px;
+  right: 7px;
+}
+
+.deleteBtn:hover {
+  background-color: transparent;
+  transform: scale(1.1);
+}
+
+.taskConstructor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 20px;
+  overflow-y: scroll;
+  max-height: 400px;
+  margin-top: 20px;
+}
+
+.taskPreview {
+  border: 6px solid #ddd;
+  border-radius: 20px;
+  min-width: 500px;
+  min-height: 300px;
+  background-image: url(./assets/bgpicker1.svg);
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.taskBGPicker {
+  background-color: #eee;
+  display: grid;
+  grid-template-columns: repeat(4, 200px);
+
+  gap: 20px;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.formConstructor {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background-color: #eee;
+  padding: 20px;
+}
+
+.bgitem {
+  width: 200px;
+  height: 150px;
+  background-color: #aaa;
+  border-radius: 10px;
+  padding: 0;
+}
+
+.bgitem:focus {
+  border: 2px solid #ff4040;
+}
+
+.correct-answer {
+  background-color: #d5e5ee;
+  border: 2px solid #4caf50;
+}
+
+.taskBlock {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background-color: #97d4e7;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: 7px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
