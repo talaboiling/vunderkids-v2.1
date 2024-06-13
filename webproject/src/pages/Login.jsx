@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import logoImg from "/src/assets/logo_blue.png";
+import { loginUser, logout } from "../utils/authService";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -21,35 +21,25 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/api/login/", {
-        email: formData.email,
-        password: formData.password,
-      });
-
-      const data = response.data;
-      if (response.status === 200) {
-        // Store the tokens and user info as needed
-        localStorage.setItem("access_token", data.access);
-        localStorage.setItem("refresh_token", data.refresh);
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        const user = data.user;
-        setResponseMessage("Login successful!");
-        if (user.role === "parent") {
-          navigate("/parent"); // Redirect parent to dashboard
-        } else if (user.role === "student") {
-          navigate("/dashboard"); // Redirect to student dashboard
-        } else if (user.is_superuser) {
-          navigate("/admindashboard"); // Redirect to dashboard
-        } else {
-          navigate("/dashboard");
-        }
+      const user = await loginUser(formData.email, formData.password);
+      setResponseMessage("Login successful!");
+      if (user.role === "parent") {
+        navigate("/parent"); // Redirect parent to dashboard
+      } else if (user.role === "student") {
+        navigate("/dashboard"); // Redirect to student dashboard
+      } else if (user.is_superuser) {
+        navigate("/admindashboard"); // Redirect to dashboard
       } else {
-        setResponseMessage("Login failed!");
+        navigate("/dashboard");
       }
     } catch (error) {
-      setResponseMessage("Error: " + error.response.data.detail);
+      setResponseMessage("Error: " + error.message);
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
   };
 
   return (

@@ -2,34 +2,49 @@ import React, { useState, useEffect } from "react";
 import Superside from "../admin_components/Superside";
 import { Link, useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import MenuIcon from '@mui/icons-material/Menu';
-import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import MenuIcon from "@mui/icons-material/Menu";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  fetchCourses,
+  createCourse,
+  updateCourse,
+  deleteCourse,
+  createSections,
+  updateSection,
+  fetchCourse,
+} from "../../utils/apiService";
+
+import Loader from "../Loader";
 
 const Tasks = () => {
   const [showModal, setOpen] = useState(false);
   const [courseName, setCourseName] = useState("");
   const [courseDesc, setCourseDesc] = useState("");
+  const [courseGrade, setCourseGrade] = useState("");
   const [sections, setSections] = useState([]);
   const [courses, setCourses] = useState([]);
   const [editingCourseId, setEditingCourseId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Load courses from local storage
-    const savedCourses = localStorage.getItem('courses');
-    if (savedCourses) {
-      setCourses(JSON.parse(savedCourses));
-    }
-  }, []);
+    const loadCourses = async () => {
+      try {
+        const fetchedCourses = await fetchCourses();
+        setCourses(fetchedCourses);
+      } catch (error) {
+        console.error("Error loading courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    // Save courses to local storage whenever courses change
-    localStorage.setItem('courses', JSON.stringify(courses));
-  }, [courses]);
+    loadCourses();
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -43,27 +58,35 @@ const Tasks = () => {
   const resetForm = () => {
     setCourseName("");
     setCourseDesc("");
+    setCourseGrade("");
     setSections([]);
     setEditingCourseId(null);
   };
 
   const handleAddSection = () => {
     const newSection = {
-      id: Date.now().toString(),
-      name: "",
+      id: `temp-id-${sections.length}`, // Temporary ID for client-side handling
+      title: "",
+      description: "",
+      order: sections.length + 1, // Set the order to the next available index
     };
     setSections([...sections, newSection]);
   };
 
   const handleDeleteSection = (id) => {
     const updatedSections = sections.filter((section) => section.id !== id);
-    setSections(updatedSections);
+    // Reorder the remaining sections
+    const reorderedSections = updatedSections.map((section, index) => ({
+      ...section,
+      order: index + 1,
+    }));
+    setSections(reorderedSections);
   };
 
-  const handleSectionNameChange = (id, newName) => {
+  const handleSectionChange = (id, field, value) => {
     const updatedSections = sections.map((section) => {
       if (section.id === id) {
-        return { ...section, name: newName };
+        return { ...section, [field]: value };
       }
       return section;
     });
@@ -75,54 +98,111 @@ const Tasks = () => {
     const items = Array.from(sections);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    setSections(items);
+    // Update order based on the new position
+    const reorderedSections = items.map((section, index) => ({
+      ...section,
+      order: index + 1,
+    }));
+    setSections(reorderedSections);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    if (!courseName.trim() || !courseDesc.trim()) {
-      alert("Course name and description cannot be empty");
+    if (!courseName.trim() || !courseGrade.trim()) {
+      alert("Course name and grade cannot be empty");
       return;
     }
 
-    const nonEmptySections = sections.filter(section => section.name.trim());
+    const nonEmptySections = sections.filter((section) => section.title.trim());
 
     const newCourse = {
-      id: editingCourseId ? editingCourseId : Date.now().toString(),
       name: courseName,
       description: courseDesc,
-      sections: nonEmptySections,
+      grade: parseInt(courseGrade),
     };
 
-    const updatedCourses = editingCourseId
-      ? courses.map((course) => (course.id === editingCourseId ? newCourse : course))
-      : [...courses, newCourse];
+    try {
+      let savedCourse;
+      if (editingCourseId) {
+        savedCourse = await updateCourse(editingCourseId, newCourse);
+        const updatedCourses = courses.map((course) =>
+          course.id === editingCourseId ? savedCourse : course
+        );
+        setCourses(updatedCourses);
+      } else {
+        savedCourse = await createCourse(newCourse);
+        setCourses([...courses, savedCourse]);
+      }
 
-    setCourses(updatedCourses);
-    handleClose();
+      // Save sections
+      const sectionsToCreate = [];
+      for (const section of nonEmptySections) {
+        const sectionId = section.id.toString();
+        if (sectionId && !sectionId.startsWith("temp-id-")) {
+          await updateSection(savedCourse.id, sectionId, {
+            title: section.title,
+            description: section.description,
+            order: section.order,
+          });
+        } else {
+          sectionsToCreate.push({
+            title: section.title,
+            description: section.description,
+            order: section.order,
+          });
+        }
+      }
+      if (sectionsToCreate.length > 0) {
+        await createSections(savedCourse.id, sectionsToCreate);
+      }
+
+      // Fetch updated course data to reflect changes in the UI
+      const updatedCourse = await fetchCourse(savedCourse.id);
+      setCourses((prevCourses) =>
+        prevCourses.map((course) =>
+          course.id === savedCourse.id ? updatedCourse : course
+        )
+      );
+
+      handleClose();
+    } catch (error) {
+      console.error("Error saving course:", error);
+    }
   };
 
   const handleEditCourse = (id) => {
     const courseToEdit = courses.find((course) => course.id === id);
     setCourseName(courseToEdit.name);
     setCourseDesc(courseToEdit.description);
-    setSections(courseToEdit.sections);
+    setCourseGrade(courseToEdit.grade.toString());
+    setSections(courseToEdit.sections || []);
     setEditingCourseId(id);
     setOpen(true);
   };
 
-  const handleDeleteCourse = () => {
+  const handleDeleteCourse = async () => {
     if (window.confirm("Вы действительно хотите удалить этот курс?")) {
-      const updatedCourses = courses.filter((course) => course.id !== editingCourseId);
-      setCourses(updatedCourses);
-      handleClose();
+      try {
+        await deleteCourse(editingCourseId);
+        const updatedCourses = courses.filter(
+          (course) => course.id !== editingCourseId
+        );
+        setCourses(updatedCourses);
+        handleClose();
+      } catch (error) {
+        console.error("Error deleting course:", error);
+      }
     }
   };
 
   const handleNavigateToSection = (courseId, sectionId) => {
-    navigate(`/admindashboard/tasks/${courseId}/${sectionId}`);
+    navigate(`/admindashboard/tasks/courses/${courseId}/sections/${sectionId}`);
   };
+
+  if (loading) {
+    return <Loader></Loader>;
+  }
 
   return (
     <div className="spdash">
@@ -154,25 +234,47 @@ const Tasks = () => {
 
           {courses.map((course) => (
             <div key={course.id} className="addedCourses">
-              <div style={{display:"flex", flexDirection:"column", alignItems:'center', gap:"0.5rem"}}>
-                <h3 className="defaultStyle" style={{fontSize:"x-large", color:"black"}}>{course.name}</h3>
-                <p className="defaultStyle" style={{color:"#666"}}>{course.description} класс</p>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
+              >
+                <h3
+                  className="defaultStyle"
+                  style={{ fontSize: "x-large", color: "black" }}
+                >
+                  {course.name}
+                </h3>
+                <p className="defaultStyle" style={{ color: "#666" }}>
+                  {course.grade} класс
+                </p>
+                <p className="defaultStyle" style={{ color: "#666" }}>
+                  {course.description}
+                </p>
               </div>
-              
+
               <ul className="sectListInfo">
                 {course.sections.map((section, index) => (
-                  <li 
-                    className="sectionsInfo" 
+                  <li
+                    className="sectionsInfo"
                     key={section.id}
-                    onClick={() => handleNavigateToSection(course.name, section.name)}
-                    style={{ cursor: 'pointer' }}
+                    onClick={() =>
+                      handleNavigateToSection(course.id, section.id)
+                    }
+                    style={{ cursor: "pointer" }}
                   >
                     <span>{index + 1}.</span>
-                    {section.name}
+                    {section.title}
                   </li>
                 ))}
               </ul>
-              <button className="superBtn" onClick={() => handleEditCourse(course.id)}>
+              <button
+                className="superBtn"
+                onClick={() => handleEditCourse(course.id)}
+              >
                 <EditIcon />
               </button>
             </div>
@@ -217,22 +319,26 @@ const Tasks = () => {
                     required
                   />{" "}
                   <br />
-                  <label htmlFor="courseDesc">Выберите уровень</label> <br />
+                  <label htmlFor="courseGrade">Выберите уровень</label> <br />
                   <input
-                    list="levels"
-                    id="gender"
-                    name="courseDesc"
-                    value={courseDesc}
-                    onChange={(e) => setCourseDesc(e.target.value)}
+                    type="text"
+                    id="courseGrade"
+                    name="courseGrade"
+                    value={courseGrade}
+                    onChange={(e) => setCourseGrade(e.target.value)}
                     placeholder="Дошкольный"
                     required
                   />
-                  <datalist id="levels">
-                    <option value="1"></option>
-                    <option value="2"></option>
-                    <option value="3"></option>
-                  </datalist>
-
+                  <br />
+                  <label htmlFor="courseDesc">Описание курса</label> <br />
+                  <input
+                    type="text"
+                    id="courseDesc"
+                    name="courseDesc"
+                    value={courseDesc}
+                    onChange={(e) => setCourseDesc(e.target.value)}
+                    placeholder="Описание курса"
+                  />
                   <button
                     type="submit"
                     className="superBtn"
@@ -240,12 +346,15 @@ const Tasks = () => {
                   >
                     {editingCourseId ? "Сохранить изменения" : "Добавить курс"}
                   </button>
-
                   {editingCourseId && (
                     <button
                       type="button"
                       className="superBtn"
-                      style={{ marginTop: "10px", color: "red", marginLeft:"10px"}}
+                      style={{
+                        marginTop: "10px",
+                        color: "red",
+                        marginLeft: "10px",
+                      }}
                       onClick={handleDeleteCourse}
                     >
                       Удалить курс
@@ -272,23 +381,60 @@ const Tasks = () => {
                   <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="sections">
                       {(provided) => (
-                        <ul className="sectList" {...provided.droppableProps} ref={provided.innerRef}>
+                        <ul
+                          className="sectList"
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                        >
                           {sections.map((section, index) => (
-                            <Draggable key={section.id} draggableId={section.id} index={index}>
+                            <Draggable
+                              key={section.id}
+                              draggableId={section.id.toString()} // Ensure draggableId is a string
+                              index={index}
+                            >
                               {(provided) => (
-                                <li className="sectAdder" {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                                <li
+                                  className="sectAdder"
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  ref={provided.innerRef}
+                                >
                                   <input
-                                    style={{ margin: "0" }}
                                     type="text"
-                                    value={section.name}
+                                    value={section.title}
                                     onChange={(e) =>
-                                      handleSectionNameChange(section.id, e.target.value)
+                                      handleSectionChange(
+                                        section.id,
+                                        "title",
+                                        e.target.value
+                                      )
                                     }
+                                    placeholder="Название секции"
                                   />
-                                  <button onClick={() => handleDeleteSection(section.id)} className="transBtn">
+                                  <textarea
+                                    value={section.description}
+                                    onChange={(e) =>
+                                      handleSectionChange(
+                                        section.id,
+                                        "description",
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder="Описание секции"
+                                  ></textarea>
+                                  <button
+                                    onClick={() =>
+                                      handleDeleteSection(section.id)
+                                    }
+                                    className="transBtn"
+                                  >
                                     <DeleteForeverIcon />
                                   </button>
-                                  <button className="transBtn" name="dragger" {...provided.dragHandleProps}>
+                                  <button
+                                    className="transBtn"
+                                    name="dragger"
+                                    {...provided.dragHandleProps}
+                                  >
                                     <MenuIcon />
                                   </button>
                                 </li>

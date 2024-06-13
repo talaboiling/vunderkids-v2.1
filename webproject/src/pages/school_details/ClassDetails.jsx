@@ -2,12 +2,20 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
-import Superside from "../admin_components/Superside.jsx"
+import Superside from "../admin_components/Superside.jsx";
+import {
+  addStudent,
+  fetchClass,
+  fetchStudentsOfClass,
+} from "../../utils/apiService.js";
+import Loader from "../Loader.jsx";
 
 const ClassDetails = () => {
   const { schoolId, classId } = useParams();
   const [students, setStudents] = useState([]);
+  const [class_info, setClass] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -17,25 +25,8 @@ const ClassDetails = () => {
   });
 
   useEffect(() => {
-    fetchStudents();
+    fetchData();
   }, [schoolId, classId]);
-
-  const fetchStudents = async () => {
-    const token = localStorage.getItem("access_token");
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/schools/${schoolId}/classes/${classId}/students`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setStudents(response.data);
-    } catch (error) {
-      console.error("Error fetching students:", error);
-    }
-  };
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -45,19 +36,25 @@ const ClassDetails = () => {
     });
   };
 
+  const fetchData = async () => {
+    try {
+      const [studentsData, classData] = await Promise.all([
+        fetchStudentsOfClass(schoolId, classId),
+        fetchClass(schoolId, classId),
+      ]);
+      setStudents(studentsData);
+      setClass(classData);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("access_token");
     try {
-      await axios.post(
-        `http://localhost:8000/api/schools/${schoolId}/classes/${classId}/students/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await addStudent(schoolId, classId, formData);
       setShowModal(false);
       setFormData({
         first_name: "",
@@ -66,39 +63,64 @@ const ClassDetails = () => {
         gender: "",
         phone_number: "",
       });
-      fetchStudents(); // Fetch the updated list of students
+      await fetchData();
     } catch (error) {
       console.error("Error adding student:", error);
     }
   };
 
+  if (loading) {
+    return <Loader></Loader>;
+  }
+
   return (
     <div className="spdash">
       <Superside />
       <div className="superMain schoolCont">
-        <h2>Идентификатор класса: {classId}</h2>
+        <h2>
+          Класс: {class_info.grade}
+          {class_info.section}{" "}
+        </h2>
         {students.length === 0 ? (
-          <div className="classList" style={{display:"flex", justifyContent:"center", alignItems:"center", marginBottom:"10px"}}>
-            <p style={{color:"lightgray"}}>Пока нет учеников в этом классе.</p>
+          <div
+            className="classList"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: "10px",
+            }}
+          >
+            <p style={{ color: "lightgray" }}>
+              Пока нет учеников в этом классе.
+            </p>
           </div>
-          
         ) : (
           <ul className="classList">
-          {students.map((student) => (
-            <li key={student.id} className="classItem">
-              <b>{student.user.first_name} {student.user.last_name}</b> <br /> {student.user.email} <br />
-              {student.user.phone_number}
-            </li>
-          ))}
-        </ul>
+            {students.map((student) => (
+              <li key={student.id} className="classItem">
+                <b>
+                  {student.user.first_name} {student.user.last_name}
+                </b>{" "}
+                <br /> {student.user.email} <br />
+                {student.user.phone_number}
+              </li>
+            ))}
+          </ul>
         )}
-        
-        <button onClick={() => setShowModal(true)} style={{border: "none",
-                        borderRadius: "4px",
-                        backgroundColor: "#509CDB",
-                        fontSize: "large",
-                        fontWeight: "600"
-                      }}>Добавить ученика</button>
+
+        <button
+          onClick={() => setShowModal(true)}
+          style={{
+            border: "none",
+            borderRadius: "4px",
+            backgroundColor: "#509CDB",
+            fontSize: "large",
+            fontWeight: "600",
+          }}
+        >
+          Добавить ученика
+        </button>
 
         {showModal && (
           <dialog open className="modal supermodal">
@@ -108,11 +130,11 @@ const ClassDetails = () => {
                   border: "none",
                   float: "right",
                   backgroundColor: "transparent",
-                  boxShadow:"none"
+                  boxShadow: "none",
                 }}
                 onClick={() => setShowModal(false)}
               >
-                <CloseIcon sx={{color:"gray"}}/>
+                <CloseIcon sx={{ color: "gray" }} />
               </button>
               <br />
               <form onSubmit={handleSubmit}>
@@ -127,7 +149,7 @@ const ClassDetails = () => {
                   style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
                 <br />
-                
+
                 <label htmlFor="last_name">Фамилия</label>
                 <input
                   type="text"
@@ -139,7 +161,7 @@ const ClassDetails = () => {
                   style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
                 <br />
-                
+
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
@@ -151,19 +173,23 @@ const ClassDetails = () => {
                   style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
                 <br />
-                
+
                 <label htmlFor="gender">Пол</label>
-                <input
-                  type="text"
+                <select
                   id="gender"
                   name="gender"
                   value={formData.gender}
                   onChange={handleFormChange}
                   required
                   style={{ width: "100%", padding: "10px", fontSize: "large" }}
-                />
+                >
+                  <option value="">Выберите пол</option>
+                  <option value="M">Мужской</option>
+                  <option value="F">Женский</option>
+                  <option value="O">Не указан</option>
+                </select>
                 <br />
-                
+
                 <label htmlFor="phone_number">Телефон</label>
                 <input
                   type="text"
@@ -176,10 +202,7 @@ const ClassDetails = () => {
                 />
                 <br />
                 <br />
-                <button
-                  type="submit"
-                  className="superBtn"
-                >
+                <button type="submit" className="superBtn">
                   Добавить
                 </button>
               </form>

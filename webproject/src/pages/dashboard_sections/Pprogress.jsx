@@ -18,6 +18,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { fetchUserData, fetchWeeklyProgress } from "../../utils/apiService";
+import Loader from "../Loader";
 
 ChartJS.register(
   CategoryScale,
@@ -31,77 +33,28 @@ ChartJS.register(
 
 const Pprogress = () => {
   const [user, setUser] = useState({ first_name: "Ученик", last_name: "" }); // Default values
-  const [courses, setCourses] = useState([]); // State to store courses
   const [weeklyProgress, setWeeklyProgress] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const accessToken = localStorage.getItem("access_token");
+    const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
-      if (accessToken) {
-        try {
-          const userEndpoint = childId
-            ? `http://localhost:8000/api/children/${childId}`
-            : "http://localhost:8000/api/current-user";
-          const response = await axios.get(userEndpoint, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-          if (childId) {
-            setUser(response.data);
-          } else {
-            setUser(response.data.user);
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
+      try {
+        const [userData, weeklyProgressData] = await Promise.all([
+          fetchUserData(childId),
+          fetchWeeklyProgress(childId),
+        ]);
+
+        setUser(userData);
+        setWeeklyProgress(weeklyProgressData.weekly_progress);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    const fetchCourses = async () => {
-      const accessToken = localStorage.getItem("access_token");
-      const childId = localStorage.getItem("child_id");
-      if (accessToken) {
-        try {
-          const coursesEndpoint = childId
-            ? `http://localhost:8000/api/courses?child_id=${childId}`
-            : "http://localhost:8000/api/courses";
-          const response = await axios.get(coursesEndpoint, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-          setCourses(response.data);
-        } catch (error) {
-          console.error("Error fetching courses:", error);
-        }
-      }
-    };
-
-    const fetchWeeklyProgress = async () => {
-      const accessToken = localStorage.getItem("access_token");
-      const childId = localStorage.getItem("child_id");
-      if (accessToken) {
-        try {
-          const progressEndpoint = childId
-            ? `http://localhost:8000/api/progress/weekly?child_id=${childId}`
-            : "http://localhost:8000/api/progress/weekly";
-          const response = await axios.get(progressEndpoint, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-          setWeeklyProgress(response.data.weekly_progress);
-        } catch (error) {
-          console.error("Error fetching weekly progress:", error);
-        }
-      }
-    };
-
-    fetchUserData();
-    fetchCourses();
-    fetchWeeklyProgress();
+    fetchData();
   }, []);
 
   const daysInRussian = {
@@ -159,6 +112,10 @@ const Pprogress = () => {
     responsive: true,
     maintainAspectRatio: false,
   };
+
+  if (loading) {
+    return <Loader></Loader>;
+  }
 
   return (
     <div className="rtdash">

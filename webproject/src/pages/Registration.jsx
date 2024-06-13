@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logoImg from "/src/assets/logo_blue.png";
+import { registerParent } from "../utils/apiService"; // Import the function
 
 function Registration() {
   const [formData, setFormData] = useState({
@@ -30,22 +31,8 @@ function Registration() {
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:8000/api/register-parent/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        }
-      );
-      const data = await response.json();
-      if (response.ok) {
-        setResponseMessage(`Success: ${data.message}`);
-      } else {
-        setResponseMessage(`Error: ${data.message}`);
-      }
+      const data = await registerParent(body); // Use the function from apiService
+      setResponseMessage(`Success: ${data.message}`);
     } catch (error) {
       setResponseMessage(`Error: ${error.message}`);
     }
