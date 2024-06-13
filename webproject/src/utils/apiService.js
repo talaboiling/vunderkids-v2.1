@@ -338,3 +338,33 @@ export const registerParent = async (formData) => {
     throw new Error(error || "Something went wrong");
   }
 };
+
+export const fetchSchoolData = async (schoolId) => {
+  try {
+    const endpoint = `/schools/${schoolId}/`;
+    const response = await instance.get(endpoint);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
+export const fetchClassesData = async (schoolId) => {
+  try {
+    const endpoint = `/schools/${schoolId}/classes/`;
+    const response = await instance.get(endpoint);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
+export const addClasses = async (schoolId, formData) => {
+  try {
+    const endpoint = `/schools/${schoolId}/classes/`;
+    const response = await instance.post(endpoint, formData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
