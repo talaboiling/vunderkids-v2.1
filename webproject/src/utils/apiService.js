@@ -28,12 +28,10 @@ instance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    console.log("hello");
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         const newAccessToken = await refreshAccessToken();
-        console.log(newAccessToken);
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${newAccessToken}`;
@@ -50,6 +48,16 @@ instance.interceptors.response.use(
 export const fetchStudentsAdmin = async () => {
   try {
     const response = await instance.get("/all-students");
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || "Something went wrong");
+  }
+};
+
+export const fetchStudentsOfClass = async (schoolId, classId) => {
+  try {
+    const endpoint = `/schools/${schoolId}/classes/${classId}/students/`;
+    const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.message || "Something went wrong");
@@ -89,6 +97,17 @@ export const addChild = async (formData) => {
   }
 };
 
+export const addStudent = async (schoolId, classId, formData) => {
+  try {
+    const endpoint = `/schools/${schoolId}/classes/${classId}/students/`;
+    console.log(endpoint);
+    const response = await instance.post(endpoint, formData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
 export const deleteChild = async (childId) => {
   try {
     const response = await instance.delete(`/children/${childId}`);
@@ -108,6 +127,16 @@ export const fetchSchools = async () => {
   }
 };
 
+export const fetchClass = async (schoolId, classId) => {
+  try {
+    const endpoint = `/schools/${schoolId}/classes/${classId}/`;
+    const response = await instance.get(endpoint);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
 export const fetchCourses = async (childId) => {
   try {
     const endpoint = childId ? `/courses?child_id=${childId}` : "/courses";
@@ -115,6 +144,78 @@ export const fetchCourses = async (childId) => {
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");
+  }
+};
+
+export const fetchCourse = async (courseId) => {
+  try {
+    const endpoint = `/courses/${courseId}`;
+    const response = await instance.get(endpoint);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
+export const createCourse = async (courseData) => {
+  try {
+    const response = await instance.post("/courses/", courseData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || "Something went wrong");
+  }
+};
+
+export const updateCourse = async (courseId, courseData) => {
+  try {
+    const response = await instance.patch(`/courses/${courseId}/`, courseData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || "Something went wrong");
+  }
+};
+
+export const deleteCourse = async (courseId) => {
+  try {
+    const response = await instance.delete(`/courses/${courseId}/`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || "Something went wrong");
+  }
+};
+
+export const createSections = async (courseId, sections) => {
+  try {
+    const response = await instance.post(
+      `/courses/${courseId}/sections/`,
+      sections
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || "Something went wrong");
+  }
+};
+
+export const updateSection = async (courseId, sectionId, sectionData) => {
+  try {
+    const response = await instance.patch(
+      `/courses/${courseId}/sections/${sectionId}/`,
+      sectionData
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || "Something went wrong");
+  }
+};
+
+export const deleteSection = async (courseId, sectionId) => {
+  try {
+    const response = await instance.delete(
+      `/courses/${courseId}/sections/${sectionId}/`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || "Something went wrong");
   }
 };
 
@@ -194,16 +295,6 @@ export const fetchQuestion = async (
   }
 };
 
-export const fetchCourse = async (courseId) => {
-  try {
-    const endpoint = `/courses/${courseId}`;
-    const response = await instance.get(endpoint);
-    return response.data;
-  } catch (error) {
-    throw new Error(error || "Something went wrong");
-  }
-};
-
 export const fetchWeeklyProgress = async (childId) => {
   try {
     const endpoint = childId
@@ -227,4 +318,23 @@ export const fetchRatings = async (childId) => {
     throw new Error(error || "Something went wrong");
   }
 };
-// Add other fetch functions as needed
+
+export const activateAccount = async (activationToken) => {
+  try {
+    const endpoint = `/activate/${activationToken}/`;
+    const response = await instance.get(endpoint);
+    return response;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
+export const registerParent = async (formData) => {
+  try {
+    const endpoint = `/register-parent/`;
+    const response = await instance.post(endpoint, formData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};

@@ -55,7 +55,7 @@ const Pprogress = () => {
     };
 
     fetchData();
-  });
+  }, []);
 
   const daysInRussian = {
     Monday: "Пон",

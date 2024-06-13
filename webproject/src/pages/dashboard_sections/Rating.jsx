@@ -36,7 +36,7 @@ const Rating = () => {
       }
     };
     fetchData();
-  });
+  }, []);
 
   if (loading) {
     return <Loader></Loader>;
