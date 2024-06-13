@@ -286,14 +286,20 @@
     margin-top: 40px;
 }
 
-
+.thumbcontainer{
+    padding: 0;
+    margin: 0;
+    object-fit:contain;
+}
 
 .taskThumbnail {
-    padding: 7px;
+    padding-top: 7px;
     max-height: 140px;
-    object-fit: cover;
-    background-position: center;
+    max-width: 180px;
+    
+    background-position:center;
     border-radius: 15px;
+    overflow: hidden;
 }
 
 .vidBlock {
@@ -334,6 +340,11 @@
     flex-direction: column;
 }
 
+.studVidBlock:hover .taskHover{
+    display: none;
+
+}
+
 .deleteBtn{
     background-color: transparent;
     padding: 0;
@@ -347,6 +358,14 @@
 
 .deleteBtn:hover{
     background-color: transparent;
+    transform: scale(1.1);
+}
+
+.editBtn{
+    top: 30px;
+}
+
+.editBtn:hover{
     transform: scale(1.1);
 }
 
@@ -373,8 +392,16 @@
     background-size: cover;
     background-position: center;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     padding: 10px;
+}
+
+.previewContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
 }
 
 .taskBGPicker{
@@ -425,4 +452,21 @@
     position: relative;
     cursor: pointer;
     transition: transform 0.2s;
+}
+
+.taskBlock:hover{
+    transform: scale(0.98);
+}
+
+.selected-template {
+    border: 2px solid orange;
+  }
+
+.questionNavigation{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: center;
+    align-content: center;
 }
