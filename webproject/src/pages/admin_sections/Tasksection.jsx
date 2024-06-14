@@ -9,7 +9,6 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import bgtask from "../../assets/bgtask.svg";
 import bgvideo from "../../assets/videolessonthumb.svg";
-import axios from "axios";
 import {
   fetchContents,
   createLesson,
@@ -19,8 +18,6 @@ import {
   updateTask,
   deleteTask,
   createQuestion,
-  updateQuestion,
-  deleteQuestion,
 } from "../../utils/apiService";
 
 const Tasksection = () => {
@@ -33,9 +30,8 @@ const Tasksection = () => {
     title: "",
     description: "",
   });
-  const [file, setFile] = useState(null);
   const [taskDetails, setTaskDetails] = useState({
-    question_type: "",
+    question_type: "multiple_choice_text",
     template: "",
     title: "",
     question_text: "",
@@ -54,7 +50,6 @@ const Tasksection = () => {
     const fetchContentsData = async () => {
       try {
         const response = await fetchContents(courseId, sectionId);
-        console.log(response);
         setContents(response);
       } catch (error) {
         console.error("Failed to fetch contents", error);
@@ -68,7 +63,9 @@ const Tasksection = () => {
     e.preventDefault();
     const updatedVideoDetails = {
       ...videoDetails,
-      thumbnail: file ? URL.createObjectURL(file) : videoDetails.thumbnail,
+      content_type: "lesson",
+      order: contents.length + 1,
+      section: sectionId,
     };
 
     let updatedContents;
@@ -102,7 +99,6 @@ const Tasksection = () => {
       title: "",
       description: "",
     });
-    setFile(null);
     setIsEditingVideo(false);
   };
 
@@ -137,7 +133,7 @@ const Tasksection = () => {
       template: question.template,
       title: question.title,
       question_text: question.question_text,
-      options: question.options,
+      options: question.options.map((opt) => opt.value),
       correct_answer: question.correct_answer,
     });
     setCurrentQuestionIndex(index);
@@ -145,19 +141,34 @@ const Tasksection = () => {
 
   const resetTaskDetails = () => {
     setTaskDetails({
-      type: "",
+      question_type: "multiple_choice_text",
       template: "",
-      topText: "",
-      taskText: "",
-      answers: ["", "", "", ""],
-      correctAnswer: "",
+      title: "",
+      question_text: "",
+      options: ["", "", "", ""],
+      correct_answer: "",
     });
   };
 
   const handleFinishTasks = async () => {
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex] = taskDetails;
-    const finalQuestions = updatedQuestions;
+    const finalQuestions = updatedQuestions.map((question, index) => ({
+      ...question,
+      options: question.options.map((option, idx) => ({
+        id: idx + 1,
+        value: option,
+      })),
+      correct_answer: question.options.indexOf(question.correct_answer) + 1,
+    }));
+
+    const taskData = {
+      title: taskDetails.title,
+      description: taskDetails.description || "",
+      section: sectionId,
+      questions: finalQuestions,
+      order: contents.length + 1,
+    };
 
     let updatedContents;
     if (isEditingTask) {
@@ -165,15 +176,13 @@ const Tasksection = () => {
         courseId,
         sectionId,
         contents[editingTaskIndex].id,
-        { questions: finalQuestions }
+        taskData
       );
       updatedContents = contents.map((content, index) =>
         index === editingTaskIndex ? updatedTask : content
       );
     } else {
-      const newTask = await createTask(courseId, sectionId, {
-        questions: finalQuestions,
-      });
+      const newTask = await createTask(courseId, sectionId, taskData);
       updatedContents = [...contents, newTask];
     }
 
@@ -185,27 +194,31 @@ const Tasksection = () => {
     setCurrentQuestionIndex(0);
   };
 
-  const handleFileChange = (file) => {
-    setFile(file);
-  };
-
   const handleAnswerChange = (index, value) => {
-    const newAnswers = [...taskDetails.answers];
-    newAnswers[index] = value;
-    setTaskDetails({ ...taskDetails, answers: newAnswers });
+    const newOptions = [...taskDetails.options];
+    newOptions[index] = value;
+    setTaskDetails({ ...taskDetails, options: newOptions });
   };
 
   const handleSelectCorrectAnswer = (index) => {
     setTaskDetails({
       ...taskDetails,
-      correctAnswer: taskDetails.answers[index],
+      correct_answer: taskDetails.options[index],
     });
   };
 
-  const openContent = (index) => {
+  const openLesson = (index) => {
+    const lesson = contents[index];
+    if (lesson.video_url) {
+      window.open(lesson.video_url, "_blank");
+    }
+  };
+
+  const openTask = (index) => {
     setSelectedTaskIndex(index);
     setShowQuestionsModal(true);
     setCurrentQuestionIndex(0);
+    setQuestions(contents[index].questions || []);
   };
 
   const handleEditContent = (index) => {
@@ -270,7 +283,7 @@ const Tasksection = () => {
           }}
         >
           <p style={{ fontSize: "x-large", fontWeight: "500", color: "#666" }}>
-            {sectionId}
+            {courseId}
           </p>
           <p
             className="defaultStyle"
@@ -290,53 +303,64 @@ const Tasksection = () => {
             contents.map((content, index) => (
               <div
                 key={index}
-                className={`contentBlock ${content.content_type}`}
-                onClick={() => openContent(index)}
+                className={`vidBlock ${content.content_type}`}
               >
                 {content.content_type === "lesson" && (
-                  <>
-                    <div className="thumbcontainer">
-                      <img
-                        src={bgvideo || "placeholder.png"}
-                        alt={content.name}
-                        className="taskThumbnail"
-                        onClick={() => openContent(index)}
-                      />
-                    </div>
-                    <p
-                      style={{
-                        backgroundColor: "white",
-                        margin: "0",
-                        padding: "7px 40px",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      Видеоурок
-                    </p>
-                  </>
+                  
+                    <>
+                      <div className="thumbcontainer" onClick={() => openLesson(index)}>
+                        <img
+                          src={bgvideo || "placeholder.png"}
+                          alt={content.title}
+                          className="taskThumbnail"
+                        />
+                      </div>
+                      <p
+                        style={{
+                          backgroundColor: "white",
+                          margin: "0",
+                          padding: "7px 40px",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        {content.title}
+                      </p>
+                      <div className="taskHover">
+                        <p>
+                          <strong>Название:</strong> {content.title}
+                        </p>
+                        <p>
+                          <strong>Описание:</strong> {content.description}
+                        </p>
+                      </div>
+                    </>
+                  
                 )}
                 {content.content_type === "task" && (
-                  <>
-                    <img
-                      src={bgtask}
-                      alt=""
-                      style={{
-                        paddingTop: "20px",
-                        scale: "1.3",
-                        overflow: "hidden",
-                      }}
-                    />
-                    <p
-                      style={{
-                        backgroundColor: "white",
-                        margin: "0",
-                        padding: "7px 40px",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      Задание
-                    </p>
-                  </>
+                  
+                    <>
+                      <img
+                        src={bgtask}
+                        alt=""
+                        style={{
+                          paddingTop: "20px",
+                          scale: "1.3",
+                          overflow: "hidden",
+                        }}
+                        onClick={() => openTask(index)}
+                      />
+                      <p
+                        style={{
+                          backgroundColor: "white",
+                          margin: "0",
+                          padding: "7px 40px",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        {content.title}
+                      </p>
+                    </>
+                  
                 )}
                 <button
                   onClick={(e) => {
@@ -416,9 +440,12 @@ const Tasksection = () => {
                   <input
                     type="text"
                     id="videoUrl"
-                    value={videoDetails.url}
+                    value={videoDetails.video_url}
                     onChange={(e) =>
-                      setVideoDetails({ ...videoDetails, url: e.target.value })
+                      setVideoDetails({
+                        ...videoDetails,
+                        video_url: e.target.value,
+                      })
                     }
                     required
                   />
@@ -429,9 +456,9 @@ const Tasksection = () => {
                   <input
                     type="text"
                     id="videoName"
-                    value={videoDetails.name}
+                    value={videoDetails.title}
                     onChange={(e) =>
-                      setVideoDetails({ ...videoDetails, name: e.target.value })
+                      setVideoDetails({ ...videoDetails, title: e.target.value })
                     }
                     required
                   />
@@ -499,7 +526,7 @@ const Tasksection = () => {
                 </p>
                 <div className="previewContent">
                   <p style={{ margin: "0", fontSize: "xx-large" }}>
-                    {taskDetails.taskText}
+                    {taskDetails.question_text}
                   </p>
                 </div>
               </div>
@@ -524,18 +551,18 @@ const Tasksection = () => {
                         placeholder="Выбор правильного ответа"
                         required
                         style={{ margin: "0" }}
-                        value={taskDetails.type}
+                        value={taskDetails.question_type}
                         onChange={(e) =>
                           setTaskDetails({
                             ...taskDetails,
-                            type: e.target.value,
+                            question_type: e.target.value,
                           })
                         }
                       />
                       <datalist id="tasktype">
-                        <option value="Выбор правильного ответа" />
-                        <option value="Ввод текста" />
-                        <option value="Загрузка файла" />
+                        <option value="multiple_choice_text" />
+                        <option value="text_input" />
+                        <option value="file_upload" />
                       </datalist>
                       <button
                         className="transBtn"
@@ -626,7 +653,7 @@ const Tasksection = () => {
                     >
                       <span>
                         <label
-                          htmlFor=""
+                          htmlFor="taskTitle"
                           className="defaultStyle"
                           style={{ fontSize: "medium", color: "#666" }}
                         >
@@ -634,6 +661,7 @@ const Tasksection = () => {
                         </label>
                         <input
                           type="text"
+                          id="taskTitle"
                           placeholder="Мой вопрос"
                           style={{ margin: "0" }}
                           value={taskDetails.title}
@@ -647,7 +675,7 @@ const Tasksection = () => {
                       </span>
                       <span>
                         <label
-                          htmlFor=""
+                          htmlFor="taskText"
                           className="defaultStyle"
                           style={{ fontSize: "medium", color: "#666" }}
                         >
@@ -655,6 +683,7 @@ const Tasksection = () => {
                         </label>
                         <input
                           type="text"
+                          id="taskText"
                           placeholder="15 + 4 ="
                           style={{ margin: "0" }}
                           value={taskDetails.question_text}
@@ -681,19 +710,19 @@ const Tasksection = () => {
                         gap: "1rem",
                       }}
                     >
-                      {taskDetails.answers.map((answer, index) => (
+                      {taskDetails.options.map((option, index) => (
                         <input
                           key={index}
                           type="text"
                           placeholder={String.fromCharCode(97 + index)}
-                          value={answer}
+                          value={option}
                           style={{ margin: "0" }}
                           onChange={(e) =>
                             handleAnswerChange(index, e.target.value)
                           }
                           onClick={() => handleSelectCorrectAnswer(index)}
                           className={
-                            taskDetails.correct_answer === answer
+                            taskDetails.correct_answer === option
                               ? "correct-answer"
                               : ""
                           }
@@ -773,8 +802,7 @@ const Tasksection = () => {
             </h2>
             <div className="questionsList">
               {selectedTaskIndex !== null &&
-                contents[selectedTaskIndex].questions &&
-                contents[selectedTaskIndex].questions.length > 0 && (
+                questions.length > 0 && (
                   <>
                     <div className="questionItem">
                       <p>
@@ -782,57 +810,45 @@ const Tasksection = () => {
                       </p>
                       <p>
                         <strong>Тип задачи:</strong>{" "}
-                        {
-                          contents[selectedTaskIndex].questions[
-                            currentQuestionIndex
-                          ].question_type
-                        }
+                        {questions[currentQuestionIndex]?.question_type}
                       </p>
                       <p>
                         <strong>Шаблон:</strong>{" "}
-                        {
-                          contents[selectedTaskIndex].questions[
-                            currentQuestionIndex
-                          ].template
-                        }
+                        {questions[currentQuestionIndex]?.template}
                       </p>
                       <p>
                         <strong>Текст сверху:</strong>{" "}
-                        {
-                          contents[selectedTaskIndex].questions[
-                            currentQuestionIndex
-                          ].title
-                        }
+                        {questions[currentQuestionIndex]?.title}
                       </p>
                       <p>
                         <strong>Текст задачи:</strong>{" "}
-                        {
-                          contents[selectedTaskIndex].questions[
-                            currentQuestionIndex
-                          ].question_text
-                        }
+                        {questions[currentQuestionIndex]?.question_text}
                       </p>
                       <p>
                         <strong>Варианты ответа:</strong>{" "}
-                        {contents[selectedTaskIndex].questions[
-                          currentQuestionIndex
-                        ].answers.join(", ")}
+                        {questions[currentQuestionIndex]?.options
+                          .map((opt) => opt.value)
+                          .join(", ")}
                       </p>
                       <p>
                         <strong>Правильный ответ:</strong>{" "}
-                        {
-                          contents[selectedTaskIndex].questions[
-                            currentQuestionIndex
-                          ].correct_answer
-                        }
+                        {questions[currentQuestionIndex]?.correct_answer}
                       </p>
                     </div>
                     <div className="questionNavigation">
-                      <button onClick={prevQuestion} className="transBtn">
+                      <button
+                        onClick={prevQuestion}
+                        className="transBtn"
+                        disabled={currentQuestionIndex === 0}
+                      >
                         <ArrowBackIosNewIcon />
                         <p className="defaultStyle">Prev</p>
                       </button>
-                      <button onClick={nextQuestion} className="transBtn">
+                      <button
+                        onClick={nextQuestion}
+                        className="transBtn"
+                        disabled={currentQuestionIndex >= questions.length - 1}
+                      >
                         <ArrowForwardIosIcon />
                         <p className="defaultStyle">Next</p>
                       </button>
