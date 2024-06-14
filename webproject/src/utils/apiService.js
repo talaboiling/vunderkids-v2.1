@@ -151,6 +151,7 @@ export const fetchCourse = async (courseId) => {
   try {
     const endpoint = `/courses/${courseId}`;
     const response = await instance.get(endpoint);
+    console.log(endpoint);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");

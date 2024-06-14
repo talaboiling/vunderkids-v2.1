@@ -37,7 +37,7 @@ const router = createBrowserRouter([
   { path: "/admindashboard/tasks", element: <Tasks /> },
   { path: "/schools/:schoolId", element: <SchoolDetails /> },
   { path: "/schools/:schoolId/classes/:classId", element: <ClassDetails /> },
-  { path: "/dashboard/lessons/:lessonId", element: <MathCourse /> },
+  { path: "/dashboard/courses/:courseId/lessons", element: <MathCourse /> },
   {
     path: "/admindashboard/tasks/courses/:courseId/sections/:sectionId",
     element: <TaskSection />,
