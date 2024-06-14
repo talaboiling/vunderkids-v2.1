@@ -16,25 +16,29 @@ const Math = () => {
   const { courseId } = useParams();
   const [course, setCourse] = useState();
   const [sections, setSections] = useState([]);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        console.log(courseId);
+        const child_id = localStorage.getItem("child_id");
+        if (child_id) {
+          const userData = await fetchUserData(child_id);
+        } else {
+          const userData = await fetchUserData();
+        }
         const courseData = await fetchCourse(courseId);
         const sectionsData = await fetchSections(courseId);
         setSections(sectionsData);
         setCourse(courseData);
+        setUser(userData);
       } catch (error) {
         console.error("Error loading data:", error);
       }
     };
 
-    fetchUserData();
-    fetchCourses();
+    loadData();
   }, []);
-
-  console.log(course);
 
   const openVideoModal = (url) => {
     setVideoUrl("https://www.youtube.com/embed/_ALtBbXcyXc");
