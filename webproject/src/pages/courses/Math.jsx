@@ -17,6 +17,9 @@ const Math = () => {
   const [course, setCourse] = useState();
   const [sections, setSections] = useState([]);
   const [user, setUser] = useState({});
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [showQuestionsModal, setShowQuestionsModal] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
