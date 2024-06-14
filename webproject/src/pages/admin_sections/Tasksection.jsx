@@ -10,7 +10,18 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import bgtask from "../../assets/bgtask.svg";
 import bgvideo from "../../assets/videolessonthumb.svg";
 import axios from "axios";
-import { fetchContents } from "../../utils/apiService";
+import {
+  fetchContents,
+  createLesson,
+  updateLesson,
+  deleteLesson,
+  createTask,
+  updateTask,
+  deleteTask,
+  createQuestion,
+  updateQuestion,
+  deleteQuestion,
+} from "../../utils/apiService";
 
 const Tasksection = () => {
   const { courseId, sectionId } = useParams();
@@ -25,12 +36,12 @@ const Tasksection = () => {
   });
   const [file, setFile] = useState(null);
   const [taskDetails, setTaskDetails] = useState({
-    type: "",
+    question_type: "",
     template: "",
-    topText: "",
-    taskText: "",
-    answers: ["", "", "", ""],
-    correctAnswer: "",
+    title: "",
+    question_text: "",
+    options: ["", "", "", ""],
+    correct_answer: "",
   });
   const [questions, setQuestions] = useState([]);
   const [showQuestionsModal, setShowQuestionsModal] = useState(false);
@@ -54,68 +65,81 @@ const Tasksection = () => {
     fetchContentsData();
   }, [courseId, sectionId]);
 
-  const handleVideoSubmit = (e) => {
+  const handleVideoSubmit = async (e) => {
     e.preventDefault();
     const updatedVideoDetails = {
       ...videoDetails,
       thumbnail: file ? URL.createObjectURL(file) : videoDetails.thumbnail,
     };
 
-    const updatedContents = isEditingVideo
-      ? contents.map((content, index) =>
-          index === selectedTaskIndex
-            ? { ...content, ...updatedVideoDetails }
-            : content
-        )
-      : [...contents, { ...updatedVideoDetails, content_type: "lesson" }];
+    let updatedContents;
+    if (isEditingVideo) {
+      const updatedLesson = await updateLesson(
+        courseId,
+        sectionId,
+        contents[selectedTaskIndex].id,
+        updatedVideoDetails
+      );
+      updatedContents = contents.map((content, index) =>
+        index === selectedTaskIndex ? updatedLesson : content
+      );
+    } else {
+      const newLesson = await createLesson(
+        courseId,
+        sectionId,
+        updatedVideoDetails
+      );
+      updatedContents = [...contents, newLesson];
+    }
 
     setContents(updatedContents);
     setShowVideoModal(false);
     resetVideoDetails();
-
-    // Save updated section to local storage
-    saveContentsToLocalStorage(updatedContents);
   };
 
   const resetVideoDetails = () => {
     setVideoDetails({
-      url: "",
-      name: "",
+      video_url: "",
+      title: "",
       description: "",
-      thumbnail: "",
     });
     setFile(null);
     setIsEditingVideo(false);
   };
 
-  const handleDeleteContent = (index) => {
+  const handleDeleteContent = async (id, type) => {
     if (window.confirm("Вы действительно хотите удалить этот элемент?")) {
-      const updatedContents = contents.filter((_, i) => i !== index);
-      setContents(updatedContents);
+      let updatedContents;
+      if (type === "lesson") {
+        await deleteLesson(courseId, sectionId, id);
+        updatedContents = contents.filter((content) => content.id !== id);
+      } else if (type === "task") {
+        await deleteTask(courseId, sectionId, id);
+        updatedContents = contents.filter((content) => content.id !== id);
+      }
 
-      // Save updated section to local storage
-      saveContentsToLocalStorage(updatedContents);
+      setContents(updatedContents);
     }
   };
 
   const handleTaskSubmit = (e) => {
     e.preventDefault();
     const updatedQuestions = [...questions];
-    updatedQuestions[currentQuestionIndex] = taskDetails; // Ensure the current question is updated
+    updatedQuestions[currentQuestionIndex] = taskDetails;
     setQuestions(updatedQuestions);
     resetTaskDetails();
-    setCurrentQuestionIndex(updatedQuestions.length); // Move to the next question index
+    setCurrentQuestionIndex(updatedQuestions.length);
   };
 
   const loadQuestion = (index) => {
     const question = questions[index];
     setTaskDetails({
-      type: question.type,
+      question_type: question.question_type,
       template: question.template,
-      topText: question.topText,
-      taskText: question.taskText,
-      answers: question.answers,
-      correctAnswer: question.correctAnswer,
+      title: question.title,
+      question_text: question.question_text,
+      options: question.options,
+      correct_answer: question.correct_answer,
     });
     setCurrentQuestionIndex(index);
   };
@@ -131,33 +155,35 @@ const Tasksection = () => {
     });
   };
 
-  const handleFinishTasks = () => {
+  const handleFinishTasks = async () => {
     const updatedQuestions = [...questions];
-    updatedQuestions[currentQuestionIndex] = taskDetails; // Ensure the current question is saved
+    updatedQuestions[currentQuestionIndex] = taskDetails;
     const finalQuestions = updatedQuestions;
 
-    const updatedContents = isEditingTask
-      ? contents.map((content, index) =>
-          index === editingTaskIndex
-            ? { ...content, questions: finalQuestions }
-            : content
-        )
-      : [...contents, { questions: finalQuestions, content_type: "task" }];
+    let updatedContents;
+    if (isEditingTask) {
+      const updatedTask = await updateTask(
+        courseId,
+        sectionId,
+        contents[editingTaskIndex].id,
+        { questions: finalQuestions }
+      );
+      updatedContents = contents.map((content, index) =>
+        index === editingTaskIndex ? updatedTask : content
+      );
+    } else {
+      const newTask = await createTask(courseId, sectionId, {
+        questions: finalQuestions,
+      });
+      updatedContents = [...contents, newTask];
+    }
 
     setContents(updatedContents);
     setShowTaskModal(false);
     setQuestions([]);
     resetTaskDetails();
-    saveContentsToLocalStorage(updatedContents);
     setIsEditingTask(false);
     setCurrentQuestionIndex(0);
-  };
-
-  const saveContentsToLocalStorage = (updatedContents) => {
-    localStorage.setItem(
-      `contents_${courseId}_${sectionId}`,
-      JSON.stringify(updatedContents)
-    );
   };
 
   const handleFileChange = (file) => {
@@ -200,7 +226,7 @@ const Tasksection = () => {
 
   const nextQuestion = () => {
     const updatedQuestions = [...questions];
-    updatedQuestions[currentQuestionIndex] = taskDetails; // Save the current question before moving
+    updatedQuestions[currentQuestionIndex] = taskDetails;
     setQuestions(updatedQuestions);
     if (currentQuestionIndex < questions.length - 1) {
       loadQuestion(currentQuestionIndex + 1);
@@ -212,16 +238,12 @@ const Tasksection = () => {
 
   const prevQuestion = () => {
     const updatedQuestions = [...questions];
-    updatedQuestions[currentQuestionIndex] = taskDetails; // Save the current question before moving
+    updatedQuestions[currentQuestionIndex] = taskDetails;
     setQuestions(updatedQuestions);
     if (currentQuestionIndex > 0) {
       loadQuestion(currentQuestionIndex - 1);
     }
   };
-
-  // if (!contents) {
-  //   return <div>Loading...</div>;
-  // }
 
   return (
     <div className="spdash">
@@ -320,7 +342,7 @@ const Tasksection = () => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDeleteContent(index);
+                    handleDeleteContent(content.id, content.content_type);
                   }}
                   className="deleteBtn"
                 >
@@ -343,7 +365,7 @@ const Tasksection = () => {
               className="adderBtn"
               onClick={() => {
                 setShowVideoModal(true);
-                resetVideoDetails(); // Reset video details for new entry
+                resetVideoDetails();
               }}
             >
               Видеоурок
@@ -352,8 +374,8 @@ const Tasksection = () => {
               className="adderBtn"
               onClick={() => {
                 setShowTaskModal(true);
-                resetTaskDetails(); // Reset task details for new entry
-                setQuestions([]); // Reset questions for new task
+                resetTaskDetails();
+                setQuestions([]);
               }}
             >
               Задание
@@ -474,7 +496,7 @@ const Tasksection = () => {
                   className="defaultStyle"
                   style={{ margin: "0", padding: "40px", fontSize: "large" }}
                 >
-                  {taskDetails.topText}
+                  {taskDetails.title}
                 </p>
                 <div className="previewContent">
                   <p style={{ margin: "0", fontSize: "xx-large" }}>
@@ -615,11 +637,11 @@ const Tasksection = () => {
                           type="text"
                           placeholder="Мой вопрос"
                           style={{ margin: "0" }}
-                          value={taskDetails.topText}
+                          value={taskDetails.title}
                           onChange={(e) =>
                             setTaskDetails({
                               ...taskDetails,
-                              topText: e.target.value,
+                              title: e.target.value,
                             })
                           }
                         />
@@ -636,11 +658,11 @@ const Tasksection = () => {
                           type="text"
                           placeholder="15 + 4 ="
                           style={{ margin: "0" }}
-                          value={taskDetails.taskText}
+                          value={taskDetails.question_text}
                           onChange={(e) =>
                             setTaskDetails({
                               ...taskDetails,
-                              taskText: e.target.value,
+                              question_text: e.target.value,
                             })
                           }
                         />
@@ -672,7 +694,7 @@ const Tasksection = () => {
                           }
                           onClick={() => handleSelectCorrectAnswer(index)}
                           className={
-                            taskDetails.correctAnswer === answer
+                            taskDetails.correct_answer === answer
                               ? "correct-answer"
                               : ""
                           }
@@ -752,6 +774,7 @@ const Tasksection = () => {
             </h2>
             <div className="questionsList">
               {selectedTaskIndex !== null &&
+                contents[selectedTaskIndex].questions &&
                 contents[selectedTaskIndex].questions.length > 0 && (
                   <>
                     <div className="questionItem">
@@ -763,7 +786,7 @@ const Tasksection = () => {
                         {
                           contents[selectedTaskIndex].questions[
                             currentQuestionIndex
-                          ].type
+                          ].question_type
                         }
                       </p>
                       <p>
@@ -779,7 +802,7 @@ const Tasksection = () => {
                         {
                           contents[selectedTaskIndex].questions[
                             currentQuestionIndex
-                          ].topText
+                          ].title
                         }
                       </p>
                       <p>
@@ -787,7 +810,7 @@ const Tasksection = () => {
                         {
                           contents[selectedTaskIndex].questions[
                             currentQuestionIndex
-                          ].taskText
+                          ].question_text
                         }
                       </p>
                       <p>
@@ -801,7 +824,7 @@ const Tasksection = () => {
                         {
                           contents[selectedTaskIndex].questions[
                             currentQuestionIndex
-                          ].correctAnswer
+                          ].correct_answer
                         }
                       </p>
                     </div>
