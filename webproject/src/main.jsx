@@ -17,7 +17,7 @@ import Tasks from "./pages/admin_sections/Tasks.jsx";
 import SchoolDetails from "./pages/school_details/SchoolDetails.jsx";
 import ClassDetails from "./pages/school_details/ClassDetails.jsx";
 import MathCourse from "./pages/courses/Math.jsx";
-import TaskSection from "./pages/admin_sections/Tasksection.jsx"
+import TaskSection from "./pages/admin_sections/Tasksection.jsx";
 
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 
@@ -37,8 +37,11 @@ const router = createBrowserRouter([
   { path: "/admindashboard/tasks", element: <Tasks /> },
   { path: "/schools/:schoolId", element: <SchoolDetails /> },
   { path: "/schools/:schoolId/classes/:classId", element: <ClassDetails /> },
-  { path: "/dashboard/lessons/:lessonId", element: <MathCourse/> },
-  { path: "/admindashboard/tasks/:courseId/:sectionId", element: <TaskSection/> },
+  { path: "/dashboard/lessons/:lessonId", element: <MathCourse /> },
+  {
+    path: "/admindashboard/tasks/courses/:courseId/sections/:sectionId",
+    element: <TaskSection />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
