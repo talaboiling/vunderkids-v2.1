@@ -29,10 +29,9 @@ const Tasksection = () => {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [videoDetails, setVideoDetails] = useState({
-    url: "",
-    name: "",
+    video_url: "",
+    title: "",
     description: "",
-    thumbnail: "",
   });
   const [file, setFile] = useState(null);
   const [taskDetails, setTaskDetails] = useState({
