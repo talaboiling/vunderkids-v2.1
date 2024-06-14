@@ -332,7 +332,7 @@
   border-radius: 5px;
 }
 
-.vidBlock:hover .taskHover {
+.lesson:hover .taskHover {
   display: flex;
   flex-direction: column;
 }
@@ -436,7 +436,7 @@
   border: 2px solid #4caf50;
 }
 
-.taskBlock {
+.task {
   display: flex;
   flex-direction: column;
   border-radius: 20px;
@@ -450,7 +450,7 @@
   transition: transform 0.2s;
 }
 
-.taskBlock:hover {
+.task:hover {
   transform: scale(0.98);
 }
 

@@ -30,7 +30,8 @@ const Math = () => {
       }
     };
 
-    loadData();
+    fetchUserData();
+    fetchCourses();
   }, []);
 
   console.log(course);
@@ -60,7 +61,12 @@ const Math = () => {
     <div className="rtdash rtrat">
       <Sidebar />
       <div className="centralLessons">
-        <Navdash />
+        <Navdash
+          starCount={user.stars}
+          cupCount={user.cups}
+          gradeNum={user.grade}
+          notif={3}
+        />
         <div className="ratingCentral">
           <div className="lessonsMain">
             <div className="coursesCards">
@@ -142,6 +148,90 @@ const Math = () => {
           </div>
         </div>
       </div>
+
+      {showVideoModal && (
+        <dialog className="studmodal" style={{}}>
+          <div className="studmodal-content">
+            <button
+              style={{
+                border: "none",
+                float: "right",
+                backgroundColor: "transparent",
+                boxShadow: "none",
+                padding: "0",
+              }}
+              onClick={closeVideoModal}
+            >
+              <CloseIcon sx={{ color: "gray" }} />
+            </button>
+            <h2 className="defaultStyle" style={{ color: "#666" }}>
+              Видео Урок
+            </h2>
+            <iframe
+              width="500px"
+              height="315px"
+              src={videoUrl}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </dialog>
+      )}
+
+      {showTaskModal && (
+        <dialog className="studmodal" style={{}}>
+          <div className="studmodal-content">
+            <button
+              style={{
+                border: "none",
+                float: "right",
+                backgroundColor: "transparent",
+                boxShadow: "none",
+                padding: "0",
+              }}
+              onClick={closeTaskModal}
+            >
+              <CloseIcon sx={{ color: "gray" }} />
+            </button>
+            <div className="studmodal-header">
+              <div className="lndsh">
+                <img src={staricon} alt="stars" className="defaultIcon" />
+                <strong>{user.stars}</strong>
+              </div>
+              <div className="lndsh">
+                <img src={cupicon} alt="cupicon" className="defaultIcon" />
+                <strong>{user.cups}</strong>
+              </div>
+            </div>
+            <div className="studmodal-main">
+              <h2
+                className="defaultStyle"
+                style={{
+                  fontSize: "xx-large",
+                  fontWeight: "700",
+                  margin: "25px 0",
+                }}
+              >
+                Какая картинка показывает 7?
+              </h2>
+              <div className="studmodal-main-content">
+                <button>1</button>
+                <button>5</button>
+                <button>7</button>
+                <button>8</button>
+              </div>
+            </div>
+            <div className="studmodal-footer">
+              <progress value={0.4} />
+              <button className="orangeButton" style={{ float: "right" }}>
+                Дальше
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
     </div>
   );
 };
