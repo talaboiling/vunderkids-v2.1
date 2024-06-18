@@ -9,6 +9,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import bgtask from "../../assets/bgtask.svg";
 import bgvideo from "../../assets/videolessonthumb.svg";
+import Loader from "../Loader";
 import {
   fetchContents,
   createLesson,
@@ -18,13 +19,18 @@ import {
   updateTask,
   deleteTask,
   createQuestion,
+  fetchSection,
+  fetchCourse,
 } from "../../utils/apiService";
 
 const Tasksection = () => {
   const { courseId, sectionId } = useParams();
   const [contents, setContents] = useState([]);
+  const [section, setSection] = useState();
+  const [course, setCourse] = useState();
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [videoDetails, setVideoDetails] = useState({
     video_url: "",
     title: "",
@@ -49,10 +55,16 @@ const Tasksection = () => {
   useEffect(() => {
     const fetchContentsData = async () => {
       try {
-        const response = await fetchContents(courseId, sectionId);
-        setContents(response);
+        const contentsData = await fetchContents(courseId, sectionId);
+        setContents(contentsData);
+        const sectionData = await fetchSection(courseId, sectionId);
+        setSection(sectionData);
+        const courseData = await fetchCourse(courseId);
+        setCourse(courseData);
       } catch (error) {
         console.error("Failed to fetch contents", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -257,6 +269,10 @@ const Tasksection = () => {
     }
   };
 
+  if (loading) {
+    return <Loader></Loader>;
+  }
+
   return (
     <div className="spdash">
       <Superside />
@@ -283,7 +299,7 @@ const Tasksection = () => {
           }}
         >
           <p style={{ fontSize: "x-large", fontWeight: "500", color: "#666" }}>
-            {courseId}
+            {section.title}
           </p>
           <p
             className="defaultStyle"
@@ -294,73 +310,69 @@ const Tasksection = () => {
               marginLeft: "20px",
             }}
           >
-            {courseId}
+            {course.name} ({course.grade} класс)
           </p>
         </div>
 
         <div className="superCont sectCont">
           {contents &&
             contents.map((content, index) => (
-              <div
-                key={index}
-                className={`vidBlock ${content.content_type}`}
-              >
+              <div key={index} className={`vidBlock ${content.content_type}`}>
                 {content.content_type === "lesson" && (
-                  
-                    <>
-                      <div className="thumbcontainer" onClick={() => openLesson(index)}>
-                        <img
-                          src={bgvideo || "placeholder.png"}
-                          alt={content.title}
-                          className="taskThumbnail"
-                        />
-                      </div>
-                      <p
-                        style={{
-                          backgroundColor: "white",
-                          margin: "0",
-                          padding: "7px 40px",
-                          borderRadius: "10px",
-                        }}
-                      >
-                        {content.title}
+                  <>
+                    <div
+                      className="thumbcontainer"
+                      onClick={() => openLesson(index)}
+                    >
+                      <img
+                        src={bgvideo || "placeholder.png"}
+                        alt={content.title}
+                        className="taskThumbnail"
+                      />
+                    </div>
+                    <p
+                      style={{
+                        backgroundColor: "white",
+                        margin: "0",
+                        padding: "7px 40px",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      {content.title}
+                    </p>
+                    <div className="taskHover">
+                      <p>
+                        <strong>Название:</strong> {content.title}
                       </p>
-                      <div className="taskHover">
-                        <p>
-                          <strong>Название:</strong> {content.title}
-                        </p>
-                        <p>
-                          <strong>Описание:</strong> {content.description}
-                        </p>
-                      </div>
-                    </>
-                  
+                      <p>
+                        <strong>Описание:</strong> {content.description}
+                      </p>
+                    </div>
+                  </>
                 )}
                 {content.content_type === "task" && (
-                  
-                    <>
-                      <img
-                        src={bgtask}
-                        alt=""
-                        style={{
-                          paddingTop: "20px",
-                          scale: "1.3",
-                          overflow: "hidden",
-                        }}
-                        onClick={() => openTask(index)}
-                      />
-                      <p
-                        style={{
-                          backgroundColor: "white",
-                          margin: "0",
-                          padding: "7px 40px",
-                          borderRadius: "10px",
-                        }}
-                      >
-                        {content.title}
-                      </p>
-                    </>
-                  
+                  <>
+                    <img
+                      src={bgtask}
+                      alt=""
+                      style={{
+                        paddingTop: "20px",
+                        scale: "1.3",
+                        overflow: "hidden",
+                      }}
+                      onClick={() => openTask(index)}
+                    />
+                    <p
+                      style={{
+                        backgroundColor: "white",
+                        margin: "0",
+                        padding: "7px 40px",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      {content.title}
+                    </p>
+                  </>
                 )}
                 <button
                   onClick={(e) => {
@@ -458,7 +470,10 @@ const Tasksection = () => {
                     id="videoName"
                     value={videoDetails.title}
                     onChange={(e) =>
-                      setVideoDetails({ ...videoDetails, title: e.target.value })
+                      setVideoDetails({
+                        ...videoDetails,
+                        title: e.target.value,
+                      })
                     }
                     required
                   />
@@ -801,60 +816,59 @@ const Tasksection = () => {
               Все вопросы
             </h2>
             <div className="questionsList">
-              {selectedTaskIndex !== null &&
-                questions.length > 0 && (
-                  <>
-                    <div className="questionItem">
-                      <p>
-                        <strong>Вопрос {currentQuestionIndex + 1}:</strong>
-                      </p>
-                      <p>
-                        <strong>Тип задачи:</strong>{" "}
-                        {questions[currentQuestionIndex]?.question_type}
-                      </p>
-                      <p>
-                        <strong>Шаблон:</strong>{" "}
-                        {questions[currentQuestionIndex]?.template}
-                      </p>
-                      <p>
-                        <strong>Текст сверху:</strong>{" "}
-                        {questions[currentQuestionIndex]?.title}
-                      </p>
-                      <p>
-                        <strong>Текст задачи:</strong>{" "}
-                        {questions[currentQuestionIndex]?.question_text}
-                      </p>
-                      <p>
-                        <strong>Варианты ответа:</strong>{" "}
-                        {questions[currentQuestionIndex]?.options
-                          .map((opt) => opt.value)
-                          .join(", ")}
-                      </p>
-                      <p>
-                        <strong>Правильный ответ:</strong>{" "}
-                        {questions[currentQuestionIndex]?.correct_answer}
-                      </p>
-                    </div>
-                    <div className="questionNavigation">
-                      <button
-                        onClick={prevQuestion}
-                        className="transBtn"
-                        disabled={currentQuestionIndex === 0}
-                      >
-                        <ArrowBackIosNewIcon />
-                        <p className="defaultStyle">Prev</p>
-                      </button>
-                      <button
-                        onClick={nextQuestion}
-                        className="transBtn"
-                        disabled={currentQuestionIndex >= questions.length - 1}
-                      >
-                        <ArrowForwardIosIcon />
-                        <p className="defaultStyle">Next</p>
-                      </button>
-                    </div>
-                  </>
-                )}
+              {selectedTaskIndex !== null && questions.length > 0 && (
+                <>
+                  <div className="questionItem">
+                    <p>
+                      <strong>Вопрос {currentQuestionIndex + 1}:</strong>
+                    </p>
+                    <p>
+                      <strong>Тип задачи:</strong>{" "}
+                      {questions[currentQuestionIndex]?.question_type}
+                    </p>
+                    <p>
+                      <strong>Шаблон:</strong>{" "}
+                      {questions[currentQuestionIndex]?.template}
+                    </p>
+                    <p>
+                      <strong>Текст сверху:</strong>{" "}
+                      {questions[currentQuestionIndex]?.title}
+                    </p>
+                    <p>
+                      <strong>Текст задачи:</strong>{" "}
+                      {questions[currentQuestionIndex]?.question_text}
+                    </p>
+                    <p>
+                      <strong>Варианты ответа:</strong>{" "}
+                      {questions[currentQuestionIndex]?.options
+                        .map((opt) => opt.value)
+                        .join(", ")}
+                    </p>
+                    <p>
+                      <strong>Правильный ответ:</strong>{" "}
+                      {questions[currentQuestionIndex]?.correct_answer}
+                    </p>
+                  </div>
+                  <div className="questionNavigation">
+                    <button
+                      onClick={prevQuestion}
+                      className="transBtn"
+                      disabled={currentQuestionIndex === 0}
+                    >
+                      <ArrowBackIosNewIcon />
+                      <p className="defaultStyle">Prev</p>
+                    </button>
+                    <button
+                      onClick={nextQuestion}
+                      className="transBtn"
+                      disabled={currentQuestionIndex >= questions.length - 1}
+                    >
+                      <ArrowForwardIosIcon />
+                      <p className="defaultStyle">Next</p>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </dialog>
