@@ -183,7 +183,7 @@ const Dashboard = () => {
                 <div className="courseItemLeft">
                   <p style={{ margin: "0" }}>{course.name}</p>
                   <progress value={course.percentage_completed / 100} />
-                  <Link to={`/dashboard/lessons/${course.id}`}>
+                  <Link to={`/dashboard/courses/${course.id}/lessons`}>
                     <button
                       style={{
                         backgroundColor: "#F8753D",

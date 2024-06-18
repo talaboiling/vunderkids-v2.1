@@ -11,7 +11,7 @@ const Activate = () => {
   useEffect(() => {
     const activate = async () => {
       try {
-        const response = activateAccount(activation_token);
+        const response = await activateAccount(activation_token);
         if (response.status === 200) {
           setMessage("Account successfully activated!");
           setIsSuccess(true);

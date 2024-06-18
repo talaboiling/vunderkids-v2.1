@@ -175,15 +175,19 @@ const ClassDetails = () => {
                 <br />
 
                 <label htmlFor="gender">Пол</label>
-                <input
-                  type="text"
+                <select
                   id="gender"
                   name="gender"
                   value={formData.gender}
                   onChange={handleFormChange}
                   required
                   style={{ width: "100%", padding: "10px", fontSize: "large" }}
-                />
+                >
+                  <option value="">Выберите пол</option>
+                  <option value="M">Мужской</option>
+                  <option value="F">Женский</option>
+                  <option value="O">Не указан</option>
+                </select>
                 <br />
 
                 <label htmlFor="phone_number">Телефон</label>

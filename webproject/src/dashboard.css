@@ -599,6 +599,68 @@ img.childcard {
   border: 2px solid gray;
 }
 
+.studmodal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.studmodal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: fit-content;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.studmodal-header {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin-left: 20px;
+  padding: 10px 0;
+}
+
+.studmodal-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 20px;
+  height: 400px;
+  width: 800px;
+  background-image: url(./assets/bgstudtask.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 30px;
+}
+
+.studmodal-main-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-top: 50px;
+}
+
+.studmodal-footer {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .modal-content {
   position: relative;
   width: max-content;
@@ -707,7 +769,7 @@ img.childcard {
 }
 
 .lessonsLinks {
-  max-height: 500px;
+  max-height: 600px;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
@@ -735,10 +797,4 @@ img.childcard {
   flex-direction: column;
   align-items: center;
   padding: 10px;
-}
-
-.blurred {
-  filter: blur(5px);
-  pointer-events: none; /* Prevent interaction with blurred content */
-  user-select: none; /* Prevent text selection on blurred content */
 }

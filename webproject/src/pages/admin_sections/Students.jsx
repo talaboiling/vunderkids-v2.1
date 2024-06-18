@@ -68,13 +68,25 @@ const Students = () => {
         "school_name",
         "grade",
         "gender",
+        "parent_id",
       ],
     });
 
     // Set custom headers in Russian
     XLSX.utils.sheet_add_aoa(
       worksheet,
-      [["ID", "Имя", "Фамилия", "Email", "Школа", "Класс", "Пол"]],
+      [
+        [
+          "ID",
+          "Имя",
+          "Фамилия",
+          "Email",
+          "Школа",
+          "Класс",
+          "Пол",
+          "ID Родителя",
+        ],
+      ],
       { origin: "A1" }
     );
 

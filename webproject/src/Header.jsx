@@ -2,14 +2,15 @@ import React from "react";
 import mascotImg from "./assets/mascotImg.png";
 import logoImg from "./assets/logo_blue.png";
 import { Link, useNavigate } from "react-router-dom";
+import { logout } from "./utils/authService";
 
 function Header() {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("access_token") !== null;
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login"); // Redirect to the homepage or login page
+    logout();
+    navigate("/login");
   };
 
   return (
