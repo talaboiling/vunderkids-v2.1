@@ -18,6 +18,7 @@ import SchoolDetails from "./pages/school_details/SchoolDetails.jsx";
 import ClassDetails from "./pages/school_details/ClassDetails.jsx";
 import MathCourse from "./pages/courses/Math.jsx";
 import TaskSection from "./pages/admin_sections/Tasksection.jsx";
+import SupervisorDashboard from "./pages/SupervisorDashboard.jsx";
 
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
     path: "/admindashboard/tasks/courses/:courseId/sections/:sectionId",
     element: <TaskSection />,
   },
+  { path: "/supervisor-dashboard/", element: <SupervisorDashboard /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
