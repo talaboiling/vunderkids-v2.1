@@ -8,6 +8,7 @@ import { fetchSchools } from "../utils/apiService.js";
 import Loader from "./Loader.jsx";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
+import { logout } from "../utils/authService.js";
 
 const Superdash = () => {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const Superdash = () => {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    logout();
     navigate("/login"); // Redirect to the homepage or login page
   };
 

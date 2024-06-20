@@ -477,3 +477,113 @@ export const deleteQuestion = async (
     throw new Error(error || "Something went wrong");
   }
 };
+
+// SUPERVISOR
+
+export const assignSupervisor = async (schoolId, formData) => {
+  try {
+    const response = await instance.post(
+      `/schools/${schoolId}/assign_supervisor/`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
+export const deassignSupervisor = async (schoolId) => {
+  try {
+    const response = await instance.get(
+      `/schools/${schoolId}/deassign_supervisor/`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
+export const fetchSupervisorSchoolData = async () => {
+  {
+    try {
+      const response = await instance.get("/supervisor_school/school/");
+      return response.data;
+    } catch (error) {
+      throw new Error(error || "Something went wrong");
+    }
+  }
+};
+
+export const fetchSupervisorClassesData = async () => {
+  {
+    try {
+      const response = await instance.get("/supervisor_school/classes/");
+      return response.data;
+    } catch (error) {
+      throw new Error(error || "Something went wrong");
+    }
+  }
+};
+
+export const fetchSupervisorClassData = async (classId) => {
+  {
+    try {
+      const response = await instance.get(
+        `/supervisor_school/classes/${classId}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error || "Something went wrong");
+    }
+  }
+};
+
+export const fetchSupervisorStudentsData = async (classId) => {
+  {
+    try {
+      const response = await instance.get(
+        `/supervisor_school/classes/${classId}/students/`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error || "Something went wrong");
+    }
+  }
+};
+
+export const fetchSupervisorStudentData = async (studentId) => {
+  {
+    try {
+      const response = await instance.get(
+        `/supervisor_school/students/${studentId}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error || "Something went wrong");
+    }
+  }
+};
+
+export const fetchSupervisorStudentProgress = async (studentId) => {
+  {
+    try {
+      const response = await instance.get(
+        `/supervisor_school/students/${studentId}/progress/`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error || "Something went wrong");
+    }
+  }
+};
+
+export const fetchSupervisorTopStudents = async () => {
+  {
+    try {
+      const response = await instance.get("/supervisor_school/top-students/");
+      return response.data;
+    } catch (error) {
+      throw new Error(error || "Something went wrong");
+    }
+  }
+};

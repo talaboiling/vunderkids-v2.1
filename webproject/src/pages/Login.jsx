@@ -29,6 +29,8 @@ function Login() {
         navigate("/dashboard"); // Redirect to student dashboard
       } else if (user.is_superuser) {
         navigate("/admindashboard"); // Redirect to dashboard
+      } else if (user.role === "supervisor") {
+        navigate("/supervisor-dashboard"); // Redirect to dashboard
       } else {
         navigate("/dashboard");
       }
