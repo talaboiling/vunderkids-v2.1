@@ -18,7 +18,6 @@ import {
   createTask,
   updateTask,
   deleteTask,
-  createQuestion,
   fetchSection,
   fetchCourse,
 } from "../../utils/apiService";
@@ -37,13 +36,19 @@ const Tasksection = () => {
     description: "",
   });
   const [taskDetails, setTaskDetails] = useState({
-    question_type: "multiple_choice_text",
-    template: "",
     title: "",
-    question_text: "",
-    options: ["", "", "", ""],
-    correct_answer: "",
+    questions: [
+      {
+        question_type: "multiple_choice_text",
+        template: "",
+        title: "",
+        question_text: "",
+        options: ["", "", "", ""],
+        correct_answer: "",
+      },
+    ],
   });
+  
   const [questions, setQuestions] = useState([]);
   const [showQuestionsModal, setShowQuestionsModal] = useState(false);
   const [selectedTaskIndex, setSelectedTaskIndex] = useState(null);
@@ -114,6 +119,45 @@ const Tasksection = () => {
     setIsEditingVideo(false);
   };
 
+  const handleTaskSubmit = async (e) => {
+    e.preventDefault();
+    const taskData = {
+      ...taskDetails,
+      section: sectionId,
+      order: contents.length + 1,
+    };
+
+    let updatedContents;
+    if (isEditingTask) {
+      const updatedTask = await updateTask(
+        courseId,
+        sectionId,
+        contents[editingTaskIndex].id,
+        taskData
+      );
+      updatedContents = contents.map((content, index) =>
+        index === editingTaskIndex ? updatedTask : content
+      );
+    } else {
+      const newTask = await createTask(courseId, sectionId, taskData);
+      updatedContents = [...contents, newTask];
+    }
+
+    setContents(updatedContents);
+    setShowTaskModal(false);
+    setQuestions([]);
+    resetTaskDetails();
+    setIsEditingTask(false);
+  };
+
+  const resetTaskDetails = () => {
+    setTaskDetails({
+      title: "",
+      questions: [],
+    });
+    setIsEditingTask(false);
+  };
+
   const handleDeleteContent = async (id, type) => {
     if (window.confirm("Вы действительно хотите удалить этот элемент?")) {
       let updatedContents;
@@ -129,37 +173,95 @@ const Tasksection = () => {
     }
   };
 
-  const handleTaskSubmit = (e) => {
+  const handleAnswerChange = (index, value) => {
+    const newOptions = [...questions[currentQuestionIndex].options];
+    newOptions[index] = value;
+    const updatedQuestions = [...questions];
+    updatedQuestions[currentQuestionIndex].options = newOptions;
+    setQuestions(updatedQuestions);
+  };
+
+  const handleSelectCorrectAnswer = (index) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[currentQuestionIndex].correct_answer =
+      questions[currentQuestionIndex].options[index];
+    setQuestions(updatedQuestions);
+  };
+
+  const loadQuestion = (index) => {
+    setCurrentQuestionIndex(index);
+    const question = questions[index];
+    setTaskDetails({
+      ...taskDetails,
+      question_type: question?.question_type || "multiple_choice_text",
+      template: question?.template || "",
+      title: question?.title || "",
+      question_text: question?.question_text || "",
+      options: question?.options ? question.options.map((opt) => opt.value) : ["", "", "", ""],
+      correct_answer: question?.correct_answer || "",
+    });
+  };
+  
+
+  const openLesson = (index) => {
+    const lesson = contents[index];
+    if (lesson.video_url) {
+      window.open(lesson.video_url, "_blank");
+    }
+  };
+
+  const openTask = (index) => {
+    setSelectedTaskIndex(index);
+    setShowQuestionsModal(true);
+    setCurrentQuestionIndex(0);
+    setQuestions(contents[index].questions || []);
+  };
+
+  const handleEditContent = (index) => {
+    const content = contents[index];
+    if (content.content_type === "lesson") {
+      setSelectedTaskIndex(index);
+      setVideoDetails(content);
+      setIsEditingVideo(true);
+      setShowVideoModal(true);
+    } else if (content.content_type === "task") {
+      setEditingTaskIndex(index);
+      setTaskDetails({
+        title: content.title,
+        questions: content.questions.length > 0 ? content.questions : [
+          {
+            question_type: "multiple_choice_text",
+            template: "",
+            title: "",
+            question_text: "",
+            options: ["", "", "", ""],
+            correct_answer: "",
+          },
+        ],
+      });
+      setQuestions(content.questions.length > 0 ? content.questions : [
+        {
+          question_type: "multiple_choice_text",
+          template: "",
+          title: "",
+          question_text: "",
+          options: ["", "", "", ""],
+          correct_answer: "",
+        },
+      ]);
+      setIsEditingTask(true);
+      setShowTaskModal(true);
+    }
+  };
+  
+
+  const handleTaskUpdate = (e) => {
     e.preventDefault();
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex] = taskDetails;
     setQuestions(updatedQuestions);
     resetTaskDetails();
     setCurrentQuestionIndex(updatedQuestions.length);
-  };
-
-  const loadQuestion = (index) => {
-    const question = questions[index];
-    setTaskDetails({
-      question_type: question.question_type,
-      template: question.template,
-      title: question.title,
-      question_text: question.question_text,
-      options: question.options.map((opt) => opt.value),
-      correct_answer: question.correct_answer,
-    });
-    setCurrentQuestionIndex(index);
-  };
-
-  const resetTaskDetails = () => {
-    setTaskDetails({
-      question_type: "multiple_choice_text",
-      template: "",
-      title: "",
-      question_text: "",
-      options: ["", "", "", ""],
-      correct_answer: "",
-    });
   };
 
   const handleFinishTasks = async () => {
@@ -206,48 +308,6 @@ const Tasksection = () => {
     setCurrentQuestionIndex(0);
   };
 
-  const handleAnswerChange = (index, value) => {
-    const newOptions = [...taskDetails.options];
-    newOptions[index] = value;
-    setTaskDetails({ ...taskDetails, options: newOptions });
-  };
-
-  const handleSelectCorrectAnswer = (index) => {
-    setTaskDetails({
-      ...taskDetails,
-      correct_answer: taskDetails.options[index],
-    });
-  };
-
-  const openLesson = (index) => {
-    const lesson = contents[index];
-    if (lesson.video_url) {
-      window.open(lesson.video_url, "_blank");
-    }
-  };
-
-  const openTask = (index) => {
-    setSelectedTaskIndex(index);
-    setShowQuestionsModal(true);
-    setCurrentQuestionIndex(0);
-    setQuestions(contents[index].questions || []);
-  };
-
-  const handleEditContent = (index) => {
-    const content = contents[index];
-    if (content.content_type === "lesson") {
-      setSelectedTaskIndex(index);
-      setVideoDetails(content);
-      setIsEditingVideo(true);
-      setShowVideoModal(true);
-    } else if (content.content_type === "task") {
-      setEditingTaskIndex(index);
-      setQuestions(content.questions);
-      setIsEditingTask(true);
-      setShowTaskModal(true);
-    }
-  };
-
   const nextQuestion = () => {
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex] = taskDetails;
@@ -257,9 +317,20 @@ const Tasksection = () => {
     } else {
       resetTaskDetails();
       setCurrentQuestionIndex(questions.length);
+      setQuestions([
+        ...questions,
+        {
+          question_type: "multiple_choice_text",
+          template: "",
+          title: "",
+          question_text: "",
+          options: ["", "", "", ""],
+          correct_answer: "",
+        },
+      ]);
     }
   };
-
+  
   const prevQuestion = () => {
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex] = taskDetails;
@@ -268,9 +339,10 @@ const Tasksection = () => {
       loadQuestion(currentQuestionIndex - 1);
     }
   };
+  
 
   if (loading) {
-    return <Loader></Loader>;
+    return <Loader />;
   }
 
   return (
@@ -546,7 +618,7 @@ const Tasksection = () => {
                 </div>
               </div>
               <div className="taskDetails">
-                <form onSubmit={handleTaskSubmit} className="">
+                <form onSubmit={handleTaskUpdate} className="">
                   <div className="formConstructor">
                     <div
                       style={{
@@ -744,31 +816,11 @@ const Tasksection = () => {
                         />
                       ))}
                     </div>
-                    <div className="questionNavigation">
-                      <button
-                        type="button"
-                        onClick={prevQuestion}
-                        className="transBtn"
-                        disabled={currentQuestionIndex === 0}
-                      >
-                        <ArrowBackIosNewIcon />
-                        <p className="defaultStyle">Prev</p>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={nextQuestion}
-                        className="transBtn"
-                        disabled={currentQuestionIndex >= questions.length - 1}
-                      >
-                        <ArrowForwardIosIcon />
-                        <p className="defaultStyle">Next</p>
-                      </button>
-                    </div>
                   </div>
                   <div style={{ marginTop: "40px" }}>
                     <button
                       type="button"
-                      onClick={handleTaskSubmit}
+                      onClick={handleTaskUpdate}
                       className="superBtn"
                       style={{
                         backgroundColor: "#D5E5EE",
@@ -782,7 +834,7 @@ const Tasksection = () => {
                       onClick={handleFinishTasks}
                       className="superBtn"
                     >
-                      {isEditingTask ? "Сохранить" : "Закончить"}
+                      Сохранить
                     </button>
                   </div>
                 </form>
