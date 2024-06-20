@@ -100,7 +100,6 @@ export const addChild = async (formData) => {
 export const addStudent = async (schoolId, classId, formData) => {
   try {
     const endpoint = `/schools/${schoolId}/classes/${classId}/students/`;
-    console.log(endpoint);
     const response = await instance.post(endpoint, formData);
     return response.data;
   } catch (error) {
@@ -355,6 +354,15 @@ export const fetchSchoolData = async (schoolId) => {
   try {
     const endpoint = `/schools/${schoolId}/`;
     const response = await instance.get(endpoint);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
+export const addSchool = async (formData) => {
+  try {
+    const response = await instance.post("/schools/", formData);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");

@@ -7,6 +7,8 @@ import {
   addClasses,
   fetchClassesData,
   fetchSchoolData,
+  assignSupervisor,
+  deassignSupervisor, // Add these imports
 } from "../../utils/apiService.js";
 
 import Loader from "../Loader.jsx";
@@ -18,20 +20,30 @@ const SchoolDetails = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [supervisorModal, setSupervisorModal] = useState(false); // Modal for supervisor
   const [formData, setFormData] = useState({
     grade: "",
     section: "",
   });
+  const [supervisorData, setSupervisorData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+  });
 
   useEffect(() => {
-    fetchSchoolDetails();
-    fetchClasses();
+    const fetchData = async () => {
+      await fetchSchoolDetails();
+      await fetchClasses();
+    };
+    fetchData();
   }, [schoolId]);
 
   const fetchSchoolDetails = async () => {
     try {
-      const schooldData = await fetchSchoolData(schoolId);
-      setSchool(schooldData);
+      const schoolData = await fetchSchoolData(schoolId);
+      setSchool(schoolData);
     } catch (error) {
       console.error("Error fetching school details:", error);
     }
@@ -55,6 +67,14 @@ const SchoolDetails = () => {
     });
   };
 
+  const handleSupervisorFormChange = (e) => {
+    const { name, value } = e.target;
+    setSupervisorData({
+      ...supervisorData,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -64,6 +84,32 @@ const SchoolDetails = () => {
       fetchClasses(); // Fetch the updated list of classes
     } catch (error) {
       console.error("Error adding class:", error);
+    }
+  };
+
+  const handleSupervisorSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await assignSupervisor(schoolId, supervisorData);
+      setSupervisorModal(false);
+      setSupervisorData({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone_number: "",
+      });
+      fetchSchoolDetails(); // Fetch the updated school details
+    } catch (error) {
+      console.error("Error assigning supervisor:", error);
+    }
+  };
+
+  const handleDeassignSupervisor = async () => {
+    try {
+      await deassignSupervisor(schoolId);
+      fetchSchoolDetails(); // Fetch the updated school details
+    } catch (error) {
+      console.error("Error deassigning supervisor:", error);
     }
   };
 
@@ -132,6 +178,48 @@ const SchoolDetails = () => {
           Добавить класс
         </button>
 
+        <h3>Супервайзер</h3>
+        {school.supervisor ? (
+          <div className="supervisorDetails">
+            <p className="defaultStyle">
+              <b>Имя:</b> {school.supervisor.first_name}{" "}
+              {school.supervisor.last_name}
+            </p>
+            <p className="defaultStyle">
+              <b>Email:</b> {school.supervisor.email}
+            </p>
+            <p className="defaultStyle">
+              <b>Телефон:</b> {school.supervisor.phone_number}
+            </p>
+            <button
+              onClick={handleDeassignSupervisor}
+              style={{
+                border: "none",
+                borderRadius: "4px",
+                backgroundColor: "#D9534F",
+                fontSize: "large",
+                fontWeight: "600",
+                color: "#fff",
+              }}
+            >
+              Удалить супервайзера
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setSupervisorModal(true)}
+            style={{
+              border: "none",
+              borderRadius: "4px",
+              backgroundColor: "#509CDB",
+              fontSize: "large",
+              fontWeight: "600",
+            }}
+          >
+            Назначить супервайзера
+          </button>
+        )}
+
         {showModal && (
           <dialog open className="modal supermodal">
             <div className="modal-content">
@@ -177,6 +265,81 @@ const SchoolDetails = () => {
                 <br />
                 <button type="submit" className="superBtn">
                   Добавить
+                </button>
+              </form>
+            </div>
+          </dialog>
+        )}
+
+        {supervisorModal && (
+          <dialog open className="modal supermodal">
+            <div className="modal-content">
+              <button
+                style={{
+                  border: "none",
+                  float: "right",
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                }}
+                onClick={() => setSupervisorModal(false)}
+              >
+                <CloseIcon sx={{ color: "gray" }} />
+              </button>
+              <br />
+              <form
+                onSubmit={handleSupervisorSubmit}
+                style={{ padding: "20px", fontSize: "large" }}
+              >
+                <label htmlFor="first_name">Имя</label>
+                <input
+                  type="text"
+                  id="first_name"
+                  name="first_name"
+                  value={supervisorData.first_name}
+                  onChange={handleSupervisorFormChange}
+                  required
+                  style={{ width: "100%", padding: "10px", fontSize: "large" }}
+                />
+                <br />
+                <br />
+                <label htmlFor="last_name">Фамилия</label>
+                <input
+                  type="text"
+                  id="last_name"
+                  name="last_name"
+                  value={supervisorData.last_name}
+                  onChange={handleSupervisorFormChange}
+                  required
+                  style={{ width: "100%", padding: "10px", fontSize: "large" }}
+                />
+                <br />
+                <br />
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={supervisorData.email}
+                  onChange={handleSupervisorFormChange}
+                  required
+                  style={{ width: "100%", padding: "10px", fontSize: "large" }}
+                />
+                <br />
+                <br />
+                <label htmlFor="phone_number">Телефон</label>
+                <input
+                  type="text"
+                  id="phone_number"
+                  name="phone_number"
+                  value={supervisorData.phone_number}
+                  onChange={handleSupervisorFormChange}
+                  required
+                  style={{ width: "100%", padding: "10px", fontSize: "large" }}
+                />
+                <br />
+                <br />
+                <button type="submit" className="superBtn">
+                  Назначить
                 </button>
               </form>
             </div>
