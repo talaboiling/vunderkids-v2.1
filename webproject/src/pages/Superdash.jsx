@@ -4,7 +4,7 @@ import Superside from "./admin_components/Superside.jsx";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import "/src/superdash.css";
-import { fetchSchools } from "../utils/apiService.js";
+import { addSchool, fetchSchools } from "../utils/apiService.js";
 import Loader from "./Loader.jsx";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
@@ -64,16 +64,13 @@ const Superdash = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("access_token");
     try {
-      await axios.post("http://localhost:8000/api/schools/", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await addSchool(formData);
       setShowModal(false);
       setFormData({ name: "", city: "", email: "" });
-      fetchSchools(); // Fetch the updated list of schools
+      const updatedSchools = await fetchSchools(); // Fetch the updated list of schools
+      setSchools(updatedSchools); // Update the state with the new list
+      setFilteredSchools(updatedSchools); // Update the filtered list as well
     } catch (error) {
       console.error("Error adding school:", error);
     }
