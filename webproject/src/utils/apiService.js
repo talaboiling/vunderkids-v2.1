@@ -479,7 +479,7 @@ export const deleteQuestion = async (
 ) => {
   try {
     const endpoint = `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/questions/${questionId}/`;
-    const response = await instance.patch(endpoint);
+    const response = await instance.delete(endpoint);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");
