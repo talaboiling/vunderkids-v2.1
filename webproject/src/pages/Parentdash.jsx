@@ -231,7 +231,7 @@ const Parentdash = () => {
         {showModal && (
           <dialog
             open
-            className="modal modal-backdrop"
+            className="modal supermodal"
             onClose={() => setShowModal(false)}
           >
             <div className="modal-content">

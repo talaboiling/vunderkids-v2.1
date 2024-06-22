@@ -5,8 +5,6 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import bgtask from "../../assets/bgtask.svg";
 import bgvideo from "../../assets/videolessonthumb.svg";
 import Loader from "../Loader";
@@ -22,6 +20,8 @@ import {
   fetchCourse,
   fetchQuestions,
   createQuestion,
+  updateQuestion,
+  deleteQuestion,
 } from "../../utils/apiService";
 
 const Tasksection = () => {
@@ -29,35 +29,33 @@ const Tasksection = () => {
   const [contents, setContents] = useState([]);
   const [section, setSection] = useState();
   const [course, setCourse] = useState();
-  const [showVideoModal, setShowVideoModal] = useState(false);
-  const [showTaskModal, setShowTaskModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [showQuestionsModal, setShowQuestionsModal] = useState(false);
+  const [showQuestionModal, setShowQuestionModal] = useState(false);
+  const [isEditingTask, setIsEditingTask] = useState(false);
+  const [taskDetails, setTaskDetails] = useState({
+    title: "",
+    description: "",
+  });
   const [videoDetails, setVideoDetails] = useState({
     video_url: "",
     title: "",
     description: "",
   });
-  const [taskDetails, setTaskDetails] = useState({
-    title: "",
-    questions: [
-      {
-        question_type: "multiple_choice_text",
-        template: "",
-        title: "",
-        question_text: "",
-        options: ["", "", "", ""],
-        correct_answer: "",
-      },
-    ],
-  });
   const [questions, setQuestions] = useState([]);
-  const [showQuestionsModal, setShowQuestionsModal] = useState(false);
   const [selectedTaskIndex, setSelectedTaskIndex] = useState(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState({
+    question_type: "multiple_choice_text",
+    template: "",
+    title: "",
+    question_text: "",
+    options: ["", "", "", ""],
+    correct_answer: "",
+  });
+  const [editingQuestionIndex, setEditingQuestionIndex] = useState(null);
   const [isEditingVideo, setIsEditingVideo] = useState(false);
-  const [isEditingTask, setIsEditingTask] = useState(false);
-  const [editingTaskIndex, setEditingTaskIndex] = useState(null);
-  const [showQuestionDetailsModal, setShowQuestionDetailsModal] = useState(false);
 
   useEffect(() => {
     const fetchContentsData = async () => {
@@ -77,6 +75,54 @@ const Tasksection = () => {
 
     fetchContentsData();
   }, [courseId, sectionId]);
+
+  const handleTaskSubmit = async (e) => {
+    e.preventDefault();
+    const taskData = {
+      ...taskDetails,
+      section: sectionId,
+      order: contents.length + 1,
+    };
+  
+    try {
+      let updatedContents;
+      if (isEditingTask) {
+        const updatedTask = await updateTask(courseId, sectionId, contents[selectedTaskIndex].id, taskData);
+        updatedContents = contents.map((content, index) =>
+          index === selectedTaskIndex ? updatedTask : content
+        );
+      } else {
+        const newTask = await createTask(courseId, sectionId, taskData);
+        updatedContents = [...contents, newTask];
+      }
+  
+      setContents(updatedContents);
+      setShowTaskModal(false);
+      resetTaskDetails();
+    } catch (error) {
+      console.error("Failed to create or update task", error);
+    }
+  };
+
+  const handleEditTask = (index) => {
+    const task = contents[index];
+    setSelectedTaskIndex(index);
+    setTaskDetails({
+      title: task.title,
+      description: task.description,
+    });
+    setIsEditingTask(true);
+    setShowTaskModal(true);
+  };
+  
+
+  const resetTaskDetails = () => {
+    setTaskDetails({
+      title: "",
+      description: "",
+    });
+    setIsEditingTask(false);
+  };  
 
   const handleVideoSubmit = async (e) => {
     e.preventDefault();
@@ -121,6 +167,13 @@ const Tasksection = () => {
     setIsEditingVideo(false);
   };
 
+  const openLesson = (index) => {
+    const lesson = contents[index];
+    if (lesson.video_url) {
+      window.open(lesson.video_url, "_blank");
+    }
+  };
+
   const handleDeleteContent = async (id, type) => {
     if (window.confirm("Вы действительно хотите удалить этот элемент?")) {
       let updatedContents;
@@ -136,37 +189,7 @@ const Tasksection = () => {
     }
   };
 
-  const handleAnswerChange = (questionIndex, optionIndex, value) => {
-    const updatedQuestions = [...taskDetails.questions];
-    const updatedOptions = [...updatedQuestions[questionIndex].options];
-    updatedOptions[optionIndex] = value;
-    updatedQuestions[questionIndex].options = updatedOptions;
-    setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-  };
-
-  const handleSelectCorrectAnswer = (questionIndex, optionIndex) => {
-    const updatedQuestions = [...taskDetails.questions];
-    updatedQuestions[questionIndex].correct_answer =
-      updatedQuestions[questionIndex].options[optionIndex];
-    setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-  };
-
-  const openLesson = (index) => {
-    const lesson = contents[index];
-    if (lesson.video_url) {
-      window.open(lesson.video_url, "_blank");
-    }
-  };
-
-  const handleEditContent = (index) => {
-    const content = contents[index];
-    setSelectedTaskIndex(index);
-    setVideoDetails(content);
-    setIsEditingVideo(true);
-    setShowVideoModal(true);
-  };
-
-  const fetchTaskQuestions = async (courseId, sectionId, taskId) => {
+  const fetchTaskQuestions = async (taskId) => {
     const response = await fetchQuestions(courseId, sectionId, taskId);
     return response;
   };
@@ -176,7 +199,7 @@ const Tasksection = () => {
     setSelectedTaskIndex(index);
     setLoading(true);
     try {
-      const taskQuestions = await fetchTaskQuestions(courseId, sectionId, taskId);
+      const taskQuestions = await fetchTaskQuestions(taskId);
       setQuestions(taskQuestions);
       setShowQuestionsModal(true);
     } catch (error) {
@@ -186,109 +209,83 @@ const Tasksection = () => {
     }
   };
 
-  const handleTaskSubmit = (e) => {
-    e.preventDefault();
-    const updatedQuestions = [...taskDetails.questions];
-    updatedQuestions[currentQuestionIndex] = {
-      ...updatedQuestions[currentQuestionIndex],
-      is_attempted: false,
-      is_correct: false,
-      images: [],
-    };
-    setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-    setCurrentQuestionIndex(updatedQuestions.length);
+const handleQuestionSubmit = async (e) => {
+  e.preventDefault();
+
+  // Format options to ensure they have the correct id and value structure
+  const formattedOptions = currentQuestion.options.map((option, idx) => ({
+    id: idx + 1,
+    value: typeof option === 'string' ? option : option.value,
+  }));
+
+  const questionData = {
+    ...currentQuestion,
+    options: formattedOptions,
+    correct_answer: currentQuestion.correct_answer,
   };
 
-  const nextQuestion = () => {
-    const updatedQuestions = [...taskDetails.questions];
-    updatedQuestions[currentQuestionIndex] = {
-      ...updatedQuestions[currentQuestionIndex],
-      is_attempted: false,
-      is_correct: false,
-      images: [],
-    };
-    setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-    if (currentQuestionIndex < questions.length - 1) {
-      loadQuestion(currentQuestionIndex + 1);
+  try {
+    if (editingQuestionIndex !== null) {
+      await updateQuestion(courseId, sectionId, contents[selectedTaskIndex].id, questions[editingQuestionIndex].id, questionData);
+      const updatedQuestions = [...questions];
+      updatedQuestions[editingQuestionIndex] = questionData;
+      setQuestions(updatedQuestions);
     } else {
-      resetTaskDetails();
-      setCurrentQuestionIndex(questions.length);
+      const newQuestion = await createQuestion(courseId, sectionId, contents[selectedTaskIndex].id, questionData);
+      setQuestions([...questions, newQuestion]);
     }
-  };
-
-  const handleFinishTasks = async () => {
-    const taskData = {
-      title: taskDetails.title,
-      description: taskDetails.description || "",
-      section: sectionId,
-      order: contents.length + 1,
-    };
-
-    let updatedContents;
-    let taskId;
-
-    if (isEditingTask) {
-      const updatedTask = await updateTask(
-        courseId,
-        sectionId,
-        contents[editingTaskIndex].id,
-        taskData
-      );
-      taskId = updatedTask.id;
-      updatedContents = contents.map((content, index) =>
-        index === editingTaskIndex ? updatedTask : content
-      );
-    } else {
-      const newTask = await createTask(courseId, sectionId, taskData);
-      taskId = newTask.id;
-      updatedContents = [...contents, newTask];
-    }
-
-    const questionPromises = taskDetails.questions.map(async (question) => {
-      const questionData = {
-        is_attempted: false,
-        is_correct: false,
-        images: [],
-        title: question.title,
-        question_text: question.question_text,
-        question_type: question.question_type,
-        options: question.options.map((option, idx) => ({
-          id: idx + 1,
-          value: option,
-        })),
-        correct_answer: question.options.indexOf(question.correct_answer) + 1,
-        template: question.template,
-        task: taskId,
-      };
-
-      return await createQuestion(courseId, sectionId, taskId, questionData);
-    });
-
-    await Promise.all(questionPromises);
-
-    setContents(updatedContents);
-    setShowTaskModal(false);
-    setQuestions([]);
-    resetTaskDetails();
-    setIsEditingTask(false);
-    setCurrentQuestionIndex(0);
-  };
-
-  const resetTaskDetails = () => {
-    setTaskDetails({
+    setShowQuestionModal(false);
+    setCurrentQuestion({
+      question_type: "multiple_choice_text",
+      template: "",
       title: "",
-      questions: [
-        {
-          question_type: "multiple_choice_text",
-          template: "",
-          title: "",
-          question_text: "",
-          options: ["", "", "", ""],
-          correct_answer: "",
-        },
-      ],
+      question_text: "",
+      options: ["", "", "", ""],
+      correct_answer: "",
+    });
+    setEditingQuestionIndex(null);
+  } catch (error) {
+    console.error("Failed to save question", error);
+  }
+};
+
+  const handleSelectCorrectAnswer = (optionIndex) => {
+    setCurrentQuestion({
+      ...currentQuestion,
+      correct_answer: optionIndex + 1, // Store as a 1-based index
     });
   };
+  
+  const handleEditQuestion = (index) => {
+    const question = questions[index];
+    const formattedOptions = question.options.map(opt => opt.value); // Extract values from options
+    setCurrentQuestion({
+      ...question,
+      options: formattedOptions,
+      correct_answer: question.correct_answer, // Set the correct answer to the index
+    });
+    setEditingQuestionIndex(index);
+    setShowQuestionModal(true);
+  };  
+
+  const handleEditContent = (index) => {
+    const content = contents[index];
+    setSelectedTaskIndex(index);
+    setVideoDetails(content);
+    setIsEditingVideo(true);
+    setShowVideoModal(true);
+  };
+
+  const handleDeleteQuestion = async (index) => {
+    const questionId = questions[index].id;
+    try {
+      await deleteQuestion(courseId, sectionId, contents[selectedTaskIndex].id, questionId);
+      const updatedQuestions = questions.filter((_, i) => i !== index);
+      setQuestions(updatedQuestions);
+    } catch (error) {
+      console.error("Failed to delete question", error);
+    }
+  };  
 
   if (loading) {
     return <Loader />;
@@ -341,7 +338,7 @@ const Tasksection = () => {
               <div key={index} className={`vidBlock ${content.content_type}`}>
                 {content.content_type === "lesson" && (
                   <>
-                    <div
+                    <div 
                       className="thumbcontainer"
                       onClick={() => openLesson(index)}
                     >
@@ -360,16 +357,11 @@ const Tasksection = () => {
                         className="taskThumbnail"
                       />
                     </div>
-                    <p
-                      style={{
-                        backgroundColor: "white",
-                        margin: "0",
-                        padding: "7px 40px",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      {content.title}
-                    </p>
+                    <div className={`contentTitle ${content.title.length > 20 ? "title-slider" : ""}`}>
+                      <div className="title-slide">
+                        <p style={{margin:"0"}}>{content.title}</p>
+                      </div>
+                    </div>
                     <div className="taskHover">
                       <p>
                         <strong>Название:</strong> {content.title}
@@ -392,16 +384,25 @@ const Tasksection = () => {
                       }}
                       onClick={() => handleTaskClick(index)}
                     />
-                    <p
-                      style={{
-                        backgroundColor: "white",
-                        margin: "0",
-                        padding: "7px 40px",
-                        borderRadius: "10px",
+                    <div className="contentTitle">
+                      <div className="title-slide">
+                        <p style={{margin:"0"}}>{content.title}</p>
+                      </div>
+                    </div>
+                    <div className="taskHover">
+                      <p>
+                        <strong>Описание:</strong> {content.description}
+                      </p>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditTask(index);
                       }}
+                      className="deleteBtn editBtn"
                     >
-                      {content.title}
-                    </p>
+                      <EditIcon sx={{ color: "black" }} />
+                    </button>
                   </>
                 )}
                 <button
@@ -430,8 +431,10 @@ const Tasksection = () => {
               className="adderBtn"
               onClick={() => {
                 setShowTaskModal(true);
-                resetTaskDetails(); // Reset task details for new entry
-                setQuestions([]); // Reset questions for new task
+                setTaskDetails({
+                  title: "",
+                  description: "",
+                });
               }}
             >
               Задание
@@ -448,23 +451,25 @@ const Tasksection = () => {
           style={{ padding: "60px" }}
         >
           <div className="modal-content">
-            <button
-              style={{
-                border: "none",
-                float: "right",
-                backgroundColor: "transparent",
-                boxShadow: "none",
-                padding: "0",
-              }}
-              onClick={() => setShowVideoModal(false)}
-            >
-              <CloseIcon sx={{ color: "gray" }} />
-            </button>
-            <h2 className="defaultStyle" style={{ color: "#666" }}>
-              {isEditingVideo
-                ? "Редактировать видеоурок"
-                : "Добавить видеоурок"}
-            </h2>
+            <div className="modalHeader">
+              <h2 className="defaultStyle" style={{ color: "#666" }}>
+                {isEditingVideo
+                  ? "Редактировать видеоурок"
+                  : "Добавить видеоурок"}
+              </h2>
+              <button
+                style={{
+                  border: "none",
+                  float: "right",
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                  padding: "0",
+                }}
+                onClick={() => setShowVideoModal(false)}
+              >
+                <CloseIcon sx={{ color: "gray" }} />
+              </button>
+            </div>
             <form onSubmit={handleVideoSubmit}>
               <div className="formVideo">
                 <span>
@@ -537,6 +542,150 @@ const Tasksection = () => {
           style={{ padding: "60px" }}
         >
           <div className="modal-content">
+            <div className="modalHeader">
+              <h2 className="defaultStyle" style={{ color: "#666" }}>
+                Добавить задание
+              </h2>
+              <button
+                style={{
+                  border: "none",
+                  float: "right",
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                  padding: "0",
+                }}
+                onClick={() => setShowTaskModal(false)}
+              >
+                <CloseIcon sx={{ color: "gray" }} />
+              </button>
+            </div>
+            <form onSubmit={handleTaskSubmit}>
+              <div className="formVideo">
+                <span>
+                  <label htmlFor="taskTitle">Название задания:</label>
+                  <br />
+                  <input
+                    type="text"
+                    id="taskTitle"
+                    value={taskDetails.title}
+                    onChange={(e) =>
+                      setTaskDetails({
+                        ...taskDetails,
+                        title: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </span>
+                <span style={{ marginLeft: "2rem" }}>
+                  <label htmlFor="taskDescription">Описание задания:</label>
+                  <br />
+                  <textarea
+                    id="taskDescription"
+                    value={taskDetails.description}
+                    onChange={(e) =>
+                      setTaskDetails({
+                        ...taskDetails,
+                        description: e.target.value,
+                      })
+                    }
+                    style={{ width: "300px", height: "40px" }}
+                  />
+                  <br />
+                </span>
+              </div>
+              <button
+                type="submit"
+                className="superBtn"
+                style={{ marginTop: "30px" }}
+              >
+                Создать
+              </button>
+            </form>
+          </div>
+        </dialog>
+      )}
+
+      {showQuestionsModal && (
+        <dialog
+          open={showQuestionsModal}
+          onClose={() => setShowQuestionsModal(false)}
+          className="modal supermodal"
+          style={{ padding: "60px" }}
+        >
+          <div className="modal-content">
+            <div className="modalHeader">
+              <h2 className="defaultStyle" style={{ color: "#666" }}>
+                Вопросы задания
+              </h2>
+              <button
+                style={{
+                  border: "none",
+                  float: "right",
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                  padding: "0",
+                }}
+                onClick={() => setShowQuestionsModal(false)}
+              >
+                <CloseIcon sx={{ color: "gray" }} />
+              </button>
+            </div>
+            <div className="questionsList">
+              {selectedTaskIndex !== null && questions.length > 0 && (
+                <ul>
+                  {questions.map((question, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleEditQuestion(index)}
+                      className="questions"
+                    >
+                      {question.title || `Вопрос ${index + 1}`}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteQuestion(index);
+                        }}
+                        className="transBtn"
+                        style={{ paddingTop: "3px" }}
+                      >
+                        <DeleteForeverIcon sx={{ color: "darkred" }} />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <button
+                onClick={() => {
+                  setCurrentQuestion({
+                    question_type: "multiple_choice_text",
+                    template: "",
+                    title: "",
+                    question_text: "",
+                    options: ["", "", "", ""],
+                    correct_answer: "",
+                  });
+                  setEditingQuestionIndex(null);
+                  setShowQuestionModal(true);
+                }}
+                className="adderBtn"
+                style={{ marginTop: "20px" }}
+              >
+                Добавить вопрос
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
+
+      {showQuestionModal && (
+        <dialog
+          open={showQuestionModal}
+          onClose={() => setShowQuestionModal(false)}
+          className="modal supermodal"
+          style={{ padding: "60px" }}
+        >
+          <div className="modal-content">
             <button
               style={{
                 border: "none",
@@ -545,29 +694,43 @@ const Tasksection = () => {
                 boxShadow: "none",
                 padding: "0",
               }}
-              onClick={() => setShowTaskModal(false)}
+              onClick={() => setShowQuestionModal(false)}
             >
               <CloseIcon sx={{ color: "gray" }} />
             </button>
             <h2 className="defaultStyle" style={{ color: "#666" }}>
-              Добавить задание
+              {editingQuestionIndex !== null ? "Редактировать вопрос" : "Добавить вопрос"}
             </h2>
             <div className="taskConstructor">
               <div className="taskPreview">
                 <p
                   className="defaultStyle"
-                  style={{ margin: "0", padding: "40px", fontSize: "large" }}
+                  style={{ margin: "0", padding: "20px", maxWidth:"500px", maxHeight:"70px", fontSize: "large", textWrap:"wrap", textOverflow:"ellipsis", textAlign:"center"}}
                 >
-                  {taskDetails.title}
+                  {currentQuestion.title}
                 </p>
                 <div className="previewContent">
-                  <p style={{ margin: "0", fontSize: "xx-large" }}>
-                    {taskDetails.questions[currentQuestionIndex].question_text}
+                  <p style={{ margin: "0", fontSize: "xx-large", maxWidth:"500px", maxHeight:"105px", textWrap:"wrap", textOverflow:"ellipsis", textAlign:"center"}}>
+                    {currentQuestion.question_text}
                   </p>
+                  <div className="previewOptions">
+                    {currentQuestion.options.map((option, index) => (
+                      <div
+                        key={index}
+                        className={`previewOption ${
+                          currentQuestion.correct_answer === index + 1 ? "correct-answer" : ""
+                        }`}
+                        onClick={() => handleSelectCorrectAnswer(index)}
+                      >
+                        {typeof option === 'string' ? option : option.value}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
+
               <div className="taskDetails">
-                <form onSubmit={handleTaskSubmit} className="">
+                <form onSubmit={handleQuestionSubmit}>
                   <div className="formConstructor">
                     <div
                       style={{
@@ -575,40 +738,33 @@ const Tasksection = () => {
                         flexDirection: "row",
                         alignItems: "center",
                         gap: "2rem",
-                        width: "60%",
+                        width:"60%",
                         marginBottom: "40px",
                       }}
-                    >
-                      <h3 className="defaultStyle" style={{ color: "#666" }}>
-                        Выберите тип задачи
-                      </h3>
-                      <input
-                        list="tasktype"
-                        placeholder="Выбор правильного ответа"
-                        required
-                        style={{ margin: "0" }}
-                        value={taskDetails.questions[currentQuestionIndex].question_type}
-                        onChange={(e) => {
-                          const updatedQuestions = [...taskDetails.questions];
-                          updatedQuestions[currentQuestionIndex].question_type = e.target.value;
-                          setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-                        }}
-                      />
-                      <datalist id="tasktype">
-                        <option value="multiple_choice_text" />
-                        <option value="text_input" />
-                        <option value="file_upload" />
-                      </datalist>
-                      <button
-                        className="transBtn"
-                        style={{
-                          backgroundColor: "#aaa",
-                          borderRadius: "7px",
-                          padding: "8px",
-                        }}
                       >
-                        <AddIcon sx={{ color: "#333" }} />
-                      </button>
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Выберите тип задачи
+                        </h3>
+                        <input
+                          list="questiontype"
+                          id="questionType"
+                          placeholder="Выбор правильного ответа"
+                          style={{margin:"0"}}
+                          value={currentQuestion.question_type}
+                          onChange={(e) =>
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              question_type: e.target.value,
+                            })
+                          }
+                          required
+                        />
+                        <datalist id="questiontype">
+                          <option value="multiple_choice_text" />
+                          <option value="text_input" />
+                          <option value="file_upload" />
+                        </datalist>
+                        
                     </div>
                     <div
                       style={{
@@ -626,122 +782,103 @@ const Tasksection = () => {
                           display: "flex",
                           flexDirection: "row",
                           gap: "2rem",
+                          margin:"0"
                         }}
                       >
                         <li
                           className={`bgitem ${
-                            taskDetails.questions[currentQuestionIndex].template === "1"
+                            currentQuestion.template === "1"
                               ? "selected-template"
                               : ""
                           }`}
-                          onClick={() => {
-                            const updatedQuestions = [...taskDetails.questions];
-                            updatedQuestions[currentQuestionIndex].template = "1";
-                            setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-                          }}
+                          onClick={() =>
+                            setCurrentQuestion({ ...currentQuestion, template: "1" })
+                          }
                         >
                           1
                         </li>
                         <li
                           className={`bgitem ${
-                            taskDetails.questions[currentQuestionIndex].template === "2"
+                            currentQuestion.template === "2"
                               ? "selected-template"
                               : ""
                           }`}
-                          onClick={() => {
-                            const updatedQuestions = [...taskDetails.questions];
-                            updatedQuestions[currentQuestionIndex].template = "2";
-                            setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-                          }}
+                          onClick={() =>
+                            setCurrentQuestion({ ...currentQuestion, template: "2" })
+                          }
                         >
                           2
                         </li>
                         <li
                           className={`bgitem ${
-                            taskDetails.questions[currentQuestionIndex].template === "3"
+                            currentQuestion.template === "3"
                               ? "selected-template"
                               : ""
                           }`}
-                          onClick={() => {
-                            const updatedQuestions = [...taskDetails.questions];
-                            updatedQuestions[currentQuestionIndex].template = "3";
-                            setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-                          }}
+                          onClick={() =>
+                            setCurrentQuestion({ ...currentQuestion, template: "3" })
+                          }
                         >
                           3
                         </li>
                         <li
                           className={`bgitem ${
-                            taskDetails.questions[currentQuestionIndex].template === "4"
+                            currentQuestion.template === "4"
                               ? "selected-template"
                               : ""
                           }`}
-                          onClick={() => {
-                            const updatedQuestions = [...taskDetails.questions];
-                            updatedQuestions[currentQuestionIndex].template = "4";
-                            setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-                          }}
+                          onClick={() =>
+                            setCurrentQuestion({ ...currentQuestion, template: "4" })
+                          }
                         >
                           4
                         </li>
                       </ul>
                     </div>
-                    <div
+                    <span
                       style={{
                         display: "flex",
                         flexDirection: "row",
-                        gap: "1rem",
+                        alignItems: "center",
+                        gap: "2rem",
                         marginBottom: "40px",
                       }}
                     >
                       <span>
-                        <label
-                          htmlFor="taskTitle"
-                          className="defaultStyle"
-                          style={{ fontSize: "medium", color: "#666" }}
-                        >
-                          Текст сверху
-                        </label>
+                        <h3 className="defaultStyle" style={{color:"#666"}}>Название вопроса</h3>
                         <input
                           type="text"
-                          id="taskTitle"
-                          placeholder="Мой вопрос"
-                          style={{ margin: "0" }}
-                          value={taskDetails.title}
-                          onChange={(e) => {
-                            setTaskDetails({ ...taskDetails, title: e.target.value });
-                          }}
+                          id="questionTitle"
+                          placeholder="Задание по арифметике"
+                          value={currentQuestion.title}
+                          onChange={(e) =>
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              title: e.target.value,
+                            })
+                          }
+                          required
                         />
                       </span>
+                      
                       <span>
-                        <label
-                          htmlFor="taskText"
-                          className="defaultStyle"
-                          style={{ fontSize: "medium", color: "#666" }}
-                        >
-                          Текст задачи
-                        </label>
+                        <h3 className="defaultStyle" style={{color:"#666"}}>Описание вопроса</h3>
                         <input
-                          type="text"
-                          id="taskText"
-                          placeholder="15 + 4 ="
-                          style={{ margin: "0" }}
-                          value={taskDetails.questions[currentQuestionIndex].question_text}
-                          onChange={(e) => {
-                            const updatedQuestions = [...taskDetails.questions];
-                            updatedQuestions[currentQuestionIndex].question_text = e.target.value;
-                            setTaskDetails({ ...taskDetails, questions: updatedQuestions });
-                          }}
+                          id="questionText"
+                          value={currentQuestion.question_text}
+                          placeholder="Ваш вопрос"
+                          onChange={(e) =>
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              question_text: e.target.value,
+                            })
+                          }                          
+                          required
                         />
                       </span>
-                    </div>
-                    <label
-                      htmlFor=""
-                      className="defaultStyle"
-                      style={{ fontSize: "medium", color: "#666" }}
-                    >
-                      Варианты ответа (напишите и нажмите на правильный)
-                    </label>
+                    </span>
+                    
+                    <h3 className="defaultStyle" style={{color:"#666"}}>Варианты ответа (напишите и нажмите на правильный)</h3>
                     <div
                       style={{
                         display: "flex",
@@ -749,134 +886,40 @@ const Tasksection = () => {
                         gap: "1rem",
                       }}
                     >
-                      {taskDetails.questions[currentQuestionIndex].options.map((option, index) => (
+                      {currentQuestion.options.map((option, index) => (
                         <input
                           key={index}
                           type="text"
-                          placeholder={String.fromCharCode(97 + index)}
-                          value={option}
+                          placeholder={`Вариант ${index + 1}`}
+                          value={typeof option === 'string' ? option : option.value}
+                          onChange={(e) => {
+                            const updatedOptions = [...currentQuestion.options];
+                            updatedOptions[index] = e.target.value;
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              options: updatedOptions,
+                            });
+                          }}
                           style={{ margin: "0" }}
-                          onChange={(e) =>
-                            handleAnswerChange(currentQuestionIndex, index, e.target.value)
-                          }
-                          onClick={() => handleSelectCorrectAnswer(currentQuestionIndex, index)}
                           className={
-                            taskDetails.questions[currentQuestionIndex].correct_answer === option
+                            currentQuestion.correct_answer === index + 1
                               ? "correct-answer"
                               : ""
                           }
+                          onClick={() => handleSelectCorrectAnswer(index)}
                         />
                       ))}
                     </div>
                   </div>
-                  <div style={{ marginTop: "40px" }}>
-                    <button
-                      type="button"
-                      onClick={nextQuestion}
-                      className="superBtn"
-                      style={{
-                        backgroundColor: "#D5E5EE",
-                        marginRight: "20px",
-                      }}
-                    >
-                      Добавить еще
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleFinishTasks}
-                      className="superBtn"
-                    >
-                      Сохранить
-                    </button>
-                  </div>
+                  <button
+                    type="submit"
+                    className="superBtn"
+                    style={{ marginTop: "30px" }}
+                  >
+                    {editingQuestionIndex !== null ? "Сохранить" : "Добавить"}
+                  </button>
                 </form>
               </div>
-            </div>
-          </div>
-        </dialog>
-      )}
-
-      {showQuestionsModal && (
-        <dialog
-          open={showQuestionsModal}
-          onClose={() => setShowQuestionsModal(false)}
-          className="modal supermodal"
-          style={{ padding: "60px" }}
-        >
-          <div className="modal-content">
-            <button
-              style={{
-                border: "none",
-                float: "right",
-                backgroundColor: "transparent",
-                boxShadow: "none",
-                padding: "0",
-              }}
-              onClick={() => setShowQuestionsModal(false)}
-            >
-              <CloseIcon sx={{ color: "gray" }} />
-            </button>
-            <h2 className="defaultStyle" style={{ color: "#666" }}>
-              Все вопросы
-            </h2>
-            <div className="questionsList">
-              {selectedTaskIndex !== null && questions.length > 0 && (
-                <ul>
-                  {questions.map((question, index) => (
-                    <li
-                      key={index}
-                      onClick={() => {
-                        setCurrentQuestionIndex(index);
-                        setShowQuestionDetailsModal(true);
-                      }}
-                      style={{ cursor: "pointer", padding: "10px", borderBottom: "1px solid #ccc" }}
-                    >
-                      {question.title || `Вопрос ${index + 1}`}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        </dialog>
-      )}
-
-      {showQuestionDetailsModal && (
-        <dialog
-          open={showQuestionDetailsModal}
-          onClose={() => setShowQuestionDetailsModal(false)}
-          className="modal supermodal"
-          style={{ padding: "60px" }}
-        >
-          <div className="modal-content">
-            <button
-              style={{
-                border: "none",
-                float: "right",
-                backgroundColor: "transparent",
-                boxShadow: "none",
-                padding: "0",
-              }}
-              onClick={() => setShowQuestionDetailsModal(false)}
-            >
-              <CloseIcon sx={{ color: "gray" }} />
-            </button>
-            <h2 className="defaultStyle" style={{ color: "#666" }}>
-              Детали вопроса
-            </h2>
-            <div className="questionDetails">
-              <p><strong>Название:</strong> {questions[currentQuestionIndex].title}</p>
-              <p><strong>Текст задачи:</strong> {questions[currentQuestionIndex].question_text}</p>
-              <p><strong>Шаблон:</strong> {questions[currentQuestionIndex].template}</p>
-              <p><strong>Тип задачи:</strong> {questions[currentQuestionIndex].question_type}</p>
-              <p><strong>Варианты ответа:</strong></p>
-              <ul>
-                {questions[currentQuestionIndex].options.map((option, index) => (
-                  <li key={index} style={{ margin: "5px 0" }}>
-                    {option.value} {questions[currentQuestionIndex].correct_answer === option.id && "(Correct)"}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </dialog>
