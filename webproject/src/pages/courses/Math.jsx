@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Sidebar from "../Sidebar";
 import Navdash from "../Navdash";
-import Profile from "../Profile";
-import placeholderPfp from "../../assets/placehoder_pfp.png";
 import mathIcon from "../../assets/calculator.png";
 import englishIcon from "../../assets/english.png";
 import bgtask from "../../assets/bgtask.svg";
+import bgstudtask from "../../assets/bgstudtask.png";
 import bgvideo from "../../assets/videolessonthumb.svg";
+import staricon from "../../assets/navStars.png";
+import cupicon from "../../assets/navCups.png";
 import CloseIcon from "@mui/icons-material/Close";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
   fetchUserData,
   fetchCourses,
@@ -25,10 +28,15 @@ const Math = () => {
   const [user, setUser] = useState({});
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [showQuestionsModal, setShowQuestionsModal] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
   const [taskContent, setTaskContent] = useState({});
   const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [isChild, setIsChild] = useState(false);
+  const [childId, setChildId] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -37,6 +45,8 @@ const Math = () => {
         let userData;
         if (child_id) {
           userData = await fetchUserData(child_id);
+          setIsChild(true);
+          setChildId(child_id);
         } else {
           userData = await fetchUserData();
         }
@@ -59,12 +69,19 @@ const Math = () => {
     setShowVideoModal(true);
   };
 
-  const openTaskModal = async (taskId) => {
+  const openTaskModal = async (sectionId, taskId) => {
     try {
-      const task = await fetchTask(courseId, taskId);
-      const taskQuestions = await fetchQuestions(courseId, task.section, taskId);
+      const task = await fetchTask(courseId, sectionId, taskId, childId);
+      const taskQuestions = await fetchQuestions(
+        courseId,
+        task.section,
+        taskId,
+        childId
+      );
       setTaskContent(task);
       setQuestions(taskQuestions);
+      setCurrentQuestionIndex(0);
+      setSelectedOption(null);
       setShowTaskModal(true);
     } catch (error) {
       console.error("Error fetching task data:", error);
@@ -79,9 +96,41 @@ const Math = () => {
     setShowTaskModal(false);
   };
 
+  const handleOptionClick = (optionId) => {
+    setSelectedOption(optionId);
+  };
+
+  const handleNextQuestion = () => {
+    const isCorrect =
+      selectedOption === questions[currentQuestionIndex].correct_answer;
+    setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
+    setShowFeedback(true);
+  
+    setTimeout(() => {
+      setShowFeedback(false);
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+      setSelectedOption(null);
+    }, 1500);
+  };
+
+  const handleSubmit = () => {
+    const isCorrect =
+      selectedOption === questions[currentQuestionIndex].correct_answer;
+    setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
+    setShowFeedback(true);
+  
+    setTimeout(() => {
+      console.log("Submitting answers...");
+      closeTaskModal();
+    }, 1500);
+  };
+
   if (!course) {
     return <div>Loading</div>;
   }
+
+  const currentQuestion = questions[currentQuestionIndex];
+  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
     <div className="rtdash rtrat">
@@ -162,13 +211,15 @@ const Math = () => {
                       ) : (
                         <div
                           className="studVidBlock task"
-                          onClick={() => openTaskModal(content.id)}
+                          onClick={() =>
+                            openTaskModal(content.section, content.id)
+                          }
                         >
                           <img
-                              src={bgtask || "placeholder.png"}
-                              alt="vidname"
-                              className="taskThumbnail"
-                            />
+                            src={bgtask || "placeholder.png"}
+                            alt="vidname"
+                            className="taskThumbnail"
+                          />
                           <p
                             style={{
                               backgroundColor: "white",
@@ -208,21 +259,23 @@ const Math = () => {
       {showVideoModal && (
         <dialog className="studmodal" open>
           <div className="studmodal-content">
-            <button
-              style={{
-                border: "none",
-                float: "right",
-                backgroundColor: "transparent",
-                boxShadow: "none",
-                padding: "0",
-              }}
-              onClick={closeVideoModal}
-            >
-              <CloseIcon sx={{ color: "gray" }} />
-            </button>
-            <h2 className="defaultStyle" style={{ color: "#666" }}>
-              Видео Урок
-            </h2>
+            <div className="modalHeader" style={{marginBottom:"20px"}}>
+              <h2 className="defaultStyle" style={{ color: "#666" }}>
+                Видеоурок
+              </h2>
+              <button
+                style={{
+                  float: "right",
+                  backgroundColor: "lightgray",
+                  border: "none",
+                  borderRadius: "10px",
+                  color: "#666",
+                }}
+                onClick={closeVideoModal}
+              >
+                Закрыть
+              </button>
+            </div>
             <iframe
               width="500px"
               height="315px"
@@ -239,38 +292,125 @@ const Math = () => {
       {showTaskModal && (
         <dialog className="studmodal" open>
           <div className="studmodal-content">
-            <button
-              style={{
-                border: "none",
-                float: "right",
-                backgroundColor: "transparent",
-                boxShadow: "none",
-                padding: "0",
-              }}
-              onClick={closeTaskModal}
+            <div className="modalHeader">
+              <span
+                style={{ display: "flex", flexDirection: "row", gap: "2rem" }}
+              >
+                <p
+                  className="lndsh"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <img src={staricon} alt="" className="defaultIcon" />
+                  0{childId.stars}
+                </p>
+                <p
+                  className="lndsh"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <img src={cupicon} alt="" className="defaultIcon" />
+                  0{childId.cups}
+                </p>
+              </span>
+
+              <button
+                style={{
+                  float: "right",
+                  backgroundColor: "lightgray",
+                  border: "none",
+                  borderRadius: "10px",
+                  color: "#666",
+                }}
+                onClick={closeTaskModal}
+              >
+                Закрыть
+              </button>
+            </div>
+            <div
+              className="studtaskDetails"
+              style={{ backgroundImage: "url(./assets/bgstudtask.png)" }}
             >
-              <CloseIcon sx={{ color: "gray" }} />
-            </button>
-            <h2 className="defaultStyle" style={{ color: "#666" }}>
-              {taskContent.title}
-            </h2>
-            <div className="taskDetails">
-              <p><strong>Описание:</strong> {taskContent.description}</p>
-              <h3>Вопросы</h3>
-              <ul>
-                {questions.map((question, index) => (
-                  <li key={index}>
-                    <strong>{question.title}</strong>: {question.question_text}
-                    <ul>
-                      {question.options.map((option, idx) => (
-                        <li key={idx}>
-                          {option.value} {question.correct_answer === option.id ? "(Correct)" : ""}
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ))}
-              </ul>
+              {showFeedback && (
+                <div
+                  className={`feedbackMessage ${
+                    feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
+                  }`}
+                >
+                  <p
+                    className={`defaultStyle ${
+                      feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
+                    }`}
+                  >
+                    {feedbackMessage === "Correct!"
+                      ? "Правильно!"
+                      : "Неправильно!"}
+                  </p>
+                </div>
+              )}
+              <div className="questionCarousel">
+                <div className="questionContent">
+                  <ul
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <li key={currentQuestionIndex}>
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <span>
+                          <strong>{currentQuestionIndex + 1}. </strong>
+                          <i>{currentQuestion.title}:</i>{" "}
+                        </span>
+                        <strong>{currentQuestion.question_text}</strong>
+                      </span>
+                      <ul className="studTaskOptions">
+                        {currentQuestion.options.map((option, idx) => (
+                          <li
+                            key={idx}
+                            className={`studTaskOption ${
+                              selectedOption === option.id ? "studTaskOptionSelected" : ""
+                            }`}
+                            onClick={() => handleOptionClick(option.id)}
+                          >
+                            {option.value}
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  </ul>
+                  <div className="navigationButtons">
+                    <span style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+                      <progress
+                        value={progress}
+                        max="100"
+                        style={{ width: "100%", marginTop: "10px" }}
+                      ></progress>
+                      <button
+                        onClick={
+                          currentQuestionIndex === questions.length - 1
+                            ? handleSubmit
+                            : handleNextQuestion
+                        }
+                        disabled={selectedOption === null}
+                        className={`${currentQuestionIndex === questions.length - 1 ? "" : "orangeButton"}`}
+                        style={{ float: "right" }}
+                      >
+                        {currentQuestionIndex === questions.length - 1
+                          ? "Закончить"
+                          : "Дальше"}
+                      </button>
+                      
+                    </span>
+                    
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </dialog>
