@@ -623,3 +623,15 @@ export const answerQuestion = async (
     throw new Error(error || "Something went wrong");
   }
 };
+
+export const playGame = async (childId) => {
+  try {
+    const endpoint = childId
+      ? `/play-game/?child_id=${childId}`
+      : "/play-game/";
+    const response = await instance.get(endpoint);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
