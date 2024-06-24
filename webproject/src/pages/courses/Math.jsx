@@ -29,6 +29,8 @@ const Math = () => {
   const [videoUrl, setVideoUrl] = useState("");
   const [taskContent, setTaskContent] = useState({});
   const [questions, setQuestions] = useState([]);
+  const [isChild, setIsChild] = useState(false);
+  const [childId, setChildId] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -37,6 +39,8 @@ const Math = () => {
         let userData;
         if (child_id) {
           userData = await fetchUserData(child_id);
+          setIsChild(true);
+          setChildId(child_id);
         } else {
           userData = await fetchUserData();
         }
@@ -59,10 +63,15 @@ const Math = () => {
     setShowVideoModal(true);
   };
 
-  const openTaskModal = async (taskId) => {
+  const openTaskModal = async (sectionId, taskId) => {
     try {
-      const task = await fetchTask(courseId, taskId);
-      const taskQuestions = await fetchQuestions(courseId, task.section, taskId);
+      const task = await fetchTask(courseId, sectionId, taskId, childId);
+      const taskQuestions = await fetchQuestions(
+        courseId,
+        task.section,
+        taskId,
+        childId
+      );
       setTaskContent(task);
       setQuestions(taskQuestions);
       setShowTaskModal(true);
@@ -162,13 +171,15 @@ const Math = () => {
                       ) : (
                         <div
                           className="studVidBlock task"
-                          onClick={() => openTaskModal(content.id)}
+                          onClick={() =>
+                            openTaskModal(content.section, content.id)
+                          }
                         >
                           <img
-                              src={bgtask || "placeholder.png"}
-                              alt="vidname"
-                              className="taskThumbnail"
-                            />
+                            src={bgtask || "placeholder.png"}
+                            alt="vidname"
+                            className="taskThumbnail"
+                          />
                           <p
                             style={{
                               backgroundColor: "white",
@@ -255,7 +266,9 @@ const Math = () => {
               {taskContent.title}
             </h2>
             <div className="taskDetails">
-              <p><strong>Описание:</strong> {taskContent.description}</p>
+              <p>
+                <strong>Описание:</strong> {taskContent.description}
+              </p>
               <h3>Вопросы</h3>
               <ul>
                 {questions.map((question, index) => (
@@ -264,7 +277,10 @@ const Math = () => {
                     <ul>
                       {question.options.map((option, idx) => (
                         <li key={idx}>
-                          {option.value} {question.correct_answer === option.id ? "(Correct)" : ""}
+                          {option.value}{" "}
+                          {question.correct_answer === option.id
+                            ? "(Correct)"
+                            : ""}
                         </li>
                       ))}
                     </ul>

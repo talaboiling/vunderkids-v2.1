@@ -259,20 +259,23 @@ export const fetchLessons = async (courseId, sectionId) => {
   }
 };
 
-export const fetchTasks = async (courseId, sectionId) => {
+export const fetchTasks = async (courseId, sectionId, childId) => {
   try {
-    const response = await instance.get(
-      `/courses/${courseId}/sections/${sectionId}/tasks/`
-    );
+    const endpoint = childId
+      ? `/courses/${courseId}/sections/${sectionId}/tasks?child_id=${childId}`
+      : `/courses/${courseId}/sections/${sectionId}/tasks`;
+    const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");
   }
 };
 
-export const fetchQuestions = async (courseId, sectionId, taskId) => {
+export const fetchQuestions = async (courseId, sectionId, taskId, childId) => {
   try {
-    const endpoint = `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/questions`;
+    const endpoint = childId
+      ? `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/questions?child_id=${childId}`
+      : `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/questions`;
     const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
@@ -281,9 +284,11 @@ export const fetchQuestions = async (courseId, sectionId, taskId) => {
 };
 
 // Fetch specific objects
-export const fetchTask = async (courseId, sectionId, taskId) => {
+export const fetchTask = async (courseId, sectionId, taskId, childId) => {
   try {
-    const endpoint = `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}`;
+    const endpoint = childId
+      ? `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/?child_id=${childId}`
+      : `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/`;
     const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
