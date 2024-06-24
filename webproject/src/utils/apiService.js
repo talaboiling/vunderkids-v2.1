@@ -610,12 +610,14 @@ export const answerQuestion = async (
   childId
 ) => {
   try {
+    console.log(courseId, sectionId, taskId, questionId, data, childId);
     const endpoint = `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/questions/${questionId}/answer/`;
     const requestData = {
       answer: data,
       ...(childId && { child_id: childId }),
     };
     const response = await instance.post(endpoint, requestData);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");

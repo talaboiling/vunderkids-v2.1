@@ -107,13 +107,13 @@ const Math = () => {
       selectedOption === questions[currentQuestionIndex].correct_answer;
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
-  
+
     await answerQuestion(
       courseId,
       taskContent.section,
       taskContent.id,
       questions[currentQuestionIndex].id,
-      { selectedOption, isCorrect },
+      selectedOption,
       childId
     );
 
@@ -129,13 +129,13 @@ const Math = () => {
       selectedOption === questions[currentQuestionIndex].correct_answer;
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
-  
+
     await answerQuestion(
       courseId,
       taskContent.section,
       taskContent.id,
       questions[currentQuestionIndex].id,
-      { selectedOption, isCorrect },
+      selectedOption,
       childId
     );
 
@@ -197,7 +197,13 @@ const Math = () => {
 
               {sections.map((section, sectionIndex) => (
                 <div key={sectionIndex}>
-                  <div style={{ display: "flex", flexDirection: "row", alignItems:"center"}}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <hr />
                     <h2 className="defaultStyle" style={{ color: "#aaa" }}>
                       {section.title}
@@ -241,6 +247,9 @@ const Math = () => {
                             alt="vidname"
                             className="taskThumbnail"
                           />
+                          {content.is_completed && (
+                            <strong>Вы сделали это задание</strong>
+                          )}
                           <p
                             style={{
                               backgroundColor: "white",
@@ -280,7 +289,7 @@ const Math = () => {
       {showVideoModal && (
         <dialog className="studmodal" open>
           <div className="studmodal-content">
-            <div className="modalHeader" style={{marginBottom:"20px"}}>
+            <div className="modalHeader" style={{ marginBottom: "20px" }}>
               <h2 className="defaultStyle" style={{ color: "#666" }}>
                 Видеоурок
               </h2>
@@ -321,15 +330,15 @@ const Math = () => {
                   className="lndsh"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  <img src={staricon} alt="" className="defaultIcon" />
-                  0{childId.stars}
+                  <img src={staricon} alt="" className="defaultIcon" />0
+                  {childId.stars}
                 </p>
                 <p
                   className="lndsh"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  <img src={cupicon} alt="" className="defaultIcon" />
-                  0{childId.cups}
+                  <img src={cupicon} alt="" className="defaultIcon" />0
+                  {childId.cups}
                 </p>
               </span>
 
@@ -353,12 +362,16 @@ const Math = () => {
               {showFeedback && (
                 <div
                   className={`feedbackMessage ${
-                    feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
+                    feedbackMessage === "Correct!"
+                      ? "fbmcorrect"
+                      : "fbmincorrect"
                   }`}
                 >
                   <p
                     className={`defaultStyle ${
-                      feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
+                      feedbackMessage === "Correct!"
+                        ? "fbmcorrect"
+                        : "fbmincorrect"
                     }`}
                   >
                     {feedbackMessage === "Correct!"
@@ -389,13 +402,20 @@ const Math = () => {
                           <i>{currentQuestion.title}:</i>{" "}
                         </span>
                         <strong>{currentQuestion.question_text}</strong>
+                        {currentQuestion.is_attempted && (
+                          <strong style={{ color: "green" }}>
+                            Вы уже ответили на этот вопрос
+                          </strong>
+                        )}
                       </span>
                       <ul className="studTaskOptions">
                         {currentQuestion.options.map((option, idx) => (
                           <li
                             key={idx}
                             className={`studTaskOption ${
-                              selectedOption === option.id ? "studTaskOptionSelected" : ""
+                              selectedOption === option.id
+                                ? "studTaskOptionSelected"
+                                : ""
                             }`}
                             onClick={() => handleOptionClick(option.id)}
                           >
@@ -406,7 +426,14 @@ const Math = () => {
                     </li>
                   </ul>
                   <div className="navigationButtons">
-                    <span style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+                    <span
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
                       <progress
                         value={progress}
                         max="100"
@@ -419,16 +446,18 @@ const Math = () => {
                             : handleNextQuestion
                         }
                         disabled={selectedOption === null}
-                        className={`${currentQuestionIndex === questions.length - 1 ? "" : "orangeButton"}`}
+                        className={`${
+                          currentQuestionIndex === questions.length - 1
+                            ? ""
+                            : "orangeButton"
+                        }`}
                         style={{ float: "right" }}
                       >
                         {currentQuestionIndex === questions.length - 1
                           ? "Закончить"
                           : "Дальше"}
                       </button>
-                      
                     </span>
-                    
                   </div>
                 </div>
               </div>
