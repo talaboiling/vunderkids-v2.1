@@ -825,6 +825,7 @@ img.childcard {
   border: 4px solid lightgray;
   padding: 10px;
   border-radius: 7px;
+  margin-top: 10px;
 }
 
 .fbmcorrect{

@@ -19,6 +19,7 @@ import {
   fetchCourse,
   fetchTask,
   fetchQuestions,
+  answerQuestion,
 } from "../../utils/apiService";
 
 const Math = () => {
@@ -82,6 +83,7 @@ const Math = () => {
       setQuestions(taskQuestions);
       setCurrentQuestionIndex(0);
       setSelectedOption(null);
+      setShowFeedback(false);
       setShowTaskModal(true);
     } catch (error) {
       console.error("Error fetching task data:", error);
@@ -100,12 +102,21 @@ const Math = () => {
     setSelectedOption(optionId);
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     const isCorrect =
       selectedOption === questions[currentQuestionIndex].correct_answer;
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
   
+    await answerQuestion(
+      courseId,
+      taskContent.section,
+      taskContent.id,
+      questions[currentQuestionIndex].id,
+      { selectedOption, isCorrect },
+      childId
+    );
+
     setTimeout(() => {
       setShowFeedback(false);
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
@@ -113,14 +124,24 @@ const Math = () => {
     }, 1500);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const isCorrect =
       selectedOption === questions[currentQuestionIndex].correct_answer;
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
   
+    await answerQuestion(
+      courseId,
+      taskContent.section,
+      taskContent.id,
+      questions[currentQuestionIndex].id,
+      { selectedOption, isCorrect },
+      childId
+    );
+
     setTimeout(() => {
       console.log("Submitting answers...");
+      setShowFeedback(false);
       closeTaskModal();
     }, 1500);
   };
@@ -176,7 +197,7 @@ const Math = () => {
 
               {sections.map((section, sectionIndex) => (
                 <div key={sectionIndex}>
-                  <div style={{ display: "flex", flexDirection: "row" }}>
+                  <div style={{ display: "flex", flexDirection: "row", alignItems:"center"}}>
                     <hr />
                     <h2 className="defaultStyle" style={{ color: "#aaa" }}>
                       {section.title}
