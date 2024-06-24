@@ -610,12 +610,26 @@ export const answerQuestion = async (
   childId
 ) => {
   try {
+    console.log(courseId, sectionId, taskId, questionId, data, childId);
     const endpoint = `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/questions/${questionId}/answer/`;
     const requestData = {
       answer: data,
       ...(childId && { child_id: childId }),
     };
     const response = await instance.post(endpoint, requestData);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error(error || "Something went wrong");
+  }
+};
+
+export const playGame = async (childId) => {
+  try {
+    const endpoint = childId
+      ? `/play-game/?child_id=${childId}`
+      : "/play-game/";
+    const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");

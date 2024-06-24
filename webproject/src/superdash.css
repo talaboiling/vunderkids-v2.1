@@ -474,8 +474,6 @@
   background-color: #97d4e7;
   align-items: center;
   justify-content: space-between;
-
-  padding-bottom: 7px;
   position: relative;
   cursor: pointer;
   transition: transform 0.2s;

@@ -838,3 +838,19 @@ img.childcard {
   color: red;
 }
 
+.completedTask{
+  background-color: #6beda6;
+  color: white;
+  border-radius: 10px;
+  padding: 7px 25px;
+  margin-top: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.incompleteTask{
+  background-color: lightgray;
+}
