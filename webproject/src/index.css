@@ -196,6 +196,10 @@ a:visited{
 
 li{
   text-decoration: none;
+  padding: 0;
+}
+
+li .linkMain{
   padding-inline-start: 1ch;
 }
 
@@ -622,6 +626,10 @@ label{
 
 li.planCardList::marker{
   content: url(./assets/marker.png);
+}
+
+li.planCardList{
+  padding-inline-start: 1ch;
 }
 
 .planBack{
