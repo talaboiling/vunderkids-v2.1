@@ -3,6 +3,8 @@ import mascotImg from "./assets/mascotImg.png";
 import logoImg from "./assets/logo_blue.png";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "./utils/authService";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 function Header() {
   const navigate = useNavigate();
@@ -12,7 +14,7 @@ function Header() {
     logout();
     navigate("/login");
   };
-
+  const { t } = useTranslation();
   return (
     <div className="headerImg">
       <div className="navBar">
@@ -22,35 +24,39 @@ function Header() {
         <div className="excLogo">
           <div className="navList">
             <a href="#oplatforme" className="navLink">
-              О ПЛАТФОРМЕ
+              { t('aboutPlatform')}
             </a>
             <a href="#obuchenie" className="navLink">
-              ОБУЧЕНИЕ
+              { t('education')}
             </a>
             <a href="#otzyvy" className="navLink">
-              ОТЗЫВЫ
+              {t('reviews')}
             </a>
             <a href="#contakty" className="navLink">
-              КОНТАКТЫ
+              {t('contacts')}
             </a>
           </div>
           <div className="navButton">
+            <div className="langSelector">
+              <button className="transBtn" onClick={() => i18next.changeLanguage('ru')}>РУС</button>
+              <button className="transBtn" onClick={() => i18next.changeLanguage('kk')}>ҚАЗ</button>
+            </div>
             {isLoggedIn ? (
               <>
                 <Link to="/dashboard">
-                  <button>Продолжить</button>
+                  <button>{t('continue')}</button>
                 </Link>
                 <button className="orangeButton" onClick={handleLogout}>
-                  ВЫЙТИ
+                  {t('exit')}
                 </button>
               </>
             ) : (
               <>
                 <Link to="/login">
-                  <button>ВХОД</button>
+                  <button>{t('enter')}</button>
                 </Link>
                 <Link to="/registration">
-                  <button className="orangeButton">РЕГИСТРАЦИЯ</button>
+                  <button className="orangeButton">{t('register')}</button>
                 </Link>
               </>
             )}
@@ -61,17 +67,17 @@ function Header() {
         <div className="hook1">
           <div className="hook1Desc">
             <p style={{ fontWeight: 600, margin: 0 }}>
-              ДОШКОЛЬНОЕ И НАЧАЛЬНОЕ ОБРАЗОВАНИЕ ОТ 5 ДО 12 ЛЕТ
+              {t('eduAge')}
             </p>
             <div className="hook1Title">
               <span className="spanAnim">
-                <h1>ОНЛАЙН ШКОЛА ПО</h1>
+                <h1>{t('mathEng1')}</h1>
               </span>
               <span className="spanAnim">
-                <h1>МАТЕМАТИКЕ И</h1>
+                <h1>{t('mathEng2')}</h1>
               </span>
               <span className="spanAnim">
-                <h1>АНГЛИЙСКОМУ ЯЗЫКУ</h1>
+                <h1>{t('mathEng3')}</h1>
               </span>
             </div>
             <Link to="/registration">
@@ -83,7 +89,7 @@ function Header() {
                   borderColor: "white",
                 }}
               >
-                ПОПРОБУЙТЕ БЕСПЛАТНО
+                {t('tryForFree')}
               </button>
             </Link>
           </div>

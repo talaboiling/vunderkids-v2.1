@@ -827,3 +827,8 @@ input{
   width: 30px;
   height: 30px;
 }
+
+.langSelector{
+  display: flex;
+  flex-direction: column;
+}
