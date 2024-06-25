@@ -12,6 +12,7 @@ import cupicon from "../../assets/navCups.png";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import VerifiedIcon from '@mui/icons-material/Verified';
 import {
   fetchUserData,
   fetchCourses,
@@ -79,6 +80,10 @@ const Math = () => {
         taskId,
         childId
       );
+      if (taskQuestions.length === 0) {
+        alert("This task has no questions.");
+        return;
+      }
       setTaskContent(task);
       setQuestions(taskQuestions);
       setCurrentQuestionIndex(0);
@@ -94,8 +99,18 @@ const Math = () => {
     setShowVideoModal(false);
   };
 
-  const closeTaskModal = () => {
+  const closeTaskModal = async () => {
     setShowTaskModal(false);
+    await fetchChildData();
+  };
+
+  const fetchChildData = async () => {
+    try {
+      const updatedUserData = await fetchUserData(childId);
+      setUser(updatedUserData);
+    } catch (error) {
+      console.error("Error fetching updated child data:", error);
+    }
   };
 
   const handleOptionClick = (optionId) => {
@@ -139,10 +154,11 @@ const Math = () => {
       childId
     );
 
-    setTimeout(() => {
+    setTimeout(async () => {
       console.log("Submitting answers...");
       setShowFeedback(false);
-      closeTaskModal();
+      setShowTaskModal(false);
+      await fetchChildData();
     }, 1500);
   };
 
@@ -247,19 +263,29 @@ const Math = () => {
                             alt="vidname"
                             className="taskThumbnail"
                           />
-                          {content.is_completed && (
-                            <strong>Вы сделали это задание</strong>
-                          )}
+                          
                           <p
                             style={{
                               backgroundColor: "white",
                               margin: "0",
                               padding: "7px 40px",
                               borderRadius: "10px",
+                              marginBottom:"7px",
                             }}
                           >
                             {content.title}
                           </p>
+                          {content.is_completed && (
+                            <div className="completedTask">
+                              <VerifiedIcon sx={{color:"#19a5fc"}}/>
+                              <strong>Вы сделали это задание!</strong>
+                            </div>
+                          )}
+                          {!content.is_completed && (
+                            <div className="completedTask incompleteTask">
+                              <strong>Вас ждет новое задание</strong>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -330,15 +356,13 @@ const Math = () => {
                   className="lndsh"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  <img src={staricon} alt="" className="defaultIcon" />0
-                  {childId.stars}
+                  <img src={staricon} alt="" className="defaultIcon" />{user.stars}
                 </p>
                 <p
                   className="lndsh"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  <img src={cupicon} alt="" className="defaultIcon" />0
-                  {childId.cups}
+                  <img src={cupicon} alt="" className="defaultIcon" />{user.cups}
                 </p>
               </span>
 
@@ -435,7 +459,7 @@ const Math = () => {
                       }}
                     >
                       <progress
-                        value={progress}
+                        value={progress - (100/questions.length)}
                         max="100"
                         style={{ width: "100%", marginTop: "10px" }}
                       ></progress>
