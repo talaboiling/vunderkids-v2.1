@@ -12,6 +12,7 @@ import cupicon from "../../assets/navCups.png";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import VerifiedIcon from '@mui/icons-material/Verified';
 import {
   fetchUserData,
   fetchCourses,
@@ -19,6 +20,7 @@ import {
   fetchCourse,
   fetchTask,
   fetchQuestions,
+  answerQuestion,
 } from "../../utils/apiService";
 
 const Math = () => {
@@ -78,10 +80,15 @@ const Math = () => {
         taskId,
         childId
       );
+      if (taskQuestions.length === 0) {
+        alert("This task has no questions.");
+        return;
+      }
       setTaskContent(task);
       setQuestions(taskQuestions);
       setCurrentQuestionIndex(0);
       setSelectedOption(null);
+      setShowFeedback(false);
       setShowTaskModal(true);
     } catch (error) {
       console.error("Error fetching task data:", error);
@@ -92,20 +99,39 @@ const Math = () => {
     setShowVideoModal(false);
   };
 
-  const closeTaskModal = () => {
+  const closeTaskModal = async () => {
     setShowTaskModal(false);
+    await fetchChildData();
+  };
+
+  const fetchChildData = async () => {
+    try {
+      const updatedUserData = await fetchUserData(childId);
+      setUser(updatedUserData);
+    } catch (error) {
+      console.error("Error fetching updated child data:", error);
+    }
   };
 
   const handleOptionClick = (optionId) => {
     setSelectedOption(optionId);
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     const isCorrect =
       selectedOption === questions[currentQuestionIndex].correct_answer;
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
-  
+
+    await answerQuestion(
+      courseId,
+      taskContent.section,
+      taskContent.id,
+      questions[currentQuestionIndex].id,
+      selectedOption,
+      childId
+    );
+
     setTimeout(() => {
       setShowFeedback(false);
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
@@ -113,15 +139,26 @@ const Math = () => {
     }, 1500);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const isCorrect =
       selectedOption === questions[currentQuestionIndex].correct_answer;
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
-  
-    setTimeout(() => {
+
+    await answerQuestion(
+      courseId,
+      taskContent.section,
+      taskContent.id,
+      questions[currentQuestionIndex].id,
+      selectedOption,
+      childId
+    );
+
+    setTimeout(async () => {
       console.log("Submitting answers...");
-      closeTaskModal();
+      setShowFeedback(false);
+      setShowTaskModal(false);
+      await fetchChildData();
     }, 1500);
   };
 
@@ -176,7 +213,13 @@ const Math = () => {
 
               {sections.map((section, sectionIndex) => (
                 <div key={sectionIndex}>
-                  <div style={{ display: "flex", flexDirection: "row" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
                     <hr />
                     <h2 className="defaultStyle" style={{ color: "#aaa" }}>
                       {section.title}
@@ -220,16 +263,29 @@ const Math = () => {
                             alt="vidname"
                             className="taskThumbnail"
                           />
+                          
                           <p
                             style={{
                               backgroundColor: "white",
                               margin: "0",
                               padding: "7px 40px",
                               borderRadius: "10px",
+                              marginBottom:"7px",
                             }}
                           >
                             {content.title}
                           </p>
+                          {content.is_completed && (
+                            <div className="completedTask">
+                              <VerifiedIcon sx={{color:"#19a5fc"}}/>
+                              <strong>Вы сделали это задание!</strong>
+                            </div>
+                          )}
+                          {!content.is_completed && (
+                            <div className="completedTask incompleteTask">
+                              <strong>Вас ждет новое задание</strong>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -259,7 +315,7 @@ const Math = () => {
       {showVideoModal && (
         <dialog className="studmodal" open>
           <div className="studmodal-content">
-            <div className="modalHeader" style={{marginBottom:"20px"}}>
+            <div className="modalHeader" style={{ marginBottom: "20px" }}>
               <h2 className="defaultStyle" style={{ color: "#666" }}>
                 Видеоурок
               </h2>
@@ -300,15 +356,13 @@ const Math = () => {
                   className="lndsh"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  <img src={staricon} alt="" className="defaultIcon" />
-                  0{childId.stars}
+                  <img src={staricon} alt="" className="defaultIcon" />{user.stars}
                 </p>
                 <p
                   className="lndsh"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  <img src={cupicon} alt="" className="defaultIcon" />
-                  0{childId.cups}
+                  <img src={cupicon} alt="" className="defaultIcon" />{user.cups}
                 </p>
               </span>
 
@@ -332,12 +386,16 @@ const Math = () => {
               {showFeedback && (
                 <div
                   className={`feedbackMessage ${
-                    feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
+                    feedbackMessage === "Correct!"
+                      ? "fbmcorrect"
+                      : "fbmincorrect"
                   }`}
                 >
                   <p
                     className={`defaultStyle ${
-                      feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
+                      feedbackMessage === "Correct!"
+                        ? "fbmcorrect"
+                        : "fbmincorrect"
                     }`}
                   >
                     {feedbackMessage === "Correct!"
@@ -368,13 +426,20 @@ const Math = () => {
                           <i>{currentQuestion.title}:</i>{" "}
                         </span>
                         <strong>{currentQuestion.question_text}</strong>
+                        {currentQuestion.is_attempted && (
+                          <strong style={{ color: "green" }}>
+                            Вы уже ответили на этот вопрос
+                          </strong>
+                        )}
                       </span>
                       <ul className="studTaskOptions">
                         {currentQuestion.options.map((option, idx) => (
                           <li
                             key={idx}
                             className={`studTaskOption ${
-                              selectedOption === option.id ? "studTaskOptionSelected" : ""
+                              selectedOption === option.id
+                                ? "studTaskOptionSelected"
+                                : ""
                             }`}
                             onClick={() => handleOptionClick(option.id)}
                           >
@@ -385,9 +450,16 @@ const Math = () => {
                     </li>
                   </ul>
                   <div className="navigationButtons">
-                    <span style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+                    <span
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
                       <progress
-                        value={progress}
+                        value={progress - (100/questions.length)}
                         max="100"
                         style={{ width: "100%", marginTop: "10px" }}
                       ></progress>
@@ -398,16 +470,18 @@ const Math = () => {
                             : handleNextQuestion
                         }
                         disabled={selectedOption === null}
-                        className={`${currentQuestionIndex === questions.length - 1 ? "" : "orangeButton"}`}
+                        className={`${
+                          currentQuestionIndex === questions.length - 1
+                            ? ""
+                            : "orangeButton"
+                        }`}
                         style={{ float: "right" }}
                       >
                         {currentQuestionIndex === questions.length - 1
                           ? "Закончить"
                           : "Дальше"}
                       </button>
-                      
                     </span>
-                    
                   </div>
                 </div>
               </div>
