@@ -411,7 +411,7 @@ const Tasks = () => {
                                     }
                                     placeholder="Название секции"
                                   />
-                                  <textarea
+                                  {/* <textarea
                                     value={section.description}
                                     onChange={(e) =>
                                       handleSectionChange(
@@ -421,7 +421,7 @@ const Tasks = () => {
                                       )
                                     }
                                     placeholder="Описание секции"
-                                  ></textarea>
+                                  ></textarea> */}
                                   <button
                                     onClick={() =>
                                       handleDeleteSection(section.id)

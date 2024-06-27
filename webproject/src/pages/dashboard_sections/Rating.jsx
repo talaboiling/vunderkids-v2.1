@@ -67,11 +67,6 @@ const Rating = () => {
               >
                 Мой профиль
               </p>
-              <input list="settings" className="settings" />
-              <datalist id="settings">
-                <option value="Настройки" />
-                <option value="Выйти" />
-              </datalist>
             </div>
             <div className="sidepfp">
               <img

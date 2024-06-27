@@ -171,7 +171,7 @@ const Math = () => {
 
   return (
     <div className="rtdash rtrat">
-      <Sidebar />
+      <Sidebar className="courseSidebar"/>
       <div className="centralLessons">
         <Navdash
           starCount={user.stars}
@@ -296,11 +296,11 @@ const Math = () => {
           </div>
 
           <div className="lessonsProg">
-            <p>Что мы будем проходить:</p>
+            <h3 className="defaultStyle" style={{color:"black", fontWeight:"800", fontSize:"x-large"}}>Что мы будем проходить:</h3>
             <div className="progList">
               {sections.map((section, index) => (
                 <div className="progItem" key={index}>
-                  <p>{section.title}</p>
+                  <p style={{margin:"0", marginBottom:"15px"}}>{section.title}</p>
                   <progress
                     value={section.percentage_completed / 100}
                     max="1"
