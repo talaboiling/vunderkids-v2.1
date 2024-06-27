@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Activate.css"; // Import the CSS file for styling
 import { activateAccount } from "../utils/apiService";
-import { useTraslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const Activate = () => {
   const { t } = useTranslation();
