@@ -20,7 +20,7 @@ const ReviewCard = (props) => {
 }
 
 ReviewCard.propTypes = {
-    pfp: PropTypes.shape,
+    pfp: PropTypes.string,
     name: PropTypes.string,
     subject: PropTypes.string,
     text: PropTypes.string,

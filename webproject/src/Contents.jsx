@@ -21,11 +21,13 @@ import offer_progress from './assets/offer_progress.png';
 import offer_time from './assets/offer_time.png';
 import logoImg from './assets/logo_blue.png';
 import {Link} from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Contents() {
     useEffect(() => {
         
     }, []);
+    const { t } = useTranslation();
     return (
         <>
         <div className="contents" id='oplatforme'>
@@ -35,26 +37,26 @@ function Contents() {
                     <li style={{display:"flex", gap:"1rem", alignItems:"center"}}>
                         <img src={icon_games} alt="icon_games" />
                         <div style={{display:"flex", flexDirection:"column", margin:"0", padding:"0", maxWidth:"150px"}}>
-                            <h3 style={{margin:"0"}}>Видео игры</h3><p style={{fontWeight:"400", fontSize:"small"}}>Получайте монеты за правильный ответ и меняйте их на питомцев</p>
+                            <h3 style={{margin:"0"}}>{t ('videoGames')}</h3><p style={{fontWeight:"400", fontSize:"small"}}>{t ('videoGamesDescription')}</p>
                             
                         </div>
                     </li>
                     <li style={{display:"flex", gap:"0.7rem", alignItems:"center"}}>
                         <img src={icon_books} alt="icon_books" />
                         <div style={{display:"flex", flexDirection:"column", margin:"0", padding:"0", maxWidth:"150px"}}>
-                            <h3 style={{margin:"0"}}>Мотивирующие задачи</h3><p style={{fontWeight:"400", fontSize:"small"}}>Повышайте свой уровень и получайте больше монет</p>
+                            <h3 style={{margin:"0"}}>{t ('motivatingTasks')}</h3><p style={{fontWeight:"400", fontSize:"small"}}>{t ('motivatingTasksDescription')}</p>
                         </div>
                     </li>
                     <li style={{display:"flex", gap:"1rem", alignItems:"center"}}>
                         <img src={icon_cert} alt="icon_certificate" />
                         <div style={{display:"flex", flexDirection:"column", margin:"0", padding:"0", maxWidth:"150px"}}>
-                            <h3 style={{margin:"0"}}>Сертификаты</h3><p style={{fontWeight:"400", fontSize:"small"}}>Получите валидные сертификаты о завершении курса</p>
+                            <h3 style={{margin:"0"}}>{t ('certificates')}</h3><p style={{fontWeight:"400", fontSize:"small"}}>{t ('certificatesDescription')}</p>
                         </div>
                     </li>
                     <li style={{display:"flex", gap:"0.7rem", alignItems:"center"}}>
                         <img src={icon_tablet} alt="icon_tablet" />
                         <div style={{display:"flex", flexDirection:"column", margin:"0", padding:"0", maxWidth:"150px"}}>
-                            <h3 style={{margin:"0"}}>Различные темы</h3><p style={{fontWeight:"400", fontSize:"small"}}>Курс включает в себя большое разнообразие тем</p>
+                            <h3 style={{margin:"0"}}>{t ('variousThemes')}</h3><p style={{fontWeight:"400", fontSize:"small"}}>{t ('variousThemesDescription')}</p>
                         </div>
                     </li>
                 </ul>
@@ -62,19 +64,19 @@ function Contents() {
             <div className="contRight">
             <img src={icon_stars} alt="" style={{position:"absolute", marginLeft:"370px", width:"8%"}}/>
                 <motion.div className="titleAnim" initial={{opacity:0}} whileInView={{opacity:1}} transition={{duration:0.6}}>
-                    <span><h2>Качественное</h2></span>
-                    <span><h2>образование зависит</h2></span>
-                    <span><h2>от родителей</h2></span>
+                    <span><h2>{t ('parentDepend1')}</h2></span>
+                    <span><h2>{t ('parentDepend2')}</h2></span>
+                    <span><h2>{t ('parentDepend3')}</h2></span>
                 </motion.div>
                 
                 <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
                 <img src={icon_stars} alt="" style={{position:"absolute", width:"6%", marginLeft:"-50px", marginTop:"-120px"}}/>
                     <div style={{marginTop:"50px"}}>
                         <div className="contDisplay">
-                            <h4>Мотивирующие задачи</h4>
+                            <h4>{t ('motivatingTasks')}</h4>
                         </div>
                         <div className="contDisplay">
-                            <h4>Видеоигры</h4>
+                            <h4>{t ('videoGames')}</h4>
                         </div>
                     </div>
                     <div style={{position:"absolute", marginLeft:"45%", marginTop:"22%", zIndex:"-1"}}>
@@ -82,7 +84,7 @@ function Contents() {
                     </div>
                 </div>
                 <Link to={"/registration"}>
-                    <button className="orangeButton" style={{marginTop:"50px"}}>ПОПРОБОВАТЬ</button>
+                    <button className="orangeButton" style={{marginTop:"50px"}}>{t ('try')}</button>
                 </Link>
                 
                 <img src={icon_stars} alt="" style={{position:"absolute", marginLeft:"10px", marginTop:"70px", width:"4%"}}/>
@@ -91,25 +93,25 @@ function Contents() {
         <div className="hookUnder">
                 <div className="hookInfo">
                     
-                    <p style={{fontWeight:"700"}}>ПО СТАНДАРТУ МИНИСТРЕСТВА ОБРАЗОВАНИЯ</p>
+                    <p style={{fontWeight:"700"}}>{t ('byStandard')}</p>
                     <div className="hookInfoRight">
                         <img src={icon_grad} alt="icon_graduation" className='glowImg'/>
-                        <p style={{marginLeft:"20px"}}>100 000 студентов</p>
+                        <p style={{marginLeft:"20px"}}>{t ('students100k')}</p>
                         <img src={icon_school} alt="icon_school" className='glowImg'/>
-                        <p style={{marginLeft:"20px"}}>5 000 школ</p>
+                        <p style={{marginLeft:"20px"}}>{t ('schools5k')}</p>
                     </div>
                 </div>
             </div>
         <div className="offers">
             <div className="offersTop">
-                <Offers num={1} text="Персональная учебная программа" img={offer_books}/>
-                <Offers num={2} text="Более 5000+ практических занятий" img={offer_tablet}/>
-                <Offers num={3} text="Мониторинг прогресса" img={offer_progress}/>
+                <Offers num={1} text={t ('personalStudyProgram')} img={offer_books}/>
+                <Offers num={2} text={t ('moreThanPractical')} img={offer_tablet}/>
+                <Offers num={3} text={t ('progressMonitor')} img={offer_progress}/>
             </div>
             <div className="offersBottom">
-                <OffersBot num={4} text="Интересные видеоигры" img={offer_gaming}/>
-                <OffersBot num={5} text="В любое время - в любом месте" img={offer_time}/>
-                <OffersBot num={6} text="Сертификат по окончанию курса" img={offer_certificate}/>
+                <OffersBot num={4} text={t ('interestingVideoGames')} img={offer_gaming}/>
+                <OffersBot num={5} text={t ('anywhereAnytime')} img={offer_time}/>
+                <OffersBot num={6} text={t ('endCertificate')} img={offer_certificate}/>
             </div>
         </div>
         <div className="learnPlan" id='obuchenie'>
@@ -117,19 +119,19 @@ function Contents() {
                 <img src={laptops} alt="" className="planImg"/>
             </div>
             <div className="planTop">
-                <h1 style={{lineHeight:"50px", width:"557px"}}>УЧЕБНЫЙ ПЛАН ПО МАТЕМАТИКЕ</h1>
+                <h1 style={{lineHeight:"50px", width:"557px"}}>{t ('mathPlan')}</h1>
                 <ul className="planCardBot">
-                    <li className='planCardList'>Нумерация</li>
-                    <li className='planCardList'>Сравнение чисел</li>
-                    <li className='planCardList'>Арифметические задачи</li>
-                    <li className='planCardList'>Сложение и вычитание</li>
-                    <li className='planCardList'>Умножение и деление</li>
-                    <li className='planCardList'>Логические задачи</li>
-                    <li className='planCardList'>Геометрические фигуры</li>
+                    <li className='planCardList'>{t ('numeration')}</li>
+                    <li className='planCardList'>{t ('numCompare')}</li>
+                    <li className='planCardList'>{t ('arithmeticTasks')}</li>
+                    <li className='planCardList'>{t ('addSubtract')}</li>
+                    <li className='planCardList'>{t ('multDiv')}</li>
+                    <li className='planCardList'>{t ('logicalTasks')}</li>
+                    <li className='planCardList'>{t ('geometricalShapes')}</li>
                 </ul>
             </div>
             <div className="planTop">
-                <h1 style={{lineHeight:"50px", width:"577px"}}>УЧЕБНЫЙ ПЛАН ПО АНГЛИЙСКОМУ ЯЗЫКУ</h1>
+                <h1 style={{lineHeight:"50px", width:"577px"}}>{t ('engPlan')}</h1>
                 <ul className="planCardBot">
                     <li className='planCardList'>Phonics</li>
                     <li className='planCardList'>Grammar</li>
@@ -151,27 +153,27 @@ function Contents() {
         <div className="bottomCont">
             <div className="bottomCard">
                 <img src={logoImg} alt="logo" style={{width:"136px", height:"34px"}}/>
-                <h1>ОБРАЗОВАНИЕ - САМАЯ</h1>
-                <h1>ПРАВИЛЬНАЯ ИНВЕСТИЦИЯ</h1>
+                <h1>{t ('eduInvest1')}</h1>
+                <h1>{t ('eduInvest2')}</h1>
                 <ol style={{marginTop:"50px"}}>
                     <li>
                         <div className="contDisplay">
-                            <h4>Проходите уроки</h4>
+                            <h4>{t ('completeLessons')}</h4>
                         </div>
                     </li>
                     <li>
                         <div className="contDisplay">
-                            <h4>Зарабатывайте золотые монеты</h4>
+                            <h4>{t ('earnGoldCoins')}</h4>
                         </div>
                     </li>
                     <li>
                         <div className="contDisplay">
-                            <h4>Играйте в видеоигры</h4>
+                            <h4>{t ('playVideoGames')}</h4>
                         </div>
                     </li>
                 </ol>
                 <Link to={"/registration"}>
-                    <button className="orangeButton" style={{marginTop:"50px"}}>ПОПРОБОВАТЬ</button>
+                    <button className="orangeButton" style={{marginTop:"50px"}}>{t ('try')}</button>
                 </Link>
                 
             </div>
