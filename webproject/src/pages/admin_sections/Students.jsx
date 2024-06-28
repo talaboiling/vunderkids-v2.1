@@ -172,7 +172,17 @@ const Students = () => {
             />
           </div>
           <div className="downloadButtons">
-            <button onClick={downloadExcel}>Скачать Excel</button>
+            <button onClick={downloadExcel}
+                    style={{
+                      border: "none",
+                      borderRadius: "4px",
+                      backgroundColor: "#509CDB",
+                      fontSize: "large",
+                      fontWeight: "600",
+                    }}
+            >
+              Скачать Excel
+            </button>
           </div>
           <div className="superTable">
             <Studenttable students={filteredStudents} />
