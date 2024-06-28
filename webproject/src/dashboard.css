@@ -693,7 +693,7 @@ img.childcard {
   background-size: cover;
   background-position: center;
   border-radius: 25px;
-  padding: 30px 150px;
+  padding: 30px 100px;
 }
 
 .certificates {
@@ -814,7 +814,10 @@ img.childcard {
 .studtaskDetails{
   display: flex;
   flex-direction: column;
-  background-color: #c3f0ff;
+  width: 900px;
+  height: 500px;
+  background-image: url(./assets/bgstudtask.png);
+  background-size: cover;
   border-radius: 35px;
   border: 4px solid lightgray;
   padding: 0 40px;
@@ -823,18 +826,19 @@ img.childcard {
 .studTaskOptions{
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin: 20px;
+  gap: 1rem;
+  margin-top: 70px;
 }
 
 .studTaskOption{
   padding: 5px 10px;
-  background-color: #0080cf;
+  background-color: #3fa8e9;
   color: white;
-  border-radius: 20px;
+  border-radius: 15px;
   text-align: center;
   border: 4px solid lightgray;
   box-shadow: inset 0 -5px 0 0 #00000038;
+  font-weight: 700;
 }
 
 .studTaskOptionSelected{
@@ -878,4 +882,8 @@ img.childcard {
 
 .courseSidebar{
   position: fixed;
+}
+
+.navigationButtons{
+  margin-top: 20px;
 }

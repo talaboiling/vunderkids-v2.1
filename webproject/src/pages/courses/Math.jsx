@@ -354,13 +354,13 @@ const Math = () => {
               >
                 <p
                   className="lndsh"
-                  style={{ display: "flex", alignItems: "center" }}
+                  style={{ display: "flex", alignItems: "center", padding:"5px 20px", gap:"0.5rem"}}
                 >
                   <img src={staricon} alt="" className="defaultIcon" />{user.stars}
                 </p>
                 <p
                   className="lndsh"
-                  style={{ display: "flex", alignItems: "center" }}
+                  style={{ display: "flex", alignItems: "center", padding:"5px 20px", gap:"0.5rem"}}
                 >
                   <img src={cupicon} alt="" className="defaultIcon" />{user.cups}
                 </p>
@@ -381,7 +381,6 @@ const Math = () => {
             </div>
             <div
               className="studtaskDetails"
-              style={{ backgroundImage: "url(./assets/bgstudtask.png)" }}
             >
               {showFeedback && (
                 <div
@@ -411,6 +410,9 @@ const Math = () => {
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
+                      fontSize:"x-large",
+                      padding:"7px 0",
+                      gap:"1rem"
                     }}
                   >
                     <li key={currentQuestionIndex}>
@@ -419,6 +421,9 @@ const Math = () => {
                           display: "flex",
                           alignItems: "center",
                           flexDirection: "column",
+                          gap:"0.33rem",
+                          maxWidth:"500px",
+                          textAlign:"center"
                         }}
                       >
                         <span>
@@ -427,7 +432,7 @@ const Math = () => {
                         </span>
                         <strong>{currentQuestion.question_text}</strong>
                         {currentQuestion.is_attempted && (
-                          <strong style={{ color: "green" }}>
+                          <strong style={{ color: "green", marginTop:"50px"}}>
                             Вы уже ответили на этот вопрос
                           </strong>
                         )}
@@ -449,42 +454,42 @@ const Math = () => {
                       </ul>
                     </li>
                   </ul>
-                  <div className="navigationButtons">
-                    <span
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <progress
-                        value={progress - (100/questions.length)}
-                        max="100"
-                        style={{ width: "100%", marginTop: "10px" }}
-                      ></progress>
-                      <button
-                        onClick={
-                          currentQuestionIndex === questions.length - 1
-                            ? handleSubmit
-                            : handleNextQuestion
-                        }
-                        disabled={selectedOption === null}
-                        className={`${
-                          currentQuestionIndex === questions.length - 1
-                            ? ""
-                            : "orangeButton"
-                        }`}
-                        style={{ float: "right" }}
-                      >
-                        {currentQuestionIndex === questions.length - 1
-                          ? "Закончить"
-                          : "Дальше"}
-                      </button>
-                    </span>
-                  </div>
                 </div>
               </div>
+            </div>
+            <div className="navigationButtons">
+              <span
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <progress
+                  value={progress - (100/questions.length)}
+                  max="100"
+                  style={{ width: "60%", marginTop: "10px" }}
+                ></progress>
+                <button
+                  onClick={
+                    currentQuestionIndex === questions.length - 1
+                      ? handleSubmit
+                      : handleNextQuestion
+                  }
+                  disabled={selectedOption === null}
+                  className={`${
+                    currentQuestionIndex === questions.length - 1
+                      ? ""
+                      : "orangeButton"
+                  }`}
+                  style={{ float: "right" }}
+                >
+                  {currentQuestionIndex === questions.length - 1
+                    ? "Закончить"
+                    : "Дальше"}
+                </button>
+              </span>
             </div>
           </div>
         </dialog>

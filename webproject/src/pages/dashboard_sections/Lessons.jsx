@@ -19,8 +19,6 @@ import { useTranslation } from "react-i18next";
 
 const Lessons = () => {
 
-  const [user, setUser] = useState({ first_name: "Ученик", last_name: "" }); // Default values
-  const [courses, setCourses] = useState([]); // State to store courses
   const { t } = useTranslation();
   const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
   const [courses, setCourses] = useState([]); // State to store courses
@@ -138,8 +136,8 @@ const Lessons = () => {
             </div>
             <div className="sectCertificates">
               <div className="certbanner">
-                <h2 className="defaultStyle" style={{fontSize:"xx-large", fontWeight:"800", color:"white", textAlign:"center", width:"250px"}}>
-                  МОИ СЕРТИФИКАТЫ
+                <h2 className="defaultStyle" style={{fontSize:"xx-large", fontWeight:"800", color:"white", textAlign:"center", textWrap:"wrap"}}>
+                  {t('myCerts')}
                 </h2>
               </div>
               <div className="achievements">
