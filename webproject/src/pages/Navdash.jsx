@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import staricon from "../assets/navStars.png";
 import cupicon from "../assets/navCups.png";
-import bellicon from "../assets/navBell.png";
 import { fetchUserData } from "../utils/apiService"; // Import the fetch function
 import Loader from "./Loader";
 import { useTranslation } from "react-i18next";
@@ -51,10 +50,6 @@ const Navdash = (props) => {
             <span>ҚАЗ</span>
           </div>
         </div>
-      </div>
-      <div className="rndsh notif">
-        <img src={bellicon} alt="bell" className="bellIcon" />
-        {props.notif}
       </div>
     </div>
   );

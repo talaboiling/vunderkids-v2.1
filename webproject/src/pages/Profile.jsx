@@ -37,11 +37,6 @@ const Profile = ({ user }) => {
         >
           {t ('myProfile')}
         </p>
-        <input list="settings" className="settings" />
-        <datalist id="settings">
-          <option value={t ('settings')} />
-          <option value={t ('logout')} />
-        </datalist>
       </div>
       <div className="sidepfp">
         <img
@@ -51,8 +46,8 @@ const Profile = ({ user }) => {
           style={{
             borderRadius: "50%",
             marginBottom: "15px",
-            width: "100px",
-            height: "100px",
+            width: "110px",
+            height: "110px",
           }}
         />
         <p

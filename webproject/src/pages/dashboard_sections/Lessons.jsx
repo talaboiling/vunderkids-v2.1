@@ -9,7 +9,7 @@ import englishIcon from "../../assets/english.png";
 import placeholderPfp from "../../assets/placehoder_pfp.png"; // Import the placeholder image
 import cupicon from "../../assets/navCups.png";
 import League from "./League";
-import certbanner from "../../assets/myCerts.png";
+import certbanner from "../../assets/certbanner.png";
 import cert90 from "../../assets/90lessons.png";
 import cert200 from "../../assets/200lessons.png";
 import cert500 from "../../assets/500lessons.png";
@@ -18,9 +18,11 @@ import { fetchUserData, fetchCourses } from "../../utils/apiService";
 import { useTranslation } from "react-i18next";
 
 const Lessons = () => {
+
   const { t } = useTranslation();
   const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
-  // const [courses, setCourses] = useState([]); // State to store courses
+  const [courses, setCourses] = useState([]); // State to store courses
+
   const [loading, setLoading] = useState(true); // Add loading state
   const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
 
@@ -58,20 +60,6 @@ const Lessons = () => {
           notif={3}
         />
         <div className="mainContent">
-          {/* <div className="coursesCards">
-            {courses.map(course => (
-              <div className="courseItem" key={course.id}>
-                <div className="courseItemLeft">
-                  <p style={{ margin: "0" }}>{course.name}</p>
-                  <progress value={course.percentage_completed / 100} />
-                  <Link to={`/dashboard/lessons/${course.id}`}>
-                    <button style={{ backgroundColor: "#F8753D", fontWeight: "550", fontSize: "large", borderColor: "#FFB99C", boxShadow: "none" }}>Начать</button>
-                  </Link>
-                </div>
-                <img src={course.name === "Математика" ? mathIcon : englishIcon} alt={course.name} style={{ backgroundColor: "#F8753D", border: "1px solid black", borderRadius: "21px" }} />
-              </div>
-            ))}
-          </div> */}
           <div className="ratingCentral">
             <div className="ratinginfo">
               <div className="prowfirst">
@@ -86,11 +74,6 @@ const Lessons = () => {
                 >
                   {t ('myProfile')}
                 </p>
-                <input list="settings" className="settings" />
-                <datalist id="settings">
-                  <option value={t ('settings')} />
-                  <option value={t ('logout')} />
-                </datalist>
               </div>
               <div className="sidepfp">
                 <img
@@ -152,14 +135,14 @@ const Lessons = () => {
               </div>
             </div>
             <div className="sectCertificates">
-              <img
-                src={certbanner}
-                alt="Мои сертификаты"
-                style={{ marginBottom: "20px", scale: "0.9" }}
-              />
+              <div className="certbanner">
+                <h2 className="defaultStyle" style={{fontSize:"xx-large", fontWeight:"800", color:"white", textAlign:"center", textWrap:"wrap"}}>
+                  {t('myCerts')}
+                </h2>
+              </div>
               <div className="achievements">
                 <ul className="certificates">
-                  <li className="certificate c90" id="active">
+                  <li className="certificate c90" id="">
                     <img src={cert90} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
                       {t ('pass1')}{" "}
@@ -167,7 +150,7 @@ const Lessons = () => {
                       {t ('pass2')}
                     </p>
                   </li>
-                  <li className="certificate c200" id="active">
+                  <li className="certificate c200" id="">
                     <img src={cert200} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
                       {t ('pass1')}{" "}

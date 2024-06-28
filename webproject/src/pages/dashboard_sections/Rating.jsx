@@ -69,11 +69,6 @@ const Rating = () => {
               >
                 {t ('myProfile')}
               </p>
-              <input list="settings" className="settings" />
-              <datalist id="settings">
-                <option value={t ('settings')} />
-                <option value={t ('logout')} />
-              </datalist>
             </div>
             <div className="sidepfp">
               <img
