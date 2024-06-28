@@ -14,11 +14,11 @@ const OffersBot = (props) => {
 OffersBot.propTypes = {
     num: PropTypes.number,
     text: PropTypes.string,
-    img: PropTypes.shape,
+    img: PropTypes.string,
 }
 OffersBot.defaultProps = {
     num: 1,
     text: "Текст",
-    img: {},
+    img: "https://placehold.co/75x75",
 }
 export default OffersBot;
