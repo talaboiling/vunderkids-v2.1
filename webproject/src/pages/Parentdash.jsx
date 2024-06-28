@@ -16,11 +16,13 @@ import {
   deleteChild,
 } from "../utils/apiService";
 import Loader from "./Loader";
+import { useTranslation } from "react-i18next";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 const Parentdash = () => {
-  const [user, setUser] = useState({ first_name: "Родитель", last_name: "" }); // Default values
+  const { t } = useTranslation();
+  const [user, setUser] = useState({ first_name: t ('parent'), last_name: "" }); // Default values
   const [children, setChildren] = useState([]); // State to store children
   const [file, setFile] = useState(null);
   const [formData, setFormData] = useState({
@@ -120,7 +122,7 @@ const Parentdash = () => {
         >
           <img src={plusicon} alt="add child" />
           <p style={{ fontSize: "x-large", fontWeight: "500" }}>
-            Добавить ребенка
+            {t ('addChildButton')}
           </p>
         </button>
       );
@@ -140,7 +142,7 @@ const Parentdash = () => {
         <div className="excLogo">
           <div className="mailname">{user.email}</div>
           <div className="navButton">
-            <button onClick={handleLogout}>ВЫЙТИ</button>
+            <button onClick={handleLogout}>{t ('exit')}</button>
           </div>
         </div>
       </div>
@@ -157,7 +159,7 @@ const Parentdash = () => {
               {child.first_name} {child.last_name}
             </p>
             <div className="rndsh" style={{ marginBottom: "20px" }}>
-              <p>{child.grade} класс</p>
+              <p>{child.grade} {t ('classLowercase')}</p>
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "2rem" }}>
               <div
@@ -195,10 +197,10 @@ const Parentdash = () => {
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "2rem" }}>
               <div className="lndsh">
-                <p>LVL: {child.level}</p>
+                <p>{t ('lvl')}: {child.level}</p>
               </div>
               <div className="lndsh">
-                <p>Ser: {child.streak}</p>
+                <p>{t ('streak')}: {child.streak}</p>
               </div>
             </div>
 
@@ -211,7 +213,7 @@ const Parentdash = () => {
                 onClick={() => handleNavigate(child.id)}
                 className="orangeButton"
               >
-                Перейти в Платформу
+                {t ('goToPlatform')}
               </button>
               <button
                 onClick={() => {
@@ -220,7 +222,7 @@ const Parentdash = () => {
                 }}
                 style={{ backgroundColor: "rgb(204, 47, 47)" }}
               >
-                Удалить
+                {t ('delete')}
               </button>
             </div>
           </div>
@@ -258,7 +260,7 @@ const Parentdash = () => {
                     types={fileTypes}
                   />
                 </div>
-                <label htmlFor="first_name">Имя</label>
+                <label htmlFor="first_name">{t ('firstNameChild')}</label>
                 <input
                   type="text"
                   id="first_name"
@@ -269,7 +271,7 @@ const Parentdash = () => {
                   required
                 />
                 <br />
-                <label htmlFor="last_name">Фамилия</label>
+                <label htmlFor="last_name">{t ('lastNameChild')}</label>
                 <input
                   type="text"
                   id="last_name"
@@ -280,7 +282,7 @@ const Parentdash = () => {
                   required
                 />
                 <br />
-                <label htmlFor="birth_date">Дата Рождения</label>
+                <label htmlFor="birth_date">{t ('birthDate')}</label>
                 <input
                   type="date"
                   id="birth_date"
@@ -292,7 +294,7 @@ const Parentdash = () => {
                 <br />
                 <div className="gendgrade">
                   <span>
-                    <label htmlFor="gender">Пол</label>
+                    <label htmlFor="gender">{t ('gender')}</label>
                     <br />
                     <input
                       list="genders"
@@ -300,17 +302,17 @@ const Parentdash = () => {
                       name="gender"
                       value={formData.gender}
                       onChange={handleInputChange}
-                      placeholder="Мальчик"
+                      placeholder={t ('boy')}
                       required
                     />
                     <datalist id="genders">
-                      <option value="M">Мальчик</option>
-                      <option value="F">Девочка</option>
-                      <option value="O">Другое</option>
+                      <option value="M">{t ('boy')}</option>
+                      <option value="F">{t ('girl')}</option>
+                      <option value="O">{t ('other')}</option>
                     </datalist>
                   </span>
                   <span>
-                    <label htmlFor="grade">Класс</label>
+                    <label htmlFor="grade">{t ('studClass')}</label>
                     <br />
                     <input
                       list="grades"
@@ -318,11 +320,11 @@ const Parentdash = () => {
                       name="grade"
                       value={formData.grade}
                       onChange={handleInputChange}
-                      placeholder="Дошкольный"
+                      placeholder={t ('preschool')}
                       required
                     />
                     <datalist id="grades">
-                      <option value="Дошкольный" />
+                      <option value={t ('preschool')} />
                       <option value="1" />
                       <option value="2" />
                       <option value="3" />
@@ -336,7 +338,7 @@ const Parentdash = () => {
                     marginTop: "20px",
                   }}
                 >
-                  <button type="submit">Добавить Ребенка</button>
+                  <button type="submit">{t ('addChildButton')}</button>
                 </div>
               </form>
             </div>
@@ -350,9 +352,9 @@ const Parentdash = () => {
             onClose={() => setShowDeleteModal(false)}
           >
             <div className="modal-content">
-              <p>Вы уверены, что хотите удалить этого ребенка?</p>
-              <button onClick={handleDelete}>Да</button>
-              <button onClick={() => setShowDeleteModal(false)}>Нет</button>
+              <p>{t ('confirmDelete')}</p>
+              <button onClick={handleDelete}>{t ('yes')}</button>
+              <button onClick={() => setShowDeleteModal(false)}>{t ('no')}</button>
             </div>
           </dialog>
         )}

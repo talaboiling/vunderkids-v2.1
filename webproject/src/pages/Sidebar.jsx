@@ -4,8 +4,10 @@ import logo from "../assets/NAV_LOGO.png";
 import { Link, useNavigate } from "react-router-dom";
 import { SidebarData } from "./SidebarData";
 import { logout } from "../utils/authService";
+import { useTranslation } from "react-i18next";
 
 const Sidebar = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   // Parse user information from local storage
@@ -55,7 +57,7 @@ const Sidebar = () => {
         {/* Conditionally render the "Назад" button based on user role */}
         {user.role === "parent" && (
           <button className="exitButton" onClick={goBack}>
-            Назад
+            {t ('back')}
           </button>
         )}
         <button
@@ -63,7 +65,7 @@ const Sidebar = () => {
           onClick={handleLogout}
           style={{ backgroundColor: "rgb(204, 47, 47)" }}
         >
-          Выйти из аккаунта
+          {t ('exitAccount')}
         </button>
       </div>
     </div>

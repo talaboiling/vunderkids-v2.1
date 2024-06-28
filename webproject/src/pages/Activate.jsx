@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Activate.css"; // Import the CSS file for styling
 import { activateAccount } from "../utils/apiService";
-import { useTraslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const Activate = () => {
   const { t } = useTranslation();
@@ -15,14 +15,14 @@ const Activate = () => {
       try {
         const response = await activateAccount(activation_token);
         if (response.status === 200) {
-          setMessage("Account successfully activated!");
+          setMessage(t ('accountActivated'));
           setIsSuccess(true);
         } else {
-          setMessage("Failed to activate account.");
+          setMessage(t ('activationFailed'));
           setIsSuccess(false);
         }
       } catch (error) {
-        setMessage("Invalid or expired activation link.");
+        setMessage(t ('invalidActivationLink'));
         setIsSuccess(false);
       }
     };
@@ -36,11 +36,11 @@ const Activate = () => {
         <h1 className="activate-message">{message}</h1>
         {isSuccess && (
           <p className="activate-instruction">
-            You can now log in to your account.
+            {t ('loginAvailable')}
           </p>
         )}
         <a href="/" className="activate-home-button">
-          Go to Home
+          {t ('goToHome')}
         </a>
       </div>
     </div>

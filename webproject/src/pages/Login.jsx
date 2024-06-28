@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoImg from "/src/assets/logo_blue.png";
 import { loginUser, logout } from "../utils/authService";
+import { useTranslation } from "react-i18next";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ function Login() {
 
   const [responseMessage, setResponseMessage] = useState("");
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,7 +24,7 @@ function Login() {
 
     try {
       const user = await loginUser(formData.email, formData.password);
-      setResponseMessage("Login successful!");
+      setResponseMessage(t ('loginSuccessful'));
       if (user.role === "parent") {
         navigate("/parent"); // Redirect parent to dashboard
       } else if (user.role === "student") {
@@ -59,16 +61,16 @@ function Login() {
           <div className="excLogo">
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
-                О ПЛАТФОРМЕ
+                {t ('aboutPlatform')}
               </a>
               <a href="/#obuchenie" className="navLink">
-                ОБУЧЕНИЕ
+                {t ('education')}
               </a>
               <a href="/#otzyvy" className="navLink">
-                ОТЗЫВЫ
+                {t ('reviews')}
               </a>
               <a href="/#contakty" className="navLink">
-                КОНТАКТЫ
+                {t ('contacts')}
               </a>
             </div>
           </div>
@@ -79,9 +81,9 @@ function Login() {
         >
           <div className="regform">
             <div className="formTitle">
-              <h3 className="form-h3">Войти в Аккаунт</h3>
+              <h3 className="form-h3">{t ('login')}</h3>
               <Link to={"/registration"} className="formLink">
-                У меня нет аккаунта
+                {t ('noAccount')}
               </Link>
             </div>
             <form className="inputField" onSubmit={handleSubmit}>
@@ -101,7 +103,7 @@ function Login() {
                   />
                 </span>
               </span>
-              <label htmlFor="password">Ваш пароль:</label>
+              <label htmlFor="password">{t ('yourPassword')}</label>
               <br />
               <input
                 type="password"
@@ -116,7 +118,7 @@ function Login() {
               <br />
               <input
                 type="submit"
-                value="Войти"
+                value={t ('loginButton')}
                 className="orangeButton"
                 style={{
                   position: "relative",

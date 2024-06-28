@@ -11,9 +11,11 @@ import placeholderPfp from "../../assets/placehoder_pfp.png"; // Import the plac
 import Ratinglist from "./Ratinglist"; // Import the Ratinglist component
 import Loader from "../Loader";
 import { fetchRatings, fetchUserData } from "../../utils/apiService";
+import { useTranslation } from "react-i18next";
 
 const Rating = () => {
-  const [user, setUser] = useState({ first_name: "Ученик", last_name: "" }); // Default values
+  const { t } = useTranslation();
+  const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
   const [ratings, setRatings] = useState([]); // State to store ratings
   const [loading, setLoading] = useState(true); // Add loading state
   const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
@@ -65,12 +67,12 @@ const Rating = () => {
                   padding: "0",
                 }}
               >
-                Мой профиль
+                {t ('myProfile')}
               </p>
               <input list="settings" className="settings" />
               <datalist id="settings">
-                <option value="Настройки" />
-                <option value="Выйти" />
+                <option value={t ('settings')} />
+                <option value={t ('logout')} />
               </datalist>
             </div>
             <div className="sidepfp">
@@ -105,7 +107,7 @@ const Rating = () => {
                   padding: "0",
                 }}
               >
-                Ученик
+                {t ('student')}
               </p>
             </div>
             <div className="lndsh cupCount">

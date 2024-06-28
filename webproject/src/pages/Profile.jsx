@@ -4,8 +4,10 @@ import placeholderPfp from "../assets/placehoder_pfp.png"; // Import the placeho
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { fetchRatings } from "../utils/apiService";
+import { useTranslation } from "react-i18next";
 
 const Profile = ({ user }) => {
+  const { t } = useTranslation();
   const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
   const [ratings, setRatings] = useState([]); // State to store ratings
 
@@ -33,12 +35,12 @@ const Profile = ({ user }) => {
             padding: "0",
           }}
         >
-          Мой профиль
+          {t ('myProfile')}
         </p>
         <input list="settings" className="settings" />
         <datalist id="settings">
-          <option value="Настройки" />
-          <option value="Выйти" />
+          <option value={t ('settings')} />
+          <option value={t ('logout')} />
         </datalist>
       </div>
       <div className="sidepfp">
@@ -73,7 +75,7 @@ const Profile = ({ user }) => {
             padding: "0",
           }}
         >
-          Ученик
+          {t ('student')}
         </p>
       </div>
       <League />

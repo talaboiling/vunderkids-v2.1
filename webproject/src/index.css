@@ -227,6 +227,7 @@ button{
   border-radius: 20px;
   background-color: #0077BF;
   transition: background-color 0.2s ease-in-out;
+  font-family: 'Montserrat', 'Arial', 'Helvetica', 'sans-serif';
   color: white;
   font-weight: 900;
   cursor: pointer;

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logoImg from "/src/assets/logo_blue.png";
 import { registerParent } from "../utils/apiService"; // Import the function
+import { useTranslation } from "react-i18next";
 
 function Registration() {
   const [formData, setFormData] = useState({
@@ -53,21 +54,21 @@ function Registration() {
           <div className="excLogo">
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
-                О ПЛАТФОРМЕ
+                {t ('aboutPlatform')}
               </a>
               <a href="/#obuchenie" className="navLink">
-                ОБУЧЕНИЕ
+                {t ('education')}
               </a>
               <a href="/#otzyvy" className="navLink">
-                ОТЗЫВЫ
+                {t ('reviews')}
               </a>
               <a href="/#contakty" className="navLink">
-                КОНТАКТЫ
+                {t ('contacts')}
               </a>
             </div>
             <div className="navButton" style={{ marginLeft: "80px" }}>
               <Link to={"/login"}>
-                <button>ВХОД</button>
+                <button>{t ('enter')}</button>
               </Link>
             </div>
           </div>
@@ -75,13 +76,13 @@ function Registration() {
         <div className="regPage">
           <div className="regform">
             <div className="formTitle">
-              <h3 className="form-h3">Создать Аккаунт для Родителя</h3>
+              <h3 className="form-h3">{t ('createParentAccount')}</h3>
               <Link to="/login" className="formLink">
-                У меня уже есть аккаунт
+                {t ('haveAccount')}
               </Link>
             </div>
             <form className="inputField" onSubmit={handleSubmit}>
-              <label htmlFor="first_name">Имя</label>
+              <label htmlFor="first_name">{t ('firstNameChild')}</label>
               <br />
               <input
                 type="text"
@@ -94,7 +95,7 @@ function Registration() {
               />
               <br />
 
-              <label htmlFor="last_name">Фамилия</label>
+              <label htmlFor="last_name">{t ('lastNameChild')}</label>
               <br />
               <input
                 type="text"
@@ -123,7 +124,7 @@ function Registration() {
                   />
                 </span>
                 <span>
-                  <label htmlFor="phone">Номер телефона</label>
+                  <label htmlFor="phone">{t ('phone')}</label>
                   <br />
                   <input
                     type="phone"
@@ -137,7 +138,7 @@ function Registration() {
                   />
                 </span>
               </span>
-              <label htmlFor="password">Придумайте пароль:</label>
+              <label htmlFor="password">{t ('comeUpWithPassword')}</label>
               <br />
               <input
                 type="password"
@@ -151,7 +152,7 @@ function Registration() {
               <br />
               <input
                 type="submit"
-                value="Регистрация"
+                value={t ('registration')}
                 className="orangeButton"
                 style={{
                   position: "relative",
