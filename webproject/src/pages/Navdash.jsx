@@ -4,10 +4,13 @@ import staricon from "../assets/navStars.png";
 import cupicon from "../assets/navCups.png";
 import { fetchUserData } from "../utils/apiService"; // Import the fetch function
 import Loader from "./Loader";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 const Navdash = (props) => {
-  const [user, setUser] = useState({ first_name: "Ученик", last_name: "" }); // Default values
-
+  const { t } = useTranslation();
+  const [user, setUser] = useState({ first_name: t('student'), last_name: "" }); // Default values
+  const [checked, setChecked] = useState(i18next.language === 'ru');
   useEffect(() => {
     const fetchUser = async () => {
       const childId = localStorage.getItem("child_id");
@@ -20,7 +23,14 @@ const Navdash = (props) => {
     };
 
     fetchUser();
-  }, []);
+    setChecked(i18next.language === 'ru');
+  }, [i18next.language]);
+
+  const handleChange = () => {
+    const newLang = checked ? 'ru' : 'kk';
+    i18next.changeLanguage(newLang);
+    setChecked(!checked);
+  }
 
   return (
     <div className="navdashboard">
@@ -32,10 +42,10 @@ const Navdash = (props) => {
         <img src={cupicon} alt="cups" className="cupIcon" />
         {user.cups || props.cupCount}
       </div>
-      <div className="rndsh gradeNum">{user.grade || props.gradeNum} Класс</div>
+      <div className="rndsh gradeNum">{user.grade || props.gradeNum} {t ('studClass')}</div>
       <div className="rndsh langSelect">
         <div className="button b2" id="button-10">
-          <input type="checkbox" className="checkbox" />
+          <input type="checkbox" className="checkbox" checked={checked} onChange={handleChange}/>
           <div className="knobs">
             <span>ҚАЗ</span>
           </div>

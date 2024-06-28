@@ -15,10 +15,16 @@ import cert200 from "../../assets/200lessons.png";
 import cert500 from "../../assets/500lessons.png";
 import Loader from "../Loader";
 import { fetchUserData, fetchCourses } from "../../utils/apiService";
+import { useTranslation } from "react-i18next";
 
 const Lessons = () => {
+
   const [user, setUser] = useState({ first_name: "Ученик", last_name: "" }); // Default values
   const [courses, setCourses] = useState([]); // State to store courses
+  const { t } = useTranslation();
+  const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
+  const [courses, setCourses] = useState([]); // State to store courses
+
   const [loading, setLoading] = useState(true); // Add loading state
   const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
 
@@ -68,7 +74,7 @@ const Lessons = () => {
                     padding: "0",
                   }}
                 >
-                  Мой профиль
+                  {t ('myProfile')}
                 </p>
               </div>
               <div className="sidepfp">
@@ -103,7 +109,7 @@ const Lessons = () => {
                     padding: "0",
                   }}
                 >
-                  Ученик
+                  {t ('student')}
                 </p>
               </div>
               <div className="lndsh cupCount">
@@ -120,13 +126,13 @@ const Lessons = () => {
                     textWrap: "wrap",
                   }}
                 >
-                  Сертификаты можно скачать в электронном виде или же получить
-                  по почте
+                  {t ('downloadCertificate1')}
+                  {t ('downloadCertificate2')}
                 </p>
-                <button className="orangeButton">СКАЧАТЬ</button>
+                <button className="orangeButton">{t ('download')}</button>
                 <form action="">
-                  <input type="text" placeholder="Ваша почта" />
-                  <button>Отправить</button>
+                  <input type="text" placeholder={t ('yourMail')} />
+                  <button>{t ('send')}</button>
                 </form>
               </div>
             </div>
@@ -141,25 +147,25 @@ const Lessons = () => {
                   <li className="certificate c90" id="">
                     <img src={cert90} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
-                      Пройдите{" "}
+                      {t ('pass1')}{" "}
                       <b style={{ fontWeight: "800", color: "#91DCB3" }}>90</b>{" "}
-                      уроков
+                      {t ('pass2')}
                     </p>
                   </li>
                   <li className="certificate c200" id="">
                     <img src={cert200} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
-                      Пройдите{" "}
+                      {t ('pass1')}{" "}
                       <b style={{ fontWeight: "800", color: "#FFD991" }}>200</b>{" "}
-                      уроков
+                      {t ('pass2')}
                     </p>
                   </li>
                   <li className="certificate c500">
                     <img src={cert500} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
-                      Пройдите{" "}
+                      {t ('pass1')}{" "}
                       <b style={{ fontWeight: "800", color: "#FF7763" }}>500</b>{" "}
-                      уроков
+                      {t ('pass2')}
                     </p>
                   </li>
                 </ul>

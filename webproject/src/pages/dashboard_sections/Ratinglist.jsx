@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import placeholderPfp from '../../assets/placehoder_pfp.png'; // Import the placeholder image
+import { useTranslation } from 'react-i18next';
 
 const Ratinglist = ({ ratings }) => {
+  const { t } = useTranslation();
   return (
     <div className='ratingList'>
-      <p style={{fontSize:"x-large", fontWeight:"650", color:"#222222", margin:"0", padding:'0', marginBottom:"15px"}}>Рейтинг учеников</p>
+      <p style={{fontSize:"x-large", fontWeight:"650", color:"#222222", margin:"0", padding:'0', marginBottom:"15px"}}>{t ('studentRating')}</p>
       <div className="studentsList">
         {ratings.map((student, index) => (
           <div 
@@ -25,6 +27,9 @@ const Ratinglist = ({ ratings }) => {
               </p>
               <p style={{ fontSize: "large", color: index > 2 ? "#222222" : "#fff", margin: "0", padding: '0', fontWeight: "700" }}>
                 <strong style={{fontSize:"x-large"}}>{student.cups}</strong> очков
+              </p>
+              <p style={{ fontSize: "large", color: index > 2 ? "#222222" : "#fff", margin: "0", padding: '0', fontWeight: "600" }}>
+                {student.cups} {t ('points')}
               </p>
             </div>
           </div>

@@ -24,6 +24,7 @@ import {
   fetchCourses,
   fetchWeeklyProgress,
 } from "../utils/apiService";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(
   CategoryScale,
@@ -36,10 +37,12 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-  const [user, setUser] = useState({ first_name: "Ученик", last_name: "" }); // Default values
+  const { t } = useTranslation();
+  const [user, setUser] = useState({ first_name: t('student'), last_name: "" }); // Default values
   const [courses, setCourses] = useState([]); // State to store courses
   const [weeklyProgress, setWeeklyProgress] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,20 +67,20 @@ const Dashboard = () => {
   }, []);
 
   const daysInRussian = {
-    Monday: "Пон",
-    Tuesday: "Вто",
-    Wednesday: "Сре",
-    Thursday: "Чет",
-    Friday: "Пят",
-    Saturday: "Суб",
-    Sunday: "Вос",
+    Monday: t ('mon'),
+    Tuesday: t ('tue'),
+    Wednesday: t ('wed'),
+    Thursday: t ('thu'),
+    Friday: t ('fri'),
+    Saturday: t ('sat'),
+    Sunday: t ('sun'),
   };
 
   const data = {
     labels: weeklyProgress.map((day) => daysInRussian[day.day] || day.day),
     datasets: [
       {
-        label: "Кубки",
+        label: t ('cups'),
         data: weeklyProgress.map((day) => day.cups),
         fill: true,
         backgroundColor: "rgba(75,192,192,0.2)",
@@ -93,7 +96,7 @@ const Dashboard = () => {
         beginAtZero: true,
         title: {
           display: true,
-          text: "Кубки",
+          text: t ('cups'),
           font: {
             size: 20,
           },
@@ -134,7 +137,7 @@ const Dashboard = () => {
           notif={3}
         />
         <div className="mainContent">
-          <h2 style={{ color: "#22222244" }}>Главная</h2>
+          <h2 style={{ color: "#22222244" }}>{t ('main')}</h2>
           <div className="helloContent">
             <span className="helloCont">
               <p
@@ -146,7 +149,7 @@ const Dashboard = () => {
                   marginBottom: "15px",
                 }}
               >
-                Привет, <strong>{user.first_name}</strong>
+                {t('hello')}, <strong>{user.first_name}</strong>
               </p>
               <p
                 style={{
@@ -156,8 +159,8 @@ const Dashboard = () => {
                   margin: "0",
                 }}
               >
-                Делай сегодня то, что другие не хотят - завтра будешь жить так,
-                как другие не могут
+                {t ('quote1')}
+                {t ('quote2')}
               </p>
             </span>
             <img
@@ -175,7 +178,7 @@ const Dashboard = () => {
           <h3
             style={{ color: "black", fontWeight: "700", fontSize: "x-large" }}
           >
-            Мои курсы
+            {t ('myCourses')}
           </h3>
           <div className="coursesCards">
             {courses.map((course) => (
@@ -193,7 +196,7 @@ const Dashboard = () => {
                         boxShadow: "none",
                       }}
                     >
-                      Начать
+                      {t ('begin')}
                     </button>
                   </Link>
                 </div>

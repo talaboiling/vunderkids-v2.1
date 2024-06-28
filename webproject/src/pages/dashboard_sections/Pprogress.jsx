@@ -20,6 +20,7 @@ import {
 } from "chart.js";
 import { fetchUserData, fetchWeeklyProgress } from "../../utils/apiService";
 import Loader from "../Loader";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(
   CategoryScale,
@@ -32,7 +33,8 @@ ChartJS.register(
 );
 
 const Pprogress = () => {
-  const [user, setUser] = useState({ first_name: "Ученик", last_name: "" }); // Default values
+  const { t } = useTranslation();
+  const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
   const [weeklyProgress, setWeeklyProgress] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
 
@@ -58,20 +60,20 @@ const Pprogress = () => {
   }, []);
 
   const daysInRussian = {
-    Monday: "Пон",
-    Tuesday: "Вто",
-    Wednesday: "Сре",
-    Thursday: "Чет",
-    Friday: "Пят",
-    Saturday: "Суб",
-    Sunday: "Вос",
+    Monday: t ('mon'),
+    Tuesday: t ('tue'),
+    Wednesday: t ('wed'),
+    Thursday: t ('thu'),
+    Friday: t ('fri'),
+    Saturday: t ('sat'),
+    Sunday: t ('sun'),
   };
 
   const data = {
     labels: weeklyProgress.map((day) => daysInRussian[day.day] || day.day),
     datasets: [
       {
-        label: "Кубки",
+        label: t ('cups'),
         data: weeklyProgress.map((day) => day.cups),
         fill: true,
         backgroundColor: "rgba(75,192,192,0.2)",
@@ -87,7 +89,7 @@ const Pprogress = () => {
         beginAtZero: true,
         title: {
           display: true,
-          text: "Кубки",
+          text: t ('cups'),
           font: {
             size: 20,
           },
