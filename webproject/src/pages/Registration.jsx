@@ -5,6 +5,7 @@ import { registerParent } from "../utils/apiService"; // Import the function
 import { useTranslation } from "react-i18next";
 
 function Registration() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -54,21 +55,21 @@ function Registration() {
           <div className="excLogo">
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
-                {t ('aboutPlatform')}
+                {t("aboutPlatform")}
               </a>
               <a href="/#obuchenie" className="navLink">
-                {t ('education')}
+                {t("education")}
               </a>
               <a href="/#otzyvy" className="navLink">
-                {t ('reviews')}
+                {t("reviews")}
               </a>
               <a href="/#contakty" className="navLink">
-                {t ('contacts')}
+                {t("contacts")}
               </a>
             </div>
             <div className="navButton" style={{ marginLeft: "80px" }}>
               <Link to={"/login"}>
-                <button>{t ('enter')}</button>
+                <button>{t("enter")}</button>
               </Link>
             </div>
           </div>
@@ -76,13 +77,13 @@ function Registration() {
         <div className="regPage">
           <div className="regform">
             <div className="formTitle">
-              <h3 className="form-h3">{t ('createParentAccount')}</h3>
+              <h3 className="form-h3">{t("createParentAccount")}</h3>
               <Link to="/login" className="formLink">
-                {t ('haveAccount')}
+                {t("haveAccount")}
               </Link>
             </div>
             <form className="inputField" onSubmit={handleSubmit}>
-              <label htmlFor="first_name">{t ('firstNameChild')}</label>
+              <label htmlFor="first_name">{t("firstNameChild")}</label>
               <br />
               <input
                 type="text"
@@ -95,7 +96,7 @@ function Registration() {
               />
               <br />
 
-              <label htmlFor="last_name">{t ('lastNameChild')}</label>
+              <label htmlFor="last_name">{t("lastNameChild")}</label>
               <br />
               <input
                 type="text"
@@ -124,7 +125,7 @@ function Registration() {
                   />
                 </span>
                 <span>
-                  <label htmlFor="phone">{t ('phone')}</label>
+                  <label htmlFor="phone">{t("phone")}</label>
                   <br />
                   <input
                     type="phone"
@@ -138,7 +139,7 @@ function Registration() {
                   />
                 </span>
               </span>
-              <label htmlFor="password">{t ('comeUpWithPassword')}</label>
+              <label htmlFor="password">{t("comeUpWithPassword")}</label>
               <br />
               <input
                 type="password"
@@ -152,7 +153,7 @@ function Registration() {
               <br />
               <input
                 type="submit"
-                value={t ('registration')}
+                value={t("registration")}
                 className="orangeButton"
                 style={{
                   position: "relative",
