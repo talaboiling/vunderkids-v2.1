@@ -287,6 +287,12 @@ const handleQuestionSubmit = async (e) => {
     }
   };  
 
+  const questionTypeMap = {
+    "Выбор правильного ответа": "multiple_choice_text",
+    "Выбор правильного рисунка": "multiple_choice_images",
+    "Драг н дроп": "drag-n-drop",
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -335,7 +341,7 @@ const handleQuestionSubmit = async (e) => {
         <div className="superCont sectCont">
           {contents &&
             contents.map((content, index) => (
-              <div key={index} className={`vidBlock ${content.content_type}`}>
+              <div key={index} className={`vidBlock ${content.content_type} ${content.template ? `template-${content.template}` : ""}`}>
                 {content.content_type === "lesson" && (
                   <>
                     <div 
@@ -745,27 +751,39 @@ const handleQuestionSubmit = async (e) => {
                         <h3 className="defaultStyle" style={{ color: "#666" }}>
                           Выберите тип задачи
                         </h3>
+                        
+
                         <input
                           list="questiontype"
                           id="questionType"
                           placeholder="Выбор правильного ответа"
-                          style={{margin:"0"}}
+                          style={{ margin: "0" }}
                           value={currentQuestion.question_type}
-                          onChange={(e) =>
-                            setCurrentQuestion({
-                              ...currentQuestion,
-                              question_type: e.target.value,
-                            })
-                          }
+                          onChange={(e) => {
+                            const selectedOption = e.target.value;
+                            const serverValue = questionTypeMap[selectedOption];
+                            
+                            if (serverValue) {
+                              setCurrentQuestion({
+                                ...currentQuestion,
+                                question_type: serverValue,
+                              });
+                            } else {
+                              // Handle invalid input (e.g., reset the value)
+                              setCurrentQuestion({
+                                ...currentQuestion,
+                                question_type: '', // Reset to empty string or handle as needed
+                              });
+                            }
+                          }}
                           required
                         />
                         <datalist id="questiontype">
-                          <option value="multiple_choice_text" />
-                          <option value="text_input" />
-                          <option value="file_upload" />
+                          <option value="Выбор правильного ответа" />
+                          <option value="Выбор правильного рисунка" />
+                          <option value="Драг н дроп" />
                         </datalist>
-                        
-                    </div>
+                      </div>
                     <div
                       style={{
                         display: "flex",
@@ -786,7 +804,7 @@ const handleQuestionSubmit = async (e) => {
                         }}
                       >
                         <li
-                          className={`bgitem ${
+                          className={`bgitem template-1 ${
                             currentQuestion.template === "1"
                               ? "selected-template"
                               : ""
@@ -798,7 +816,7 @@ const handleQuestionSubmit = async (e) => {
                           1
                         </li>
                         <li
-                          className={`bgitem ${
+                          className={`bgitem template-2 ${
                             currentQuestion.template === "2"
                               ? "selected-template"
                               : ""
@@ -810,9 +828,9 @@ const handleQuestionSubmit = async (e) => {
                           2
                         </li>
                         <li
-                          className={`bgitem ${
+                          className={`bgitem template-3 ${
                             currentQuestion.template === "3"
-                              ? "selected-template"
+                              ? " selected-template"
                               : ""
                           }`}
                           onClick={() =>
@@ -822,7 +840,7 @@ const handleQuestionSubmit = async (e) => {
                           3
                         </li>
                         <li
-                          className={`bgitem ${
+                          className={`bgitem template-4 ${
                             currentQuestion.template === "4"
                               ? "selected-template"
                               : ""

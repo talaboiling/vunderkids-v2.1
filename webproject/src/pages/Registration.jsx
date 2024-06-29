@@ -5,6 +5,7 @@ import { registerParent } from "../utils/apiService"; // Import the function
 import { useTranslation } from "react-i18next";
 
 function Registration() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
