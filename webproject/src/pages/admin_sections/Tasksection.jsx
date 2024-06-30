@@ -53,6 +53,8 @@ const Tasksection = () => {
     question_text: "",
     options: ["", "", "", ""],
     correct_answer: "",
+    images: ["", "", "", ""],
+    drag_answers: ["", "", "", ""],
   });
   const [editingQuestionIndex, setEditingQuestionIndex] = useState(null);
   const [isEditingVideo, setIsEditingVideo] = useState(false);
@@ -114,7 +116,6 @@ const Tasksection = () => {
     setIsEditingTask(true);
     setShowTaskModal(true);
   };
-  
 
   const resetTaskDetails = () => {
     setTaskDetails({
@@ -209,45 +210,70 @@ const Tasksection = () => {
     }
   };
 
-const handleQuestionSubmit = async (e) => {
-  e.preventDefault();
+  const handleQuestionSubmit = async (e) => {
+    e.preventDefault();
 
-  // Format options to ensure they have the correct id and value structure
-  const formattedOptions = currentQuestion.options.map((option, idx) => ({
-    id: idx + 1,
-    value: typeof option === 'string' ? option : option.value,
-  }));
+    const formattedOptions = currentQuestion.options.map((option, idx) => ({
+      id: idx + 1,
+      value: typeof option === 'string' ? option : option.value,
+    }));
 
-  const questionData = {
-    ...currentQuestion,
-    options: formattedOptions,
-    correct_answer: currentQuestion.correct_answer,
-  };
+    const formattedImages = currentQuestion.images.map((image, idx) => ({
+      id: idx + 1,
+      image,
+    }));
 
-  try {
-    if (editingQuestionIndex !== null) {
-      await updateQuestion(courseId, sectionId, contents[selectedTaskIndex].id, questions[editingQuestionIndex].id, questionData);
-      const updatedQuestions = [...questions];
-      updatedQuestions[editingQuestionIndex] = questionData;
-      setQuestions(updatedQuestions);
-    } else {
-      const newQuestion = await createQuestion(courseId, sectionId, contents[selectedTaskIndex].id, questionData);
-      setQuestions([...questions, newQuestion]);
+    const questionData = {
+      ...currentQuestion,
+      options:
+        currentQuestion.question_type === "multiple_choice_images" ||
+        currentQuestion.question_type === "drag_and_drop_images"
+          ? formattedImages
+          : formattedOptions,
+      correct_answer:
+        currentQuestion.question_type === "drag_and_drop_text" ||
+        currentQuestion.question_type === "drag_and_drop_images"
+          ? currentQuestion.drag_answers
+          : currentQuestion.correct_answer,
+    };
+
+    try {
+      if (editingQuestionIndex !== null) {
+        await updateQuestion(
+          courseId,
+          sectionId,
+          contents[selectedTaskIndex].id,
+          questions[editingQuestionIndex].id,
+          questionData
+        );
+        const updatedQuestions = [...questions];
+        updatedQuestions[editingQuestionIndex] = questionData;
+        setQuestions(updatedQuestions);
+      } else {
+        const newQuestion = await createQuestion(
+          courseId,
+          sectionId,
+          contents[selectedTaskIndex].id,
+          questionData
+        );
+        setQuestions([...questions, newQuestion]);
+      }
+      setShowQuestionModal(false);
+      setCurrentQuestion({
+        question_type: "multiple_choice_text",
+        template: "",
+        title: "",
+        question_text: "",
+        options: ["", "", "", ""],
+        correct_answer: "",
+        images: ["", "", "", ""],
+        drag_answers: ["", "", "", ""],
+      });
+      setEditingQuestionIndex(null);
+    } catch (error) {
+      console.error("Failed to save question", error);
     }
-    setShowQuestionModal(false);
-    setCurrentQuestion({
-      question_type: "multiple_choice_text",
-      template: "",
-      title: "",
-      question_text: "",
-      options: ["", "", "", ""],
-      correct_answer: "",
-    });
-    setEditingQuestionIndex(null);
-  } catch (error) {
-    console.error("Failed to save question", error);
-  }
-};
+  };
 
   const handleSelectCorrectAnswer = (optionIndex) => {
     setCurrentQuestion({
@@ -255,7 +281,7 @@ const handleQuestionSubmit = async (e) => {
       correct_answer: optionIndex + 1, // Store as a 1-based index
     });
   };
-  
+
   const handleEditQuestion = (index) => {
     const question = questions[index];
     const formattedOptions = question.options.map(opt => opt.value); // Extract values from options
@@ -266,7 +292,7 @@ const handleQuestionSubmit = async (e) => {
     });
     setEditingQuestionIndex(index);
     setShowQuestionModal(true);
-  };  
+  };
 
   const handleEditContent = (index) => {
     const content = contents[index];
@@ -285,12 +311,17 @@ const handleQuestionSubmit = async (e) => {
     } catch (error) {
       console.error("Failed to delete question", error);
     }
-  };  
+  };
 
   const questionTypeMap = {
     "Выбор правильного ответа": "multiple_choice_text",
     "Выбор правильного рисунка": "multiple_choice_images",
-    "Драг н дроп": "drag-n-drop",
+    "Драг н дроп текст": "drag_and_drop_text",
+    "Драг н дроп рисунки": "drag_and_drop_images",
+    "Правда или ложь": "true_false",
+    "Отметить все, что применимо": "mark_all",
+    "Линия чисел": "number_line",
+    "Перетащить позицию": "drag_position",
   };
 
   if (loading) {
@@ -670,6 +701,8 @@ const handleQuestionSubmit = async (e) => {
                     question_text: "",
                     options: ["", "", "", ""],
                     correct_answer: "",
+                    images: ["", "", "", ""],
+                    drag_answers: ["", "", "", ""],
                   });
                   setEditingQuestionIndex(null);
                   setShowQuestionModal(true);
@@ -781,7 +814,12 @@ const handleQuestionSubmit = async (e) => {
                         <datalist id="questiontype">
                           <option value="Выбор правильного ответа" />
                           <option value="Выбор правильного рисунка" />
-                          <option value="Драг н дроп" />
+                          <option value="Драг н дроп текст" />
+                          <option value="Драг н дроп рисунки" />
+                          <option value="Правда или ложь" />
+                          <option value="Отметить все, что применимо" />
+                          <option value="Линия чисел" />
+                          <option value="Перетащить позицию" />
                         </datalist>
                       </div>
                     <div
@@ -896,38 +934,182 @@ const handleQuestionSubmit = async (e) => {
                       </span>
                     </span>
                     
-                    <h3 className="defaultStyle" style={{color:"#666"}}>Варианты ответа (напишите и нажмите на правильный)</h3>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "1rem",
-                      }}
-                    >
-                      {currentQuestion.options.map((option, index) => (
+                    {currentQuestion.question_type === "multiple_choice_text" && (
+                      <>
+                        <h3 className="defaultStyle" style={{color:"#666"}}>Варианты ответа (нажмите на правильный)</h3>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "1rem",
+                          }}
+                        >
+                          {currentQuestion.options.map((option, index) => (
+                            <input
+                              key={index}
+                              type="text"
+                              placeholder={`Вариант ${index + 1}`}
+                              value={typeof option === 'string' ? option : option.value}
+                              onChange={(e) => {
+                                const updatedOptions = [...currentQuestion.options];
+                                updatedOptions[index] = e.target.value;
+                                setCurrentQuestion({
+                                  ...currentQuestion,
+                                  options: updatedOptions,
+                                });
+                              }}
+                              style={{ margin: "0" }}
+                              className={
+                                currentQuestion.correct_answer === index + 1
+                                  ? "correct-answer"
+                                  : ""
+                              }
+                              onClick={() => handleSelectCorrectAnswer(index)}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {currentQuestion.question_type === "multiple_choice_images" && (
+                      <>
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Варианты ответа (нажмите на правильный)
+                        </h3>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "1rem",
+                          }}
+                        >
+                          {currentQuestion.images.map((image, index) => (
+                            <div key={index}>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const updatedImages = [...currentQuestion.images];
+                                  updatedImages[index] = URL.createObjectURL(e.target.files[0]);
+                                  setCurrentQuestion({
+                                    ...currentQuestion,
+                                    images: updatedImages,
+                                  });
+                                }}
+                              />
+                              {image && (
+                                <img
+                                  src={image}
+                                  alt={`Option ${index + 1}`}
+                                  style={{ width: "100px", height: "100px" }}
+                                />
+                              )}
+                              <input
+                                type="radio"
+                                name="correctAnswer"
+                                onChange={() => handleSelectCorrectAnswer(index)}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {currentQuestion.question_type === "drag_and_drop_text" && (
+                      <>
+                        <h3 className="defaultStyle" style={{color:"#666"}}>Варианты ответа (введите порядок правильных ответов через запятую)</h3>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "1rem",
+                          }}
+                        >
+                          {currentQuestion.options.map((option, index) => (
+                            <input
+                              key={index}
+                              type="text"
+                              placeholder={`Вариант ${index + 1}`}
+                              value={typeof option === 'string' ? option : option.value}
+                              onChange={(e) => {
+                                const updatedOptions = [...currentQuestion.options];
+                                updatedOptions[index] = e.target.value;
+                                setCurrentQuestion({
+                                  ...currentQuestion,
+                                  options: updatedOptions,
+                                });
+                              }}
+                              style={{ margin: "0" }}
+                            />
+                          ))}
+                        </div>
                         <input
-                          key={index}
                           type="text"
-                          placeholder={`Вариант ${index + 1}`}
-                          value={typeof option === 'string' ? option : option.value}
+                          placeholder="Правильный порядок (пример: 1,3,2,4)"
+                          value={currentQuestion.drag_answers.join(",")}
                           onChange={(e) => {
-                            const updatedOptions = [...currentQuestion.options];
-                            updatedOptions[index] = e.target.value;
+                            const updatedDragAnswers = e.target.value.split(",").map(Number);
                             setCurrentQuestion({
                               ...currentQuestion,
-                              options: updatedOptions,
+                              drag_answers: updatedDragAnswers,
                             });
                           }}
-                          style={{ margin: "0" }}
-                          className={
-                            currentQuestion.correct_answer === index + 1
-                              ? "correct-answer"
-                              : ""
-                          }
-                          onClick={() => handleSelectCorrectAnswer(index)}
+                          style={{ marginTop: "20px", width: "100%" }}
                         />
-                      ))}
-                    </div>
+                      </>
+                    )}
+
+                    {currentQuestion.question_type === "drag_and_drop_images" && (
+                      <>
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Варианты ответа (введите порядок правильных ответов через запятую)
+                        </h3>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "1rem",
+                          }}
+                        >
+                          {currentQuestion.images.map((image, index) => (
+                            <div key={index}>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const updatedImages = [...currentQuestion.images];
+                                  updatedImages[index] = URL.createObjectURL(e.target.files[0]);
+                                  setCurrentQuestion({
+                                    ...currentQuestion,
+                                    images: updatedImages,
+                                  });
+                                }}
+                              />
+                              {image && (
+                                <img
+                                  src={image}
+                                  alt={`Option ${index + 1}`}
+                                  style={{ width: "100px", height: "100px" }}
+                                />
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                        <input
+                          type="text"
+                          placeholder="Правильный порядок (пример: 1,3,2,4)"
+                          value={currentQuestion.drag_answers.join(",")}
+                          onChange={(e) => {
+                            const updatedDragAnswers = e.target.value.split(",").map(Number);
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              drag_answers: updatedDragAnswers,
+                            });
+                          }}
+                          style={{ marginTop: "20px", width: "100%" }}
+                        />
+                      </>
+                    )}
                   </div>
                   <button
                     type="submit"
