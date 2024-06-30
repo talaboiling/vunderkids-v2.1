@@ -69,7 +69,7 @@ const Games = () => {
   const openGameWindow = async (path) => {
 
     if (user.stars < 20) {
-      alert("Not enough stars to play the game. Earn more stars by completing activities.");
+      alert(t ('notEnoughStars'));
       return;
     }
 
