@@ -47,7 +47,7 @@ const Tasksection = () => {
   const [questions, setQuestions] = useState([]);
   const [selectedTaskIndex, setSelectedTaskIndex] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState({
-    question_type: "multiple_choice_text",
+    question_type: "",
     template: "",
     title: "",
     question_text: "",
@@ -85,7 +85,7 @@ const Tasksection = () => {
       section: sectionId,
       order: contents.length + 1,
     };
-  
+
     try {
       let updatedContents;
       if (isEditingTask) {
@@ -97,7 +97,7 @@ const Tasksection = () => {
         const newTask = await createTask(courseId, sectionId, taskData);
         updatedContents = [...contents, newTask];
       }
-  
+
       setContents(updatedContents);
       setShowTaskModal(false);
       resetTaskDetails();
@@ -123,7 +123,7 @@ const Tasksection = () => {
       description: "",
     });
     setIsEditingTask(false);
-  };  
+  };
 
   const handleVideoSubmit = async (e) => {
     e.preventDefault();
@@ -212,31 +212,63 @@ const Tasksection = () => {
 
   const handleQuestionSubmit = async (e) => {
     e.preventDefault();
-
-    const formattedOptions = currentQuestion.options.map((option, idx) => ({
-      id: idx + 1,
-      value: typeof option === 'string' ? option : option.value,
-    }));
-
-    const formattedImages = currentQuestion.images.map((image, idx) => ({
-      id: idx + 1,
-      image,
-    }));
-
-    const questionData = {
-      ...currentQuestion,
-      options:
-        currentQuestion.question_type === "multiple_choice_images" ||
-        currentQuestion.question_type === "drag_and_drop_images"
-          ? formattedImages
-          : formattedOptions,
-      correct_answer:
-        currentQuestion.question_type === "drag_and_drop_text" ||
-        currentQuestion.question_type === "drag_and_drop_images"
-          ? currentQuestion.drag_answers
-          : currentQuestion.correct_answer,
-    };
-
+  
+    let questionData;
+  
+    if (currentQuestion.question_type === "multiple_choice_text") {
+      const formattedOptions = currentQuestion.options.map((option, idx) => ({
+        id: idx + 1,
+        value: typeof option === 'string' ? option : option.value,
+      }));
+  
+      questionData = {
+        ...currentQuestion,
+        options: formattedOptions,
+        correct_answer: currentQuestion.correct_answer,
+      };
+    }
+  
+    if (currentQuestion.question_type === "multiple_choice_images") {
+      const formattedImages = currentQuestion.images.map((image, idx) => ({
+        id: idx + 1,
+        image,
+      }));
+  
+      questionData = {
+        ...currentQuestion,
+        options: formattedImages,
+        correct_answer: currentQuestion.correct_answer,
+      };
+    }
+  
+    if (currentQuestion.question_type === "drag_and_drop_text" || currentQuestion.question_type === "drag_and_drop_images") {
+      const formattedOptions = currentQuestion.options.map((option, idx) => ({
+        id: idx + 1,
+        value: typeof option === 'string' ? option : option.value,
+      }));
+  
+      const formattedImages = currentQuestion.images.map((image, idx) => ({
+        id: idx + 1,
+        image,
+      }));
+  
+      // Map the drag_answers to the corresponding option IDs and filter out empty strings
+      const filteredDragAnswers = currentQuestion.drag_answers
+        .map((order, idx) => {
+          const orderNum = parseInt(order, 10);
+          return (order !== "" && orderNum > 0 && orderNum <= currentQuestion.options.length) ? { order: orderNum, id: idx + 1 } : null;
+        })
+        .filter(answer => answer !== null)
+        .sort((a, b) => a.order - b.order)
+        .map(answer => answer.id);
+  
+      questionData = {
+        ...currentQuestion,
+        options: currentQuestion.question_type === "drag_and_drop_images" ? formattedImages : formattedOptions,
+        correct_answer: filteredDragAnswers,
+      };
+    }
+  
     try {
       if (editingQuestionIndex !== null) {
         await updateQuestion(
@@ -274,7 +306,7 @@ const Tasksection = () => {
       console.error("Failed to save question", error);
     }
   };
-
+  
   const handleSelectCorrectAnswer = (optionIndex) => {
     setCurrentQuestion({
       ...currentQuestion,
@@ -284,16 +316,28 @@ const Tasksection = () => {
 
   const handleEditQuestion = (index) => {
     const question = questions[index];
-    const formattedOptions = question.options.map(opt => opt.value); // Extract values from options
+    let formattedOptions = [];
+    let formattedImages = [];
+  
+    if (question.question_type === "multiple_choice_text") {
+      formattedOptions = question.options.map(opt => opt.value); // Extract values from options
+    }
+  
+    if (question.question_type === "multiple_choice_images" || question.question_type === "drag_and_drop_images") {
+      formattedImages = question.options.map(opt => opt.image); // Extract images from options
+    }
+  
     setCurrentQuestion({
       ...question,
-      options: formattedOptions,
-      correct_answer: question.correct_answer, // Set the correct answer to the index
+      options: formattedOptions.length > 0 ? formattedOptions : question.options,
+      images: formattedImages.length > 0 ? formattedImages : question.images,
+      correct_answer: question.correct_answer,
+      drag_answers: question.correct_answer, // Assuming correct_answer is an array for drag_and_drop
     });
     setEditingQuestionIndex(index);
     setShowQuestionModal(true);
   };
-
+  
   const handleEditContent = (index) => {
     const content = contents[index];
     setSelectedTaskIndex(index);
@@ -375,7 +419,7 @@ const Tasksection = () => {
               <div key={index} className={`vidBlock ${content.content_type} ${content.template ? `template-${content.template}` : ""}`}>
                 {content.content_type === "lesson" && (
                   <>
-                    <div 
+                    <div
                       className="thumbcontainer"
                       onClick={() => openLesson(index)}
                     >
@@ -396,7 +440,7 @@ const Tasksection = () => {
                     </div>
                     <div className={`contentTitle ${content.title.length > 20 ? "title-slider" : ""}`}>
                       <div className="title-slide">
-                        <p style={{margin:"0"}}>{content.title}</p>
+                        <p style={{ margin: "0" }}>{content.title}</p>
                       </div>
                     </div>
                     <div className="taskHover">
@@ -423,7 +467,7 @@ const Tasksection = () => {
                     />
                     <div className="contentTitle">
                       <div className="title-slide">
-                        <p style={{margin:"0"}}>{content.title}</p>
+                        <p style={{ margin: "0" }}>{content.title}</p>
                       </div>
                     </div>
                     <div className="taskHover">
@@ -695,7 +739,7 @@ const Tasksection = () => {
               <button
                 onClick={() => {
                   setCurrentQuestion({
-                    question_type: "multiple_choice_text",
+                    question_type: "",
                     template: "",
                     title: "",
                     question_text: "",
@@ -795,7 +839,7 @@ const Tasksection = () => {
                           onChange={(e) => {
                             const selectedOption = e.target.value;
                             const serverValue = questionTypeMap[selectedOption];
-                            
+
                             if (serverValue) {
                               setCurrentQuestion({
                                 ...currentQuestion,
@@ -813,13 +857,9 @@ const Tasksection = () => {
                         />
                         <datalist id="questiontype">
                           <option value="Выбор правильного ответа" />
-                          <option value="Выбор правильного рисунка" />
+                          {/* <option value="Выбор правильного рисунка" /> */}
                           <option value="Драг н дроп текст" />
-                          <option value="Драг н дроп рисунки" />
-                          <option value="Правда или ложь" />
-                          <option value="Отметить все, что применимо" />
-                          <option value="Линия чисел" />
-                          <option value="Перетащить позицию" />
+                          {/* <option value="Драг н дроп рисунки" /> */}
                         </datalist>
                       </div>
                     <div
@@ -916,7 +956,7 @@ const Tasksection = () => {
                           required
                         />
                       </span>
-                      
+
                       <span>
                         <h3 className="defaultStyle" style={{color:"#666"}}>Описание вопроса</h3>
                         <input
@@ -928,12 +968,12 @@ const Tasksection = () => {
                               ...currentQuestion,
                               question_text: e.target.value,
                             })
-                          }                          
+                          }
                           required
                         />
                       </span>
                     </span>
-                    
+
                     {currentQuestion.question_type === "multiple_choice_text" && (
                       <>
                         <h3 className="defaultStyle" style={{color:"#666"}}>Варианты ответа (нажмите на правильный)</h3>
@@ -1017,60 +1057,51 @@ const Tasksection = () => {
 
                     {currentQuestion.question_type === "drag_and_drop_text" && (
                       <>
-                        <h3 className="defaultStyle" style={{color:"#666"}}>Варианты ответа (введите порядок правильных ответов через запятую)</h3>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: "1rem",
-                          }}
-                        >
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>Варианты ответа (введите порядок правильных ответов)</h3>
+                        <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
                           {currentQuestion.options.map((option, index) => (
-                            <input
-                              key={index}
-                              type="text"
-                              placeholder={`Вариант ${index + 1}`}
-                              value={typeof option === 'string' ? option : option.value}
-                              onChange={(e) => {
-                                const updatedOptions = [...currentQuestion.options];
-                                updatedOptions[index] = e.target.value;
-                                setCurrentQuestion({
-                                  ...currentQuestion,
-                                  options: updatedOptions,
-                                });
-                              }}
-                              style={{ margin: "0" }}
-                            />
+                            <div key={index}>
+                              <input
+                                type="text"
+                                placeholder={`Вариант ${index + 1}`}
+                                value={typeof option === 'string' ? option : option.value}
+                                onChange={(e) => {
+                                  const updatedOptions = [...currentQuestion.options];
+                                  updatedOptions[index] = e.target.value;
+                                  setCurrentQuestion({
+                                    ...currentQuestion,
+                                    options: updatedOptions,
+                                  });
+                                }}
+                                style={{ margin: "0" }}
+                              />
+                              <input
+                                type="number"
+                                placeholder={`Порядок`}
+                                min="1"
+                                max={currentQuestion.options.length}
+                                value={currentQuestion.drag_answers[index]}
+                                onChange={(e) => {
+                                  const orderValue = e.target.value ? parseInt(e.target.value, 10) : "";
+                                  const updatedDragAnswers = [...currentQuestion.drag_answers];
+                                  updatedDragAnswers[index] = orderValue;
+                                  setCurrentQuestion({
+                                    ...currentQuestion,
+                                    drag_answers: updatedDragAnswers,
+                                  });
+                                }}
+                                style={{ width: "50px", marginTop: "5px" }}
+                              />
+                            </div>
                           ))}
                         </div>
-                        <input
-                          type="text"
-                          placeholder="Правильный порядок (пример: 1,3,2,4)"
-                          value={currentQuestion.drag_answers.join(",")}
-                          onChange={(e) => {
-                            const updatedDragAnswers = e.target.value.split(",").map(Number);
-                            setCurrentQuestion({
-                              ...currentQuestion,
-                              drag_answers: updatedDragAnswers,
-                            });
-                          }}
-                          style={{ marginTop: "20px", width: "100%" }}
-                        />
                       </>
                     )}
 
                     {currentQuestion.question_type === "drag_and_drop_images" && (
                       <>
-                        <h3 className="defaultStyle" style={{ color: "#666" }}>
-                          Варианты ответа (введите порядок правильных ответов через запятую)
-                        </h3>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: "1rem",
-                          }}
-                        >
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>Варианты ответа (введите порядок правильных ответов)</h3>
+                        <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
                           {currentQuestion.images.map((image, index) => (
                             <div key={index}>
                               <input
@@ -1092,22 +1123,26 @@ const Tasksection = () => {
                                   style={{ width: "100px", height: "100px" }}
                                 />
                               )}
+                              <input
+                                type="number"
+                                placeholder={`Порядок`}
+                                min="1"
+                                max={currentQuestion.images.length}
+                                value={currentQuestion.drag_answers[index]}
+                                onChange={(e) => {
+                                  const orderValue = e.target.value ? parseInt(e.target.value, 10) : "";
+                                  const updatedDragAnswers = [...currentQuestion.drag_answers];
+                                  updatedDragAnswers[index] = orderValue;
+                                  setCurrentQuestion({
+                                    ...currentQuestion,
+                                    drag_answers: updatedDragAnswers,
+                                  });
+                                }}
+                                style={{ width: "50px", marginTop: "5px" }}
+                              />
                             </div>
                           ))}
                         </div>
-                        <input
-                          type="text"
-                          placeholder="Правильный порядок (пример: 1,3,2,4)"
-                          value={currentQuestion.drag_answers.join(",")}
-                          onChange={(e) => {
-                            const updatedDragAnswers = e.target.value.split(",").map(Number);
-                            setCurrentQuestion({
-                              ...currentQuestion,
-                              drag_answers: updatedDragAnswers,
-                            });
-                          }}
-                          style={{ marginTop: "20px", width: "100%" }}
-                        />
                       </>
                     )}
                   </div>

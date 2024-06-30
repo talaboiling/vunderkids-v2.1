@@ -35,6 +35,8 @@ const Math = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [isChild, setIsChild] = useState(false);
   const [childId, setChildId] = useState("");
+  const [draggedOption, setDraggedOption] = useState(null);
+  const [droppedOrder, setDroppedOrder] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -85,6 +87,7 @@ const Math = () => {
       setCurrentQuestionIndex(0);
       setSelectedOption(null);
       setShowFeedback(false);
+      setDroppedOrder([]);
       setShowTaskModal(true);
     } catch (error) {
       console.error("Error fetching task data:", error);
@@ -113,9 +116,32 @@ const Math = () => {
     setSelectedOption(optionId);
   };
 
+  const handleDragStart = (optionId) => {
+    setDraggedOption(optionId);
+  };
+
+  const handleDrop = (event, dropIndex) => {
+    event.preventDefault();
+    const updatedOrder = [...droppedOrder];
+    updatedOrder[dropIndex] = draggedOption;
+    setDroppedOrder(updatedOrder);
+  };
+
+  const allowDrop = (event) => {
+    event.preventDefault();
+  };
+
   const handleNextQuestion = async () => {
-    const isCorrect =
-      selectedOption === questions[currentQuestionIndex].correct_answer;
+    const currentQuestion = questions[currentQuestionIndex];
+    let isCorrect;
+
+    if (currentQuestion.question_type.startsWith("drag_and_drop")) {
+      isCorrect =
+        JSON.stringify(droppedOrder) === JSON.stringify(currentQuestion.correct_answer);
+    } else {
+      isCorrect = selectedOption === currentQuestion.correct_answer;
+    }
+
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
 
@@ -123,8 +149,8 @@ const Math = () => {
       courseId,
       taskContent.section,
       taskContent.id,
-      questions[currentQuestionIndex].id,
-      selectedOption,
+      currentQuestion.id,
+      isCorrect ? 1 : 0,
       childId
     );
 
@@ -132,12 +158,21 @@ const Math = () => {
       setShowFeedback(false);
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       setSelectedOption(null);
+      setDroppedOrder([]);
     }, 1500);
   };
 
   const handleSubmit = async () => {
-    const isCorrect =
-      selectedOption === questions[currentQuestionIndex].correct_answer;
+    const currentQuestion = questions[currentQuestionIndex];
+    let isCorrect;
+
+    if (currentQuestion.question_type.startsWith("drag_and_drop")) {
+      isCorrect =
+        JSON.stringify(droppedOrder) === JSON.stringify(currentQuestion.correct_answer);
+    } else {
+      isCorrect = selectedOption === currentQuestion.correct_answer;
+    }
+
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
 
@@ -145,13 +180,12 @@ const Math = () => {
       courseId,
       taskContent.section,
       taskContent.id,
-      questions[currentQuestionIndex].id,
-      selectedOption,
+      currentQuestion.id,
+      isCorrect ? 1 : 0,
       childId
     );
 
     setTimeout(async () => {
-      console.log("Submitting answers...");
       setShowFeedback(false);
       setShowTaskModal(false);
       await fetchChildData();
@@ -431,21 +465,43 @@ const Math = () => {
                           </strong>
                         )}
                       </span>
-                      <ul className="studTaskOptions">
-                        {currentQuestion.options.map((option, idx) => (
-                          <li
-                            key={idx}
-                            className={`studTaskOption ${
-                              selectedOption === option.id
-                                ? "studTaskOptionSelected"
-                                : ""
-                            }`}
-                            onClick={() => handleOptionClick(option.id)}
-                          >
-                            {option.value}
-                          </li>
-                        ))}
-                      </ul>
+                      {currentQuestion.question_type.startsWith("drag_and_drop") ? (
+                        <ul className="studTaskOptions" style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                          {currentQuestion.options.map((option, idx) => (
+                            <li
+                              key={idx}
+                              className="studTaskOption"
+                              draggable
+                              onDragStart={() => handleDragStart(option.id)}
+                              onDrop={(event) => handleDrop(event, idx)}
+                              onDragOver={allowDrop}
+                              style={{ cursor: 'move' }}
+                            >
+                              {currentQuestion.question_type === 'drag_and_drop_images' ? (
+                                <img src={option.image} alt={`option-${idx}`} style={{ width: "100px", height: "100px" }} />
+                              ) : (
+                                option.value
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <ul className="studTaskOptions">
+                          {currentQuestion.options.map((option, idx) => (
+                            <li
+                              key={idx}
+                              className={`studTaskOption ${
+                                selectedOption === option.id
+                                  ? "studTaskOptionSelected"
+                                  : ""
+                              }`}
+                              onClick={() => handleOptionClick(option.id)}
+                            >
+                              {option.value}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </li>
                   </ul>
                 </div>
@@ -471,7 +527,7 @@ const Math = () => {
                       ? handleSubmit
                       : handleNextQuestion
                   }
-                  disabled={selectedOption === null}
+                  disabled={selectedOption === null && droppedOrder.length === 0}
                   className={`${
                     currentQuestionIndex === questions.length - 1
                       ? ""
