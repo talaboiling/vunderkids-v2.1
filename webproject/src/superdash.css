@@ -560,5 +560,28 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+}
+
+.template-1 {
+  background-image: url('./assets/bgpicker1.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.template-2 {
+  background-image: url('./assets/bgpicker2.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.template-3 {
+  background-image: url('./assets/bgpicker3.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.template-4 {
+  background-image: url('./assets/bgpicker4.svg');
+  background-size: cover;
+  background-position: center;
 }

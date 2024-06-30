@@ -5,19 +5,15 @@ import Navdash from "../Navdash";
 import mathIcon from "../../assets/calculator.png";
 import englishIcon from "../../assets/english.png";
 import bgtask from "../../assets/bgtask.svg";
-import bgstudtask from "../../assets/bgstudtask.png";
 import bgvideo from "../../assets/videolessonthumb.svg";
 import staricon from "../../assets/navStars.png";
 import cupicon from "../../assets/navCups.png";
 import CloseIcon from "@mui/icons-material/Close";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import VerifiedIcon from '@mui/icons-material/Verified';
 import {
   fetchUserData,
-  fetchCourses,
-  fetchSections,
   fetchCourse,
+  fetchSections,
   fetchTask,
   fetchQuestions,
   answerQuestion,
@@ -379,9 +375,7 @@ const Math = () => {
                 Закрыть
               </button>
             </div>
-            <div
-              className="studtaskDetails"
-            >
+            <div className={`studtaskDetails ${currentQuestion?.template ? `template-${currentQuestion.template}` : ""}`}>
               {showFeedback && (
                 <div
                   className={`feedbackMessage ${
