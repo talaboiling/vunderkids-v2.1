@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Timer = ({isActive, onTimeUp}) => {
+    const { t } = useTranslation();
     const [time, setTime] = useState(() => {
         const savedTime = localStorage.getItem('time');
         return savedTime ? parseInt(savedTime, 10) : 600;
@@ -33,7 +35,7 @@ const Timer = ({isActive, onTimeUp}) => {
 
     return (
         <div>
-            <h1>Time: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</h1>
+            <h1>{t ('time')}: {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}</h1>
         </div>
     );
 }

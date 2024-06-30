@@ -7,14 +7,17 @@ import {
   fetchUserData      
  } from "../../utils/apiService";
  import Timer from "../../components/Timer";
+ import { useTranslation } from "react-i18next";
 
 const Games = () => {
+  const { t } = useTranslation();
 
   const [user, setUser] = useState({});
   const [isChild, setIsChild] = useState(false);
   const [childId, setChildId] = useState("");
   const [open, setOpen] = useState(false);
-  const externalWindow = useRef(null);
+  const [gamePath, setGamePath] = useState("");
+  const modalRef = useRef(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -39,8 +42,8 @@ const Games = () => {
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-        if (externalWindow.current) {
-            externalWindow.current.close();
+        if (open) {
+            setOpen(false);
         }
     };
 
@@ -48,11 +51,11 @@ const Games = () => {
 
     return () => {
         window.removeEventListener("beforeunload", handleBeforeUnload);
-        if (externalWindow.current) {
-            externalWindow.current.close();
+        if (open) {
+            setOpen(false);
         }
     };
-  }, []);
+  }, [open]);
 
   const fetchChildData = async () => {
     try {
@@ -65,45 +68,79 @@ const Games = () => {
 
   const openGameWindow = async (path) => {
 
+    if (user.stars < 20) {
+      alert("Not enough stars to play the game. Earn more stars by completing activities.");
+      return;
+    }
+
     if (!open) {
       const savedTime = localStorage.getItem('time');
       if (!savedTime || parseInt(savedTime, 10) <= 0) {
         localStorage.setItem('time', 600);
       }
-      externalWindow.current = window.open(path, "_blank", "width=800,height=600");
-      setOpen(true);
       
-      const ifWindowClosed = () => {
-        if (externalWindow.current && externalWindow.current.closed) {
-          setOpen(false);
-          console.log("Game window closed");
-        } else {
-          setTimeout(ifWindowClosed, 10);
-        }
-      };
-
-      ifWindowClosed();
+      setGamePath(path);
+      setOpen(true);
+      modalRef.current.showModal();
+      
     }
+  };
+
+  const closeModal = () => {
+    if (modalRef.current) {
+      modalRef.current.close();
+    }
+    setOpen(false);
   };
 
   const handleTimeUp = () => {
-    if (externalWindow.current) {
-      externalWindow.current.close();
-    }
-    setOpen(false);
+    closeModal();
     playGame(childId);
     fetchChildData();
+    setOpen(false);
   };
 
   return (
-    <div className="rtdash">
+    <div className="rtdash rtrat">
       <Sidebar />
       <div className="centralDash">
         <Navdash />
-        <div>
-          <button onClick={() => openGameWindow("/src/pages/dashboard_sections/games/3ryad/index.html")}>Open Game</button>
-          {open && <Timer isActive={open} onTimeUp={handleTimeUp}/>}
+        <div class="game-div">
+          <button onClick={() => openGameWindow("/src/pages/dashboard_sections/games/3ryad/index.html")} className="game-button">Fantasy Forest</button>
+          <button onClick={() => openGameWindow("/src/pages/dashboard_sections/games/duckhunt/index.html")} className="game-button">Duck Hunt</button>
+          <button onClick={() => openGameWindow("/src/pages/dashboard_sections/games/gonki/index.html")} className="game-button">Gonki</button>
         </div>
+        {open && (
+        <dialog className="studmodal" ref={modalRef}>
+          <div className="studmodal-content game-modal">
+            <div className="modalHeader" style={{ marginBottom: "20px" }}>
+              <h2 className="defaultStyle" style={{ color: "#666" }}>{t ('game')}</h2>
+              <button
+                style={{
+                  float: "right",
+                  backgroundColor: "lightgray",
+                  border: "none",
+                  borderRadius: "10px",
+                  color: "#666",
+                }}
+                onClick={closeModal}
+              >
+                {t ('close')}
+              </button>
+            </div>
+            <iframe
+              width="1000"
+              height="500"
+              src={gamePath}
+              title="Game"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="game-iframe"
+            ></iframe>
+            {open && <Timer isActive={open} onTimeUp={handleTimeUp} />}
+          </div>
+        </dialog>)}
       </div>
     </div>
   );

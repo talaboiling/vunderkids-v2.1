@@ -337,6 +337,7 @@ label{
 }
 
 ::-webkit-scrollbar {
+  background-color: transparent;
   width: 7px;
 }
 ::-webkit-scrollbar-track {

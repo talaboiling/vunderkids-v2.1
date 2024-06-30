@@ -10,7 +10,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none;
-  width: 99vw;
+  width: 100vw;
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
 }
@@ -609,7 +609,7 @@ img.childcard {
   background: white;
   padding: 30px;
   border-radius: 10px;
-  width: 80%;
+  width: auto;
   max-width: fit-content;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -886,4 +886,36 @@ img.childcard {
 
 .navigationButtons{
   margin-top: 20px;
+}
+
+.game-modal{
+  overflow: hidden;
+  width: 90vw;
+  height: 90vh;
+  z-index: 1000;
+}
+
+.game-iframe{
+  overflow: hidden;
+  position: relative;
+}
+
+.game-button{
+  background-color: rgb(152, 247, 152);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 50px;
+  width: 100%;
+}
+
+.game-button:hover{
+  background-color: rgb(71, 236, 71);
+}
+
+.game-div{
+  display: grid;
+  padding-right: 50px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
