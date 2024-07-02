@@ -82,9 +82,8 @@ function Registration() {
                 {t("haveAccount")}
               </Link>
             </div>
-            <form className="inputField" onSubmit={handleSubmit}>
+            <form className="registrationInput" onSubmit={handleSubmit}>
               <label htmlFor="first_name">{t("firstNameChild")}</label>
-              <br />
               <input
                 type="text"
                 id="first_name"
@@ -94,10 +93,7 @@ function Registration() {
                 onChange={handleInputChange}
                 required
               />
-              <br />
-
               <label htmlFor="last_name">{t("lastNameChild")}</label>
-              <br />
               <input
                 type="text"
                 id="last_name"
@@ -107,8 +103,6 @@ function Registration() {
                 onChange={handleInputChange}
                 required
               />
-              <br />
-
               <span className="gendemail">
                 <span>
                   <label htmlFor="email">E-mail:</label>
@@ -140,7 +134,6 @@ function Registration() {
                 </span>
               </span>
               <label htmlFor="password">{t("comeUpWithPassword")}</label>
-              <br />
               <input
                 type="password"
                 id="password"

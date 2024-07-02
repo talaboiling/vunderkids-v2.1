@@ -508,11 +508,9 @@ dialog::backdrop {
 }
 
 .gendgrade {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  max-width: 90%;
-  justify-self: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 10px;
 }
 
 .childavatar {

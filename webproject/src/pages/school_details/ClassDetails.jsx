@@ -188,7 +188,7 @@ const ClassDetails = () => {
                   <option value="F">Женский</option>
                   <option value="O">Не указан</option>
                 </select>
-                <br />
+                <br/>
 
                 <label htmlFor="phone_number">Телефон</label>
                 <input

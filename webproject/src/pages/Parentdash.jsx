@@ -153,7 +153,7 @@ const Parentdash = () => {
             <img
               src={child.avatar || pfplaceholder}
               alt="child avatar"
-              style={{ maxWidth: "100px", maxHeight: "100px" }}
+              style={{ maxWidth: "100px", maxHeight: "100px", borderRadius:"50%"}}
             />
             <p style={{ fontSize: "x-large" }}>
               {child.first_name} {child.last_name}
@@ -251,7 +251,7 @@ const Parentdash = () => {
                 <CloseIcon sx={{ color: "grey" }} />
               </button>
 
-              <form className="inputField" onSubmit={handleSubmit}>
+              <form className="registrationInput" onSubmit={handleSubmit}>
                 <div className="childavatar">
                   <img src={pfplaceholder} alt="pfp" />
                   <FileUploader
@@ -270,7 +270,6 @@ const Parentdash = () => {
                   placeholder="Мақсат"
                   required
                 />
-                <br />
                 <label htmlFor="last_name">{t ('lastNameChild')}</label>
                 <input
                   type="text"
@@ -281,7 +280,6 @@ const Parentdash = () => {
                   placeholder="Бектұрғын"
                   required
                 />
-                <br />
                 <label htmlFor="birth_date">{t ('birthDate')}</label>
                 <input
                   type="date"
@@ -291,12 +289,10 @@ const Parentdash = () => {
                   onChange={handleInputChange}
                   required
                 />
-                <br />
-                <div className="gendgrade">
-                  <span>
+                  <div className="gendgrade">
                     <label htmlFor="gender">{t ('gender')}</label>
-                    <br />
-                    <input
+                    <label htmlFor="grade">{t ('studClass')}</label>
+                    <select
                       list="genders"
                       id="gender"
                       name="gender"
@@ -304,17 +300,13 @@ const Parentdash = () => {
                       onChange={handleInputChange}
                       placeholder={t ('boy')}
                       required
-                    />
-                    <datalist id="genders">
+                    >
+                      <option value="">{t ('Choose gender')}</option>
                       <option value="M">{t ('boy')}</option>
                       <option value="F">{t ('girl')}</option>
                       <option value="O">{t ('other')}</option>
-                    </datalist>
-                  </span>
-                  <span>
-                    <label htmlFor="grade">{t ('studClass')}</label>
-                    <br />
-                    <input
+                    </select>                    
+                    <select
                       list="grades"
                       id="grade"
                       name="grade"
@@ -322,15 +314,19 @@ const Parentdash = () => {
                       onChange={handleInputChange}
                       placeholder={t ('preschool')}
                       required
-                    />
-                    <datalist id="grades">
-                      <option value={t ('preschool')} />
-                      <option value="1" />
-                      <option value="2" />
-                      <option value="3" />
-                    </datalist>
-                  </span>
-                </div>
+                    >
+                      <option value="0">{t ('preschool')}</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                  </div>
+                    <label htmlFor="language">{t ('Язык обучения')}</label>
+                    <select name="language" id="language" value={formData.language} onChange={handleInputChange}>
+                      <option value="">{t ('Язык обучения')}</option>
+                      <option value="ru">Русский</option>
+                      <option value="kz">Қазақша</option>
+                    </select>
                 <div
                   style={{
                     display: "flex",
@@ -338,7 +334,7 @@ const Parentdash = () => {
                     marginTop: "20px",
                   }}
                 >
-                  <button type="submit">{t ('addChildButton')}</button>
+                  <button type="submit" onClick={console.log(formData)}>{t ('addChildButton')}</button>
                 </div>
               </form>
             </div>
@@ -348,7 +344,7 @@ const Parentdash = () => {
         {showDeleteModal && (
           <dialog
             open
-            className="modal"
+            className="modal studmodal"
             onClose={() => setShowDeleteModal(false)}
           >
             <div className="modal-content">

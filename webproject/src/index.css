@@ -813,16 +813,21 @@ footer{
   gap: 1rem;
 }
 
-input{
+input, select {
   padding: 0.8rem 1rem;
   border: 2px solid #C1C1C1;
   border-radius: 10px;
-  width: 90%;
   margin-bottom: 10px;
   font-family: 'Montserrat', Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size:medium;
   outline: none;
+}
+
+.registrationInput{
+  display: flex;
+  flex-direction: column;
+  
 }
 
 .defaultIcon{

@@ -465,12 +465,15 @@ const Tasksection = () => {
                       }}
                       onClick={() => handleTaskClick(index)}
                     />
-                    <div className="contentTitle">
+                  <div className={`contentTitle ${content.title.length > 15 ? "title-slider" : ""}`}>
                       <div className="title-slide">
                         <p style={{ margin: "0" }}>{content.title}</p>
                       </div>
                     </div>
                     <div className="taskHover">
+                      <p>
+                        <strong>Название:</strong> {content.title}
+                      </p>
                       <p>
                         <strong>Описание:</strong> {content.description}
                       </p>
