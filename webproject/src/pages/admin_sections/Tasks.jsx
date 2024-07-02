@@ -309,10 +309,10 @@ const Tasks = () => {
             <h2 className="defaultStyle" style={{ color: "#666" }}>
               {editingCourseId ? "Редактировать курс" : "Добавить курс"}
             </h2>
-            <form onSubmit={handleFormSubmit}>
+            <form className="registrationInput" onSubmit={handleFormSubmit}>
               <div className="formCont">
                 <div className="formLeft">
-                  <label htmlFor="courseName">Название курса:</label> <br />
+                  <label htmlFor="courseName">Название курса:</label>
                   <input
                     type="text"
                     id="courseName"
@@ -322,8 +322,7 @@ const Tasks = () => {
                     placeholder="Математика"
                     required
                   />{" "}
-                  <br />
-                  <label htmlFor="courseDesc">Описание курса</label> <br />
+                  <label htmlFor="courseDesc">Описание курса</label>
                   <input
                     type="text"
                     id="courseDesc"
@@ -332,7 +331,7 @@ const Tasks = () => {
                     onChange={(e) => setCourseDesc(e.target.value)}
                     placeholder="Описание курса"
                   />
-                  <label htmlFor="courseGrade">Выберите уровень</label> <br />
+                  <label htmlFor="courseGrade">Выберите уровень</label>
                   <select
                     type="text"
                     id="courseGrade"
@@ -348,7 +347,6 @@ const Tasks = () => {
                     <option value="2">2 класс</option>
                     <option value="3">3 класс</option>
                   </select>
-                  <br />
                   <label htmlFor="courselang">Выберите язык обучения</label>
                   <select
                     id="courselang"
@@ -361,30 +359,28 @@ const Tasks = () => {
                     <option value="ru">Русский</option>
                     <option value="kz">Қазақша</option>
                   </select>
-
-                  <button
-                    type="submit"
-                    className="superBtn"
-                    style={{ marginTop: "30px" }}
-                  >
-                    {editingCourseId ? "Сохранить изменения" : "Добавить курс"}
-                  </button>
-                  {editingCourseId && (
+                  <span style={{display:"flex", flexDirection:"row", marginTop:"30px"}}>
                     <button
-                      type="button"
+                      type="submit"
                       className="superBtn"
-                      style={{
-                        marginTop: "10px",
-                        color: "red",
-                        marginLeft: "10px",
-                      }}
-                      onClick={handleDeleteCourse}
                     >
-                      Удалить курс
+                      {editingCourseId ? "Сохранить изменения" : "Добавить курс"}
                     </button>
-                  )}
+                    {editingCourseId && (
+                      <button
+                        type="button"
+                        className="superBtn"
+                        style={{
+                          color: "red",
+                          marginLeft: "10px",
+                        }}
+                        onClick={handleDeleteCourse}
+                      >
+                        Удалить курс
+                      </button>
+                    )}
+                  </span>
                 </div>
-
                 <div className="formRight">
                   <label htmlFor="coursePrice">Добавить секций</label> <br />
                   <button

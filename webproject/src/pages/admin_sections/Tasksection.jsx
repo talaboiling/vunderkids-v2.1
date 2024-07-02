@@ -55,6 +55,7 @@ const Tasksection = () => {
     correct_answer: "",
     images: ["", "", "", ""],
     drag_answers: ["", "", "", ""],
+    audio: null,  // Add this line
   });
   const [editingQuestionIndex, setEditingQuestionIndex] = useState(null);
   const [isEditingVideo, setIsEditingVideo] = useState(false);
@@ -229,7 +230,7 @@ const Tasksection = () => {
     }
   
     if (currentQuestion.question_type === "multiple_choice_images") {
-      const formattedImages = currentQuestion.images.map((image, idx) => ({
+      const formattedImages = currentQuestion.images.map((option, idx) => ({
         id: idx + 1,
         image,
       }));
@@ -247,10 +248,10 @@ const Tasksection = () => {
         value: typeof option === 'string' ? option : option.value,
       }));
   
-      const formattedImages = currentQuestion.images.map((image, idx) => ({
-        id: idx + 1,
-        image,
-      }));
+      // const formattedImages = currentQuestion.images.map((image, idx) => ({
+      //   id: idx + 1,
+      //   image,
+      // }));
   
       // Map the drag_answers to the corresponding option IDs and filter out empty strings
       const filteredDragAnswers = currentQuestion.drag_answers
@@ -278,8 +279,9 @@ const Tasksection = () => {
           questions[editingQuestionIndex].id,
           questionData
         );
-        const updatedQuestions = [...questions];
-        updatedQuestions[editingQuestionIndex] = questionData;
+        const updatedQuestions = questions.map((q, i) =>
+          i === editingQuestionIndex ? questionData : q
+        );
         setQuestions(updatedQuestions);
       } else {
         const newQuestion = await createQuestion(
@@ -300,6 +302,7 @@ const Tasksection = () => {
         correct_answer: "",
         images: ["", "", "", ""],
         drag_answers: ["", "", "", ""],
+        audio: null,  // Reset this line
       });
       setEditingQuestionIndex(null);
     } catch (error) {
@@ -316,23 +319,16 @@ const Tasksection = () => {
 
   const handleEditQuestion = (index) => {
     const question = questions[index];
-    let formattedOptions = [];
-    let formattedImages = [];
-  
-    if (question.question_type === "multiple_choice_text") {
-      formattedOptions = question.options.map(opt => opt.value); // Extract values from options
-    }
-  
-    if (question.question_type === "multiple_choice_images" || question.question_type === "drag_and_drop_images") {
-      formattedImages = question.options.map(opt => opt.image); // Extract images from options
-    }
+    const formattedOptions = Array.isArray(question.options) ? question.options : [];
+    const formattedImages = Array.isArray(question.images) ? question.images : [];
   
     setCurrentQuestion({
       ...question,
-      options: formattedOptions.length > 0 ? formattedOptions : question.options,
-      images: formattedImages.length > 0 ? formattedImages : question.images,
+      options: formattedOptions.length > 0 ? formattedOptions.map(opt => opt.value) : ["", "", "", ""],
+      // images: formattedImages.length > 0 ? formattedImages.map(img => img.image) : ["", "", "", ""],
       correct_answer: question.correct_answer,
-      drag_answers: question.correct_answer, // Assuming correct_answer is an array for drag_and_drop
+      drag_answers: Array.isArray(question.correct_answer) ? question.correct_answer : ["", "", "", ""],
+      audio: question.audio || null,  // Add this line
     });
     setEditingQuestionIndex(index);
     setShowQuestionModal(true);
@@ -355,17 +351,6 @@ const Tasksection = () => {
     } catch (error) {
       console.error("Failed to delete question", error);
     }
-  };
-
-  const questionTypeMap = {
-    "Выбор правильного ответа": "multiple_choice_text",
-    "Выбор правильного рисунка": "multiple_choice_images",
-    "Драг н дроп текст": "drag_and_drop_text",
-    "Драг н дроп рисунки": "drag_and_drop_images",
-    "Правда или ложь": "true_false",
-    "Отметить все, что применимо": "mark_all",
-    "Линия чисел": "number_line",
-    "Перетащить позицию": "drag_position",
   };
 
   if (loading) {
@@ -556,13 +541,14 @@ const Tasksection = () => {
             </div>
             <form onSubmit={handleVideoSubmit}>
               <div className="formVideo">
-                <span>
+
                   <label htmlFor="videoUrl">URL видео:</label>
-                  <br />
+                  <label htmlFor="videoName">Название видео:</label>
                   <input
                     type="text"
                     id="videoUrl"
                     value={videoDetails.video_url}
+                    placeholder="https://www.youtube.com/watch?=..."
                     onChange={(e) =>
                       setVideoDetails({
                         ...videoDetails,
@@ -571,10 +557,8 @@ const Tasksection = () => {
                     }
                     required
                   />
-                </span>
-                <span style={{ marginLeft: "2rem" }}>
-                  <label htmlFor="videoName">Название видео:</label>
-                  <br />
+
+
                   <input
                     type="text"
                     id="videoName"
@@ -587,7 +571,6 @@ const Tasksection = () => {
                     }
                     required
                   />
-                </span>
                 <span>
                   <label htmlFor="videoDescription">Описание:</label>
                   <br />
@@ -645,9 +628,8 @@ const Tasksection = () => {
             </div>
             <form onSubmit={handleTaskSubmit}>
               <div className="formVideo">
-                <span>
                   <label htmlFor="taskTitle">Название задания:</label>
-                  <br />
+                  <label htmlFor="taskDescription">Описание задания:</label>
                   <input
                     type="text"
                     id="taskTitle"
@@ -660,10 +642,7 @@ const Tasksection = () => {
                     }
                     required
                   />
-                </span>
-                <span style={{ marginLeft: "2rem" }}>
-                  <label htmlFor="taskDescription">Описание задания:</label>
-                  <br />
+
                   <textarea
                     id="taskDescription"
                     value={taskDetails.description}
@@ -675,8 +654,6 @@ const Tasksection = () => {
                     }
                     style={{ width: "300px", height: "40px" }}
                   />
-                  <br />
-                </span>
               </div>
               <button
                 type="submit"
@@ -823,47 +800,38 @@ const Tasksection = () => {
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
-                        gap: "2rem",
-                        width:"60%",
                         marginBottom: "40px",
+                        width:"80%"
                       }}
                       >
-                        <h3 className="defaultStyle" style={{ color: "#666" }}>
-                          Выберите тип задачи
-                        </h3>
+                        <div style={{display:"flex", flexDirection:"row", width:"60%"}}>
+                          <h3 className="defaultStyle" style={{ color: "#666" }}>
+                            Выберите тип задачи
+                          </h3>
+                          
+                          <select
+                            list="questiontype"
+                            id="questionType"
+                            placeholder="Выбор правильного ответа"
+                            style={{ margin: "0" }}
+                            onChange={(e) => {
+                              setCurrentQuestion({
+                                ...currentQuestion,
+                                question_type: e.target.value,
+                              });
+                            }}
+                            required
+                          >
+                            <option value="">Выберите тип задачи</option>
+                            <option value="multiple_choice_text">Выбор правильного ответа</option>
+                            <option value="multiple_choice_images">Выбор правильного рисунка</option>
+                            <option value="drag_and_drop_text">Драг н дроп текст</option>
+                            <option value="drag_and_drop_images">Драг н дроп рисунки</option>
+                          </select>
+                        </div>
                         
 
-                        <input
-                          list="questiontype"
-                          id="questionType"
-                          placeholder="Выбор правильного ответа"
-                          style={{ margin: "0" }}
-                          value={currentQuestion.question_type}
-                          onChange={(e) => {
-                            const selectedOption = e.target.value;
-                            const serverValue = questionTypeMap[selectedOption];
 
-                            if (serverValue) {
-                              setCurrentQuestion({
-                                ...currentQuestion,
-                                question_type: serverValue,
-                              });
-                            } else {
-                              // Handle invalid input (e.g., reset the value)
-                              setCurrentQuestion({
-                                ...currentQuestion,
-                                question_type: '', // Reset to empty string or handle as needed
-                              });
-                            }
-                          }}
-                          required
-                        />
-                        <datalist id="questiontype">
-                          <option value="Выбор правильного ответа" />
-                          {/* <option value="Выбор правильного рисунка" /> */}
-                          <option value="Драг н дроп текст" />
-                          {/* <option value="Драг н дроп рисунки" /> */}
-                        </datalist>
                       </div>
                     <div
                       style={{
@@ -975,6 +943,21 @@ const Tasksection = () => {
                           required
                         />
                       </span>
+                      <span>
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Загрузить аудио файл
+                        </h3>
+                        <input
+                          type="file"
+                          accept="audio/*"
+                          onChange={(e) => {
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              audio: e.target.files[0],
+                            });
+                          }}
+                        />
+                      </span>
                     </span>
 
                     {currentQuestion.question_type === "multiple_choice_text" && (
@@ -1027,16 +1010,17 @@ const Tasksection = () => {
                           }}
                         >
                           {currentQuestion.images.map((image, index) => (
-                            <div key={index}>
+                            <div className="optionsImgUpload" key={index}>
                               <input
                                 type="file"
                                 accept="image/*"
+                                className="optionImgUpload"
                                 onChange={(e) => {
-                                  const updatedImages = [...currentQuestion.images];
-                                  updatedImages[index] = URL.createObjectURL(e.target.files[0]);
+                                  const updatedImages = [...currentQuestion.options];
+                                  updatedImages[index] = e.target.files[0];
                                   setCurrentQuestion({
                                     ...currentQuestion,
-                                    images: updatedImages,
+                                    options: updatedImages,
                                   });
                                 }}
                               />
@@ -1050,6 +1034,7 @@ const Tasksection = () => {
                               <input
                                 type="radio"
                                 name="correctAnswer"
+                                style={{scale:"1.5"}}
                                 onChange={() => handleSelectCorrectAnswer(index)}
                               />
                             </div>
@@ -1063,7 +1048,7 @@ const Tasksection = () => {
                         <h3 className="defaultStyle" style={{ color: "#666" }}>Варианты ответа (введите порядок правильных ответов)</h3>
                         <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
                           {currentQuestion.options.map((option, index) => (
-                            <div key={index}>
+                            <div className="optionsImgUpload" key={index}>
                               <input
                                 type="text"
                                 placeholder={`Вариант ${index + 1}`}
@@ -1093,7 +1078,7 @@ const Tasksection = () => {
                                     drag_answers: updatedDragAnswers,
                                   });
                                 }}
-                                style={{ width: "50px", marginTop: "5px" }}
+                                style={{ width: "100px", marginTop:"5px"}}
                               />
                             </div>
                           ))}
@@ -1106,16 +1091,17 @@ const Tasksection = () => {
                         <h3 className="defaultStyle" style={{ color: "#666" }}>Варианты ответа (введите порядок правильных ответов)</h3>
                         <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
                           {currentQuestion.images.map((image, index) => (
-                            <div key={index}>
+                            <div className="optionsImgUpload" key={index}>
                               <input
                                 type="file"
                                 accept="image/*"
+                                className="optionImgUpload"
                                 onChange={(e) => {
-                                  const updatedImages = [...currentQuestion.images];
-                                  updatedImages[index] = URL.createObjectURL(e.target.files[0]);
+                                  const updatedImages = [...currentQuestion.options];
+                                  updatedImages[index] = e.target.files[0];
                                   setCurrentQuestion({
                                     ...currentQuestion,
-                                    images: updatedImages,
+                                    options: updatedImages,
                                   });
                                 }}
                               />
@@ -1141,7 +1127,7 @@ const Tasksection = () => {
                                     drag_answers: updatedDragAnswers,
                                   });
                                 }}
-                                style={{ width: "50px", marginTop: "5px" }}
+                                style={{ width: "100px", marginTop: "5px" }}
                               />
                             </div>
                           ))}

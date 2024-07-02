@@ -80,6 +80,7 @@ const Parentdash = () => {
     form.append("grade", formData.grade);
     form.append("birth_date", formData.birth_date);
     form.append("gender", formData.gender);
+    form.append("language", formData.language);
     if (file) {
       form.append("avatar", file);
     }
@@ -159,7 +160,7 @@ const Parentdash = () => {
               {child.first_name} {child.last_name}
             </p>
             <div className="rndsh" style={{ marginBottom: "20px" }}>
-              <p>{child.grade} {t ('classLowercase')}</p>
+              <p>{child.grade} {t ('classLowercase')} ({child.language})</p>
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "2rem" }}>
               <div
@@ -334,7 +335,7 @@ const Parentdash = () => {
                     marginTop: "20px",
                   }}
                 >
-                  <button type="submit" onClick={console.log(formData)}>{t ('addChildButton')}</button>
+                  <button type="submit">{t ('addChildButton')}</button>
                 </div>
               </form>
             </div>
