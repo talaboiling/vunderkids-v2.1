@@ -224,7 +224,9 @@ const Tasksection = () => {
     formData.append("question_text", currentQuestion.question_text);
     formData.append("question_type", currentQuestion.question_type);
     formData.append("template", currentQuestion.template);
-    formData.append("audio", currentQuestion.audio);
+    if (currentQuestion.audio) {
+      formData.append("audio", currentQuestion.audio);
+    }
 
     if (currentQuestion.question_type === "multiple_choice_text") {
       currentQuestion.options.forEach((option, idx) => {

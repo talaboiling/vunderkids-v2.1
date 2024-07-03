@@ -461,7 +461,7 @@ export const createQuestion = async (courseId, sectionId, taskId, data) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Something went wrong");
+    throw new Error(error.message || "Something went wrong");
   }
 };
 
