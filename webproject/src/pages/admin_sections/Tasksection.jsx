@@ -55,7 +55,7 @@ const Tasksection = () => {
     correct_answer: "",
     images: ["", "", "", ""],
     drag_answers: ["", "", "", ""],
-    audio: null,  // Add this line
+    audio: null, // Add this line
   });
   const [editingQuestionIndex, setEditingQuestionIndex] = useState(null);
   const [isEditingVideo, setIsEditingVideo] = useState(false);
@@ -90,7 +90,12 @@ const Tasksection = () => {
     try {
       let updatedContents;
       if (isEditingTask) {
-        const updatedTask = await updateTask(courseId, sectionId, contents[selectedTaskIndex].id, taskData);
+        const updatedTask = await updateTask(
+          courseId,
+          sectionId,
+          contents[selectedTaskIndex].id,
+          taskData
+        );
         updatedContents = contents.map((content, index) =>
           index === selectedTaskIndex ? updatedTask : content
         );
@@ -213,103 +218,123 @@ const Tasksection = () => {
 
   const handleQuestionSubmit = async (e) => {
     e.preventDefault();
-  
-    let questionData;
-  
+
+    const formData = new FormData();
+    formData.append("title", currentQuestion.title);
+    formData.append("question_text", currentQuestion.question_text);
+    formData.append("question_type", currentQuestion.question_type);
+    formData.append("template", currentQuestion.template);
+
     if (currentQuestion.question_type === "multiple_choice_text") {
-      const formattedOptions = currentQuestion.options.map((option, idx) => ({
-        id: idx + 1,
-        value: typeof option === 'string' ? option : option.value,
-      }));
-  
-      questionData = {
-        ...currentQuestion,
-        options: formattedOptions,
-        correct_answer: currentQuestion.correct_answer,
-      };
+      currentQuestion.options.forEach((option, idx) => {
+        formData.append(`options[${idx}][id]`, idx + 1);
+        formData.append(`options[${idx}][value]`, option);
+      });
+      formData.append("correct_answer", currentQuestion.correct_answer);
     }
-  
+
     if (currentQuestion.question_type === "multiple_choice_images") {
-      const formattedImages = currentQuestion.images.map((option, idx) => ({
-        id: idx + 1,
-        image,
-      }));
-  
-      questionData = {
-        ...currentQuestion,
-        options: formattedImages,
-        correct_answer: currentQuestion.correct_answer,
-      };
+      currentQuestion.images.forEach((image, idx) => {
+        console.log(image);
+        formData.append(`image_${idx + 1}`, image);
+      });
+      formData.append("correct_answer", currentQuestion.correct_answer);
     }
-  
-    if (currentQuestion.question_type === "drag_and_drop_text" || currentQuestion.question_type === "drag_and_drop_images") {
-      const formattedOptions = currentQuestion.options.map((option, idx) => ({
-        id: idx + 1,
-        value: typeof option === 'string' ? option : option.value,
-      }));
-  
-      // const formattedImages = currentQuestion.images.map((image, idx) => ({
-      //   id: idx + 1,
-      //   image,
-      // }));
-  
-      // Map the drag_answers to the corresponding option IDs and filter out empty strings
+
+    if (currentQuestion.question_type === "drag_and_drop_text") {
+      currentQuestion.options.forEach((option, idx) => {
+        formData.append(`options[${idx}][id]`, idx + 1);
+        formData.append(`options[${idx}][value]`, option);
+      });
       const filteredDragAnswers = currentQuestion.drag_answers
         .map((order, idx) => {
           const orderNum = parseInt(order, 10);
-          return (order !== "" && orderNum > 0 && orderNum <= currentQuestion.options.length) ? { order: orderNum, id: idx + 1 } : null;
+          return order !== "" &&
+            orderNum > 0 &&
+            orderNum <= currentQuestion.options.length
+            ? { order: orderNum, id: idx + 1 }
+            : null;
         })
-        .filter(answer => answer !== null)
+        .filter((answer) => answer !== null)
         .sort((a, b) => a.order - b.order)
-        .map(answer => answer.id);
-  
-      questionData = {
-        ...currentQuestion,
-        options: currentQuestion.question_type === "drag_and_drop_images" ? formattedImages : formattedOptions,
-        correct_answer: filteredDragAnswers,
-      };
+        .map((answer) => answer.id);
+      formData.append("correct_answer", JSON.stringify(filteredDragAnswers));
     }
-  
+
+    if (currentQuestion.question_type === "drag_and_drop_images") {
+      currentQuestion.images.forEach((image, idx) => {
+        formData.append(`image_${idx + 1}`, image);
+      });
+      const filteredDragAnswers = currentQuestion.drag_answers
+        .map((order, idx) => {
+          const orderNum = parseInt(order, 10);
+          return order !== "" &&
+            orderNum > 0 &&
+            orderNum <= currentQuestion.images.length
+            ? { order: orderNum, id: idx + 1 }
+            : null;
+        })
+        .filter((answer) => answer !== null)
+        .sort((a, b) => a.order - b.order)
+        .map((answer) => answer.id);
+      formData.append("correct_answer", JSON.stringify(filteredDragAnswers));
+    }
+
     try {
+      let response;
       if (editingQuestionIndex !== null) {
-        await updateQuestion(
+        response = await updateQuestion(
           courseId,
           sectionId,
           contents[selectedTaskIndex].id,
           questions[editingQuestionIndex].id,
-          questionData
+          formData
         );
         const updatedQuestions = questions.map((q, i) =>
-          i === editingQuestionIndex ? questionData : q
+          i === editingQuestionIndex ? response : q
         );
         setQuestions(updatedQuestions);
       } else {
-        const newQuestion = await createQuestion(
+        response = await createQuestion(
           courseId,
           sectionId,
           contents[selectedTaskIndex].id,
-          questionData
+          formData
         );
-        setQuestions([...questions, newQuestion]);
+        setQuestions([...questions, response]);
       }
       setShowQuestionModal(false);
-      setCurrentQuestion({
-        question_type: "multiple_choice_text",
-        template: "",
-        title: "",
-        question_text: "",
-        options: ["", "", "", ""],
-        correct_answer: "",
-        images: ["", "", "", ""],
-        drag_answers: ["", "", "", ""],
-        audio: null,  // Reset this line
-      });
-      setEditingQuestionIndex(null);
+      resetQuestionForm();
     } catch (error) {
       console.error("Failed to save question", error);
     }
   };
-  
+
+  const resetQuestionForm = () => {
+    setCurrentQuestion({
+      question_type: "multiple_choice_text",
+      template: "",
+      title: "",
+      question_text: "",
+      options: ["", "", "", ""],
+      correct_answer: "",
+      images: ["", "", "", ""],
+      drag_answers: ["", "", "", ""],
+      audio: null,
+    });
+    setEditingQuestionIndex(null);
+  };
+
+  const handleImageUpload = (e, index) => {
+    const file = e.target.files[0];
+    const updatedImages = [...currentQuestion.images];
+    updatedImages[index] = file;
+    setCurrentQuestion({
+      ...currentQuestion,
+      images: updatedImages,
+    });
+  };
+
   const handleSelectCorrectAnswer = (optionIndex) => {
     setCurrentQuestion({
       ...currentQuestion,
@@ -319,21 +344,30 @@ const Tasksection = () => {
 
   const handleEditQuestion = (index) => {
     const question = questions[index];
-    const formattedOptions = Array.isArray(question.options) ? question.options : [];
-    const formattedImages = Array.isArray(question.images) ? question.images : [];
-  
+    const formattedOptions = Array.isArray(question.options)
+      ? question.options
+      : [];
+    const formattedImages = Array.isArray(question.images)
+      ? question.images
+      : [];
+
     setCurrentQuestion({
       ...question,
-      options: formattedOptions.length > 0 ? formattedOptions.map(opt => opt.value) : ["", "", "", ""],
+      options:
+        formattedOptions.length > 0
+          ? formattedOptions.map((opt) => opt.value)
+          : ["", "", "", ""],
       // images: formattedImages.length > 0 ? formattedImages.map(img => img.image) : ["", "", "", ""],
       correct_answer: question.correct_answer,
-      drag_answers: Array.isArray(question.correct_answer) ? question.correct_answer : ["", "", "", ""],
-      audio: question.audio || null,  // Add this line
+      drag_answers: Array.isArray(question.correct_answer)
+        ? question.correct_answer
+        : ["", "", "", ""],
+      audio: question.audio || null, // Add this line
     });
     setEditingQuestionIndex(index);
     setShowQuestionModal(true);
   };
-  
+
   const handleEditContent = (index) => {
     const content = contents[index];
     setSelectedTaskIndex(index);
@@ -345,7 +379,12 @@ const Tasksection = () => {
   const handleDeleteQuestion = async (index) => {
     const questionId = questions[index].id;
     try {
-      await deleteQuestion(courseId, sectionId, contents[selectedTaskIndex].id, questionId);
+      await deleteQuestion(
+        courseId,
+        sectionId,
+        contents[selectedTaskIndex].id,
+        questionId
+      );
       const updatedQuestions = questions.filter((_, i) => i !== index);
       setQuestions(updatedQuestions);
     } catch (error) {
@@ -401,7 +440,12 @@ const Tasksection = () => {
         <div className="superCont sectCont">
           {contents &&
             contents.map((content, index) => (
-              <div key={index} className={`vidBlock ${content.content_type} ${content.template ? `template-${content.template}` : ""}`}>
+              <div
+                key={index}
+                className={`vidBlock ${content.content_type} ${
+                  content.template ? `template-${content.template}` : ""
+                }`}
+              >
                 {content.content_type === "lesson" && (
                   <>
                     <div
@@ -423,7 +467,11 @@ const Tasksection = () => {
                         className="taskThumbnail"
                       />
                     </div>
-                    <div className={`contentTitle ${content.title.length > 20 ? "title-slider" : ""}`}>
+                    <div
+                      className={`contentTitle ${
+                        content.title.length > 20 ? "title-slider" : ""
+                      }`}
+                    >
                       <div className="title-slide">
                         <p style={{ margin: "0" }}>{content.title}</p>
                       </div>
@@ -450,7 +498,11 @@ const Tasksection = () => {
                       }}
                       onClick={() => handleTaskClick(index)}
                     />
-                  <div className={`contentTitle ${content.title.length > 15 ? "title-slider" : ""}`}>
+                    <div
+                      className={`contentTitle ${
+                        content.title.length > 15 ? "title-slider" : ""
+                      }`}
+                    >
                       <div className="title-slide">
                         <p style={{ margin: "0" }}>{content.title}</p>
                       </div>
@@ -541,36 +593,34 @@ const Tasksection = () => {
             </div>
             <form onSubmit={handleVideoSubmit}>
               <div className="formVideo">
+                <label htmlFor="videoUrl">URL видео:</label>
+                <label htmlFor="videoName">Название видео:</label>
+                <input
+                  type="text"
+                  id="videoUrl"
+                  value={videoDetails.video_url}
+                  placeholder="https://www.youtube.com/watch?=..."
+                  onChange={(e) =>
+                    setVideoDetails({
+                      ...videoDetails,
+                      video_url: e.target.value,
+                    })
+                  }
+                  required
+                />
 
-                  <label htmlFor="videoUrl">URL видео:</label>
-                  <label htmlFor="videoName">Название видео:</label>
-                  <input
-                    type="text"
-                    id="videoUrl"
-                    value={videoDetails.video_url}
-                    placeholder="https://www.youtube.com/watch?=..."
-                    onChange={(e) =>
-                      setVideoDetails({
-                        ...videoDetails,
-                        video_url: e.target.value,
-                      })
-                    }
-                    required
-                  />
-
-
-                  <input
-                    type="text"
-                    id="videoName"
-                    value={videoDetails.title}
-                    onChange={(e) =>
-                      setVideoDetails({
-                        ...videoDetails,
-                        title: e.target.value,
-                      })
-                    }
-                    required
-                  />
+                <input
+                  type="text"
+                  id="videoName"
+                  value={videoDetails.title}
+                  onChange={(e) =>
+                    setVideoDetails({
+                      ...videoDetails,
+                      title: e.target.value,
+                    })
+                  }
+                  required
+                />
                 <span>
                   <label htmlFor="videoDescription">Описание:</label>
                   <br />
@@ -628,32 +678,32 @@ const Tasksection = () => {
             </div>
             <form onSubmit={handleTaskSubmit}>
               <div className="formVideo">
-                  <label htmlFor="taskTitle">Название задания:</label>
-                  <label htmlFor="taskDescription">Описание задания:</label>
-                  <input
-                    type="text"
-                    id="taskTitle"
-                    value={taskDetails.title}
-                    onChange={(e) =>
-                      setTaskDetails({
-                        ...taskDetails,
-                        title: e.target.value,
-                      })
-                    }
-                    required
-                  />
+                <label htmlFor="taskTitle">Название задания:</label>
+                <label htmlFor="taskDescription">Описание задания:</label>
+                <input
+                  type="text"
+                  id="taskTitle"
+                  value={taskDetails.title}
+                  onChange={(e) =>
+                    setTaskDetails({
+                      ...taskDetails,
+                      title: e.target.value,
+                    })
+                  }
+                  required
+                />
 
-                  <textarea
-                    id="taskDescription"
-                    value={taskDetails.description}
-                    onChange={(e) =>
-                      setTaskDetails({
-                        ...taskDetails,
-                        description: e.target.value,
-                      })
-                    }
-                    style={{ width: "300px", height: "40px" }}
-                  />
+                <textarea
+                  id="taskDescription"
+                  value={taskDetails.description}
+                  onChange={(e) =>
+                    setTaskDetails({
+                      ...taskDetails,
+                      description: e.target.value,
+                    })
+                  }
+                  style={{ width: "300px", height: "40px" }}
+                />
               </div>
               <button
                 type="submit"
@@ -762,18 +812,39 @@ const Tasksection = () => {
               <CloseIcon sx={{ color: "gray" }} />
             </button>
             <h2 className="defaultStyle" style={{ color: "#666" }}>
-              {editingQuestionIndex !== null ? "Редактировать вопрос" : "Добавить вопрос"}
+              {editingQuestionIndex !== null
+                ? "Редактировать вопрос"
+                : "Добавить вопрос"}
             </h2>
             <div className="taskConstructor">
               <div className="taskPreview">
                 <p
                   className="defaultStyle"
-                  style={{ margin: "0", padding: "20px", maxWidth:"500px", maxHeight:"70px", fontSize: "large", textWrap:"wrap", textOverflow:"ellipsis", textAlign:"center"}}
+                  style={{
+                    margin: "0",
+                    padding: "20px",
+                    maxWidth: "500px",
+                    maxHeight: "70px",
+                    fontSize: "large",
+                    textWrap: "wrap",
+                    textOverflow: "ellipsis",
+                    textAlign: "center",
+                  }}
                 >
                   {currentQuestion.title}
                 </p>
                 <div className="previewContent">
-                  <p style={{ margin: "0", fontSize: "xx-large", maxWidth:"500px", maxHeight:"105px", textWrap:"wrap", textOverflow:"ellipsis", textAlign:"center"}}>
+                  <p
+                    style={{
+                      margin: "0",
+                      fontSize: "xx-large",
+                      maxWidth: "500px",
+                      maxHeight: "105px",
+                      textWrap: "wrap",
+                      textOverflow: "ellipsis",
+                      textAlign: "center",
+                    }}
+                  >
                     {currentQuestion.question_text}
                   </p>
                   <div className="previewOptions">
@@ -781,11 +852,13 @@ const Tasksection = () => {
                       <div
                         key={index}
                         className={`previewOption ${
-                          currentQuestion.correct_answer === index + 1 ? "correct-answer" : ""
+                          currentQuestion.correct_answer === index + 1
+                            ? "correct-answer"
+                            : ""
                         }`}
                         onClick={() => handleSelectCorrectAnswer(index)}
                       >
-                        {typeof option === 'string' ? option : option.value}
+                        {typeof option === "string" ? option : option.value}
                       </div>
                     ))}
                   </div>
@@ -801,38 +874,49 @@ const Tasksection = () => {
                         flexDirection: "row",
                         alignItems: "center",
                         marginBottom: "40px",
-                        width:"80%"
+                        width: "80%",
                       }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          width: "60%",
+                        }}
                       >
-                        <div style={{display:"flex", flexDirection:"row", width:"60%"}}>
-                          <h3 className="defaultStyle" style={{ color: "#666" }}>
-                            Выберите тип задачи
-                          </h3>
-                          
-                          <select
-                            list="questiontype"
-                            id="questionType"
-                            placeholder="Выбор правильного ответа"
-                            style={{ margin: "0" }}
-                            onChange={(e) => {
-                              setCurrentQuestion({
-                                ...currentQuestion,
-                                question_type: e.target.value,
-                              });
-                            }}
-                            required
-                          >
-                            <option value="">Выберите тип задачи</option>
-                            <option value="multiple_choice_text">Выбор правильного ответа</option>
-                            <option value="multiple_choice_images">Выбор правильного рисунка</option>
-                            <option value="drag_and_drop_text">Драг н дроп текст</option>
-                            <option value="drag_and_drop_images">Драг н дроп рисунки</option>
-                          </select>
-                        </div>
-                        
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Выберите тип задачи
+                        </h3>
 
-
+                        <select
+                          list="questiontype"
+                          id="questionType"
+                          placeholder="Выбор правильного ответа"
+                          style={{ margin: "0" }}
+                          onChange={(e) => {
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              question_type: e.target.value,
+                            });
+                          }}
+                          required
+                        >
+                          <option value="">Выберите тип задачи</option>
+                          <option value="multiple_choice_text">
+                            Выбор правильного ответа
+                          </option>
+                          <option value="multiple_choice_images">
+                            Выбор правильного рисунка
+                          </option>
+                          <option value="drag_and_drop_text">
+                            Драг н дроп текст
+                          </option>
+                          <option value="drag_and_drop_images">
+                            Драг н дроп рисунки
+                          </option>
+                        </select>
                       </div>
+                    </div>
                     <div
                       style={{
                         display: "flex",
@@ -849,7 +933,7 @@ const Tasksection = () => {
                           display: "flex",
                           flexDirection: "row",
                           gap: "2rem",
-                          margin:"0"
+                          margin: "0",
                         }}
                       >
                         <li
@@ -859,7 +943,10 @@ const Tasksection = () => {
                               : ""
                           }`}
                           onClick={() =>
-                            setCurrentQuestion({ ...currentQuestion, template: "1" })
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              template: "1",
+                            })
                           }
                         >
                           1
@@ -871,7 +958,10 @@ const Tasksection = () => {
                               : ""
                           }`}
                           onClick={() =>
-                            setCurrentQuestion({ ...currentQuestion, template: "2" })
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              template: "2",
+                            })
                           }
                         >
                           2
@@ -883,7 +973,10 @@ const Tasksection = () => {
                               : ""
                           }`}
                           onClick={() =>
-                            setCurrentQuestion({ ...currentQuestion, template: "3" })
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              template: "3",
+                            })
                           }
                         >
                           3
@@ -895,7 +988,10 @@ const Tasksection = () => {
                               : ""
                           }`}
                           onClick={() =>
-                            setCurrentQuestion({ ...currentQuestion, template: "4" })
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              template: "4",
+                            })
                           }
                         >
                           4
@@ -912,7 +1008,9 @@ const Tasksection = () => {
                       }}
                     >
                       <span>
-                        <h3 className="defaultStyle" style={{color:"#666"}}>Название вопроса</h3>
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Название вопроса
+                        </h3>
                         <input
                           type="text"
                           id="questionTitle"
@@ -929,7 +1027,9 @@ const Tasksection = () => {
                       </span>
 
                       <span>
-                        <h3 className="defaultStyle" style={{color:"#666"}}>Описание вопроса</h3>
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Описание вопроса
+                        </h3>
                         <input
                           id="questionText"
                           value={currentQuestion.question_text}
@@ -960,9 +1060,12 @@ const Tasksection = () => {
                       </span>
                     </span>
 
-                    {currentQuestion.question_type === "multiple_choice_text" && (
+                    {currentQuestion.question_type ===
+                      "multiple_choice_text" && (
                       <>
-                        <h3 className="defaultStyle" style={{color:"#666"}}>Варианты ответа (нажмите на правильный)</h3>
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Варианты ответа (нажмите на правильный)
+                        </h3>
                         <div
                           style={{
                             display: "flex",
@@ -975,9 +1078,15 @@ const Tasksection = () => {
                               key={index}
                               type="text"
                               placeholder={`Вариант ${index + 1}`}
-                              value={typeof option === 'string' ? option : option.value}
+                              value={
+                                typeof option === "string"
+                                  ? option
+                                  : option.value
+                              }
                               onChange={(e) => {
-                                const updatedOptions = [...currentQuestion.options];
+                                const updatedOptions = [
+                                  ...currentQuestion.options,
+                                ];
                                 updatedOptions[index] = e.target.value;
                                 setCurrentQuestion({
                                   ...currentQuestion,
@@ -997,7 +1106,8 @@ const Tasksection = () => {
                       </>
                     )}
 
-                    {currentQuestion.question_type === "multiple_choice_images" && (
+                    {currentQuestion.question_type ===
+                      "multiple_choice_images" && (
                       <>
                         <h3 className="defaultStyle" style={{ color: "#666" }}>
                           Варианты ответа (нажмите на правильный)
@@ -1015,18 +1125,11 @@ const Tasksection = () => {
                                 type="file"
                                 accept="image/*"
                                 className="optionImgUpload"
-                                onChange={(e) => {
-                                  const updatedImages = [...currentQuestion.options];
-                                  updatedImages[index] = e.target.files[0];
-                                  setCurrentQuestion({
-                                    ...currentQuestion,
-                                    options: updatedImages,
-                                  });
-                                }}
+                                onChange={(e) => handleImageUpload(e, index)}
                               />
                               {image && (
                                 <img
-                                  src={image}
+                                  src={URL.createObjectURL(image)}
                                   alt={`Option ${index + 1}`}
                                   style={{ width: "100px", height: "100px" }}
                                 />
@@ -1034,8 +1137,10 @@ const Tasksection = () => {
                               <input
                                 type="radio"
                                 name="correctAnswer"
-                                style={{scale:"1.5"}}
-                                onChange={() => handleSelectCorrectAnswer(index)}
+                                style={{ scale: "1.5" }}
+                                onChange={() =>
+                                  handleSelectCorrectAnswer(index)
+                                }
                               />
                             </div>
                           ))}
@@ -1045,16 +1150,30 @@ const Tasksection = () => {
 
                     {currentQuestion.question_type === "drag_and_drop_text" && (
                       <>
-                        <h3 className="defaultStyle" style={{ color: "#666" }}>Варианты ответа (введите порядок правильных ответов)</h3>
-                        <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Варианты ответа (введите порядок правильных ответов)
+                        </h3>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "1rem",
+                          }}
+                        >
                           {currentQuestion.options.map((option, index) => (
                             <div className="optionsImgUpload" key={index}>
                               <input
                                 type="text"
                                 placeholder={`Вариант ${index + 1}`}
-                                value={typeof option === 'string' ? option : option.value}
+                                value={
+                                  typeof option === "string"
+                                    ? option
+                                    : option.value
+                                }
                                 onChange={(e) => {
-                                  const updatedOptions = [...currentQuestion.options];
+                                  const updatedOptions = [
+                                    ...currentQuestion.options,
+                                  ];
                                   updatedOptions[index] = e.target.value;
                                   setCurrentQuestion({
                                     ...currentQuestion,
@@ -1070,15 +1189,19 @@ const Tasksection = () => {
                                 max={currentQuestion.options.length}
                                 value={currentQuestion.drag_answers[index]}
                                 onChange={(e) => {
-                                  const orderValue = e.target.value ? parseInt(e.target.value, 10) : "";
-                                  const updatedDragAnswers = [...currentQuestion.drag_answers];
+                                  const orderValue = e.target.value
+                                    ? parseInt(e.target.value, 10)
+                                    : "";
+                                  const updatedDragAnswers = [
+                                    ...currentQuestion.drag_answers,
+                                  ];
                                   updatedDragAnswers[index] = orderValue;
                                   setCurrentQuestion({
                                     ...currentQuestion,
                                     drag_answers: updatedDragAnswers,
                                   });
                                 }}
-                                style={{ width: "100px", marginTop:"5px"}}
+                                style={{ width: "100px", marginTop: "5px" }}
                               />
                             </div>
                           ))}
@@ -1086,28 +1209,30 @@ const Tasksection = () => {
                       </>
                     )}
 
-                    {currentQuestion.question_type === "drag_and_drop_images" && (
+                    {currentQuestion.question_type ===
+                      "drag_and_drop_images" && (
                       <>
-                        <h3 className="defaultStyle" style={{ color: "#666" }}>Варианты ответа (введите порядок правильных ответов)</h3>
-                        <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+                        <h3 className="defaultStyle" style={{ color: "#666" }}>
+                          Варианты ответа (введите порядок правильных ответов)
+                        </h3>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "1rem",
+                          }}
+                        >
                           {currentQuestion.images.map((image, index) => (
                             <div className="optionsImgUpload" key={index}>
                               <input
                                 type="file"
                                 accept="image/*"
                                 className="optionImgUpload"
-                                onChange={(e) => {
-                                  const updatedImages = [...currentQuestion.options];
-                                  updatedImages[index] = e.target.files[0];
-                                  setCurrentQuestion({
-                                    ...currentQuestion,
-                                    options: updatedImages,
-                                  });
-                                }}
+                                onChange={(e) => handleImageUpload(e, index)}
                               />
                               {image && (
                                 <img
-                                  src={image}
+                                  src={URL.createObjectURL(image)}
                                   alt={`Option ${index + 1}`}
                                   style={{ width: "100px", height: "100px" }}
                                 />
@@ -1119,8 +1244,12 @@ const Tasksection = () => {
                                 max={currentQuestion.images.length}
                                 value={currentQuestion.drag_answers[index]}
                                 onChange={(e) => {
-                                  const orderValue = e.target.value ? parseInt(e.target.value, 10) : "";
-                                  const updatedDragAnswers = [...currentQuestion.drag_answers];
+                                  const orderValue = e.target.value
+                                    ? parseInt(e.target.value, 10)
+                                    : "";
+                                  const updatedDragAnswers = [
+                                    ...currentQuestion.drag_answers,
+                                  ];
                                   updatedDragAnswers[index] = orderValue;
                                   setCurrentQuestion({
                                     ...currentQuestion,

@@ -454,14 +454,14 @@ export const deleteTask = async (courseId, sectionId, taskId) => {
 export const createQuestion = async (courseId, sectionId, taskId, data) => {
   try {
     const endpoint = `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/questions/`;
-    const response = await instance.post(endpoint, data /*, {
+    const response = await instance.post(endpoint, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    }*/);
+    });
     return response.data;
   } catch (error) {
-    throw new Error(error || "Something went wrong");
+    throw new Error(error.response?.data?.message || "Something went wrong");
   }
 };
 
