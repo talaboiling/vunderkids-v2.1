@@ -218,70 +218,74 @@ const Tasksection = () => {
 
   const handleQuestionSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Create a new FormData object
     const formData = new FormData();
-    formData.append("title", currentQuestion.title);
-    formData.append("question_text", currentQuestion.question_text);
-    formData.append("question_type", currentQuestion.question_type);
-    formData.append("template", currentQuestion.template);
-    if (currentQuestion.audio) {
-      formData.append("audio", currentQuestion.audio);
-    }
-
+    formData.append('title', currentQuestion.title);
+    formData.append('question_text', currentQuestion.question_text);
+    formData.append('question_type', currentQuestion.question_type);
+    formData.append('template', currentQuestion.template);
+  
+    // Handle multiple choice text question type
     if (currentQuestion.question_type === "multiple_choice_text") {
       currentQuestion.options.forEach((option, idx) => {
         formData.append(`options[${idx}][id]`, idx + 1);
         formData.append(`options[${idx}][value]`, option);
       });
-      formData.append("correct_answer", currentQuestion.correct_answer);
+      formData.append('correct_answer', currentQuestion.correct_answer);
     }
-
+  
+    // Handle multiple choice images question type
     if (currentQuestion.question_type === "multiple_choice_images") {
       currentQuestion.images.forEach((image, idx) => {
+        formData.append(`images[${idx}][id]`, idx + 1);
         formData.append(`image_${idx + 1}`, image);
       });
-      formData.append("correct_answer", currentQuestion.correct_answer);
+      formData.append('correct_answer', currentQuestion.correct_answer);
     }
-
+  
+    // Handle drag and drop text question type
     if (currentQuestion.question_type === "drag_and_drop_text") {
       currentQuestion.options.forEach((option, idx) => {
         formData.append(`options[${idx}][id]`, idx + 1);
         formData.append(`options[${idx}][value]`, option);
       });
+  
       const filteredDragAnswers = currentQuestion.drag_answers
         .map((order, idx) => {
           const orderNum = parseInt(order, 10);
-          return order !== "" &&
-            orderNum > 0 &&
-            orderNum <= currentQuestion.options.length
+          return order !== "" && orderNum > 0 && orderNum <= currentQuestion.options.length
             ? { order: orderNum, id: idx + 1 }
             : null;
         })
         .filter((answer) => answer !== null)
         .sort((a, b) => a.order - b.order)
         .map((answer) => answer.id);
-      formData.append("correct_answer", JSON.stringify(filteredDragAnswers));
+  
+      formData.append('correct_answer', JSON.stringify(filteredDragAnswers));
     }
-
+  
+    // Handle drag and drop images question type
     if (currentQuestion.question_type === "drag_and_drop_images") {
       currentQuestion.images.forEach((image, idx) => {
+        formData.append(`images[${idx}][id]`, idx + 1);
         formData.append(`image_${idx + 1}`, image);
       });
+  
       const filteredDragAnswers = currentQuestion.drag_answers
         .map((order, idx) => {
           const orderNum = parseInt(order, 10);
-          return order !== "" &&
-            orderNum > 0 &&
-            orderNum <= currentQuestion.images.length
+          return order !== "" && orderNum > 0 && orderNum <= currentQuestion.images.length
             ? { order: orderNum, id: idx + 1 }
             : null;
         })
         .filter((answer) => answer !== null)
         .sort((a, b) => a.order - b.order)
         .map((answer) => answer.id);
-      formData.append("correct_answer", JSON.stringify(filteredDragAnswers));
+  
+      formData.append('correct_answer', JSON.stringify(filteredDragAnswers));
     }
-
+  
     try {
       let response;
       if (editingQuestionIndex !== null) {
@@ -311,7 +315,7 @@ const Tasksection = () => {
       console.error("Failed to save question", error);
     }
   };
-
+  
   const resetQuestionForm = () => {
     setCurrentQuestion({
       question_type: "multiple_choice_text",
@@ -326,7 +330,7 @@ const Tasksection = () => {
     });
     setEditingQuestionIndex(null);
   };
-
+  
   const handleImageUpload = (e, index) => {
     const file = e.target.files[0];
     const updatedImages = [...currentQuestion.images];
@@ -336,13 +340,16 @@ const Tasksection = () => {
       images: updatedImages,
     });
   };
-
-  const handleSelectCorrectAnswer = (optionIndex) => {
+  
+  const handleSelectCorrectAnswer = (e, index) => {
+    const updatedOptions = [...currentQuestion.options];
+    updatedOptions[index] = e.target.value;
     setCurrentQuestion({
       ...currentQuestion,
-      correct_answer: optionIndex + 1, // Store as a 1-based index
+      options: updatedOptions,
     });
   };
+  
 
   const handleEditQuestion = (index) => {
     const question = questions[index];
