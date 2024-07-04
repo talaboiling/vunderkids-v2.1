@@ -55,6 +55,7 @@ const Tasksection = () => {
     correct_answer: "",
     images: ["", "", "", ""],
     drag_answers: ["", "", "", ""],
+    imagesToUpdate: {},
     audio: null, // Add this line
   });
   const [editingQuestionIndex, setEditingQuestionIndex] = useState(null);
@@ -224,22 +225,26 @@ const Tasksection = () => {
     formData.append("question_text", currentQuestion.question_text);
     formData.append("question_type", currentQuestion.question_type);
     formData.append("template", currentQuestion.template);
-    if (currentQuestion.audio) {
+    if (currentQuestion.audio && currentQuestion.audio instanceof File) {
       formData.append("audio", currentQuestion.audio);
     }
 
     if (currentQuestion.question_type === "multiple_choice_text") {
-      currentQuestion.options.forEach((option, idx) => {
-        formData.append(`options[${idx}][id]`, idx + 1);
-        formData.append(`options[${idx}][value]`, option);
-      });
+      const options = currentQuestion.options.map((option, idx) => ({
+        id: idx + 1,
+        value: option,
+      }));
+      formData.append("options", JSON.stringify(options));
       formData.append("correct_answer", currentQuestion.correct_answer);
     }
 
     if (currentQuestion.question_type === "multiple_choice_images") {
-      currentQuestion.images.forEach((image, idx) => {
-        formData.append(`image_${idx + 1}`, image);
-      });
+      if (Object.keys(currentQuestion.imagesToUpdate || {}).length > 0) {
+        Object.keys(currentQuestion.imagesToUpdate).forEach((key) => {
+          formData.append(`image_${key}`, currentQuestion.imagesToUpdate[key]);
+          console.log(currentQuestion.imagesToUpdate[key]);
+        });
+      }
       formData.append("correct_answer", currentQuestion.correct_answer);
     }
 
@@ -284,6 +289,7 @@ const Tasksection = () => {
 
     try {
       let response;
+      console.log(currentQuestion.question_type);
       if (editingQuestionIndex !== null) {
         response = await updateQuestion(
           courseId,
@@ -329,11 +335,21 @@ const Tasksection = () => {
 
   const handleImageUpload = (e, index) => {
     const file = e.target.files[0];
-    const updatedImages = [...currentQuestion.images];
+
+    // Update the currentQuestion options with the new file
+    const updatedImages = [...currentQuestion.options];
     updatedImages[index] = file;
+
+    // Append the new file to imagesToUpdate
+    const updatedImagesToUpdate = {
+      ...currentQuestion.imagesToUpdate,
+      [index + 1]: file,
+    };
+
     setCurrentQuestion({
       ...currentQuestion,
-      images: updatedImages,
+      options: updatedImages,
+      imagesToUpdate: updatedImagesToUpdate,
     });
   };
 
@@ -346,6 +362,7 @@ const Tasksection = () => {
 
   const handleEditQuestion = (index) => {
     const question = questions[index];
+    console.log(question.audio);
     const formattedOptions = Array.isArray(question.options)
       ? question.options
       : [];
@@ -359,7 +376,10 @@ const Tasksection = () => {
         formattedOptions.length > 0
           ? formattedOptions.map((opt) => opt.value)
           : ["", "", "", ""],
-      // images: formattedImages.length > 0 ? formattedImages.map(img => img.image) : ["", "", "", ""],
+      images:
+        formattedImages.length > 0
+          ? formattedImages.map((img) => img.image)
+          : ["", "", "", ""],
       correct_answer: question.correct_answer,
       drag_answers: Array.isArray(question.correct_answer)
         ? question.correct_answer
@@ -860,7 +880,16 @@ const Tasksection = () => {
                         }`}
                         onClick={() => handleSelectCorrectAnswer(index)}
                       >
-                        {typeof option === "string" ? option : option.value}
+                        {currentQuestion.question_type ==
+                        "multiple_choice_text" ? (
+                          <p>{option}</p>
+                        ) : (
+                          <img
+                            src={option}
+                            alt={`Option ${index + 1}`}
+                            style={{ width: "100px", height: "100px" }}
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
@@ -895,6 +924,7 @@ const Tasksection = () => {
                           id="questionType"
                           placeholder="Выбор правильного ответа"
                           style={{ margin: "0" }}
+                          value={currentQuestion.question_type} // Add this line
                           onChange={(e) => {
                             setCurrentQuestion({
                               ...currentQuestion,
@@ -1049,6 +1079,15 @@ const Tasksection = () => {
                         <h3 className="defaultStyle" style={{ color: "#666" }}>
                           Загрузить аудио файл
                         </h3>
+                        {currentQuestion.audio && (
+                          <audio controls>
+                            <source
+                              src={currentQuestion.audio}
+                              type="audio/mp3"
+                            />
+                            Your browser does not support the audio element.
+                          </audio>
+                        )}
                         <input
                           type="file"
                           accept="audio/*"
@@ -1077,7 +1116,7 @@ const Tasksection = () => {
                         >
                           {currentQuestion.options.map((option, index) => (
                             <input
-                              key={index}
+                              key={index + 1}
                               type="text"
                               placeholder={`Вариант ${index + 1}`}
                               value={
@@ -1121,8 +1160,17 @@ const Tasksection = () => {
                             gap: "1rem",
                           }}
                         >
-                          {currentQuestion.images.map((image, index) => (
-                            <div className="optionsImgUpload" key={index}>
+                          {currentQuestion.options.map((image, index) => (
+                            <div
+                              className="optionsImgUpload"
+                              key={index}
+                              style={{
+                                border:
+                                  index === currentQuestion.correct_answer - 1
+                                    ? "2px solid green"
+                                    : "none",
+                              }}
+                            >
                               <input
                                 type="file"
                                 accept="image/*"
@@ -1131,15 +1179,30 @@ const Tasksection = () => {
                               />
                               {image && (
                                 <img
-                                  src={URL.createObjectURL(image)}
+                                  src={
+                                    typeof image === "string"
+                                      ? image
+                                      : URL.createObjectURL(image)
+                                  }
                                   alt={`Option ${index + 1}`}
-                                  style={{ width: "100px", height: "100px" }}
+                                  style={{
+                                    width: "100px",
+                                    height: "100px",
+                                    border:
+                                      index ===
+                                      currentQuestion.correct_answer - 1
+                                        ? "2px solid green"
+                                        : "none",
+                                  }}
                                 />
                               )}
                               <input
                                 type="radio"
                                 name="correctAnswer"
                                 style={{ scale: "1.5" }}
+                                checked={
+                                  index === currentQuestion.correct_answer - 1
+                                }
                                 onChange={() =>
                                   handleSelectCorrectAnswer(index)
                                 }
