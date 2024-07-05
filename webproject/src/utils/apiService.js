@@ -146,11 +146,12 @@ export const fetchCourses = async (childId) => {
   }
 };
 
-export const fetchCourse = async (courseId) => {
+export const fetchCourse = async (courseId, child_id) => {
   try {
-    const endpoint = `/courses/${courseId}`;
+    const endpoint = child_id
+      ? `/courses/${courseId}?child_id=${child_id}`
+      : `/courses/${courseId}`;
     const response = await instance.get(endpoint);
-    console.log(endpoint);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");
@@ -219,29 +220,36 @@ export const deleteSection = async (courseId, sectionId) => {
   }
 };
 
-export const fetchSections = async (courseId) => {
+export const fetchSections = async (courseId, child_id) => {
   try {
-    const response = await instance.get(`/courses/${courseId}/sections/`);
+    const endpoint = child_id
+      ? `/courses/${courseId}/sections/?child_id=${child_id}`
+      : `/courses/${courseId}/sections/`;
+    console.log(endpoint);
+    const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");
   }
 };
 
-export const fetchSection = async (courseId, sectionId) => {
+export const fetchSection = async (courseId, sectionId, child_id) => {
   try {
-    const response = await instance.get(
-      `/courses/${courseId}/sections/${sectionId}`
-    );
+    const endpoint = child_id
+      ? `/courses/${courseId}/sections/${sectionId}/?child_id=${child_id}`
+      : `/courses/${courseId}/sections/${sectionId}/`;
+    const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");
   }
 };
 
-export const fetchContents = async (courseId, sectionId) => {
+export const fetchContents = async (courseId, sectionId, child_id) => {
   try {
-    const endpoint = `/courses/${courseId}/sections/${sectionId}/contents`;
+    const endpoint = child_id
+      ? `/courses/${courseId}/sections/${sectionId}/contents?child_id=${child_id}`
+      : `/courses/${courseId}/sections/${sectionId}/contents`;
     const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
@@ -454,11 +462,8 @@ export const deleteTask = async (courseId, sectionId, taskId) => {
 export const createQuestion = async (courseId, sectionId, taskId, data) => {
   try {
     const endpoint = `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/questions/`;
-    const response = await instance.post(endpoint, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const headers = { "Content-Type": "multipart/form-data" };
+    const response = await instance.post(endpoint, data, { headers });
     return response.data;
   } catch (error) {
     throw new Error(error.message || "Something went wrong");
@@ -474,12 +479,14 @@ export const updateQuestion = async (
 ) => {
   try {
     const endpoint = `/courses/${courseId}/sections/${sectionId}/tasks/${taskId}/questions/${questionId}/`;
-    const response = await instance.patch(endpoint, data);
+    const headers = { "Content-Type": "multipart/form-data" };
+    const response = await instance.patch(endpoint, data, { headers });
     return response.data;
   } catch (error) {
-    throw new Error(error || "Something went wrong");
+    throw new Error(error.message || "Something went wrong");
   }
 };
+
 export const deleteQuestion = async (
   courseId,
   sectionId,
