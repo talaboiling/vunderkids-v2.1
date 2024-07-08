@@ -219,6 +219,7 @@ const Tasksection = () => {
 
   const handleQuestionSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData();
     formData.append("title", currentQuestion.title);
@@ -242,17 +243,17 @@ const Tasksection = () => {
       if (Object.keys(currentQuestion.imagesToUpdate || {}).length > 0) {
         Object.keys(currentQuestion.imagesToUpdate).forEach((key) => {
           formData.append(`image_${key}`, currentQuestion.imagesToUpdate[key]);
-          console.log(currentQuestion.imagesToUpdate[key]);
         });
       }
       formData.append("correct_answer", currentQuestion.correct_answer);
     }
 
     if (currentQuestion.question_type === "drag_and_drop_text") {
-      currentQuestion.options.forEach((option, idx) => {
-        formData.append(`options[${idx}][id]`, idx + 1);
-        formData.append(`options[${idx}][value]`, option);
-      });
+      const options = currentQuestion.options.map((option, idx) => ({
+        id: idx + 1,
+        value: option,
+      }));
+      formData.append("options", JSON.stringify(options));
       const filteredDragAnswers = currentQuestion.drag_answers
         .map((order, idx) => {
           const orderNum = parseInt(order, 10);
@@ -269,9 +270,11 @@ const Tasksection = () => {
     }
 
     if (currentQuestion.question_type === "drag_and_drop_images") {
-      currentQuestion.images.forEach((image, idx) => {
-        formData.append(`image_${idx + 1}`, image);
-      });
+      if (Object.keys(currentQuestion.imagesToUpdate || {}).length > 0) {
+        Object.keys(currentQuestion.imagesToUpdate).forEach((key) => {
+          formData.append(`image_${key}`, currentQuestion.imagesToUpdate[key]);
+        });
+      }
       const filteredDragAnswers = currentQuestion.drag_answers
         .map((order, idx) => {
           const orderNum = parseInt(order, 10);
@@ -289,14 +292,14 @@ const Tasksection = () => {
 
     try {
       let response;
-      console.log(currentQuestion.question_type);
       if (editingQuestionIndex !== null) {
         response = await updateQuestion(
           courseId,
           sectionId,
           contents[selectedTaskIndex].id,
           questions[editingQuestionIndex].id,
-          formData
+          formData,
+          true // Indicate that this is a multipart request
         );
         const updatedQuestions = questions.map((q, i) =>
           i === editingQuestionIndex ? response : q
@@ -307,7 +310,8 @@ const Tasksection = () => {
           courseId,
           sectionId,
           contents[selectedTaskIndex].id,
-          formData
+          formData,
+          true // Indicate that this is a multipart request
         );
         setQuestions([...questions, response]);
       }
@@ -315,8 +319,11 @@ const Tasksection = () => {
       resetQuestionForm();
     } catch (error) {
       console.error("Failed to save question", error);
+    } finally {
+      setLoading(false);
     }
   };
+
 
   const resetQuestionForm = () => {
     setCurrentQuestion({
@@ -746,6 +753,9 @@ const Tasksection = () => {
           className="modal supermodal"
           style={{ padding: "60px" }}
         >
+          {loading ? (
+            <Loader />
+          ) : (
           <div className="modal-content">
             <div className="modalHeader">
               <h2 className="defaultStyle" style={{ color: "#666" }}>
@@ -810,6 +820,7 @@ const Tasksection = () => {
               </button>
             </div>
           </div>
+          )}
         </dialog>
       )}
 
@@ -820,6 +831,7 @@ const Tasksection = () => {
           className="modal supermodal"
           style={{ padding: "60px" }}
         >
+          {loading ? (<Loader />) : (
           <div className="modal-content">
             <button
               style={{
@@ -839,7 +851,9 @@ const Tasksection = () => {
                 : "Добавить вопрос"}
             </h2>
             <div className="taskConstructor">
-              <div className="taskPreview">
+              <div className={`taskPreview ${
+                currentQuestion.template ? `template-${currentQuestion.template}` : ""
+              }`}>
                 <p
                   className="defaultStyle"
                   style={{
@@ -1340,6 +1354,7 @@ const Tasksection = () => {
               </div>
             </div>
           </div>
+          )}
         </dialog>
       )}
     </div>

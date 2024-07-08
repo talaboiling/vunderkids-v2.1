@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import Sidebar from "../Sidebar";
 import Navdash from "../Navdash";
 import mathIcon from "../../assets/calculator.png";
 import englishIcon from "../../assets/english.png";
+import correctlion from "../../assets/lion_correct.png"
+import wronglion from "../../assets/lion_incorrect.png"
 import bgtask from "../../assets/bgtask.svg";
 import bgvideo from "../../assets/videolessonthumb.svg";
 import staricon from "../../assets/navStars.png";
 import cupicon from "../../assets/navCups.png";
 import CloseIcon from "@mui/icons-material/Close";
 import VerifiedIcon from "@mui/icons-material/Verified";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 import {
   fetchUserData,
   fetchCourse,
@@ -39,6 +43,11 @@ const Math = () => {
   const [draggedOption, setDraggedOption] = useState(null);
   const [droppedOrder, setDroppedOrder] = useState([]);
   const [loading, setLoading] = useState(true);
+  const audioRef = useRef(null); // Add this line
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false); // Add this line
+  const backgroundAudioRef = useRef(null);
+  const [isBackgroundAudioPlaying, setIsBackgroundAudioPlaying] = useState(false);
+
 
   useEffect(() => {
     loadData();
@@ -84,7 +93,7 @@ const Math = () => {
         childId
       );
       if (taskQuestions.length === 0) {
-        alert("This task has no questions.");
+        alert("В этом задании нет вопросов.");
         return;
       }
       setTaskContent(task);
@@ -94,10 +103,17 @@ const Math = () => {
       setShowFeedback(false);
       setDroppedOrder([]);
       setShowTaskModal(true);
+      
+      // Play background music
+      if (backgroundAudioRef.current) {
+        backgroundAudioRef.current.play();
+        setIsBackgroundAudioPlaying(true);
+      }
     } catch (error) {
       console.error("Error fetching task data:", error);
     }
   };
+  
 
   const closeVideoModal = () => {
     setShowVideoModal(false);
@@ -106,6 +122,13 @@ const Math = () => {
   const closeTaskModal = async () => {
     setShowTaskModal(false);
     await loadData();
+    
+    // Stop background music
+    if (backgroundAudioRef.current) {
+      backgroundAudioRef.current.pause();
+      backgroundAudioRef.current.currentTime = 0;
+      setIsBackgroundAudioPlaying(false);
+    }
   };
 
   const handleOptionClick = (optionId) => {
@@ -190,6 +213,32 @@ const Math = () => {
 
     await loadData();
   };
+
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isAudioPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsAudioPlaying(!isAudioPlaying);
+    }
+  };
+
+  useEffect(() => {
+    const handleAudioEnded = () => {
+      setIsAudioPlaying(false);
+    };
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      audioElement.addEventListener('ended', handleAudioEnded);
+    }
+    return () => {
+      if (audioElement) {
+        audioElement.removeEventListener('ended', handleAudioEnded);
+      }
+    };
+  }, []);
 
   if (loading) {
     return <Loader></Loader>;
@@ -442,17 +491,25 @@ const Math = () => {
                       : "fbmincorrect"
                   }`}
                 >
-                  <p
-                    className={`defaultStyle ${
-                      feedbackMessage === "Correct!"
-                        ? "fbmcorrect"
-                        : "fbmincorrect"
-                    }`}
-                  >
-                    {feedbackMessage === "Correct!"
-                      ? "Правильно!"
-                      : "Неправильно!"}
-                  </p>
+                  <div className="feedbackContent">
+                    <img src={feedbackMessage === "Correct!" ? correctlion : wronglion} alt="lion mascot" />
+                    <p
+                      style={{
+                        color: "black",
+                        fontSize: "xx-large",
+                        fontWeight: "700",
+                        textAlign: "center",
+                        backgroundColor:"white",
+                        padding:"10px",
+                        borderRadius:"10px",
+                      }}
+                    >
+                      {feedbackMessage === "Correct!"
+                        ? "Правильно!"
+                        : "Неправильно!"}
+                    </p>
+                  </div>
+                  
                 </div>
               )}
               <div className="questionCarousel">
@@ -476,9 +533,10 @@ const Math = () => {
                           gap: "0.33rem",
                           maxWidth: "500px",
                           textAlign: "center",
+                          
                         }}
                       >
-                        <span>
+                        <span style={{maxWidth:"500px"}}>
                           <strong>{currentQuestionIndex + 1}. </strong>
                           <i>{currentQuestion.title}:</i>{" "}
                         </span>
@@ -489,13 +547,15 @@ const Math = () => {
                           </strong>
                         )}
                         {currentQuestion.audio && (
-                          <audio controls>
-                            <source
-                              src={currentQuestion.audio}
-                              type="audio/mp3"
-                            />
-                            Your browser does not support the audio element.
-                          </audio>
+                          <>
+                            <div className="taskmodalaudio">
+                              <button className="" onClick={toggleAudio}>
+                                {isAudioPlaying ? <PauseIcon sx={{ fontSize: 50 }} /> : <PlayArrowIcon sx={{ fontSize: 50 }} />}
+                              </button>
+                            </div>
+                            
+                            <audio ref={audioRef} src={currentQuestion.audio} />
+                          </>
                         )}
                       </span>
                       {currentQuestion.question_type.startsWith(
@@ -605,6 +665,7 @@ const Math = () => {
           </div>
         </dialog>
       )}
+      <audio ref={backgroundAudioRef} src="../../assets/audio/Kevin MacLeod_ Atlantean Twilight.mp3" loop />
     </div>
   );
 };
