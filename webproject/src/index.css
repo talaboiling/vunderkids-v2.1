@@ -43,6 +43,11 @@ body{
     height: 42px;
 }
 
+.logo{
+    display: flex;
+    flex-direction: column;
+}
+
 .navList{
     display: flex;
     flex-direction: row; /* Added this line */
@@ -663,6 +668,12 @@ footer{
   padding: 3rem 7%;
 }
 
+.footer{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: start;
+  align-items: start;
+}
 
 .container {
     display: flex;
@@ -677,9 +688,12 @@ footer{
   border: 2px solid #286C96;
   border-radius: 20px;
   background-color: white;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 20px;
   min-width: 450px;
+
 }
 
 .rateus{
@@ -701,18 +715,19 @@ footer{
   flex-direction: row;
   gap: 5rem;
   overflow-x: scroll;
-  width: 80%;
+  max-width: 80vw;
+  padding-bottom: 15px;
 }
 .reviewTop{
   display: grid;
   grid-template-columns: 25% 75%;
   grid-template-rows: 50% 50%;
-
 }
 
 .rev{
   margin: 0;
   padding: 0;
+  
 }
 
 .revPfp{
@@ -734,12 +749,13 @@ footer{
 .revText{
   margin-left: 20px;
   font-weight: 600;
-  height: 100px;
+  height: fit-content;
+  max-height: 100px;
+  padding: 10px;
   overflow-y: hidden;
-}
-
-.revStar{
-  margin-left: 20px;
+  text-overflow: ellipsis;
+  background-color: rgb(247, 247, 247);
+  border-radius: 10px;
 }
 
 .revName{
@@ -813,16 +829,21 @@ footer{
   gap: 1rem;
 }
 
-input{
+input, select {
   padding: 0.8rem 1rem;
   border: 2px solid #C1C1C1;
   border-radius: 10px;
-  width: 90%;
   margin-bottom: 10px;
   font-family: 'Montserrat', Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size:medium;
   outline: none;
+}
+
+.registrationInput{
+  display: flex;
+  flex-direction: column;
+  
 }
 
 .defaultIcon{
@@ -833,4 +854,5 @@ input{
 .langSelector{
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }

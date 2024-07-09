@@ -86,25 +86,18 @@ function Login() {
                 {t ('noAccount')}
               </Link>
             </div>
-            <form className="inputField" onSubmit={handleSubmit}>
-              <span className="gendemail">
-                <span>
-                  <label htmlFor="email">E-mail:</label>
-                  <br />
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="maksat01@example.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    style={{ minWidth: "350px" }}
-                  />
-                </span>
-              </span>
+            <form className="registrationInput" onSubmit={handleSubmit}>
+              <label htmlFor="email">E-mail:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="maksat01@example.com"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+              />
               <label htmlFor="password">{t ('yourPassword')}</label>
-              <br />
               <input
                 type="password"
                 id="password"
@@ -113,7 +106,6 @@ function Login() {
                 value={formData.password}
                 onChange={handleInputChange}
                 required
-                style={{ maxWidth: "350px" }}
               />
               <br />
               <input
@@ -123,7 +115,6 @@ function Login() {
                 style={{
                   position: "relative",
                   maxWidth: "200px",
-                  marginTop: "25px",
                   marginBottom: "0",
                 }}
               />

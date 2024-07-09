@@ -24,6 +24,7 @@ const Tasks = () => {
   const [courseName, setCourseName] = useState("");
   const [courseDesc, setCourseDesc] = useState("");
   const [courseGrade, setCourseGrade] = useState("");
+  const [courseLanguage, setCourseLanguage] = useState("");
   const [sections, setSections] = useState([]);
   const [courses, setCourses] = useState([]);
   const [editingCourseId, setEditingCourseId] = useState(null);
@@ -59,6 +60,7 @@ const Tasks = () => {
     setCourseName("");
     setCourseDesc("");
     setCourseGrade("");
+    setCourseLanguage("");
     setSections([]);
     setEditingCourseId(null);
   };
@@ -120,6 +122,7 @@ const Tasks = () => {
       name: courseName,
       description: courseDesc,
       grade: parseInt(courseGrade),
+      language: courseLanguage,
     };
 
     try {
@@ -176,6 +179,7 @@ const Tasks = () => {
     setCourseName(courseToEdit.name);
     setCourseDesc(courseToEdit.description);
     setCourseGrade(courseToEdit.grade.toString());
+    setCourseLanguage(courseToEdit.language);
     setSections(courseToEdit.sections || []);
     setEditingCourseId(id);
     setOpen(true);
@@ -305,10 +309,10 @@ const Tasks = () => {
             <h2 className="defaultStyle" style={{ color: "#666" }}>
               {editingCourseId ? "Редактировать курс" : "Добавить курс"}
             </h2>
-            <form onSubmit={handleFormSubmit}>
+            <form className="registrationInput" onSubmit={handleFormSubmit}>
               <div className="formCont">
                 <div className="formLeft">
-                  <label htmlFor="courseName">Название курса:</label> <br />
+                  <label htmlFor="courseName">Название курса:</label>
                   <input
                     type="text"
                     id="courseName"
@@ -318,19 +322,7 @@ const Tasks = () => {
                     placeholder="Математика"
                     required
                   />{" "}
-                  <br />
-                  <label htmlFor="courseGrade">Выберите уровень</label> <br />
-                  <input
-                    type="text"
-                    id="courseGrade"
-                    name="courseGrade"
-                    value={courseGrade}
-                    onChange={(e) => setCourseGrade(e.target.value)}
-                    placeholder="Дошкольный"
-                    required
-                  />
-                  <br />
-                  <label htmlFor="courseDesc">Описание курса</label> <br />
+                  <label htmlFor="courseDesc">Описание курса</label>
                   <input
                     type="text"
                     id="courseDesc"
@@ -339,29 +331,56 @@ const Tasks = () => {
                     onChange={(e) => setCourseDesc(e.target.value)}
                     placeholder="Описание курса"
                   />
-                  <button
-                    type="submit"
-                    className="superBtn"
-                    style={{ marginTop: "30px" }}
+                  <label htmlFor="courseGrade">Выберите уровень</label>
+                  <select
+                    type="text"
+                    id="courseGrade"
+                    name="courseGrade"
+                    value={courseGrade}
+                    onChange={(e) => setCourseGrade(e.target.value)}
+                    placeholder="Дошкольный"
+                    required
                   >
-                    {editingCourseId ? "Сохранить изменения" : "Добавить курс"}
-                  </button>
-                  {editingCourseId && (
+                    <option value="">Выберите уровень</option>
+                    <option value="0">Дошкольный</option>
+                    <option value="1">1 класс</option>
+                    <option value="2">2 класс</option>
+                    <option value="3">3 класс</option>
+                  </select>
+                  <label htmlFor="courselang">Выберите язык обучения</label>
+                  <select
+                    id="courselang"
+                    name="courselang"
+                    value={courseLanguage}
+                    onChange={(e) => setCourseLanguage(e.target.value)}
+                    required
+                  >
+                    <option value="">Выберите язык</option>
+                    <option value="ru">Русский</option>
+                    <option value="kz">Қазақша</option>
+                  </select>
+                  <span style={{display:"flex", flexDirection:"row", marginTop:"30px"}}>
                     <button
-                      type="button"
+                      type="submit"
                       className="superBtn"
-                      style={{
-                        marginTop: "10px",
-                        color: "red",
-                        marginLeft: "10px",
-                      }}
-                      onClick={handleDeleteCourse}
                     >
-                      Удалить курс
+                      {editingCourseId ? "Сохранить изменения" : "Добавить курс"}
                     </button>
-                  )}
+                    {editingCourseId && (
+                      <button
+                        type="button"
+                        className="superBtn"
+                        style={{
+                          color: "red",
+                          marginLeft: "10px",
+                        }}
+                        onClick={handleDeleteCourse}
+                      >
+                        Удалить курс
+                      </button>
+                    )}
+                  </span>
                 </div>
-
                 <div className="formRight">
                   <label htmlFor="coursePrice">Добавить секций</label> <br />
                   <button

@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import Sidebar from "../Sidebar";
 import Navdash from "../Navdash";
 import mathIcon from "../../assets/calculator.png";
 import englishIcon from "../../assets/english.png";
+import correctlion from "../../assets/lion_correct.png"
+import wronglion from "../../assets/lion_incorrect.png"
 import bgtask from "../../assets/bgtask.svg";
 import bgvideo from "../../assets/videolessonthumb.svg";
 import staricon from "../../assets/navStars.png";
 import cupicon from "../../assets/navCups.png";
 import CloseIcon from "@mui/icons-material/Close";
-import VerifiedIcon from '@mui/icons-material/Verified';
+import VerifiedIcon from "@mui/icons-material/Verified";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 import {
   fetchUserData,
   fetchCourse,
@@ -18,7 +22,9 @@ import {
   fetchQuestions,
   answerQuestion,
 } from "../../utils/apiService";
+import Loader from "../Loader";
 import { useTranslation } from "react-i18next";
+
 
 const Math = () => {
   const { t } = useTranslation();
@@ -37,31 +43,42 @@ const Math = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [isChild, setIsChild] = useState(false);
   const [childId, setChildId] = useState("");
+  const [draggedOption, setDraggedOption] = useState(null);
+  const [droppedOrder, setDroppedOrder] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const audioRef = useRef(null); // Add this line
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false); // Add this line
+  const backgroundAudioRef = useRef(null);
+  const [isBackgroundAudioPlaying, setIsBackgroundAudioPlaying] = useState(false);
+
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const child_id = localStorage.getItem("child_id");
-        let userData;
-        if (child_id) {
-          userData = await fetchUserData(child_id);
-          setIsChild(true);
-          setChildId(child_id);
-        } else {
-          userData = await fetchUserData();
-        }
-        const courseData = await fetchCourse(courseId);
-        const sectionsData = await fetchSections(courseId);
-        setSections(sectionsData);
-        setCourse(courseData);
-        setUser(userData);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      }
-    };
-
     loadData();
   }, [courseId]);
+
+  const loadData = async () => {
+    try {
+      const child_id = localStorage.getItem("child_id");
+      let userData;
+      if (child_id) {
+        userData = await fetchUserData(child_id);
+        setIsChild(true);
+        setChildId(child_id);
+      } else {
+        userData = await fetchUserData();
+      }
+      const courseData = await fetchCourse(courseId, child_id);
+      const sectionsData = await fetchSections(courseId, child_id);
+      console.log(sectionsData);
+      setSections(sectionsData);
+      setCourse(courseData);
+      setUser(userData);
+    } catch (error) {
+      console.error("Error loading data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openVideoModal = (url) => {
     const embedUrl = url.replace("watch?v=", "embed/");
@@ -87,11 +104,19 @@ const Math = () => {
       setCurrentQuestionIndex(0);
       setSelectedOption(null);
       setShowFeedback(false);
+      setDroppedOrder([]);
       setShowTaskModal(true);
+      
+      // Play background music
+      if (backgroundAudioRef.current) {
+        backgroundAudioRef.current.play();
+        setIsBackgroundAudioPlaying(true);
+      }
     } catch (error) {
       console.error("Error fetching task data:", error);
     }
   };
+  
 
   const closeVideoModal = () => {
     setShowVideoModal(false);
@@ -99,15 +124,13 @@ const Math = () => {
 
   const closeTaskModal = async () => {
     setShowTaskModal(false);
-    await fetchChildData();
-  };
-
-  const fetchChildData = async () => {
-    try {
-      const updatedUserData = await fetchUserData(childId);
-      setUser(updatedUserData);
-    } catch (error) {
-      console.error("Error fetching updated child data:", error);
+    await loadData();
+    
+    // Stop background music
+    if (backgroundAudioRef.current) {
+      backgroundAudioRef.current.pause();
+      backgroundAudioRef.current.currentTime = 0;
+      setIsBackgroundAudioPlaying(false);
     }
   };
 
@@ -115,9 +138,33 @@ const Math = () => {
     setSelectedOption(optionId);
   };
 
+  const handleDragStart = (optionId) => {
+    setDraggedOption(optionId);
+  };
+
+  const handleDrop = (event, dropIndex) => {
+    event.preventDefault();
+    const updatedOrder = [...droppedOrder];
+    updatedOrder[dropIndex] = draggedOption;
+    setDroppedOrder(updatedOrder);
+  };
+
+  const allowDrop = (event) => {
+    event.preventDefault();
+  };
+
   const handleNextQuestion = async () => {
-    const isCorrect =
-      selectedOption === questions[currentQuestionIndex].correct_answer;
+    const currentQuestion = questions[currentQuestionIndex];
+    let isCorrect;
+
+    if (currentQuestion.question_type.startsWith("drag_and_drop")) {
+      isCorrect =
+        JSON.stringify(droppedOrder) ===
+        JSON.stringify(currentQuestion.correct_answer);
+    } else {
+      isCorrect = selectedOption === currentQuestion.correct_answer;
+    }
+
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
 
@@ -125,7 +172,7 @@ const Math = () => {
       courseId,
       taskContent.section,
       taskContent.id,
-      questions[currentQuestionIndex].id,
+      currentQuestion.id,
       selectedOption,
       childId
     );
@@ -134,12 +181,22 @@ const Math = () => {
       setShowFeedback(false);
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       setSelectedOption(null);
+      setDroppedOrder([]);
     }, 1500);
   };
 
   const handleSubmit = async () => {
-    const isCorrect =
-      selectedOption === questions[currentQuestionIndex].correct_answer;
+    const currentQuestion = questions[currentQuestionIndex];
+    let isCorrect;
+
+    if (currentQuestion.question_type.startsWith("drag_and_drop")) {
+      isCorrect =
+        JSON.stringify(droppedOrder) ===
+        JSON.stringify(currentQuestion.correct_answer);
+    } else {
+      isCorrect = selectedOption === currentQuestion.correct_answer;
+    }
+
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
 
@@ -147,21 +204,47 @@ const Math = () => {
       courseId,
       taskContent.section,
       taskContent.id,
-      questions[currentQuestionIndex].id,
+      currentQuestion.id,
       selectedOption,
       childId
     );
 
     setTimeout(async () => {
-      console.log("Submitting answers...");
       setShowFeedback(false);
       setShowTaskModal(false);
-      await fetchChildData();
     }, 1500);
+
+    await loadData();
   };
 
-  if (!course) {
-    return <div>Loading</div>;
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isAudioPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsAudioPlaying(!isAudioPlaying);
+    }
+  };
+
+  useEffect(() => {
+    const handleAudioEnded = () => {
+      setIsAudioPlaying(false);
+    };
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      audioElement.addEventListener('ended', handleAudioEnded);
+    }
+    return () => {
+      if (audioElement) {
+        audioElement.removeEventListener('ended', handleAudioEnded);
+      }
+    };
+  }, []);
+
+  if (loading) {
+    return <Loader></Loader>;
   }
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -169,7 +252,7 @@ const Math = () => {
 
   return (
     <div className="rtdash rtrat">
-      <Sidebar className="courseSidebar"/>
+      <Sidebar className="courseSidebar" />
       <div className="centralLessons">
         <Navdash
           starCount={user.stars}
@@ -261,21 +344,21 @@ const Math = () => {
                             alt="vidname"
                             className="taskThumbnail"
                           />
-                          
+
                           <p
                             style={{
                               backgroundColor: "white",
                               margin: "0",
                               padding: "7px 40px",
                               borderRadius: "10px",
-                              marginBottom:"7px",
+                              marginBottom: "7px",
                             }}
                           >
                             {content.title}
                           </p>
                           {content.is_completed && (
                             <div className="completedTask">
-                              <VerifiedIcon sx={{color:"#19a5fc"}}/>
+                              <VerifiedIcon sx={{ color: "#19a5fc" }} />
                               <strong>{t ('youCompletedTask')}</strong>
                             </div>
                           )}
@@ -292,13 +375,19 @@ const Math = () => {
               ))}
             </div>
           </div>
-
           <div className="lessonsProg">
-            <h3 className="defaultStyle" style={{color:"black", fontWeight:"800", fontSize:"x-large"}}>{t ('whatWeLearn')}</h3>
+            <h3
+              className="defaultStyle"
+              style={{ color: "black", fontWeight: "800", fontSize: "x-large" }}
+            >
+              {t ('whatWeLearn')}
+            </h3>
             <div className="progList">
               {sections.map((section, index) => (
                 <div className="progItem" key={index}>
-                  <p style={{margin:"0", marginBottom:"15px"}}>{section.title}</p>
+                  <p style={{ margin: "0", marginBottom: "15px" }}>
+                    {section.title}
+                  </p>
                   <progress
                     value={section.percentage_completed / 100}
                     max="1"
@@ -352,15 +441,27 @@ const Math = () => {
               >
                 <p
                   className="lndsh"
-                  style={{ display: "flex", alignItems: "center", padding:"5px 20px", gap:"0.5rem"}}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "5px 20px",
+                    gap: "0.5rem",
+                  }}
                 >
-                  <img src={staricon} alt="" className="defaultIcon" />{user.stars}
+                  <img src={staricon} alt="" className="defaultIcon" />
+                  {user.stars}
                 </p>
                 <p
                   className="lndsh"
-                  style={{ display: "flex", alignItems: "center", padding:"5px 20px", gap:"0.5rem"}}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "5px 20px",
+                    gap: "0.5rem",
+                  }}
                 >
-                  <img src={cupicon} alt="" className="defaultIcon" />{user.cups}
+                  <img src={cupicon} alt="" className="defaultIcon" />
+                  {user.cups}
                 </p>
               </span>
 
@@ -377,7 +478,13 @@ const Math = () => {
                 {t ('close')}
               </button>
             </div>
-            <div className={`studtaskDetails ${currentQuestion?.template ? `template-${currentQuestion.template}` : ""}`}>
+            <div
+              className={`studtaskDetails ${
+                currentQuestion?.template
+                  ? `template-${currentQuestion.template}`
+                  : ""
+              }`}
+            >
               {showFeedback && (
                 <div
                   className={`feedbackMessage ${
@@ -386,17 +493,24 @@ const Math = () => {
                       : "fbmincorrect"
                   }`}
                 >
-                  <p
-                    className={`defaultStyle ${
-                      feedbackMessage === "Correct!"
-                        ? "fbmcorrect"
-                        : "fbmincorrect"
-                    }`}
-                  >
-                    {feedbackMessage === "Correct!"
+                  <div className="feedbackContent">
+                    <img src={feedbackMessage === "Correct!" ? correctlion : wronglion} alt="lion mascot" />
+                    <p
+                      style={{
+                        color: "black",
+                        fontSize: "xx-large",
+                        fontWeight: "700",
+                        textAlign: "center",
+                        backgroundColor:"white",
+                        padding:"10px",
+                        borderRadius:"10px",
+                      }}
+                    >
+                      {feedbackMessage === "Correct!"
                       ? t ('correct')
                       : t ('incorrect')}
-                  </p>
+                    </p>
+                  </div>
                 </div>
               )}
               <div className="questionCarousel">
@@ -406,9 +520,9 @@ const Math = () => {
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      fontSize:"x-large",
-                      padding:"7px 0",
-                      gap:"1rem"
+                      fontSize: "x-large",
+                      padding: "7px 0",
+                      gap: "1rem",
                     }}
                   >
                     <li key={currentQuestionIndex}>
@@ -417,37 +531,97 @@ const Math = () => {
                           display: "flex",
                           alignItems: "center",
                           flexDirection: "column",
-                          gap:"0.33rem",
-                          maxWidth:"500px",
-                          textAlign:"center"
+                          gap: "0.33rem",
+                          maxWidth: "500px",
+                          textAlign: "center",
+                          
                         }}
                       >
-                        <span>
+                        <span style={{maxWidth:"500px"}}>
                           <strong>{currentQuestionIndex + 1}. </strong>
                           <i>{currentQuestion.title}:</i>{" "}
                         </span>
                         <strong>{currentQuestion.question_text}</strong>
                         {currentQuestion.is_attempted && (
-                          <strong style={{ color: "green", marginTop:"50px"}}>
+                          <strong style={{ color: "green", marginTop: "50px" }}>
                             {t ('alreadyAnswered')}
                           </strong>
                         )}
+                        {currentQuestion.audio && (
+                          <>
+                            <div className="taskmodalaudio">
+                              <button className="" onClick={toggleAudio}>
+                                {isAudioPlaying ? <PauseIcon sx={{ fontSize: 50 }} /> : <PlayArrowIcon sx={{ fontSize: 50 }} />}
+                              </button>
+                            </div>
+                            
+                            <audio ref={audioRef} src={currentQuestion.audio} />
+                          </>
+                        )}
                       </span>
-                      <ul className="studTaskOptions">
-                        {currentQuestion.options.map((option, idx) => (
-                          <li
-                            key={idx}
-                            className={`studTaskOption ${
-                              selectedOption === option.id
-                                ? "studTaskOptionSelected"
-                                : ""
-                            }`}
-                            onClick={() => handleOptionClick(option.id)}
-                          >
-                            {option.value}
-                          </li>
-                        ))}
-                      </ul>
+                      {currentQuestion.question_type.startsWith(
+                        "drag_and_drop"
+                      ) ? (
+                        <ul
+                          className="studTaskOptions"
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            flexWrap: "wrap",
+                            gap: "1rem",
+                          }}
+                        >
+                          {currentQuestion.options.map((option, idx) => (
+                            <li
+                              key={idx}
+                              className="studTaskOption"
+                              draggable
+                              onDragStart={() => handleDragStart(option.id)}
+                              onDrop={(event) => handleDrop(event, idx)}
+                              onDragOver={allowDrop}
+                              style={{ cursor: "move" }}
+                            >
+                              {currentQuestion.question_type ===
+                              "drag_and_drop_images" ? (
+                                <img
+                                  src={option.value}
+                                  alt={`option-${idx}`}
+                                  style={{ width: "100px", height: "100px" }}
+                                />
+                              ) : (
+                                option.value
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <ul className="studTaskOptions">
+                          {currentQuestion.options.map((option, idx) => (
+                            <li
+                              key={idx}
+                              className={`studTaskOption ${
+                                selectedOption === option.id
+                                  ? "studTaskOptionSelected"
+                                  : ""
+                              }`}
+                              onClick={() => {
+                                handleOptionClick(option.id);
+                              }}
+                            >
+                              {currentQuestion.question_type ===
+                              "multiple_choice_images" ? (
+                                <img
+                                  src={option.value}
+                                  alt={`option-${idx}`}
+                                  style={{ width: "100px", height: "100px" }}
+                                />
+                              ) : (
+                                option.value
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </li>
                   </ul>
                 </div>
@@ -463,7 +637,7 @@ const Math = () => {
                 }}
               >
                 <progress
-                  value={progress - (100/questions.length)}
+                  value={progress - 100 / questions.length}
                   max="100"
                   style={{ width: "60%", marginTop: "10px" }}
                 ></progress>
@@ -473,7 +647,9 @@ const Math = () => {
                       ? handleSubmit
                       : handleNextQuestion
                   }
-                  disabled={selectedOption === null}
+                  disabled={
+                    selectedOption === null && droppedOrder.length === 0
+                  }
                   className={`${
                     currentQuestionIndex === questions.length - 1
                       ? ""
@@ -490,6 +666,7 @@ const Math = () => {
           </div>
         </dialog>
       )}
+      <audio ref={backgroundAudioRef} src="../../assets/audio/Kevin MacLeod_ Atlantean Twilight.mp3" loop />
     </div>
   );
 };
