@@ -175,23 +175,15 @@ const Parentdash = () => {
                 <img
                   src={staricon}
                   alt=""
-                  style={{ margin: "0", position: "absolute", left: "-25px" }}
+                  className="starIcon"
                 />
                 <p>{child.stars}</p>
               </div>
-              <div
-                className="lndsh"
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  position: "relative",
-                }}
-              >
+              <div className="lndsh">
                 <img
                   src={cupicon}
                   alt=""
-                  style={{ position: "absolute", left: "-20px" }}
+                  className="cupIcon"
                 />
                 <p>{child.cups}</p>
               </div>

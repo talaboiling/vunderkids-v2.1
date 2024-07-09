@@ -24,20 +24,27 @@ function Login() {
 
     try {
       const user = await loginUser(formData.email, formData.password);
-      setResponseMessage(t ('loginSuccessful'));
-      if (user.role === "parent") {
-        navigate("/parent"); // Redirect parent to dashboard
-      } else if (user.role === "student") {
-        navigate("/dashboard"); // Redirect to student dashboard
-      } else if (user.is_superuser) {
-        navigate("/admindashboard"); // Redirect to dashboard
+      // console.log("Logged in user:", user); // Debugging log
+      setResponseMessage(t('loginSuccessful'));
+      if (user.is_superuser) {
+        //console.log("Navigating to /admindashboard");
+        navigate("/admindashboard"); // Redirect to admin dashboard
       } else if (user.role === "supervisor") {
-        navigate("/supervisor-dashboard"); // Redirect to dashboard
+        //console.log("Navigating to /supervisor-dashboard");
+        navigate("/supervisor-dashboard"); // Redirect to supervisor dashboard
+      } else if (user.role === "parent") {
+        //console.log("Navigating to /parent");
+        navigate("/parent"); // Redirect to parent dashboard
+      } else if (user.role === "student") {
+        //console.log("Navigating to /dashboard");
+        navigate("/dashboard"); // Redirect to student dashboard
       } else {
-        navigate("/dashboard");
+        //console.log("Navigating to /login");
+        navigate("/login"); // Default redirect to login
       }
     } catch (error) {
       setResponseMessage("Error: " + error.message);
+      console.error("Login error:", error); // Debugging log
     }
   };
 
@@ -61,16 +68,16 @@ function Login() {
           <div className="excLogo">
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
-                {t ('aboutPlatform')}
+                {t('aboutPlatform')}
               </a>
               <a href="/#obuchenie" className="navLink">
-                {t ('education')}
+                {t('education')}
               </a>
               <a href="/#otzyvy" className="navLink">
-                {t ('reviews')}
+                {t('reviews')}
               </a>
               <a href="/#contakty" className="navLink">
-                {t ('contacts')}
+                {t('contacts')}
               </a>
             </div>
           </div>
@@ -81,9 +88,9 @@ function Login() {
         >
           <div className="regform">
             <div className="formTitle">
-              <h3 className="form-h3">{t ('login')}</h3>
+              <h3 className="form-h3">{t('login')}</h3>
               <Link to={"/registration"} className="formLink">
-                {t ('noAccount')}
+                {t('noAccount')}
               </Link>
             </div>
             <form className="registrationInput" onSubmit={handleSubmit}>
@@ -97,7 +104,7 @@ function Login() {
                 onChange={handleInputChange}
                 required
               />
-              <label htmlFor="password">{t ('yourPassword')}</label>
+              <label htmlFor="password">{t('yourPassword')}</label>
               <input
                 type="password"
                 id="password"
@@ -110,7 +117,7 @@ function Login() {
               <br />
               <input
                 type="submit"
-                value={t ('loginButton')}
+                value={t('loginButton')}
                 className="orangeButton"
                 style={{
                   position: "relative",
