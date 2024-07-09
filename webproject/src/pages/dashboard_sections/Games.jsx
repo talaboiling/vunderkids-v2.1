@@ -76,12 +76,14 @@ const Games = () => {
     if (!open) {
       const savedTime = localStorage.getItem('time');
       if (!savedTime || parseInt(savedTime, 10) <= 0) {
-        localStorage.setItem('time', 600);
+        playGame(childId);
+        fetchChildData();
+        localStorage.setItem('time', 300);
       }
       
       setGamePath(path);
       setOpen(true);
-      modalRef.current.showModal();
+      // modalRef.current.setShowModal();
       
     }
   };
@@ -95,8 +97,6 @@ const Games = () => {
 
   const handleTimeUp = () => {
     closeModal();
-    playGame(childId);
-    fetchChildData();
     setOpen(false);
   };
 

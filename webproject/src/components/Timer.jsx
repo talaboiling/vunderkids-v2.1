@@ -5,7 +5,7 @@ const Timer = ({isActive, onTimeUp}) => {
     const { t } = useTranslation();
     const [time, setTime] = useState(() => {
         const savedTime = localStorage.getItem('time');
-        return savedTime ? parseInt(savedTime, 10) : 600;
+        return savedTime ? parseInt(savedTime, 10) : 300;
     });
 
     useEffect(() => {
