@@ -23,8 +23,11 @@ import {
   answerQuestion,
 } from "../../utils/apiService";
 import Loader from "../Loader";
+import { useTranslation } from "react-i18next";
+
 
 const Math = () => {
+  const { t } = useTranslation();
   const { courseId } = useParams();
   const [course, setCourse] = useState();
   const [sections, setSections] = useState([]);
@@ -93,7 +96,7 @@ const Math = () => {
         childId
       );
       if (taskQuestions.length === 0) {
-        alert("В этом задании нет вопросов.");
+        alert(t ('noQuestions'));
         return;
       }
       setTaskContent(task);
@@ -265,8 +268,8 @@ const Math = () => {
                   <p style={{ margin: "0" }}>{course.name}</p>
                   <progress value={course.percentage_completed} />
                   <p className="defaultStyle">
-                    Выполнено {course.completed_tasks} из {course.total_tasks}{" "}
-                    заданий
+                    {t ('completedTasks1')}{course.completed_tasks}{t ('completedTasks2')}{course.total_tasks}{" "}
+                    {t ('completedTasks3')}
                   </p>
                 </div>
                 <img
@@ -286,7 +289,7 @@ const Math = () => {
                 style={{ color: "black", fontWeight: "700" }}
               >
                 {" "}
-                Начало курса{" "}
+                {t ('courseStart')}{" "}
               </h2>
 
               {sections.map((section, sectionIndex) => (
@@ -356,12 +359,12 @@ const Math = () => {
                           {content.is_completed && (
                             <div className="completedTask">
                               <VerifiedIcon sx={{ color: "#19a5fc" }} />
-                              <strong>Вы сделали это задание!</strong>
+                              <strong>{t ('youCompletedTask')}</strong>
                             </div>
                           )}
                           {!content.is_completed && (
                             <div className="completedTask incompleteTask">
-                              <strong>Вас ждет новое задание</strong>
+                              <strong>{t ('youHaveNewTask')}</strong>
                             </div>
                           )}
                         </div>
@@ -372,13 +375,12 @@ const Math = () => {
               ))}
             </div>
           </div>
-
           <div className="lessonsProg">
             <h3
               className="defaultStyle"
               style={{ color: "black", fontWeight: "800", fontSize: "x-large" }}
             >
-              Что мы будем проходить:
+              {t ('whatWeLearn')}
             </h3>
             <div className="progList">
               {sections.map((section, index) => (
@@ -402,7 +404,7 @@ const Math = () => {
           <div className="studmodal-content">
             <div className="modalHeader" style={{ marginBottom: "20px" }}>
               <h2 className="defaultStyle" style={{ color: "#666" }}>
-                Видеоурок
+                {t ('videoLesson')}
               </h2>
               <button
                 style={{
@@ -414,7 +416,7 @@ const Math = () => {
                 }}
                 onClick={closeVideoModal}
               >
-                Закрыть
+                {t ('close')}
               </button>
             </div>
             <iframe
@@ -473,7 +475,7 @@ const Math = () => {
                 }}
                 onClick={closeTaskModal}
               >
-                Закрыть
+                {t ('close')}
               </button>
             </div>
             <div
@@ -505,11 +507,10 @@ const Math = () => {
                       }}
                     >
                       {feedbackMessage === "Correct!"
-                        ? "Правильно!"
-                        : "Неправильно!"}
+                      ? t ('correct')
+                      : t ('incorrect')}
                     </p>
                   </div>
-                  
                 </div>
               )}
               <div className="questionCarousel">
@@ -543,7 +544,7 @@ const Math = () => {
                         <strong>{currentQuestion.question_text}</strong>
                         {currentQuestion.is_attempted && (
                           <strong style={{ color: "green", marginTop: "50px" }}>
-                            Вы уже ответили на этот вопрос
+                            {t ('alreadyAnswered')}
                           </strong>
                         )}
                         {currentQuestion.audio && (
@@ -657,8 +658,8 @@ const Math = () => {
                   style={{ float: "right" }}
                 >
                   {currentQuestionIndex === questions.length - 1
-                    ? "Закончить"
-                    : "Дальше"}
+                    ? t ('finish')
+                    : t ('next')}
                 </button>
               </span>
             </div>
