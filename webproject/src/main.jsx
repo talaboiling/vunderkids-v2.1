@@ -19,35 +19,77 @@ import ClassDetails from "./pages/school_details/ClassDetails.jsx";
 import MathCourse from "./pages/courses/Math.jsx";
 import TaskSection from "./pages/admin_sections/Tasksection.jsx";
 import SupervisorDashboard from "./pages/SupervisorDashboard.jsx";
+import AuthRoute from "./AuthRoute.jsx";
 
-import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/login", element: <Vhod /> },
   { path: "/registration", element: <Registration /> },
   { path: "/activate/:activation_token", element: <Activate /> },
-  { path: "/parent", element: <Parentdash /> },
-  { path: "/dashboard", element: <Dashboard /> },
-  { path: "/dashboard/rating", element: <Rating /> },
-  { path: "/dashboard/progress", element: <Progress /> },
-  { path: "/dashboard/lessons", element: <Lessons /> },
-  { path: "/dashboard/games", element: <Games /> },
-  { path: "/dashboard/courses/:courseId/lessons", element: <MathCourse /> },
-  { path: "/admindashboard", element: <Superdash /> },
-  { path: "/admindashboard/students", element: <Superstudents /> },
-  { path: "/admindashboard/tasks", element: <Tasks /> },
-  { path: "/schools/:schoolId", element: <SchoolDetails /> },
-  { path: "/schools/:schoolId/classes/:classId", element: <ClassDetails /> },
+  {
+    path: "/parent",
+    element: (
+      <AuthRoute element={<Parentdash />} allowedRoles={["parent"]} />
+    ),
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <AuthRoute element={<Dashboard />} allowedRoles={["student", "parent"]} />
+    ),
+  },
+  {
+    path: "/dashboard/rating",
+    element: <AuthRoute element={<Rating />} allowedRoles={["student", "parent"]} />,
+  },
+  {
+    path: "/dashboard/progress",
+    element: <AuthRoute element={<Progress />} allowedRoles={["student", "parent"]} />,
+  },
+  {
+    path: "/dashboard/lessons",
+    element: <AuthRoute element={<Lessons />} allowedRoles={["student", "parent"]} />,
+  },
+  {
+    path: "/dashboard/games",
+    element: <AuthRoute element={<Games />} allowedRoles={["student", "parent"]} />,
+  },
+  {
+    path: "/dashboard/courses/:courseId/lessons",
+    element: <AuthRoute element={<MathCourse />} allowedRoles={["student", "parent"]} />,
+  },
+  {
+    path: "/admindashboard",
+    element: <AuthRoute element={<Superdash />} allowedRoles={["superadmin"]} />,
+  },
+  {
+    path: "/admindashboard/students",
+    element: <AuthRoute element={<Superstudents />} allowedRoles={["superadmin"]} />,
+  },
+  {
+    path: "/admindashboard/tasks",
+    element: <AuthRoute element={<Tasks />} allowedRoles={["superadmin"]} />,
+  },
+  {
+    path: "/schools/:schoolId",
+    element: <AuthRoute element={<SchoolDetails />} allowedRoles={["superadmin", "supervisor"]} />,
+  },
+  {
+    path: "/schools/:schoolId/classes/:classId",
+    element: <AuthRoute element={<ClassDetails />} allowedRoles={["superadmin", "supervisor"]} />,
+  },
   {
     path: "/admindashboard/tasks/courses/:courseId/sections/:sectionId",
-    element: <TaskSection />,
+    element: <AuthRoute element={<TaskSection />} allowedRoles={["superadmin"]} />,
   },
-  { path: "/supervisor-dashboard/", element: <SupervisorDashboard /> },
+  {
+    path: "/supervisor-dashboard",
+    element: <AuthRoute element={<SupervisorDashboard />} allowedRoles={["supervisor"]} />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router}>
-    <Route />
-  </RouterProvider>
+  <RouterProvider router={router} />
 );

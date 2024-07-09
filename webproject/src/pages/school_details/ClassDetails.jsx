@@ -126,18 +126,13 @@ const ClassDetails = () => {
           <dialog open className="modal supermodal">
             <div className="modal-content">
               <button
-                style={{
-                  border: "none",
-                  float: "right",
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                }}
+                className="transBtn"
+                style={{ float: "right"}}
                 onClick={() => setShowModal(false)}
               >
                 <CloseIcon sx={{ color: "gray" }} />
               </button>
-              <br />
-              <form onSubmit={handleSubmit}>
+              <form className="registrationInput" style={{marginTop:"40px"}} onSubmit={handleSubmit}>
                 <label htmlFor="first_name">Имя</label>
                 <input
                   type="text"
@@ -146,9 +141,7 @@ const ClassDetails = () => {
                   value={formData.first_name}
                   onChange={handleFormChange}
                   required
-                  style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
-                <br />
 
                 <label htmlFor="last_name">Фамилия</label>
                 <input
@@ -158,9 +151,7 @@ const ClassDetails = () => {
                   value={formData.last_name}
                   onChange={handleFormChange}
                   required
-                  style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
-                <br />
 
                 <label htmlFor="email">Email</label>
                 <input
@@ -170,26 +161,7 @@ const ClassDetails = () => {
                   value={formData.email}
                   onChange={handleFormChange}
                   required
-                  style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
-                <br />
-
-                <label htmlFor="gender">Пол</label>
-                <select
-                  id="gender"
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleFormChange}
-                  required
-                  style={{ width: "100%", padding: "10px", fontSize: "large" }}
-                >
-                  <option value="">Выберите пол</option>
-                  <option value="M">Мужской</option>
-                  <option value="F">Женский</option>
-                  <option value="O">Не указан</option>
-                </select>
-                <br />
-
                 <label htmlFor="phone_number">Телефон</label>
                 <input
                   type="text"
@@ -198,9 +170,22 @@ const ClassDetails = () => {
                   value={formData.phone_number}
                   onChange={handleFormChange}
                   required
-                  style={{ width: "100%", padding: "10px", fontSize: "large" }}
                 />
-                <br />
+
+                <label htmlFor="gender">Пол</label>
+                <select
+                  id="gender"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleFormChange}
+                  required
+                >
+                  <option value="">Выберите пол</option>
+                  <option value="M">Мужской</option>
+                  <option value="F">Женский</option>
+                  <option value="O">Не указан</option>
+                </select>
+
                 <br />
                 <button type="submit" className="superBtn">
                   Добавить

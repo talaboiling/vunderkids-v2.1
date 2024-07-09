@@ -16,11 +16,25 @@ export const clearTokens = () => {
   localStorage.clear();
 };
 
+export const isAuthenticated = () => {
+  const token = getAccessToken();
+  // console.log("isAuthenticated token:", token); // Debugging log
+  return !!token;
+};
+
+export const getUserRole = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const role = user?.role;
+
+  // console.log("getUserRole:", role); // Debugging log
+  return role;
+};
+
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/login/`, { email, password });
     if (response.status === 200) {
-      const data = response.data;
+      const {data} = response;
       setAccessToken(data.access);
       setRefreshToken(data.refresh);
       localStorage.setItem("user", JSON.stringify(data.user));

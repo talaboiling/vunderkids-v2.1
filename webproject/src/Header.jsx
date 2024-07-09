@@ -1,5 +1,5 @@
 import React from "react";
-import mascotImg from "./assets/mascotImg.png";
+import mascotImg from "./assets/lionmascot_main.svg";
 import logoImg from "./assets/logo_blue.png";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "./utils/authService";
@@ -18,9 +18,12 @@ function Header() {
   return (
     <div className="headerImg">
       <div className="navBar">
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <img className="navLogo" src={logoImg} alt="logo" />
-        </Link>
+        <div className="logo">
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <img className="navLogo" src={logoImg} alt="logo" />
+          </Link>
+          {/* <p className="rev">Наши контакты: +7 775 303 7432</p> */}
+        </div>
         <div className="excLogo">
           <div className="navList">
             <a href="#oplatforme" className="navLink">
@@ -93,7 +96,7 @@ function Header() {
               </button>
             </Link>
           </div>
-          <img src={mascotImg} alt="lionimg" style={{ scale: "0.8" }} />
+          <img src={mascotImg} alt="lionimg" />
         </div>
       </div>
     </div>

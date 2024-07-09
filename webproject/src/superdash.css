@@ -80,6 +80,8 @@
 
 .superTable {
   margin-top: 40px;
+  max-height: 600px;
+  overflow-y: scroll;
 }
 
 .superBtn {
@@ -167,6 +169,11 @@
   margin-top: 30px;
 }
 
+.formLeft{
+  display: flex;
+  flex-direction: column;
+}
+
 .sectAdder {
   display: flex;
   flex-direction: row;
@@ -202,6 +209,15 @@
 
 .transBtn:hover {
   background-color: transparent;
+}
+
+.transBtn .langBtn{
+  background-color: #077ac2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+
 }
 
 .addedCourses {
@@ -280,6 +296,7 @@
 .formVideo {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  column-gap: 1rem;
   margin-top: 40px;
 }
 
@@ -560,5 +577,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+}
+
+.template-1 {
+  background-image: url('./assets/bgpicker1.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.template-2 {
+  background-image: url('./assets/bgpicker2.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.template-3 {
+  background-image: url('./assets/bgpicker3.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.template-4 {
+  background-image: url('./assets/bgpicker4.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.optionsImgUpload{
+  display: flex;
+  flex-direction: column;
+}
+
+.optionImgUpload{
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
 }

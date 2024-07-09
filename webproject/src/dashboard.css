@@ -10,7 +10,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none;
-  width: 99vw;
+  width: 100vw;
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
 }
@@ -25,13 +25,16 @@
 }
 
 .lndsh {
-  width: fit-content;
-  height: min-content;
-  padding: 5px 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
   border-radius: 9px;
   background-color: white;
   box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.3);
   margin-right: 10px;
+  padding: 0 15px 0 10px;
+  max-width: fit-content;
 }
 
 .rndsh {
@@ -49,24 +52,14 @@
   min-width: fit-content;
 }
 
-.starCount {
-  position: relative;
-}
-
 .starIcon {
-  position: absolute;
-  top: -10px;
-  right: 65px;
-}
-
-.cupCount {
-  position: relative;
+  max-height: 35px;
+  max-width: 35px;
 }
 
 .cupIcon {
-  position: absolute;
-  top: -6px;
-  right: 65px;
+  max-height: 35px;
+  max-width: 35px;
 }
 
 .langSelect {
@@ -508,11 +501,9 @@ dialog::backdrop {
 }
 
 .gendgrade {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  max-width: 90%;
-  justify-self: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 10px;
 }
 
 .childavatar {
@@ -609,7 +600,7 @@ img.childcard {
   background: white;
   padding: 30px;
   border-radius: 10px;
-  width: 80%;
+  width: auto;
   max-width: fit-content;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -812,6 +803,7 @@ img.childcard {
 }
 
 .studtaskDetails{
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 900px;
@@ -821,6 +813,7 @@ img.childcard {
   border-radius: 35px;
   border: 4px solid lightgray;
   padding: 0 40px;
+  overflow: hidden;
 }
 
 .studTaskOptions{
@@ -845,22 +838,37 @@ img.childcard {
   background-color: #03a7a4;
 }
 
+.feedbackContent{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
 .feedbackMessage{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  padding: auto;
+  align-content: center;
   display: inline;
-  border: 4px solid lightgray;
-  padding: 10px;
-  border-radius: 7px;
-  margin-top: 10px;
+  z-index: 100;
+}
+
+.feedbackMessage::backdrop{
+  backdrop-filter: blur(13px);
 }
 
 .fbmcorrect{
-  border-color: #3ecb7e;
-  color: green;
+  background-color: #3ecb7e82;
 }
 
 .fbmincorrect{
-  border-color: #ff7763;
-  color: red;
+  background-color: #fa3b3b82;
 }
 
 .completedTask{
@@ -886,4 +894,45 @@ img.childcard {
 
 .navigationButtons{
   margin-top: 20px;
+}
+
+.game-modal{
+  overflow: hidden;
+  width: 90vw;
+  height: 90vh;
+  z-index: 1000;
+}
+
+.game-iframe{
+  overflow: hidden;
+  position: relative;
+}
+
+.game-button{
+  background-color: rgb(152, 247, 152);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 50px;
+  width: 100%;
+}
+
+.game-button:hover{
+  background-color: rgb(71, 236, 71);
+}
+
+.game-div{
+  display: grid;
+  padding-right: 50px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.questionContent{
+  position: relative;
+}
+
+.taskmodalaudio{
+  position: absolute;
+  left: 0;
 }

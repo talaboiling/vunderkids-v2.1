@@ -26,10 +26,7 @@ const Ratinglist = ({ ratings }) => {
                 {student.first_name} {student.last_name}
               </p>
               <p style={{ fontSize: "large", color: index > 2 ? "#222222" : "#fff", margin: "0", padding: '0', fontWeight: "700" }}>
-                <strong style={{fontSize:"x-large"}}>{student.cups}</strong> очков
-              </p>
-              <p style={{ fontSize: "large", color: index > 2 ? "#222222" : "#fff", margin: "0", padding: '0', fontWeight: "600" }}>
-                {student.cups} {t ('points')}
+                <strong style={{fontSize:"x-large"}}>{student.cups}</strong> {t ('points')}
               </p>
             </div>
           </div>
