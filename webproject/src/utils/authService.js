@@ -24,10 +24,9 @@ export const isAuthenticated = () => {
 
 export const getUserRole = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const role = user?.role;
+  return user?.role;
 
   // console.log("getUserRole:", role); // Debugging log
-  return role;
 };
 
 export const loginUser = async (email, password) => {

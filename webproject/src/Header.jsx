@@ -5,10 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { logout } from "./utils/authService";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
+import { getUserRole, isAuthenticated } from "./utils/authService.js";
 
 function Header() {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("access_token") !== null;
+  const role = getUserRole();
 
   const handleLogout = () => {
     logout();
@@ -46,7 +48,8 @@ function Header() {
             </div>
             {isLoggedIn ? (
               <>
-                <Link to="/dashboard">
+                <Link to={`${role === "superadmin" ? "/admindashboard" : role === "supervisor" ? "/supervisor-dashboard" : "/dashboard"}`} style={{ textDecoration: "none" }}>
+
                   <button>{t('continue')}</button>
                 </Link>
                 <button className="orangeButton" onClick={handleLogout}>
