@@ -638,8 +638,8 @@ export const answerQuestion = async (
 export const playGame = async (childId) => {
   try {
     const endpoint = childId
-      ? `/play-game/?child_id=${childId}`
-      : "/play-game/";
+    ? `/play-game/?child_id=${childId}`
+    : "/play-game/";
     const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
