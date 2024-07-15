@@ -48,12 +48,14 @@ const Rating = () => {
     <div className="rtdash rtrat">
       <Sidebar />
       <div className="centralLessons">
-        <Navdash
-          starCount={user.stars}
-          cupCount={user.cups}
-          gradeNum={user.grade}
-          notif={3}
-        />
+        <div style={{width:"fit-content"}}>
+          <Navdash
+            starCount={user.stars}
+            cupCount={user.cups}
+            gradeNum={user.grade}
+          />
+        </div>
+        
 
         <div className="ratingCentral">
           <div className="ratinginfo">

@@ -11,6 +11,7 @@ function Login() {
   });
 
   const [responseMessage, setResponseMessage] = useState("");
+  const [showErrModal, setShowErrModal] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -43,7 +44,8 @@ function Login() {
         navigate("/login"); // Default redirect to login
       }
     } catch (error) {
-      setResponseMessage("Error: " + error.message);
+      setResponseMessage("Ошибка: " + error.message);
+      setShowErrModal(true);
       console.error("Login error:", error); // Debugging log
     }
   };
@@ -126,8 +128,30 @@ function Login() {
                 }}
               />
             </form>
-            {responseMessage && <p>{responseMessage}</p>}
           </div>
+          {showErrModal && (
+            <dialog
+              open
+              className="modal supermodal"
+              onClose={() => setShowErrModal(false)}
+            >
+              <div className="modal-content" style={{display:"flex", flexDirection:"column", alignItems:"center", gap:"1rem", border:"3px solid darkred"}}>
+                {responseMessage}
+                <button
+                  onClick={() => setShowErrModal(false)}
+                  style={{
+                    borderRadius:"10px",
+                    backgroundColor: "transparent",
+                    boxShadow: "none",
+                    color:"#666",
+                  }}
+                >
+                  Продолжить
+                </button>
+                
+              </div>
+            </dialog>
+          )}
         </div>
       </div>
     </>

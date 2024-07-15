@@ -8,6 +8,8 @@ import pfplaceholder from "../assets/placehoder_pfp.png";
 import "/src/dashboard.css";
 import staricon from "../assets/navStars.png";
 import cupicon from "../assets/navCups.png";
+import streak from "../assets/streak.png";
+import nostreak from "../assets/nostreak.png";
 import { logout } from "../utils/authService";
 import {
   fetchUserData,
@@ -193,7 +195,8 @@ const Parentdash = () => {
                 <p>{t ('lvl')}: {child.level}</p>
               </div>
               <div className="lndsh">
-                <p>{t ('streak')}: {child.streak}</p>
+                <img src={nostreak} alt="streak" style={{width:"30px", height:"30px"}}/>
+                <p>{child.streak}</p>
               </div>
             </div>
 

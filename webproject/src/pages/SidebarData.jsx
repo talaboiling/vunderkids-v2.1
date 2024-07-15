@@ -1,5 +1,6 @@
 import React from 'react'
 import HomeIcon from '@mui/icons-material/Home';
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import cups from "../assets/sidecup.png"
 import cert from "../assets/sideachieve.png"
 import prog from "../assets/sideprog.png"
@@ -30,6 +31,11 @@ export const SidebarData = [
         title: 'Игры',
         icon: <img src={game} alt="games" />,
         link: '/dashboard/games'
+    },
+    {
+        title: 'Подписки',
+        icon: <SubscriptionsIcon/>,
+        link: '/subscriptions'
     }
 ]
 

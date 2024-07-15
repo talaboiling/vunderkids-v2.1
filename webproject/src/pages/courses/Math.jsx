@@ -238,6 +238,11 @@ const Math = () => {
     setTimeout(async () => {
       setShowFeedback(false);
       setShowTaskModal(false);
+      if (backgroundAudioRef.current) {
+        backgroundAudioRef.current.pause();
+        backgroundAudioRef.current.currentTime = 0;
+        setIsBackgroundAudioPlaying(false);
+      }
     }, 1500);
 
     await loadData();

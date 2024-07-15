@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import staricon from "../assets/navStars.png";
 import cupicon from "../assets/navCups.png";
+import streak from "../assets/streak.png";
+import nostreak from "../assets/nostreak.png";
 import { fetchUserData } from "../utils/apiService"; // Import the fetch function
 import Loader from "./Loader";
 import { useTranslation } from "react-i18next";
@@ -41,6 +43,10 @@ const Navdash = (props) => {
       <div className="lndsh cupCount">
         <img src={cupicon} alt="cups" className="cupIcon" />
         {user.cups || props.cupCount}
+      </div>
+      <div className="lndsh cupCount">
+        <img src={nostreak} alt="streak" className="cupIcon" />
+        {user.streak}
       </div>
       <div className="rndsh gradeNum">{user.grade || props.gradeNum} {t ('studClass')}</div>
       <div className="rndsh langSelect">

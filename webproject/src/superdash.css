@@ -613,3 +613,17 @@
   flex-direction: column;
   max-width: 200px;
 }
+
+.input-file{
+  position: relative;
+}
+
+.input-file input[type=file] {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}

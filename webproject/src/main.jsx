@@ -20,6 +20,7 @@ import MathCourse from "./pages/courses/Math.jsx";
 import TaskSection from "./pages/admin_sections/Tasksection.jsx";
 import SupervisorDashboard from "./pages/SupervisorDashboard.jsx";
 import AuthRoute from "./AuthRoute.jsx";
+import Subscriptions from "./pages/Subscriptions.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
   {
     path: "/supervisor-dashboard",
     element: <AuthRoute element={<SupervisorDashboard />} allowedRoles={["supervisor"]} />,
+  },
+  {
+    path: "/subscriptions",
+    element: <AuthRoute element={<Subscriptions />} allowedRoles={["parent"]}/>
   },
 ]);
 

@@ -18,10 +18,10 @@
 .navdashboard {
   font-weight: 700;
   display: grid;
-  grid-template-columns: 1fr 3fr 2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 1rem;
   height: fit-content;
-  padding: 44px 77px;
+  padding: 44px 10px;
 }
 
 .lndsh {
@@ -935,4 +935,110 @@ img.childcard {
 .taskmodalaudio{
   position: absolute;
   left: 0;
+}
+
+.subscriptionBanners{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5rem;
+}
+
+.subBanners{
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
+
+.subBanner{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.submonth{
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgb(255,255,255,0.4);
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 10px;
+  color: #444
+}
+
+.subban-1{
+  background-color: #48bff226;
+  color: #48BFF2;
+  position: relative;
+}
+
+.subban-2{
+  background-color: #b148f22c;
+  border-radius: 40px;
+  color: #b148f2;
+  position: relative;
+}
+
+.subban-1::after{
+  content: "";
+  position: absolute;
+  top: -25%;
+  left: 25%;
+  width: 150px;
+  height: 150px;
+  background-color: #48BFF2;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.subban-2::after{
+  content: "";
+  position: absolute;
+  top: -25%;
+  left: 25%;
+  width: 150px;
+  height: 150px;
+  background-color: #b148f2;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.subban-1::before{
+  content: "";
+  position: absolute;
+  top: 80%;
+  left: 15%;
+  width: 200px;
+  height: 200px;
+  background-color: #48BFF2;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.subban-2::before{
+  content: "";
+  position: absolute;
+  top: 80%;
+  left: 15%;
+  width: 200px;
+  height: 200px;
+  background-color: #b148f2;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.subBanner-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  z-index: 2;
+  backdrop-filter: blur(25px);
+  padding: 20px
 }

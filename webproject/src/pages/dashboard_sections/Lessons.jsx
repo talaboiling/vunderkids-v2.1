@@ -53,12 +53,13 @@ const Lessons = () => {
     <div className="rtdash certpage">
       <Sidebar />
       <div className="centralLessons">
-        <Navdash
-          starCount={user.stars}
-          cupCount={user.cups}
-          gradeNum={user.grade}
-          notif={3}
-        />
+        <div style={{width:"fit-content"}}>
+          <Navdash
+            starCount={user.stars}
+            cupCount={user.cups}
+            gradeNum={user.grade}
+          />
+        </div>
         <div className="mainContent">
           <div className="ratingCentral">
             <div className="ratinginfo">
