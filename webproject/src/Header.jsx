@@ -48,7 +48,7 @@ function Header() {
             </div>
             {isLoggedIn ? (
               <>
-                <Link to={`${role === "superadmin" ? "/admindashboard" : role === "supervisor" ? "/supervisor-dashboard" : "/dashboard"}`} style={{ textDecoration: "none" }}>
+                <Link to={`${role === "superadmin" ? "/admindashboard" : role === "supervisor" ? "/supervisor-dashboard" : role === "parent" ? "/parent" : "/dashboard"}`} style={{ textDecoration: "none" }}>
 
                   <button>{t('continue')}</button>
                 </Link>

@@ -172,10 +172,10 @@ function Registration() {
                 required
               />
               
-              {/* <ReCAPTCHA
-                sitekey="6LdILRAqAAAAAFSbgnl6r68qi1D3DQLfM7CQcIep"
+              <ReCAPTCHA
+                sitekey="6LdOuxAqAAAAAOZuSbWfPWcvYSbu-vMtAmhYM5f7"
                 onChange={handleCaptchaChange}
-              /> */}
+              />
               
               <input
                 type="submit"
