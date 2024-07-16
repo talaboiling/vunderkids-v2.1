@@ -40,6 +40,7 @@ export const loginUser = async (email, password) => {
       return data.user;
     }
   } catch (error) {
+    console.log(error);
     if (error.response) {
       if (error.response.status === 401) {
         throw new Error("Email или пароль не правильный");
