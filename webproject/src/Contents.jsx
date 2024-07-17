@@ -93,7 +93,7 @@ function Contents() {
         <div className="hookUnder">
                 <div className="hookInfo">
                     
-                    <p style={{fontWeight:"700"}}>{t ('byStandard')}</p>
+                    <p style={{fontWeight:"700", textAlign:"center", width:"250px"}}>{t ('byStandard')}</p>
                     <div className="hookInfoRight">
                         <img src={icon_grad} alt="icon_graduation" className='glowImg'/>
                         <p style={{marginLeft:"20px"}}>{t ('students100k')}</p>
@@ -153,9 +153,8 @@ function Contents() {
         <div className="bottomCont">
             <div className="bottomCard">
                 <img src={logoImg} alt="logo" style={{width:"136px", height:"34px"}}/>
-                <h1>{t ('eduInvest1')}</h1>
-                <h1>{t ('eduInvest2')}</h1>
-                <ol style={{marginTop:"50px"}}>
+                <h1>{t ('eduInvest1')}<br/><br/><br/>{t ('eduInvest2')}</h1>
+                <ol style={{}}>
                     <li>
                         <div className="contDisplay">
                             <h4>{t ('completeLessons')}</h4>
@@ -171,11 +170,20 @@ function Contents() {
                             <h4>{t ('playVideoGames')}</h4>
                         </div>
                     </li>
+                    <li>
+                        <div className="contDisplay">
+                            <h4>{t ('learnSkills')}</h4>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="contDisplay">
+                            <h4>{t ('getFeedback')}</h4>
+                        </div>
+                    </li>
                 </ol>
                 <Link to={"/registration"}>
-                    <button className="orangeButton" style={{marginTop:"50px"}}>{t ('try')}</button>
+                    <button className="orangeButton" style={{marginTop:"15px", fontSize:"xx-large"}}>{t ('try')}</button>
                 </Link>
-                
             </div>
         </div>
         </>

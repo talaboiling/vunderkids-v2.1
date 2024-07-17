@@ -24,7 +24,7 @@ const Lessons = () => {
   const [courses, setCourses] = useState([]); // State to store courses
 
   const [loading, setLoading] = useState(true); // Add loading state
-  const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
+  const avatarUrl = user.avatar || placeholderPfp; // Use placeholder if avatar is null
 
   useEffect(() => {
     const fetchData = async () => {

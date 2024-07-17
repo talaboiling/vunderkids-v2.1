@@ -24,7 +24,10 @@ function Header() {
           <Link to="/" style={{ textDecoration: "none" }}>
             <img className="navLogo" src={logoImg} alt="logo" />
           </Link>
-          {/* <p className="rev">Наши контакты: +7 775 303 7432</p> */}
+          <span>
+            <p className="rev">Наши контакты:</p>
+            <p className="rev">+7 775 303 7432</p>
+          </span>
         </div>
         <div className="excLogo">
           <div className="navList">
@@ -99,7 +102,7 @@ function Header() {
               </button>
             </Link>
           </div>
-          <img src={mascotImg} alt="lionimg" />
+          <img src={mascotImg} alt="lionimg" className="mascotImg" />
         </div>
       </div>
     </div>

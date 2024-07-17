@@ -21,6 +21,7 @@ import TaskSection from "./pages/admin_sections/Tasksection.jsx";
 import SupervisorDashboard from "./pages/SupervisorDashboard.jsx";
 import AuthRoute from "./AuthRoute.jsx";
 import Subscriptions from "./pages/Subscriptions.jsx";
+import Renewal from "./pages/Renewal.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
   { path: "/login", element: <Vhod /> },
   { path: "/registration", element: <Registration /> },
   { path: "/activate/:activation_token", element: <Activate /> },
+  { path: "/password-renewal", element: <Renewal />},
   {
     path: "/parent",
     element: (

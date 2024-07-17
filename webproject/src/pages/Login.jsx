@@ -116,6 +116,9 @@ function Login() {
                 onChange={handleInputChange}
                 required
               />
+              <Link to={"/password-renewal"} className="formLink">
+                {t('Забыли пароль?')}
+              </Link>
               <br />
               <input
                 type="submit"

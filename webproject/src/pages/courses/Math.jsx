@@ -32,7 +32,6 @@ import Loader from "../Loader";
 import { useTranslation } from "react-i18next";
 import VolumeUp from "@mui/icons-material/VolumeUp";
 
-
 const Math = () => {
   const { t } = useTranslation();
   const { courseId } = useParams();
@@ -53,6 +52,7 @@ const Math = () => {
   const [draggedOption, setDraggedOption] = useState(null);
   const [droppedOrder, setDroppedOrder] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const audioRef = useRef(null); // Add this line
   const [isAudioPlaying, setIsAudioPlaying] = useState(false); // Add this line
   const backgroundAudioRef = useRef(null);
@@ -168,6 +168,7 @@ const Math = () => {
   };
 
   const handleNextQuestion = async () => {
+    setIsButtonDisabled(true);
     const currentQuestion = questions[currentQuestionIndex];
     let isCorrect;
 
@@ -202,10 +203,12 @@ const Math = () => {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       setSelectedOption(null);
       setDroppedOrder([]);
+      setIsButtonDisabled(false);
     }, 1500);
   };
 
   const handleSubmit = async () => {
+    setIsButtonDisabled(true);
     const currentQuestion = questions[currentQuestionIndex];
     let isCorrect;
 
@@ -243,6 +246,7 @@ const Math = () => {
         backgroundAudioRef.current.currentTime = 0;
         setIsBackgroundAudioPlaying(false);
       }
+      setIsButtonDisabled(false);
     }, 1500);
 
     await loadData();
@@ -300,12 +304,13 @@ const Math = () => {
     <div className="rtdash rtrat">
       <Sidebar className="courseSidebar" />
       <div className="centralLessons">
-        <Navdash
-          starCount={user.stars}
-          cupCount={user.cups}
-          gradeNum={user.grade}
-          notif={3}
-        />
+        <div style={{width:"fit-content"}}>
+          <Navdash
+            starCount={user.stars}
+            cupCount={user.cups}
+            gradeNum={user.grade}
+          />
+        </div>
         <div className="ratingCentral">
           <div className="lessonsMain">
             <div className="coursesCards">
@@ -583,11 +588,17 @@ const Math = () => {
                           
                         }}
                       >
-                        <span style={{maxWidth:"500px"}}>
+                        <span 
+                          className=
+                            {`questionTitle ${
+                              currentQuestion?.template 
+                                ? `qt-template-${currentQuestion.template}` 
+                                : ""
+                              }`}>
                           <strong>{currentQuestionIndex + 1}. </strong>
-                          <i>{currentQuestion.title}:</i>{" "}
+                          <i>{currentQuestion.title}:</i>{" "} <br />
+                          <strong>{currentQuestion.question_text}</strong>
                         </span>
-                        <strong>{currentQuestion.question_text}</strong>
                         {currentQuestion.is_attempted && (
                           <strong style={{ color: "green", marginTop: "50px" }}>
                             {t ('alreadyAnswered')}
@@ -665,15 +676,25 @@ const Math = () => {
                           ))}
                         </ul>
                       ) : (
-                        <ul className="studTaskOptions">
+                        <ul className={currentQuestion.question_type === "multiple_choice_text" ?
+                          "studTaskOptions" : "studTaskImgs"
+                        }>
                           {currentQuestion.options.map((option, idx) => (
                             <li
                               key={idx}
-                              className={`studTaskOption ${
+                              className={currentQuestion.question_type === "multiple_choice_text" ? (
+                                `studTaskOption ${
                                 selectedOption === option.id
                                   ? "studTaskOptionSelected"
                                   : ""
-                              }`}
+                              }`
+                              ) : (
+                                `studTaskImg ${
+                                selectedOption === option.id
+                                  ? "studTaskImgSelected"
+                                  : ""
+                                }`
+                              )}
                               onClick={() => {
                                 handleOptionClick(option.id);
                               }}
@@ -718,7 +739,7 @@ const Math = () => {
                       : handleNextQuestion
                   }
                   disabled={
-                    selectedOption === null && droppedOrder.length === 0
+                    (selectedOption === null && droppedOrder.length === 0) || isButtonDisabled
                   }
                   className={`${
                     currentQuestionIndex === questions.length - 1
