@@ -38,24 +38,27 @@ ChartJS.register(
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const [user, setUser] = useState({ first_name: t('student'), last_name: "" }); // Default values
+  const [user, setUser] = useState({ first_name: t("student"), last_name: "" }); // Default values
   const [courses, setCourses] = useState([]); // State to store courses
   const [weeklyProgress, setWeeklyProgress] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
-  
 
   useEffect(() => {
     const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
       try {
-        const [userData, coursesData, weeklyProgressData] = await Promise.all([
-          fetchUserData(childId),
-          fetchCourses(childId),
-          fetchWeeklyProgress(childId),
-        ]);
+        // const [userData, coursesData, weeklyProgressData] = await [
+        //   fetchUserData(childId),
+        //   fetchCourses(childId),
+        //   fetchWeeklyProgress(childId),
+        // ];
+        const userData = await fetchUserData(childId);
+        console.log("userData", userData);
         setUser(userData);
-        setCourses(coursesData);
+        const weeklyProgressData = await fetchWeeklyProgress(childId);
         setWeeklyProgress(weeklyProgressData.weekly_progress);
+        const coursesData = await fetchCourses(childId);
+        setCourses(coursesData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -67,20 +70,20 @@ const Dashboard = () => {
   }, []);
 
   const daysInRussian = {
-    Monday: t ('mon'),
-    Tuesday: t ('tue'),
-    Wednesday: t ('wed'),
-    Thursday: t ('thu'),
-    Friday: t ('fri'),
-    Saturday: t ('sat'),
-    Sunday: t ('sun'),
+    Monday: t("mon"),
+    Tuesday: t("tue"),
+    Wednesday: t("wed"),
+    Thursday: t("thu"),
+    Friday: t("fri"),
+    Saturday: t("sat"),
+    Sunday: t("sun"),
   };
 
   const data = {
     labels: weeklyProgress.map((day) => daysInRussian[day.day] || day.day),
     datasets: [
       {
-        label: t ('cups'),
+        label: t("cups"),
         data: weeklyProgress.map((day) => day.cups),
         fill: true,
         backgroundColor: "rgba(75,192,192,0.2)",
@@ -96,7 +99,7 @@ const Dashboard = () => {
         beginAtZero: true,
         title: {
           display: true,
-          text: t ('cups'),
+          text: t("cups"),
           font: {
             size: 20,
           },
@@ -137,7 +140,7 @@ const Dashboard = () => {
           notif={3}
         />
         <div className="mainContent">
-          <h2 style={{ color: "#22222244" }}>{t ('main')}</h2>
+          <h2 style={{ color: "#22222244" }}>{t("main")}</h2>
           <div className="helloContent">
             <span className="helloCont">
               <p
@@ -149,7 +152,7 @@ const Dashboard = () => {
                   marginBottom: "15px",
                 }}
               >
-                {t('hello')}, <strong>{user.first_name}</strong>
+                {t("hello")}, <strong>{user.first_name}</strong>
               </p>
               <p
                 style={{
@@ -159,8 +162,8 @@ const Dashboard = () => {
                   margin: "0",
                 }}
               >
-                {t ('quote1')}
-                {t ('quote2')}
+                {t("quote1")}
+                {t("quote2")}
               </p>
             </span>
             <img
@@ -178,7 +181,7 @@ const Dashboard = () => {
           <h3
             style={{ color: "black", fontWeight: "700", fontSize: "x-large" }}
           >
-            {t ('myCourses')}
+            {t("myCourses")}
           </h3>
           <div className="coursesCards">
             {courses.map((course) => (
@@ -196,7 +199,7 @@ const Dashboard = () => {
                         boxShadow: "none",
                       }}
                     >
-                      {t ('begin')}
+                      {t("begin")}
                     </button>
                   </Link>
                 </div>

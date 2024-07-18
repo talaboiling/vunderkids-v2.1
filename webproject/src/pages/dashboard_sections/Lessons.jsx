@@ -24,7 +24,7 @@ const Lessons = () => {
   const [courses, setCourses] = useState([]); // State to store courses
 
   const [loading, setLoading] = useState(true); // Add loading state
-  const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
+  const avatarUrl = user.avatar || placeholderPfp; // Use placeholder if avatar is null
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,12 +53,13 @@ const Lessons = () => {
     <div className="rtdash certpage">
       <Sidebar />
       <div className="centralLessons">
-        <Navdash
-          starCount={user.stars}
-          cupCount={user.cups}
-          gradeNum={user.grade}
-          notif={3}
-        />
+        <div style={{width:"fit-content"}}>
+          <Navdash
+            starCount={user.stars}
+            cupCount={user.cups}
+            gradeNum={user.grade}
+          />
+        </div>
         <div className="mainContent">
           <div className="ratingCentral">
             <div className="ratinginfo">

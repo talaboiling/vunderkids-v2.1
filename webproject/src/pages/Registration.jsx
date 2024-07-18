@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import logoImg from "/src/assets/logo_blue.png";
 import { registerParent } from "../utils/apiService"; // Import the function
 import { useTranslation } from "react-i18next";
+import ReCAPTCHA from "react-google-recaptcha";
+import { dialogActionsClasses } from "@mui/material";
 
 function Registration() {
   const { t } = useTranslation();
@@ -15,14 +17,37 @@ function Registration() {
   });
 
   const [responseMessage, setResponseMessage] = useState("");
+  const [captchaValue, setCaptchaValue] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+    return passwordRegex.test(password);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validatePassword(formData.password)) {
+      setResponseMessage(t("Пароль должен содержать минимум 8 символов, 1 заглавную букву и 1 цифру"));
+      setShowModal(true);
+      return;
+    }
+
+    if (!captchaValue) {
+      setResponseMessage(t("Пожалуйста пройдите CAPTCHA."));
+      setShowModal(true)
+      return;
+    }
 
     const body = {
       email: formData.email,
@@ -30,13 +55,16 @@ function Registration() {
       phone_number: formData.phone,
       first_name: formData.first_name,
       last_name: formData.last_name,
+      captcha: captchaValue,
     };
 
     try {
       const data = await registerParent(body); // Use the function from apiService
-      setResponseMessage(`Success: ${data.message}`);
+      setResponseMessage(`${data.message}`);
+      setShowModal(true);
     } catch (error) {
-      setResponseMessage(`Error: ${error.message}`);
+      setResponseMessage(`Ошибка: ${error.message}`);
+      setShowModal(true);
     }
   };
 
@@ -143,7 +171,12 @@ function Registration() {
                 onChange={handleInputChange}
                 required
               />
-              <br />
+              
+              <ReCAPTCHA
+                sitekey="6LdOuxAqAAAAAOZuSbWfPWcvYSbu-vMtAmhYM5f7"
+                onChange={handleCaptchaChange}
+              />
+              
               <input
                 type="submit"
                 value={t("registration")}
@@ -157,8 +190,25 @@ function Registration() {
                 }}
               />
             </form>
-            {responseMessage && <p>{responseMessage}</p>}
           </div>
+          {showModal && (
+            <dialog className="modal supermodal">
+              <div className="modal-content" style={{display:"flex", flexDirection:"column", alignItems:"center", gap:"1rem"}}>
+                {responseMessage}
+                <button
+                  onClick={() => setShowModal(false)}
+                  style={{
+                    borderRadius:"10px",
+                    backgroundColor: "transparent",
+                    boxShadow: "none",
+                    color:"#666",
+                  }}
+                >
+                  {(t("continue"))}
+                </button>
+              </div>
+            </dialog>
+          )}
         </div>
       </div>
     </>

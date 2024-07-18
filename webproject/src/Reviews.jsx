@@ -1,7 +1,8 @@
 import ReviewCard from "./ReviewCard"
-import pfp from "./assets/icon_grad.png"
 import { useTranslation } from "react-i18next";
-
+import pfp1 from "./assets/pfp1.jpg"
+import pfp2 from "./assets/pfp2.jpg"
+import pfp3 from "./assets/pfp3.jpg"
 
 const Reviews = () => {
   const { t } = useTranslation();
@@ -10,21 +11,28 @@ const Reviews = () => {
     <div className="rateus" id="otzyvy">
         <h1>{t ('eachReview')}</h1>
         <div className="reviewSect">
+            <ReviewCard pfp={pfp1} 
+                        name={"Akyldy Aliyeva"} 
+                        subject={"Maths"} 
+                        text={"У меня есть два ребенка и они оба пользуются платформой Вундеркидс. Скажу честно, с тех пор как я им предоставила это приложение, их академические навыки заметно улучшились! 10/10!!!"} 
+                        stars={5} 
+                        date={"1.5.2024"}/>
             <ReviewCard 
-                        pfp={pfp} 
+                        pfp={pfp2}
+                        name={"Тахир Бергалиев"} 
+                        subject={"Maths"} 
+                        text={"Платформа помагает мне развиваться и в то же время играть в игры! Мне очень нравится материал, ведь он легко осваивается"} 
+                        stars={4} 
+                        date={"13.5.2024"}
+            />
+            <ReviewCard 
+                        pfp={pfp3} 
                         name={"Kassymkhan Amangeldi"} 
                         subject={"English"} 
                         text={"Vunderkids is the best online school platform ever!!! The only problem is that I am depressed and need urgent help, but the school is amazing!!!!"} 
-                        stars={4} 
+                        stars={5} 
                         date={"14.5.2024"}
             />
-            <ReviewCard name={"Yestay"} 
-                        subject={"Maths"} 
-                        text={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} 
-                        stars={3} 
-                        date={"13.5.2024"}
-            />
-            <ReviewCard pfp={""} name={"Talant"} subject={"Maths"} text={"Third time is a charm"} stars={3} date={"1.5.2024"}/>
         </div>
     </div>
     </>

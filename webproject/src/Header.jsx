@@ -5,10 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { logout } from "./utils/authService";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
+import { getUserRole, isAuthenticated } from "./utils/authService.js";
 
 function Header() {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("access_token") !== null;
+  const role = getUserRole();
 
   const handleLogout = () => {
     logout();
@@ -22,7 +24,10 @@ function Header() {
           <Link to="/" style={{ textDecoration: "none" }}>
             <img className="navLogo" src={logoImg} alt="logo" />
           </Link>
-          {/* <p className="rev">Наши контакты: +7 775 303 7432</p> */}
+          <span>
+            <p className="rev">Наши контакты:</p>
+            <p className="rev">+7 775 303 7432</p>
+          </span>
         </div>
         <div className="excLogo">
           <div className="navList">
@@ -46,7 +51,8 @@ function Header() {
             </div>
             {isLoggedIn ? (
               <>
-                <Link to="/dashboard">
+                <Link to={`${role === "superadmin" ? "/admindashboard" : role === "supervisor" ? "/supervisor-dashboard" : role === "parent" ? "/parent" : "/dashboard"}`} style={{ textDecoration: "none" }}>
+
                   <button>{t('continue')}</button>
                 </Link>
                 <button className="orangeButton" onClick={handleLogout}>
@@ -96,7 +102,7 @@ function Header() {
               </button>
             </Link>
           </div>
-          <img src={mascotImg} alt="lionimg" />
+          <img src={mascotImg} alt="lionimg" className="mascotImg" />
         </div>
       </div>
     </div>

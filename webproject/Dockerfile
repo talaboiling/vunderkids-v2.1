@@ -16,6 +16,9 @@ COPY . .
 # Build the React app for production
 RUN npm run build
 
+# Ensure games directory is copied to the dist folder
+RUN cp -r public/games dist/games
+
 # Install a simple web server to serve the built app
 RUN npm install -g serve
 

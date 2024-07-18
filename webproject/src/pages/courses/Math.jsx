@@ -14,6 +14,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
+import bgmusic from "../../assets/audio/Kevin MacLeod_ Atlantean Twilight.mp3"
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import click_audio from "../../assets/audio/click_sound.mp3";
+import correct_audio from "../../assets/audio/correct_sound.mp3";
+import incorrect_audio from "../../assets/audio/incorrect_sound.mp3";
 import {
   fetchUserData,
   fetchCourse,
@@ -24,7 +30,7 @@ import {
 } from "../../utils/apiService";
 import Loader from "../Loader";
 import { useTranslation } from "react-i18next";
-
+import VolumeUp from "@mui/icons-material/VolumeUp";
 
 const Math = () => {
   const { t } = useTranslation();
@@ -46,11 +52,16 @@ const Math = () => {
   const [draggedOption, setDraggedOption] = useState(null);
   const [droppedOrder, setDroppedOrder] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const audioRef = useRef(null); // Add this line
   const [isAudioPlaying, setIsAudioPlaying] = useState(false); // Add this line
   const backgroundAudioRef = useRef(null);
+  const clickSoundRef = useRef(null);
+  const correctSoundRef = useRef(null);
+  const incorrectSoundRef = useRef(null);
   const [isBackgroundAudioPlaying, setIsBackgroundAudioPlaying] = useState(false);
-
+  const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(0.5);
 
   useEffect(() => {
     loadData();
@@ -136,6 +147,9 @@ const Math = () => {
 
   const handleOptionClick = (optionId) => {
     setSelectedOption(optionId);
+    if(clickSoundRef.current) {
+      clickSoundRef.current.play();
+    }
   };
 
   const handleDragStart = (optionId) => {
@@ -154,6 +168,7 @@ const Math = () => {
   };
 
   const handleNextQuestion = async () => {
+    setIsButtonDisabled(true);
     const currentQuestion = questions[currentQuestionIndex];
     let isCorrect;
 
@@ -167,6 +182,12 @@ const Math = () => {
 
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
+
+    if (isCorrect && correctSoundRef.current) {
+      correctSoundRef.current.play();
+    } else if (!isCorrect && incorrectSoundRef.current) {
+      incorrectSoundRef.current.play();
+    }
 
     await answerQuestion(
       courseId,
@@ -182,10 +203,12 @@ const Math = () => {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       setSelectedOption(null);
       setDroppedOrder([]);
+      setIsButtonDisabled(false);
     }, 1500);
   };
 
   const handleSubmit = async () => {
+    setIsButtonDisabled(true);
     const currentQuestion = questions[currentQuestionIndex];
     let isCorrect;
 
@@ -200,6 +223,12 @@ const Math = () => {
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
 
+    if (isCorrect && correctSoundRef.current) {
+      correctSoundRef.current.play();
+    } else if (!isCorrect && incorrectSoundRef.current) {
+      incorrectSoundRef.current.play();
+    }
+
     await answerQuestion(
       courseId,
       taskContent.section,
@@ -212,6 +241,12 @@ const Math = () => {
     setTimeout(async () => {
       setShowFeedback(false);
       setShowTaskModal(false);
+      if (backgroundAudioRef.current) {
+        backgroundAudioRef.current.pause();
+        backgroundAudioRef.current.currentTime = 0;
+        setIsBackgroundAudioPlaying(false);
+      }
+      setIsButtonDisabled(false);
     }, 1500);
 
     await loadData();
@@ -243,6 +278,21 @@ const Math = () => {
     };
   }, []);
 
+  const toggleMute = () => {
+    if (backgroundAudioRef.current) {
+      backgroundAudioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+  
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    if (backgroundAudioRef.current) {
+      backgroundAudioRef.current.volume = newVolume;
+    }
+    setVolume(newVolume);
+  };
+  
   if (loading) {
     return <Loader></Loader>;
   }
@@ -254,12 +304,13 @@ const Math = () => {
     <div className="rtdash rtrat">
       <Sidebar className="courseSidebar" />
       <div className="centralLessons">
-        <Navdash
-          starCount={user.stars}
-          cupCount={user.cups}
-          gradeNum={user.grade}
-          notif={3}
-        />
+        <div style={{width:"fit-content"}}>
+          <Navdash
+            starCount={user.stars}
+            cupCount={user.cups}
+            gradeNum={user.grade}
+          />
+        </div>
         <div className="ratingCentral">
           <div className="lessonsMain">
             <div className="coursesCards">
@@ -537,11 +588,17 @@ const Math = () => {
                           
                         }}
                       >
-                        <span style={{maxWidth:"500px"}}>
+                        <span 
+                          className=
+                            {`questionTitle ${
+                              currentQuestion?.template 
+                                ? `qt-template-${currentQuestion.template}` 
+                                : ""
+                              }`}>
                           <strong>{currentQuestionIndex + 1}. </strong>
-                          <i>{currentQuestion.title}:</i>{" "}
+                          <i>{currentQuestion.title}:</i>{" "} <br />
+                          <strong>{currentQuestion.question_text}</strong>
                         </span>
-                        <strong>{currentQuestion.question_text}</strong>
                         {currentQuestion.is_attempted && (
                           <strong style={{ color: "green", marginTop: "50px" }}>
                             {t ('alreadyAnswered')}
@@ -558,6 +615,30 @@ const Math = () => {
                             <audio ref={audioRef} src={currentQuestion.audio} />
                           </>
                         )}
+                        <div style={{
+                              float: "right",
+                              position:"absolute",
+                              right:"0",
+                              display:"flex",
+                              flexDirection:"column",
+                            }}>
+                          <button
+                            className="transBtn"
+                            onClick={toggleMute}
+                            style={{color:"gray"}}
+                          >
+                            {isMuted ? <VolumeOffIcon sx={{fontSize:"70px"}}/> : <VolumeUpIcon sx={{fontSize:"70px"}}/>}
+                          </button>
+                          <input
+                            type="range"
+                            id="volumeControl"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value={volume}
+                            onChange={handleVolumeChange}
+                          />
+                        </div>
                       </span>
                       {currentQuestion.question_type.startsWith(
                         "drag_and_drop"
@@ -595,15 +676,25 @@ const Math = () => {
                           ))}
                         </ul>
                       ) : (
-                        <ul className="studTaskOptions">
+                        <ul className={currentQuestion.question_type === "multiple_choice_text" ?
+                          "studTaskOptions" : "studTaskImgs"
+                        }>
                           {currentQuestion.options.map((option, idx) => (
                             <li
                               key={idx}
-                              className={`studTaskOption ${
+                              className={currentQuestion.question_type === "multiple_choice_text" ? (
+                                `studTaskOption ${
                                 selectedOption === option.id
                                   ? "studTaskOptionSelected"
                                   : ""
-                              }`}
+                              }`
+                              ) : (
+                                `studTaskImg ${
+                                selectedOption === option.id
+                                  ? "studTaskImgSelected"
+                                  : ""
+                                }`
+                              )}
                               onClick={() => {
                                 handleOptionClick(option.id);
                               }}
@@ -648,7 +739,7 @@ const Math = () => {
                       : handleNextQuestion
                   }
                   disabled={
-                    selectedOption === null && droppedOrder.length === 0
+                    (selectedOption === null && droppedOrder.length === 0) || isButtonDisabled
                   }
                   className={`${
                     currentQuestionIndex === questions.length - 1
@@ -666,7 +757,11 @@ const Math = () => {
           </div>
         </dialog>
       )}
-      <audio ref={backgroundAudioRef} src="../../assets/audio/Kevin MacLeod_ Atlantean Twilight.mp3" loop />
+      <audio ref={backgroundAudioRef} src={bgmusic} loop/>
+      <audio ref={clickSoundRef} src={click_audio}></audio>
+      <audio ref={correctSoundRef} src={correct_audio}></audio>
+      <audio ref={incorrectSoundRef} src={incorrect_audio}></audio>
+
     </div>
   );
 };

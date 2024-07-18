@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import placeholderPfp from '../../assets/placehoder_pfp.png'; // Import the placeholder image
 import { useTranslation } from 'react-i18next';
+import streak from "../../assets/streak.png";
+import nostreak from "../../assets/nostreak.png";
 
 const Ratinglist = ({ ratings }) => {
   const { t } = useTranslation();
@@ -28,6 +30,11 @@ const Ratinglist = ({ ratings }) => {
               <p style={{ fontSize: "large", color: index > 2 ? "#222222" : "#fff", margin: "0", padding: '0', fontWeight: "700" }}>
                 <strong style={{fontSize:"x-large"}}>{student.cups}</strong> {t ('points')}
               </p>
+              <span style={{margin:"0", display:"flex", flexDirection:"row", alignItems:"center"}}>
+                <p style={{margin:"0", color: index > 2 ? "#222222" : "#fff"}}>{student.streak}</p>
+                <img src={nostreak} alt="" style={{width:"20px", height:"20px", marginRight:"5px"}}/>
+              </span>
+              
             </div>
           </div>
         ))}

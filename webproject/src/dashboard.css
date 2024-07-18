@@ -18,10 +18,10 @@
 .navdashboard {
   font-weight: 700;
   display: grid;
-  grid-template-columns: 1fr 3fr 2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 1rem;
   height: fit-content;
-  padding: 44px 77px;
+  padding: 44px 10px;
 }
 
 .lndsh {
@@ -622,7 +622,7 @@ img.childcard {
   padding: 20px;
   height: 400px;
   width: 800px;
-  background-image: url(./assets/bgstudtask.png);
+  background-image: url(./assets/bgpicker1.svg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -823,6 +823,14 @@ img.childcard {
   margin-top: 70px;
 }
 
+.studTaskImgs{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  justify-items: center;
+  margin-top: 20px;
+}
+
 .studTaskOption{
   padding: 5px 10px;
   background-color: #3fa8e9;
@@ -836,6 +844,17 @@ img.childcard {
 
 .studTaskOptionSelected{
   background-color: #03a7a4;
+}
+
+.studTaskImg{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.studTaskImgSelected{
+  border: 4px solid #03a7a4;
+  scale: 1.02;
 }
 
 .feedbackContent{
@@ -935,4 +954,154 @@ img.childcard {
 .taskmodalaudio{
   position: absolute;
   left: 0;
+}
+
+.subscriptionBanners{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5rem;
+}
+
+.subBanners{
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
+
+.subBanner{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.submonth{
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgb(255,255,255,0.4);
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 10px;
+  color: #444
+}
+
+.subban-1{
+  background-color: #48bff226;
+  color: #48BFF2;
+  position: relative;
+}
+
+.subban-2{
+  background-color: #b148f22c;
+  border-radius: 40px;
+  color: #b148f2;
+  position: relative;
+}
+
+.subban-1::after{
+  content: "";
+  position: absolute;
+  top: -25%;
+  left: 25%;
+  width: 150px;
+  height: 150px;
+  background-color: #48BFF2;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.subban-2::after{
+  content: "";
+  position: absolute;
+  top: -25%;
+  left: 25%;
+  width: 150px;
+  height: 150px;
+  background-color: #b148f2;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.subban-1::before{
+  content: "";
+  position: absolute;
+  top: 80%;
+  left: 15%;
+  width: 200px;
+  height: 200px;
+  background-color: #48BFF2;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.subban-2::before{
+  content: "";
+  position: absolute;
+  top: 80%;
+  left: 15%;
+  width: 200px;
+  height: 200px;
+  background-color: #b148f2;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.subBanner-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  z-index: 2;
+  backdrop-filter: blur(25px);
+  padding: 20px
+}
+
+.questionTitle{
+  max-width: 500px;
+  scale: 1.1;
+  margin-top: -30px;
+  padding: 40px 0 40px 0;
+}
+
+.qt-template-1{
+  background-image: url(./assets/title-template-1.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #0024B5;
+  text-shadow: 0 0 1px black;
+  font-weight: 800;
+}
+.qt-template-2{
+  background-image: url(./assets/title-template-2.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #234FFF;
+  font-weight: 800;
+  text-shadow: 0 0 5px white;
+}
+.qt-template-3{
+  background-image: url(./assets/title-template-3.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #0024B5;
+  text-shadow: 0 0 1px black;
+  font-weight: 800;
+}
+.qt-template-4{
+  background-image: url(./assets/title-template-1.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #3D6400;
+  font-weight: 800;
+  text-shadow: 0 0 5px white;
 }

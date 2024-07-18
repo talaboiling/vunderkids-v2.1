@@ -24,24 +24,34 @@ export const isAuthenticated = () => {
 
 export const getUserRole = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const role = user?.role;
+  return user?.role;
 
   // console.log("getUserRole:", role); // Debugging log
-  return role;
 };
 
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/login/`, { email, password });
     if (response.status === 200) {
-      const {data} = response;
+      const { data } = response;
       setAccessToken(data.access);
       setRefreshToken(data.refresh);
       localStorage.setItem("user", JSON.stringify(data.user));
       return data.user;
     }
   } catch (error) {
-    throw new Error(error.response.data.detail || "Login failed");
+    console.log(error);
+    if (error.response) {
+      if (error.response.status === 401) {
+        throw new Error("Email или пароль не правильный");
+      } else if (error.response.status === 500) {
+        throw new Error("Ошибка сервера. Попробуйте зайти позже");
+      } else {
+        throw new Error(error.response.data.detail || "Ошибка сервера");
+      }
+    } else {
+      throw new Error("Ошибка с подключением к интернету");
+    }
   }
 };
 
