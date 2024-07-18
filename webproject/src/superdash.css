@@ -262,6 +262,8 @@
   padding: 40px 20%;
   background-color: #eee;
   border-radius: 20px;
+  max-height: 68vh;
+  overflow-y: scroll;
 }
 
 .taskAdder {
@@ -626,4 +628,9 @@
   width: 100%;
   height: 100%;
   padding: 0;
+}
+
+.questionsList{
+  max-height: 400px;
+  overflow-y: scroll;
 }

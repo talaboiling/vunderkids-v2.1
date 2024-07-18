@@ -466,7 +466,7 @@ const Tasksection = () => {
           </p>
         </div>
 
-        <div className="superCont sectCont">
+        <div className="superCont sectCont ">
           {contents &&
             contents.map((content, index) => (
               <div
@@ -774,31 +774,7 @@ const Tasksection = () => {
                 <CloseIcon sx={{ color: "gray" }} />
               </button>
             </div>
-            <div className="questionsList">
-              {selectedTaskIndex !== null && questions.length > 0 && (
-                <ul>
-                  {questions.map((question, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleEditQuestion(index)}
-                      className="questions"
-                    >
-                      {question.title || `Вопрос ${index + 1}`}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteQuestion(index);
-                        }}
-                        className="transBtn"
-                        style={{ paddingTop: "3px" }}
-                      >
-                        <DeleteForeverIcon sx={{ color: "darkred" }} />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <button
+            <button
                 onClick={() => {
                   setCurrentQuestion({
                     question_type: "",
@@ -818,6 +794,33 @@ const Tasksection = () => {
               >
                 Добавить вопрос
               </button>
+            <div className="questionsList">
+              
+              {selectedTaskIndex !== null && questions.length > 0 && (
+                <ul>
+                  {questions.map((question, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleEditQuestion(index)}
+                      className="questions"
+                    >
+                      <p className="defaultStyle">{index + 1}.</p>
+                      {question.title || `Вопрос ${index + 1}`}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteQuestion(index);
+                        }}
+                        className="transBtn"
+                        style={{ paddingTop: "3px" }}
+                      >
+                        <DeleteForeverIcon sx={{ color: "darkred" }} />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              
             </div>
           </div>
           )}
