@@ -43,15 +43,15 @@ const Subscriptions = () => {
             <div className="subscriptionBanners">
                 <div className="certbanner" style={{width:"500px"}}>
                     <h2 className="defaultStyle" style={{fontSize:"xx-large", fontWeight:"800", color:"white", textAlign:"center", textWrap:"wrap"}}>
-                        {t('ПРЕМИУМ ПЛАНЫ')}
+                        {t('premiumPlans')}
                     </h2>
                 </div>
                 <div className="subBanners">
                     <div className="subBanner subban-1">
                         <div className="subBanner-content">
-                            <p className="submonth">6 месяцев</p>
+                            <p className="submonth">6 {t ('months')}</p>
                             <span><strong style={{margin:"0", fontSize:"xx-large", fontWeight:"900"}}>9 990</strong> тг</span>
-                            <p style={{width: "250px", textAlign:"center", color:"#444", fontWeight:"500", margin:"0"}}>Стандартный вариант, если хотите попробовать платформу на первое время</p>
+                            <p style={{width: "250px", textAlign:"center", color:"#444", fontWeight:"500", margin:"0"}}>{t ('standardForStart')}</p>
                             <button
                             style={{
                                 backgroundColor: "#F8753D",
@@ -61,15 +61,15 @@ const Subscriptions = () => {
                                 boxShadow: "none",
                             }}
                             >
-                            {t ('Выбрать')}
+                            {t ('choose')}
                             </button>
                         </div>
                     </div>
                     <div className="subBanner subban-2">
                         <div className="subBanner-content">
-                            <p className="submonth">12 месяцев</p>
+                            <p className="submonth">12 {t ('months')}</p>
                             <span><strong style={{margin:"0", fontSize:"xx-large", fontWeight:"900"}}>15 990</strong> тг</span>
-                            <p style={{margin:"0", width: "250px", textAlign:"center", color:"#444", fontWeight:"500"}}>Стандартный вариант, если хотите попробовать платформу на первое время</p>
+                            <p style={{margin:"0", width: "250px", textAlign:"center", color:"#444", fontWeight:"500"}}>{t ('standardForStart')}</p>
                             <button
                                 style={{
                                     backgroundColor: "#F8753D",
@@ -79,7 +79,7 @@ const Subscriptions = () => {
                                     boxShadow: "none",
                                 }}
                                 >
-                                {t ('Выбрать')}
+                                {t ('choose')}
                             </button>
                         </div>
                         
