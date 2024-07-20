@@ -32,10 +32,10 @@ export const SidebarData = [
         icon: <img src={game} alt="games" />,
         link: '/dashboard/games'
     },
-    {
-        title: 'Подписки',
-        icon: <SubscriptionsIcon/>,
-        link: '/subscriptions'
-    }
+    // {
+    //     title: 'Подписки',
+    //     icon: <SubscriptionsIcon/>,
+    //     link: '/subscriptions'
+    // }
 ]
 

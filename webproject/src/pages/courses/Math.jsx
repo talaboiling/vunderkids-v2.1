@@ -4,8 +4,8 @@ import Sidebar from "../Sidebar";
 import Navdash from "../Navdash";
 import mathIcon from "../../assets/calculator.png";
 import englishIcon from "../../assets/english.png";
-import correctlion from "../../assets/lion_correct.png"
-import wronglion from "../../assets/lion_incorrect.png"
+import correctlion from "../../assets/lion_correct.png";
+import wronglion from "../../assets/lion_incorrect.png";
 import bgtask from "../../assets/bgtask.svg";
 import bgvideo from "../../assets/videolessonthumb.svg";
 import staricon from "../../assets/navStars.png";
@@ -14,7 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
-import bgmusic from "../../assets/audio/Kevin MacLeod_ Atlantean Twilight.mp3"
+import bgmusic from "../../assets/audio/Kevin MacLeod_ Atlantean Twilight.mp3";
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import click_audio from "../../assets/audio/click_sound.mp3";
@@ -31,6 +31,7 @@ import {
 import Loader from "../Loader";
 import { useTranslation } from "react-i18next";
 import VolumeUp from "@mui/icons-material/VolumeUp";
+import Close from "@mui/icons-material/Close";
 
 const Math = () => {
   const { t } = useTranslation();
@@ -62,12 +63,16 @@ const Math = () => {
   const [isBackgroundAudioPlaying, setIsBackgroundAudioPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [hasSubscription, setHasSubscription] = useState(false);
+  const [isFreeTrial, setIsFreeTrial] = useState(false);
+  const [showSubscriptionError, setShowSubscriptionError] = useState(false);
 
   useEffect(() => {
     loadData();
   }, [courseId]);
 
   const loadData = async () => {
+    setLoading(true);
     try {
       const child_id = localStorage.getItem("child_id");
       let userData;
@@ -78,26 +83,38 @@ const Math = () => {
       } else {
         userData = await fetchUserData();
       }
+
       const courseData = await fetchCourse(courseId, child_id);
       const sectionsData = await fetchSections(courseId, child_id);
-      console.log(sectionsData);
       setSections(sectionsData);
       setCourse(courseData);
       setUser(userData);
+      setHasSubscription(userData.has_subscription);
+      setIsFreeTrial(userData.is_free_trial);
+
     } catch (error) {
       console.error("Error loading data:", error);
+
     } finally {
       setLoading(false);
     }
   };
 
   const openVideoModal = (url) => {
+    if (!isFreeTrial && !hasSubscription) {
+      setShowSubscriptionError(true);
+      return;
+    }
     const embedUrl = url.replace("watch?v=", "embed/");
     setVideoUrl(embedUrl);
     setShowVideoModal(true);
   };
 
   const openTaskModal = async (sectionId, taskId) => {
+    if (!isFreeTrial && !hasSubscription) {
+      setShowSubscriptionError(true);
+      return;
+    }
     try {
       const task = await fetchTask(courseId, sectionId, taskId, childId);
       const taskQuestions = await fetchQuestions(
@@ -107,7 +124,7 @@ const Math = () => {
         childId
       );
       if (taskQuestions.length === 0) {
-        alert(t ('noQuestions'));
+        alert(t('noQuestions'));
         return;
       }
       setTaskContent(task);
@@ -117,7 +134,7 @@ const Math = () => {
       setShowFeedback(false);
       setDroppedOrder([]);
       setShowTaskModal(true);
-      
+
       // Play background music
       if (backgroundAudioRef.current) {
         backgroundAudioRef.current.play();
@@ -127,7 +144,6 @@ const Math = () => {
       console.error("Error fetching task data:", error);
     }
   };
-  
 
   const closeVideoModal = () => {
     setShowVideoModal(false);
@@ -136,7 +152,7 @@ const Math = () => {
   const closeTaskModal = async () => {
     setShowTaskModal(false);
     await loadData();
-    
+
     // Stop background music
     if (backgroundAudioRef.current) {
       backgroundAudioRef.current.pause();
@@ -284,7 +300,7 @@ const Math = () => {
       setIsMuted(!isMuted);
     }
   };
-  
+
   const handleVolumeChange = (e) => {
     const newVolume = parseFloat(e.target.value);
     if (backgroundAudioRef.current) {
@@ -292,9 +308,9 @@ const Math = () => {
     }
     setVolume(newVolume);
   };
-  
+
   if (loading) {
-    return <Loader></Loader>;
+    return <Loader />;
   }
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -319,8 +335,8 @@ const Math = () => {
                   <p style={{ margin: "0" }}>{course.name}</p>
                   <progress value={course.percentage_completed} />
                   <p className="defaultStyle">
-                    {t ('completedTasks1')}{course.completed_tasks}{t ('completedTasks2')}{course.total_tasks}{" "}
-                    {t ('completedTasks3')}
+                    {t('completedTasks1')}{course.completed_tasks}{t('completedTasks2')}{course.total_tasks}{" "}
+                    {t('completedTasks3')}
                   </p>
                 </div>
                 <img
@@ -340,7 +356,7 @@ const Math = () => {
                 style={{ color: "black", fontWeight: "700" }}
               >
                 {" "}
-                {t ('courseStart')}{" "}
+                {t('courseStart')}{" "}
               </h2>
 
               {sections.map((section, sectionIndex) => (
@@ -362,8 +378,9 @@ const Math = () => {
                     <div className="lessonsLinks" key={contentIndex}>
                       {content.content_type === "lesson" ? (
                         <div
-                          className="vidBlock studVidBlock"
-                          onClick={() => openVideoModal(content.video_url)}
+                          className={`vidBlock studVidBlock ${hasSubscription ? "" : "noVidBlock"}`}
+                          onClick={() => (hasSubscription) ? openVideoModal(content.video_url) : setShowSubscriptionError(true)}
+                          
                         >
                           <div className="thumbcontainer">
                             <img
@@ -385,10 +402,9 @@ const Math = () => {
                         </div>
                       ) : (
                         <div
-                          className="studVidBlock task"
-                          onClick={() =>
-                            openTaskModal(content.section, content.id)
-                          }
+                          className={`studVidBlock task ${hasSubscription ? "" : "noTask"}`}
+                          onClick={() => (hasSubscription) ? openTaskModal(content.section, content.id) : setShowSubscriptionError(true)}
+                          
                         >
                           <img
                             src={bgtask || "placeholder.png"}
@@ -410,12 +426,12 @@ const Math = () => {
                           {content.is_completed && (
                             <div className="completedTask">
                               <VerifiedIcon sx={{ color: "#19a5fc" }} />
-                              <strong>{t ('youCompletedTask')}</strong>
+                              <strong>{t('youCompletedTask')}</strong>
                             </div>
                           )}
                           {!content.is_completed && (
                             <div className="completedTask incompleteTask">
-                              <strong>{t ('youHaveNewTask')}</strong>
+                              <strong>{t('youHaveNewTask')}</strong>
                             </div>
                           )}
                         </div>
@@ -431,7 +447,7 @@ const Math = () => {
               className="defaultStyle"
               style={{ color: "black", fontWeight: "800", fontSize: "x-large" }}
             >
-              {t ('whatWeLearn')}
+              {t('whatWeLearn')}
             </h3>
             <div className="progList">
               {sections.map((section, index) => (
@@ -455,7 +471,7 @@ const Math = () => {
           <div className="studmodal-content">
             <div className="modalHeader" style={{ marginBottom: "20px" }}>
               <h2 className="defaultStyle" style={{ color: "#666" }}>
-                {t ('videoLesson')}
+                {t('videoLesson')}
               </h2>
               <button
                 style={{
@@ -467,7 +483,7 @@ const Math = () => {
                 }}
                 onClick={closeVideoModal}
               >
-                {t ('close')}
+                {t('close')}
               </button>
             </div>
             <iframe
@@ -526,7 +542,7 @@ const Math = () => {
                 }}
                 onClick={closeTaskModal}
               >
-                {t ('close')}
+                {t('close')}
               </button>
             </div>
             <div
@@ -558,8 +574,8 @@ const Math = () => {
                       }}
                     >
                       {feedbackMessage === "Correct!"
-                      ? t ('correct')
-                      : t ('incorrect')}
+                      ? t('correct')
+                      : t('incorrect')}
                     </p>
                   </div>
                 </div>
@@ -601,7 +617,7 @@ const Math = () => {
                         </span>
                         {currentQuestion.is_attempted && (
                           <strong style={{ color: "green", marginTop: "50px" }}>
-                            {t ('alreadyAnswered')}
+                            {t('alreadyAnswered')}
                           </strong>
                         )}
                         {currentQuestion.audio && (
@@ -749,19 +765,41 @@ const Math = () => {
                   style={{ float: "right" }}
                 >
                   {currentQuestionIndex === questions.length - 1
-                    ? t ('finish')
-                    : t ('next')}
+                    ? t('finish')
+                    : t('next')}
                 </button>
               </span>
             </div>
           </div>
         </dialog>
       )}
-      <audio ref={backgroundAudioRef} src={bgmusic} loop/>
+
+      {showSubscriptionError && (
+        <dialog className="modal supermodal" open>
+          <div className="studmodal-content" style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+            <div className="modalHeader" style={{ marginBottom: "10px" }}>
+              <h2 className="defaultStyle" style={{ color: "#666" }}>
+                {t('subscriptionRequired')}
+              </h2>
+              <button
+                className="transBtn"
+                onClick={() => setShowSubscriptionError(false)}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+            <p style={{fontSize:"xx-large", maxWidth:"500px", textAlign:"center", color:"#2060c7", border:"1px solid lightgray", padding:"10px"}}>{t('subscriptionMessage')}</p>
+            <Link to="/subscriptions">
+              <button className="orangeButton" style={{fontSize:"x-large"}}>{t('gotosubscribe')}</button>
+            </Link>
+          </div>
+        </dialog>
+      )}
+
+      <audio ref={backgroundAudioRef} src={bgmusic} loop />
       <audio ref={clickSoundRef} src={click_audio}></audio>
       <audio ref={correctSoundRef} src={correct_audio}></audio>
       <audio ref={incorrectSoundRef} src={incorrect_audio}></audio>
-
     </div>
   );
 };
