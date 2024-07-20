@@ -149,6 +149,14 @@
     "correct": "Молодец!",
     "incorrect": "Попробуй еще раз!",
     "alreadyAnswered": "Вы уже ответили на этот вопрос",
+    "ourContacts": "Наши контакты",
+    "forgotPassword": "Забыли пароль?",
+    "passwordRenewal": "Восстановление пароля",
+    "premiumPlans": "ПРЕМИУМ ПЛАНЫ",
+    "months": "месяцев",
+    "standardForStart": "Стандартный вариант, если хотите попробовать платформу на первое время",
+    "choose": "Выбрать",
+    "pleaseWriteEmail": "Введите ваш email:",
     "finish": "Закончить",
     "next": "Дальше"
 }

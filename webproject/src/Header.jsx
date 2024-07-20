@@ -25,7 +25,7 @@ function Header() {
             <img className="navLogo" src={logoImg} alt="logo" />
           </Link>
           <span>
-            <p className="rev">Наши контакты:</p>
+            <p className="rev">{t ('ourContacts')}:</p>
             <p className="rev">+7 775 303 7432</p>
           </span>
         </div>

@@ -117,7 +117,7 @@ function Login() {
                 required
               />
               <Link to={"/password-renewal"} className="formLink">
-                {t('Забыли пароль?')}
+                {t('forgotPassword')}
               </Link>
               <br />
               <input
