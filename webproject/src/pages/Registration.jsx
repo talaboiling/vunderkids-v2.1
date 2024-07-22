@@ -21,6 +21,7 @@ function Registration() {
   const [responseMessage, setResponseMessage] = useState("");
   const [captchaValue, setCaptchaValue] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showHomeModal, setShowHomeModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -71,7 +72,7 @@ function Registration() {
     try {
       const data = await registerParent(body); // Use the function from apiService
       setResponseMessage(`${data.message}`);
-      setShowModal(true);
+      setShowHomeModal(true);
     } catch (error) {
       setResponseMessage(`Ошибка: ${error.message}`);
       setShowModal(true);
@@ -248,16 +249,7 @@ function Registration() {
           {showModal && (
             <dialog className="modal supermodal">
               <div className="modal-content" style={{display:"flex", flexDirection:"column", gap:"1rem"}}>
-                <div className="">
-                  <button className="transBtn"
-                    onClick={() => setShowModal(false)}
-                    style={{float:"right"}}
-                  >
-                    <CloseIcon></CloseIcon>
-                  </button>
-                </div>
                 {responseMessage}
-                <Link to="/" style={{alignSelf:"center"}}>
                   <button
                     style={{
                       borderRadius:"10px",
@@ -265,10 +257,37 @@ function Registration() {
                       boxShadow: "none",
                       color:"#666",
                     }}
+                    onClick={setShowModal(false)}
                   >
                     {(t("continue"))}
                   </button>
-                </Link>
+              </div>
+            </dialog>
+          )}
+          {showHomeModal && (
+            <dialog className="modal supermodal">
+              <div className="modal-content" style={{display:"flex", flexDirection:"column", gap:"1rem"}}>
+                <div className="">
+                  <button className="transBtn"
+                    onClick={() => setShowHomeModal(false)}
+                    style={{float:"right"}}
+                  >
+                    <CloseIcon></CloseIcon>
+                  </button>
+                </div>
+                {responseMessage}
+                  <Link to="/">
+                    <button
+                      style={{
+                        borderRadius:"10px",
+                        backgroundColor: "transparent",
+                        boxShadow: "none",
+                        color:"#666",
+                      }}
+                    >
+                      {(t("continue"))}
+                    </button>
+                  </Link>
               </div>
             </dialog>
           )}
