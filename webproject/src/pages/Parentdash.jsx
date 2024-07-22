@@ -31,7 +31,7 @@ const Parentdash = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
-    grade: "",
+    grade: "0",
     birth_date: "",
     gender: "",
   });

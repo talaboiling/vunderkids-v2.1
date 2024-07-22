@@ -5,8 +5,8 @@ import { registerParent } from "../utils/apiService"; // Import the function
 import { useTranslation } from "react-i18next";
 import ReCAPTCHA from "react-google-recaptcha";
 import CloseIcon from "@mui/icons-material/Close";
-import { dialogActionsClasses } from "@mui/material";
 import Loader from "./Loader.jsx";
+
 function Registration() {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
@@ -34,7 +34,7 @@ function Registration() {
     setCaptchaValue(value);
   };
 
-  const validatePassword = (password, confirmPassword) => {
+  const validatePassword = (password) => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
     return passwordRegex.test(password);
   };
@@ -77,12 +77,15 @@ function Registration() {
       setResponseMessage(`Ошибка: ${error.message}`);
       setShowModal(true);
     } finally {
-      setFormData({ email: "",
-                    password: "", 
-                    phone: "", 
-                    first_name: "", 
-                    last_name:"", 
-                    confirmPassword:""})
+      setFormData({
+        email: "",
+        password: "",
+        phone: "",
+        first_name: "",
+        last_name: "",
+        confirmPassword: ""
+      });
+      setConfirmPassword("");
     }
   };
 
@@ -90,7 +93,7 @@ function Registration() {
     const input = e.target;
     let value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
     if (value.startsWith('7') || value.startsWith('8')) {
-      value = value.slice(1); // Remove the leading '7' if present
+      value = value.slice(1); // Remove the leading '7' or '8' if present
     }
     let formattedValue = '+7 ';
 
@@ -104,7 +107,12 @@ function Registration() {
       formattedValue += ' ' + value.slice(6, 10);
     }
 
-    input.value = formattedValue.slice(0, 18);
+    setFormData({ ...formData, phone: formattedValue.slice(0, 18) });
+  };
+
+  const handlePhoneChange = (e) => {
+    handleInputChange(e);
+    formatPhone(e);
   };
 
   return (
@@ -122,10 +130,10 @@ function Registration() {
           <div className="excLogo">
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
-                { t('aboutPlatform')}
+                {t('aboutPlatform')}
               </a>
               <a href="/#obuchenie" className="navLink">
-                { t('education')}
+                {t('education')}
               </a>
               <a href="/#otzyvy" className="navLink">
                 {t('reviews')}
@@ -192,14 +200,13 @@ function Registration() {
                   <label htmlFor="phone">{t("phone")}</label>
                   <br />
                   <input
-                    type="phone"
+                    type="text"
                     id="phone"
                     name="phone"
                     placeholder="+7 (777) 123 4567"
                     maxLength={18}
                     value={formData.phone}
-                    onChange={handleInputChange}
-                    onInput={formatPhone}
+                    onChange={handlePhoneChange}
                     required
                     style={{ width: "350px" }}
                   />
@@ -246,52 +253,49 @@ function Registration() {
               />
             </form>
           </div>
-          {showModal && (
-            <dialog className="modal supermodal">
-              <div className="modal-content" style={{display:"flex", flexDirection:"column", gap:"1rem"}}>
-                {responseMessage}
-                  <button
-                    style={{
-                      borderRadius:"10px",
-                      backgroundColor: "transparent",
-                      boxShadow: "none",
-                      color:"#666",
-                    }}
-                    onClick={setShowModal(false)}
-                  >
-                    {(t("continue"))}
-                  </button>
-              </div>
-            </dialog>
-          )}
-          {showHomeModal && (
-            <dialog className="modal supermodal">
-              <div className="modal-content" style={{display:"flex", flexDirection:"column", gap:"1rem"}}>
-                <div className="">
-                  <button className="transBtn"
-                    onClick={() => setShowHomeModal(false)}
-                    style={{float:"right"}}
-                  >
-                    <CloseIcon></CloseIcon>
-                  </button>
-                </div>
-                {responseMessage}
-                  <Link to="/">
-                    <button
-                      style={{
-                        borderRadius:"10px",
-                        backgroundColor: "transparent",
-                        boxShadow: "none",
-                        color:"#666",
-                      }}
-                    >
-                      {(t("continue"))}
-                    </button>
-                  </Link>
-              </div>
-            </dialog>
-          )}
         </div>
+        {showHomeModal && (
+          <dialog className="modal supermodal" open>
+            <div className="modal-content" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <div className="">
+                <button className="transBtn" onClick={() => setShowHomeModal(false)} style={{ float: "right" }}>
+                  <CloseIcon />
+                </button>
+              </div>
+              {responseMessage}
+              <Link to="/">
+                <button
+                  style={{
+                    borderRadius: "10px",
+                    backgroundColor: "transparent",
+                    boxShadow: "none",
+                    color: "#666",
+                  }}
+                >
+                  {t("continue")}
+                </button>
+              </Link>
+            </div>
+          </dialog>
+        )}
+        {showModal && (
+          <dialog className="modal supermodal" open>
+            <div className="modal-content" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              {responseMessage}
+              <button
+                style={{
+                  borderRadius: "10px",
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                  color: "#666",
+                }}
+                onClick={() => setShowModal(false)}
+              >
+                {t("continue")}
+              </button>
+            </div>
+          </dialog>
+        )}
       </div>
     </>
   );

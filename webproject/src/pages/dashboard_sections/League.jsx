@@ -1,10 +1,41 @@
+import { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next'
+import {
+  fetchUserData,
+  fetchWeeklyProgress,
+} from "../../utils/apiService.js";
+import React from 'react';
 const League = () => {
   const { t } = useTranslation();
+  const [user, setUser] = useState({ first_name: t("student"), last_name: "" }); // Default values
+  const [weeklyProgress, setWeeklyProgress] = useState([]);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const childId = localStorage.getItem("child_id");
+      try {
+        // const [userData, coursesData, weeklyProgressData] = await [
+        //   fetchUserData(childId),
+        //   fetchCourses(childId),
+        //   fetchWeeklyProgress(childId),
+        // ];
+        const userData = await fetchUserData(childId);
+        setUser(userData);
+        const weeklyProgressData = await fetchWeeklyProgress(childId);
+        setWeeklyProgress(weeklyProgressData.weekly_progress);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
   return (
     <div className='league'>
-        <p style={{width:"80%", margin:"0", marginBottom:"20px"}}>
-            {t ('youAreIn')} <strong>{t ('emeraldLeague')}</strong>
+        <p style={{width:"80%", marginBottom:"0", marginTop:"0"}}>
+            {t ('youAreIn')}
+        </p>
+        <p style={{fontSize:"xx-large", margin:"10px"}}>
+          {user.level}
         </p>
         {t ('keepItUp')}
     </div>
