@@ -22,6 +22,7 @@ import SupervisorDashboard from "./pages/SupervisorDashboard.jsx";
 import AuthRoute from "./AuthRoute.jsx";
 import Subscriptions from "./pages/Subscriptions.jsx";
 import Renewal from "./pages/Renewal.jsx";
+import ChangePassword from "./ChangePassword.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
   { path: "/registration", element: <Registration /> },
   { path: "/activate/:activation_token", element: <Activate /> },
   { path: "/password-renewal", element: <Renewal />},
-  { path: "/reset-password/:token", element: <Renewal />},
+  { path: "/reset-password/:token", element: <ChangePassword />},
   {
     path: "/parent",
     element: (
