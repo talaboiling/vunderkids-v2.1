@@ -81,10 +81,10 @@ const ChangePassword = () => {
       {showModal && (
         <dialog className="modal supermodal">
           <div className="modal-content">
-            <h3>{t("Пароль успешно изменен!")}</h3>
+            <h1 style={{animation:"none"}}>{t("Пароль успешно изменен!")}</h1>
             <Link to="/">
               <button onClick={() => setShowModal(false)}>
-                {t("Ввойти в аккаунт")}
+                {t("Войти в аккаунт")}
               </button>
             </Link>
           </div>
