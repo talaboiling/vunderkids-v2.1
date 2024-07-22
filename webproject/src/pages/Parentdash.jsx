@@ -20,6 +20,7 @@ import {
 import Loader from "./Loader";
 import { useTranslation } from "react-i18next";
 
+
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 const Parentdash = () => {

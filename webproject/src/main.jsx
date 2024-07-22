@@ -23,16 +23,23 @@ import AuthRoute from "./AuthRoute.jsx";
 import Subscriptions from "./pages/Subscriptions.jsx";
 import Renewal from "./pages/Renewal.jsx";
 import ChangePassword from "./ChangePassword.jsx";
+import MainSubs from "./SubscriptionDetails.jsx";
+import Oferty from "./Oferta.jsx";
+import Confidentiality from "./Confidentiality.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import SubscriptionDetails from "./SubscriptionDetails.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/login", element: <Vhod /> },
   { path: "/registration", element: <Registration /> },
   { path: "/activate/:activation_token", element: <Activate /> },
-  { path: "/password-renewal", element: <Renewal />},
-  { path: "/reset-password/:token", element: <ChangePassword />},
+  { path: "/password-renewal", element: <Renewal /> },
+  { path: "/reset-password/:token", element: <ChangePassword /> },
+  { path: "/subscription-details", element: <MainSubs /> },
+  { path: "/oferty", element: <Oferty /> },
+  { path: "/users-terms-and-conditions", element: <Confidentiality /> },
   {
     path: "/parent",
     element: (
@@ -95,7 +102,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/subscriptions",
-    element: <AuthRoute element={<Subscriptions />} allowedRoles={["parent"]}/>
+    element: <AuthRoute element={<Subscriptions />} allowedRoles={["parent"]}/>,
   },
 ]);
 

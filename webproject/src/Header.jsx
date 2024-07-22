@@ -31,9 +31,16 @@ function Header() {
         </div>
         <div className="excLogo">
           <div className="navList">
-            <a href="#oplatforme" className="navLink">
-              { t('aboutPlatform')}
-            </a>
+            <div className="navLink dropdown">
+              <a href="#oplatforme" className="navLink">
+                { t('aboutPlatform')}
+              </a>
+              <div className="friendly-box"></div>
+              <div className="dropdownContent">
+                <Link to="/oferty" className="dropdownLink">{t('platformPage1')}</Link>
+                <Link to="/users-terms-and-conditions" className="dropdownLink">{t('platformPage2')}</Link>
+              </div>
+            </div>
             <a href="#obuchenie" className="navLink">
               { t('education')}
             </a>
@@ -42,6 +49,9 @@ function Header() {
             </a>
             <a href="#contakty" className="navLink">
               {t('contacts')}
+            </a>
+            <a href="/subscription-details" className="navLink">
+              {t('tariff')}
             </a>
           </div>
           <div className="navButton">

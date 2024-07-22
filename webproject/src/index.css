@@ -23,7 +23,10 @@ body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-decoration: none;
+}
 
+.official{
+  color: black;
 }
 
 .navBar{
@@ -44,14 +47,14 @@ body{
 .logo{
     display: flex;
     flex-direction: row;
-    gap: 3rem;
+    gap: 2rem;
 }
 
 .navList{
     display: flex;
     flex-direction: row; /* Added this line */
     list-style: none;
-    gap: 3rem;
+    gap: 2rem;
     border: 3px solid rgb(189, 230, 255);
     border-radius: 20px;
     padding: 0.7rem 2.5rem;
@@ -79,6 +82,57 @@ body{
     position: relative;
     color: #005B92;
     font-weight: 800;
+}
+
+.navLink:hover .dropdownContent {
+  display: block;
+}
+
+.navLink:hover .friendly-box {
+  visibility: visible;
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  position: relative;
+}
+
+.friendly-box{
+  visibility: hidden;
+  position: absolute;
+  height: 70px;
+  width: 120px;
+}
+
+.friendly-box:hover .dropdownContent{
+  display: block;
+}
+
+.dropdownContent {
+  display: none;
+  position: absolute;
+  margin-top: 70px;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.4);
+  border-radius: 7px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.dropdownLink {
+  color: black;
+  padding: 16px 24px;
+  text-decoration: none;
+  display: block;
+  z-index: 1000;
+}
+
+.dropdownLink:hover {
+  background-color: #ddd;
 }
 
 .excLogo{
@@ -800,6 +854,7 @@ footer{
   max-width: fit-content;
   height: min-content;
   padding: 4rem;
+  z-index: 1;
 }
 
 .formLink{
@@ -899,4 +954,82 @@ input, select {
 
 .mascotImg{
   filter: drop-shadow(0px 0px 40px rgb(255, 240, 218));
+}
+
+.passwordInputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.passwordInputContainer input {
+  width: 88%;
+}
+
+.passwordInputContainer span {
+  cursor: pointer;
+}
+
+.ofertaTitle{
+  padding: 30px;
+}
+
+.ofertaContent{
+  padding: 30px;
+}
+
+.ofertaFooter{
+  padding: 10px;
+
+}
+
+.official h3{
+  color: black;
+  font-size: 30px;
+  margin: 30px 0;
+}
+
+.official p{
+  font-weight: 400;
+}
+
+.official a{
+  color: #005589;
+}
+
+.official a:hover{
+  color: #003b5f;
+}
+
+.official ul{
+  list-style-type: disc;
+  padding-inline-start: 3ch;
+}
+
+.official li{
+  margin: 10px;
+}
+
+.footerDocs{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 25px;
+}
+
+.footerDocs p{
+  font-weight: 500;
+  margin: 0;
+  color: white;
+}
+
+.footerDocs p:hover{
+  color: #708ea2;
+}
+
+.passValidation{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1rem;
 }

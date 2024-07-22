@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logoImg from "/src/assets/logo_blue.png";
 import { loginUser, logout } from "../utils/authService";
 import { useTranslation } from "react-i18next";
-
+import Loader from "./Loader.jsx"
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ function Login() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
   const [showErrModal, setShowErrModal] = useState(false);
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ function Login() {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const user = await loginUser(formData.email, formData.password);
       // console.log("Logged in user:", user); // Debugging log
       setResponseMessage(t('loginSuccessful'));
@@ -48,6 +50,8 @@ function Login() {
       setResponseMessage("Ошибка: " + error.message);
       setShowErrModal(true);
       console.error("Login error:", error); // Debugging log
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,6 +59,10 @@ function Login() {
     logout();
     navigate("/");
   };
+
+  if(loading){
+    return <Loader/>
+  }
 
   return (
     <>
@@ -71,16 +79,19 @@ function Login() {
           <div className="excLogo">
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
-                {t('aboutPlatform')}
+                { t('aboutPlatform')}
               </a>
               <a href="/#obuchenie" className="navLink">
-                {t('education')}
+                { t('education')}
               </a>
               <a href="/#otzyvy" className="navLink">
                 {t('reviews')}
               </a>
               <a href="/#contakty" className="navLink">
                 {t('contacts')}
+              </a>
+              <a href="/subscription-details" className="navLink">
+                {t('tariff')}
               </a>
             </div>
           </div>
