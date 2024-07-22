@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import logoImg from "/src/assets/logo_blue.png";
 import { useTranslation } from "react-i18next";
-import { resetPassword } from "../utils/apiService.js";
+import { resetPassword } from "./utils/apiService";
 import { useParams } from 'react-router-dom';
 const ChangePassword = () => {
   const { t } = useTranslation();
