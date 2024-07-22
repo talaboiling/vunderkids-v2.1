@@ -638,11 +638,52 @@ export const answerQuestion = async (
 export const playGame = async (childId) => {
   try {
     const endpoint = childId
-    ? `/play-game/?child_id=${childId}`
-    : "/play-game/";
+      ? `/play-game/?child_id=${childId}`
+      : "/play-game/";
     const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {
     throw new Error(error || "Something went wrong");
+  }
+};
+
+export const requestResetPassword = async (email) => {
+  try {
+    const response = await instance.post("/reset-password/", { email });
+    if (response.status === 201 || response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    if (error.response.status === 404) {
+      throw new Error("Пользователь с таким email не найден");
+    } else if (error.response.status === 400) {
+      throw new Error("Вам нужно ввести email");
+    } else if (error.response.status === 500) {
+      throw new Error("Ошибка сервера. Попробуйте зайти позже");
+    } else {
+      throw new Error("Произошла неизвестная ошибка");
+    }
+  }
+};
+
+export const resetPassword = async (password, token) => {
+  try {
+    const response = await instance.post("/reset-password/token/", {
+      password,
+      token,
+    });
+    if (response.status === 201 || response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    if (error.response.status === 400) {
+      throw new Error("Ссылка не действительна");
+    } else if (error.response.status === 403) {
+      throw new Error("Ссылка для сброса пароля устарела");
+    } else if (error.response.status === 500) {
+      throw new Error("Ошибка сервера. Попробуйте зайти позже");
+    } else {
+      throw new Error("Произошла неизвестная ошибка");
+    }
   }
 };
