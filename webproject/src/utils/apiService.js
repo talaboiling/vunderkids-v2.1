@@ -685,3 +685,23 @@ export const resetPassword = async (password, token) => {
     }
   }
 };
+
+export const changePassword = async (currentPassword, newPassword) => {
+  try {
+    const response = await instance.post("/change-password/", {
+      current_password: currentPassword,
+      new_password: newPassword,
+    });
+    if (response.status === 201 || response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    if (error.response.status === 400) {
+      throw new Error("Неверный старый пароль или не удалось сменить пароль");
+    } else if (error.response.status === 500) {
+      throw new Error("Ошибка сервера. Попробуйте зайти позже");
+    } else {
+      throw new Error("Произошла неизвестная ошибка");
+    }
+  }
+};
