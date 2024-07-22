@@ -23,6 +23,7 @@ import {
   fetchUserData,
   fetchCourses,
   fetchWeeklyProgress,
+  changePassword,
 } from "../utils/apiService";
 import { useTranslation } from "react-i18next";
 

@@ -4,6 +4,7 @@ import logoImg from "/src/assets/logo_blue.png";
 import { loginUser, logout } from "../utils/authService";
 import { useTranslation } from "react-i18next";
 
+
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
