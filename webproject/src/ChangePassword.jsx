@@ -58,7 +58,7 @@ const ChangePassword = () => {
             <input 
               type='password' 
               name='confirmPassword' 
-              id='confirmPassword' 
+              id='confirmPassword'
               placeholder="********" 
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -67,6 +67,7 @@ const ChangePassword = () => {
               {t('send')}
             </button>
           </form>
+          {message && <p>{message}</p>}
           {showModal && (
             <dialog className='modal supermodal'>
                 <div className='modal-content'>
