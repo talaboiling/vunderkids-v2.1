@@ -668,10 +668,8 @@ export const requestResetPassword = async (email) => {
 
 export const resetPassword = async (password, token) => {
   try {
-    const response = await instance.post("/reset-password/token/", {
-      password,
-      token,
-    });
+    const url = `/reset-password/${token}/`;
+    const response = await instance.post(url, { password });
     if (response.status === 201 || response.status === 200) {
       return response.data;
     }
