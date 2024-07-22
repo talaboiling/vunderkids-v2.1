@@ -31,6 +31,7 @@ const router = createBrowserRouter([
   { path: "/registration", element: <Registration /> },
   { path: "/activate/:activation_token", element: <Activate /> },
   { path: "/password-renewal", element: <Renewal />},
+  { path: "/reset-password/:token", element: <Renewal />},
   {
     path: "/parent",
     element: (
