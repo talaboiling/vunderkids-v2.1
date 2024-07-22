@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import logoImg from "/src/assets/logo_blue.png";
 import { useTranslation } from "react-i18next";
 import { resetPassword } from "./utils/apiService";
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from "react-router-dom";
 const ChangePassword = () => {
   const { t } = useTranslation();
   const [password, setPassword] = useState("");
@@ -14,10 +14,12 @@ const ChangePassword = () => {
   const validatePassword = (password, confirmPassword) => {
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
     if (!passwordRegex.test(password)) {
-      return t('Пароль должен содержать хотя бы одну заглавную букву, одну цифру и не менее 8 символов.');
+      return t(
+        "Пароль должен содержать хотя бы одну заглавную букву, одну цифру и не менее 8 символов."
+      );
     }
     if (password !== confirmPassword) {
-      return t('Пароли не совпадают.');
+      return t("Пароли не совпадают.");
     }
     return null;
   };
@@ -26,13 +28,14 @@ const ChangePassword = () => {
     e.preventDefault();
     const validationError = validatePassword(password, confirmPassword);
     if (validationError) {
+      console.log(validationError);
       setMessage(validationError);
       return;
     }
     try {
       await resetPassword(password, token);
-      setMessage(t('Пароль успешно изменен!'));
-      
+      setMessage(t("Пароль успешно изменен!"));
+      setShowModal(true);
     } catch (error) {
       setMessage(error.message);
     }
@@ -40,45 +43,53 @@ const ChangePassword = () => {
 
   return (
     <div className="regacss">
-      <div className='renewPage'>
-        <div className='regform'>
-          <img src={logoImg} alt='logo' className="navLogo" />
-          <h2 style={{ animation: "none" }}>{t('passwordRenewal')}</h2>
+      <div className="renewPage">
+        <div className="regform">
+          <img src={logoImg} alt="logo" className="navLogo" />
+          <h2 style={{ animation: "none" }}>{t("passwordRenewal")}</h2>
           <form className="registrationInput" onSubmit={handleSubmit}>
-            <label htmlFor='password'>{t('Придумайте Пароль')}</label>
-            <input 
-              type='password' 
-              name='password' 
-              id='password' 
-              placeholder="********" 
+            <label htmlFor="password">{t("Придумайте Пароль")}</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
-            <label htmlFor='confirmPassword'>{t('Повторите пароль')}</label>
-            <input 
-              type='password' 
-              name='confirmPassword' 
-              id='confirmPassword' 
-              placeholder="********" 
+            <label htmlFor="confirmPassword">{t("Повторите пароль")}</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              id="confirmPassword"
+              placeholder="********"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              required
             />
-            <button type='submit' style={{ maxWidth: "200px", marginTop: "20px" }}>
-              {t('send')}
+            <button
+              type="submit"
+              style={{ maxWidth: "200px", marginTop: "20px" }}
+            >
+              {t("send")}
             </button>
           </form>
-          {showModal && (
-            <dialog className='modal supermodal'>
-                <div className='modal-content'>
-                    <h3>{t('Пароль успешно изменен!')}</h3>
-                    <Link to="/">
-                        <button onClick={() => setShowModal(false)}>{t('Перейти в Логин')}</button>
-                    </Link>
-                </div>
-            </dialog>
-          )}
+          {message && <p>{message}</p>}
         </div>
       </div>
+      {showModal && (
+        <dialog className="modal supermodal">
+          <div className="modal-content">
+            <h3>{t("Пароль успешно изменен!")}</h3>
+            <Link to="/">
+              <button onClick={() => setShowModal(false)}>
+                {t("Ввойти в аккаунт")}
+              </button>
+            </Link>
+          </div>
+        </dialog>
+      )}
     </div>
   );
 };
