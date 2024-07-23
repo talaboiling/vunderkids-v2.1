@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import logoImg from "/src/assets/logo_blue.png";
 import { loginUser, logout } from "../utils/authService";
 import { useTranslation } from "react-i18next";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -68,6 +70,9 @@ function Login() {
             />
           </Link>
           <div className="excLogo">
+            <div className="menuWrapper">
+              <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
+            </div>
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
                 {t('aboutPlatform')}
@@ -85,10 +90,10 @@ function Login() {
           </div>
         </div>
         <div
-          className="regPage"
-          style={{ display: "flex", justifyContent: "center" }}
+            className="regPage"
+            style={{display: "flex", justifyContent: "center"}}
         >
-          <div className="regform">
+        <div className="regform">
             <div className="formTitle">
               <h3 className="form-h3">{t('login')}</h3>
               <Link to={"/registration"} className="formLink">

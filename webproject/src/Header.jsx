@@ -6,6 +6,9 @@ import { logout } from "./utils/authService";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { getUserRole, isAuthenticated } from "./utils/authService.js";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+
 
 function Header() {
   const navigate = useNavigate();
@@ -32,10 +35,10 @@ function Header() {
         <div className="excLogo">
           <div className="navList">
             <a href="#oplatforme" className="navLink">
-              { t('aboutPlatform')}
+              {t('aboutPlatform')}
             </a>
             <a href="#obuchenie" className="navLink">
-              { t('education')}
+              {t('education')}
             </a>
             <a href="#otzyvy" className="navLink">
               {t('reviews')}
@@ -44,30 +47,36 @@ function Header() {
               {t('contacts')}
             </a>
           </div>
+          <div className="langSelector">
+            <button className="transBtn" onClick={() => i18next.changeLanguage('ru')}>РУС</button>
+            <button className="transBtn" onClick={() => i18next.changeLanguage('kk')}>ҚАЗ</button>
+          </div>
+          <div className="menuWrapper">
+            <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
+          </div>
           <div className="navButton">
-            <div className="langSelector">
-              <button className="transBtn" onClick={() => i18next.changeLanguage('ru')}>РУС</button>
-              <button className="transBtn" onClick={() => i18next.changeLanguage('kk')}>ҚАЗ</button>
-            </div>
-            {isLoggedIn ? (
-              <>
-                <Link to={`${role === "superadmin" ? "/admindashboard" : role === "supervisor" ? "/supervisor-dashboard" : role === "parent" ? "/parent" : "/dashboard"}`} style={{ textDecoration: "none" }}>
 
-                  <button>{t('continue')}</button>
-                </Link>
-                <button className="orangeButton" onClick={handleLogout}>
-                  {t('exit')}
-                </button>
-              </>
+            {isLoggedIn ? (
+                <>
+                  <Link
+                      to={`${role === "superadmin" ? "/admindashboard" : role === "supervisor" ? "/supervisor-dashboard" : role === "parent" ? "/parent" : "/dashboard"}`}
+                      style={{textDecoration: "none"}}>
+
+                    <button>{t('continue')}</button>
+                  </Link>
+                  <button className="orangeButton" onClick={handleLogout}>
+                    {t('exit')}
+                  </button>
+                </>
             ) : (
-              <>
-                <Link to="/login">
-                  <button>{t('enter')}</button>
-                </Link>
-                <Link to="/registration">
-                  <button className="orangeButton">{t('register')}</button>
-                </Link>
-              </>
+                <>
+                  <Link to="/login">
+                    <button>{t('enter')}</button>
+                  </Link>
+                  <Link to="/registration" className="orangeButtonWrapper">
+                    <button className="orangeButton">{t('register')}</button>
+                  </Link>
+                </>
             )}
           </div>
         </div>
@@ -75,7 +84,7 @@ function Header() {
       <div className="hooks">
         <div className="hook1">
           <div className="hook1Desc">
-            <p style={{ fontWeight: 600, margin: 0 }}>
+            <p style={{fontWeight: 600, margin: 0}}>
               {t('eduAge')}
             </p>
             <div className="hook1Title">

@@ -5,6 +5,8 @@ import { registerParent } from "../utils/apiService"; // Import the function
 import { useTranslation } from "react-i18next";
 import ReCAPTCHA from "react-google-recaptcha";
 import { dialogActionsClasses } from "@mui/material";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
 
 function Registration() {
   const { t } = useTranslation();
@@ -81,6 +83,9 @@ function Registration() {
             />
           </Link>
           <div className="excLogo">
+            <div className="menuWrapper">
+              <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
+            </div>
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
                 {t("aboutPlatform")}
@@ -95,7 +100,7 @@ function Registration() {
                 {t("contacts")}
               </a>
             </div>
-            <div className="navButton" style={{ marginLeft: "80px" }}>
+            <div className="navButton" style={{marginLeft: "80px"}}>
               <Link to={"/login"}>
                 <button>{t("enter")}</button>
               </Link>
@@ -105,7 +110,7 @@ function Registration() {
         <div className="regPage">
           <div className="regform">
             <div className="formTitle">
-              <h3 className="form-h3">{t("createParentAccount")}</h3>
+            <h3 className="form-h3">{t("createParentAccount")}</h3>
               <Link to="/login" className="formLink">
                 {t("haveAccount")}
               </Link>
