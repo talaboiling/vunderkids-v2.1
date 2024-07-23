@@ -359,7 +359,12 @@ export const registerParent = async (formData) => {
     const response = await instance.post(endpoint, formData);
     return response.data;
   } catch (error) {
-    throw new Error(error || "Something went wrong");
+    if (error.response.status == 400) {
+      throw new Error("Пользователь с таким email уже существует");
+    } else if (error.response.status == 500) {
+      throw new Error("Ошибка сервера. Попробуйте зайти позже");
+    }
+    throw new Error(error || "Что то полшло не так.");
   }
 };
 
