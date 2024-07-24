@@ -755,7 +755,7 @@ footer{
   margin-left: 20px;
   font-weight: 600;
   height: fit-content;
-  max-height: 100px;
+  /*max-height: 100px;*/
   padding: 10px;
   overflow-y: hidden;
   text-overflow: ellipsis;
@@ -1003,6 +1003,87 @@ input, select {
     .offersTop {
         flex-direction: column;
     }
+    .offersBottom {
+        flex-direction: column;
+        padding-top: 3rem;
+    }
+    .offers {
+        display: block;
+    }
+    footer {
+        padding: 3rem 1rem;
+    }
+    .footer {
+        grid-template-columns: 1fr 1fr;
+    }
+    .reviewSect {
+        max-width: 90vw;
+    }
+    .reviewCard {
+        padding: .5rem;
+        min-width: 85vw;
+        height: 250px;
+    }
+    .revText {
+        margin-left: 5px;
+    }
+    .revName {
+        align-self: start;
+    }
+    .reviewCard * {
+        /*width: 100%;*/
+    }
+    .rateus {
+        background-position: center;
+    }
+    .rateus h1 {
+        font-size: 2rem;
+        text-align: center;
+    }
+    .revSub {
+        align-self: center;
+    }
+    .revPfp {
+    }
+
+    .beforeCont {
+        order: 1;
+        display: none;
+    }
+    .contLeft {
+        width: 100%;
+        margin: 0;
+        order: 2;
+    }
+    .contLeft ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .contLeft::before {
+        clip-path: polygon(0 0, 90% 5%, 90% 100%, 0 100%);
+    }
+    .contents {
+        display: block;
+        /*flex-direction: column;*/
+    }
+    .contRight {
+        /*order: 3;*/
+        /*display: none;*/
+        /*margin-left: 0;*/
+        /*padding: 0;*/
+    }
+
+    /*.socialIcon {*/
+    /*    width: 4rem;*/
+    /*    height: 4rem;*/
+    /*}*/
+    /*.socialLinks {*/
+    /*    left: 36%;*/
+    /*    top: 41%;*/
+    /*    position: fixed;*/
+    /*}*/
     /*.navBar {*/
     /*    max-width: 100%;*/
     /*    !*overflow: hidden;*!*/
