@@ -1114,6 +1114,10 @@ img.childcard {
   display: none;
 }
 
+.backButton {
+  display: none;
+}
+
 @media (max-width: 450px) {
   .rtdash {
     overflow-x: hidden;
@@ -1130,6 +1134,23 @@ img.childcard {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    padding: 44px 0;
+    margin-right: .5rem;
+  }
+  .backButton {
+    width: 90%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+  .backButton svg {
+    font-size: 2rem;
+  }
+  .cups {
+    margin-right: 0 !important;
+  }
+  .streak {
+    /*margin-right: 2rem !important;*/
   }
   .navdashboard .lndsh {
   }
@@ -1142,6 +1163,12 @@ img.childcard {
     box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.3);
     margin-right: 10px;
     max-width: fit-content;
+  }
+  .burger {
+    margin-right: 0 !important;
+  }
+  .profile {
+    margin-right: 0 !important;
   }
   .navdashboard .icons svg {
     transform: scale(1.5);

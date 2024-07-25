@@ -7,6 +7,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { dialogActionsClasses } from "@mui/material";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBars} from "@fortawesome/free-solid-svg-icons";
+import {slide as Menu} from "react-burger-menu";
 
 function Registration() {
   const { t } = useTranslation();
@@ -70,6 +71,16 @@ function Registration() {
     }
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleStateChange = (state) => {
+    setIsOpen(state.isOpen);
+  };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
       <div className="regacss">
@@ -83,9 +94,6 @@ function Registration() {
             />
           </Link>
           <div className="excLogo">
-            <div className="menuWrapper">
-              <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
-            </div>
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
                 {t("aboutPlatform")}
@@ -105,8 +113,25 @@ function Registration() {
                 <button>{t("enter")}</button>
               </Link>
             </div>
+            <div className="menuWrapper" onClick={toggleMenu}>
+              <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
+            </div>
           </div>
         </div>
+        <Menu isOpen={isOpen} onStateChange={handleStateChange}>
+          <a href="#oplatforme" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('aboutPlatform')}
+          </a>
+          <a href="#obuchenie" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('education')}
+          </a>
+          <a href="#otzyvy" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('reviews')}
+          </a>
+          <a href="#contakty" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('contacts')}
+          </a>
+        </Menu>
         <div className="regPage">
           <div className="regform">
             <div className="formTitle">

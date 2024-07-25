@@ -16,8 +16,17 @@ import i18next from "i18next";
 
 const Rating = () => {
   const { t } = useTranslation();
-  const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
-  const [ratings, setRatings] = useState([]); // State to store ratings
+    const [user, setUser] = useState({ first_name: t("student"), last_name: "studentson", stars: 2, cups: 4, grade: 5, id: 1 }); // Default values
+  // const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
+  const [ratings, setRatings] = useState([
+      {
+          id: 1,
+          first_name: "John",
+          last_name: "Doe",
+          cups: 3,
+          streak: 3
+      }
+  ]); // State to store ratings
   const [loading, setLoading] = useState(true); // Add loading state
   const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
     const [isMenuOpen, setIsMenuOpen] = useState(false);

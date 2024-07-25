@@ -38,9 +38,31 @@ ChartJS.register(
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const [user, setUser] = useState({ first_name: t("student"), last_name: "" }); // Default values
-  const [courses, setCourses] = useState([]); // State to store courses
-  const [weeklyProgress, setWeeklyProgress] = useState([]);
+  // const [user, setUser] = useState({ first_name: t("student"), last_name: "" }); // Default values
+  const [user, setUser] = useState({ first_name: t("student"), last_name: "studentson", stars: 2, cups: 4, grade: 5, id: 1 }); // Default values
+  const [courses, setCourses] = useState([
+    {
+      id: 1,
+      name: "Математика",
+      percentage_completed: 50
+    },
+    {
+      id: 2,
+      name: "Английский язык",
+      percentage_completed: 70
+    },
+    {
+      id: 2,
+      name: "Математика",
+      percentage_completed: 30
+    },
+  ]); // State to store courses
+  const [weeklyProgress, setWeeklyProgress] = useState([
+    {
+      day: "mon",
+      cups: 4
+    }
+  ]);
   const [loading, setLoading] = useState(true); // Add loading state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileSwitched, setIsProfileSwitched] = useState(false);
@@ -49,11 +71,6 @@ const Dashboard = () => {
     const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
       try {
-        // const [userData, coursesData, weeklyProgressData] = await [
-        //   fetchUserData(childId),
-        //   fetchCourses(childId),
-        //   fetchWeeklyProgress(childId),
-        // ];
         const userData = await fetchUserData(childId);
         console.log("userData", userData);
         setUser(userData);
@@ -229,7 +246,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <Profile user={user} isProfileSwitched={isProfileSwitched} />
+        <Profile user={user} isProfileSwitched={isProfileSwitched} setIsProfileSwitched={setIsProfileSwitched} />
       </div>
   );
 };

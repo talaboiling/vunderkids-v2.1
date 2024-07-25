@@ -38,7 +38,7 @@ const Navdash = (props) => {
 
     return (
         <div className="navdashboard">
-            <div className={`icons`} onClick={() => {
+            <div className={`icons burger`} onClick={() => {
                 props.setIsMenuOpen(!props.isMenuOpen);
                 props.setIsProfileSwitched(false);
                 console.log("switchin sides")
@@ -49,16 +49,16 @@ const Navdash = (props) => {
                 <img src={staricon} alt="stars" className="starIcon"/>
                 {user.stars || props.starCount}
             </div>
-            <div className="lndsh cupCount">
+            <div className="lndsh cupCount cups">
                 <img src={cupicon} alt="cups" className="cupIcon"/>
                 {user.cups || props.cupCount}
             </div>
-            <div className="lndsh cupCount">
+            <div className="lndsh cupCount streak">
                 <img src={nostreak} alt="streak" className="cupIcon"/>
                 {user.streak}
             </div>
             {props.urlPath === "dashboard" ? (
-                    <div className={`icons ${props.isProfileSwitched ? "activeProfile" : ""}`} onClick={() => {
+                    <div className={`icons profile`} onClick={() => {
                         props.setIsProfileSwitched(!props.isProfileSwitched);
                         props.setIsMenuOpen(false);
                         console.log("switchin sides")
