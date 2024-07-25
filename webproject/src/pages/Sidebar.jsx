@@ -6,13 +6,13 @@ import { SidebarData } from "./SidebarData";
 import { logout } from "../utils/authService";
 import { useTranslation } from "react-i18next";
 
-const Sidebar = () => {
+const Sidebar = ({isMenuOpen}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   // Parse user information from local storage
-  const user = JSON.parse(localStorage.getItem("user"));
-
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const user = {role: "student"}
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -29,7 +29,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isMenuOpen ? "activeMenu" : ""}`}>
       <Link to={"/"}>
         <img src={logo} alt="logo" className="dashsidelogo" />
       </Link>

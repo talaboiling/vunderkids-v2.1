@@ -42,6 +42,8 @@ const Dashboard = () => {
   const [courses, setCourses] = useState([]); // State to store courses
   const [weeklyProgress, setWeeklyProgress] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileSwitched, setIsProfileSwitched] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,100 +132,105 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="rtdash">
-      <Sidebar />
-      <div className="centralDash">
-        <Navdash
-          starCount={user.stars}
-          cupCount={user.cups}
-          gradeNum={user.grade}
-          notif={3}
-        />
-        <div className="mainContent">
-          <h2 style={{ color: "#22222244" }}>{t("main")}</h2>
-          <div className="helloContent">
+      <div className="rtdash">
+        <Sidebar isMenuOpen={isMenuOpen} />
+        <div className="centralDash">
+          <Navdash
+              starCount={user.stars}
+              cupCount={user.cups}
+              gradeNum={user.grade}
+              notif={3}
+              isMenuOpen={isMenuOpen}
+              setIsMenuOpen={setIsMenuOpen}
+              isProfileSwitched={isProfileSwitched}
+              setIsProfileSwitched={setIsProfileSwitched}
+              urlPath={"dashboard"}
+          />
+          <div className="mainContent">
+            <h2 style={{ color: "#22222244" }}>{t("main")}</h2>
+            <div className="helloContent">
             <span className="helloCont">
               <p
-                style={{
-                  fontWeight: "500",
-                  fontSize: "xx-large",
-                  color: "#222222ef",
-                  margin: "0",
-                  marginBottom: "15px",
-                }}
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "xx-large",
+                    color: "#222222ef",
+                    margin: "0",
+                    marginBottom: "15px",
+                  }}
               >
                 {t("hello")}, <strong>{user.first_name}</strong>
               </p>
               <p
-                style={{
-                  fontWeight: "500",
-                  color: "#2222229f",
-                  maxWidth: "70%",
-                  margin: "0",
-                }}
+                  style={{
+                    fontWeight: "500",
+                    color: "#2222229f",
+                    maxWidth: "70%",
+                    margin: "0",
+                  }}
               >
                 {t("quote1")}
                 {t("quote2")}
               </p>
             </span>
-            <img
-              src={lionimg}
-              alt="mascot"
-              style={{
-                position: "absolute",
-                top: "-50px",
-                left: "70%",
-                scale: "1.2",
-              }}
-            />
-          </div>
-
-          <h3
-            style={{ color: "black", fontWeight: "700", fontSize: "x-large" }}
-          >
-            {t("myCourses")}
-          </h3>
-          <div className="coursesCards">
-            {courses.map((course) => (
-              <div className="courseItem" key={course.id}>
-                <div className="courseItemLeft">
-                  <p style={{ margin: "0" }}>{course.name}</p>
-                  <progress value={course.percentage_completed / 100} />
-                  <Link to={`/dashboard/courses/${course.id}/lessons`}>
-                    <button
-                      style={{
-                        backgroundColor: "#F8753D",
-                        fontWeight: "550",
-                        fontSize: "large",
-                        borderColor: "#FFB99C",
-                        boxShadow: "none",
-                      }}
-                    >
-                      {t("begin")}
-                    </button>
-                  </Link>
-                </div>
-                <img
-                  src={course.name === "Математика" ? mathIcon : englishIcon}
-                  alt={course.name}
+              <img
+                  src={lionimg}
+                  alt="mascot"
                   style={{
-                    backgroundColor: "#F8753D",
-                    border: "1px solid black",
-                    borderRadius: "21px",
+                    position: "absolute",
+                    top: "-50px",
+                    left: "70%",
+                    scale: "1.2",
                   }}
-                />
+              />
+            </div>
+
+            <h3
+                style={{ color: "black", fontWeight: "700", fontSize: "x-large" }}
+            >
+              {t("myCourses")}
+            </h3>
+            <div className="coursesCards">
+              {courses.map((course) => (
+                  <div className="courseItem" key={course.id}>
+                    <div className="courseItemLeft">
+                      <p style={{ margin: "0" }}>{course.name}</p>
+                      <progress value={course.percentage_completed / 100} />
+                      <Link to={`/dashboard/courses/${course.id}/lessons`}>
+                        <button
+                            style={{
+                              backgroundColor: "#F8753D",
+                              fontWeight: "550",
+                              fontSize: "large",
+                              borderColor: "#FFB99C",
+                              boxShadow: "none",
+                            }}
+                        >
+                          {t("begin")}
+                        </button>
+                      </Link>
+                    </div>
+                    <img
+                        src={course.name === "Математика" ? mathIcon : englishIcon}
+                        alt={course.name}
+                        style={{
+                          backgroundColor: "#F8753D",
+                          border: "1px solid black",
+                          borderRadius: "21px",
+                        }}
+                    />
+                  </div>
+              ))}
+            </div>
+            <div className="progressChart">
+              <div style={{ width: "100%", height: "200px" }}>
+                <Line data={data} options={options} />
               </div>
-            ))}
-          </div>
-          <div className="progressChart">
-            <div style={{ width: "100%", height: "200px" }}>
-              <Line data={data} options={options} />
             </div>
           </div>
         </div>
+        <Profile user={user} isProfileSwitched={isProfileSwitched} />
       </div>
-      <Profile user={user} />
-    </div>
   );
 };
 

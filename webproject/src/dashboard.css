@@ -1105,3 +1105,138 @@ img.childcard {
   font-weight: 800;
   text-shadow: 0 0 5px white;
 }
+
+.icons {
+  display: none;
+}
+
+.off {
+  display: none;
+}
+
+@media (max-width: 450px) {
+  .rtdash {
+    overflow-x: hidden;
+  }
+  .off {
+    display: block;
+  }
+  /*  Content  */
+  .centralDash {
+    width: 100vw;
+  }
+  .navdashboard {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .navdashboard .lndsh {
+  }
+  .navdashboard .icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 9px;
+    background-color: white;
+    box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-right: 10px;
+    max-width: fit-content;
+  }
+  .navdashboard .icons svg {
+    transform: scale(1.5);
+    padding: 10px 20px;
+  }
+  .navdashboard .lndsh {
+    margin-right: 0;
+  }
+  .navdashboard .langSelect {
+    display: none;
+  }
+  .navdashboard .gradeNum {
+    display: none;
+  }
+  .helloContent img {
+    top: 49px !important;
+    left: 46% !important;
+    scale: 0.65 !important;
+  }
+  .mainContent h2 {
+    text-align: center;
+  }
+  .mainContent h3 {
+    text-align: center;
+  }
+  .coursesCards {
+    flex-direction: column;
+    margin: 20px auto;
+  }
+
+  .progressChart {
+    padding: 2rem;
+  }
+  /*  Right hand sidebar  */
+  .dashProfile {
+    transition: .5s ease;
+    padding: 50px 0 0 0;
+    position: relative;
+    left: 20%;
+  }
+  .activeProfile {
+    left: -100%;
+  }
+  .league {
+    margin: 0 10px;
+  }
+  /*  Left hand sidebar  */
+  .sidebar {
+    transition: .5s ease;
+    /*display: none;*/
+    position: absolute;
+    top: 10%;
+    left: -50%;
+    z-index: 10;
+    margin: 10px;
+    padding: 10px 10px 20px 10px;
+  }
+  .activeMenu {
+    left: 0;
+  }
+  .sidebar #active {
+
+  }
+  .sidebar .linkbuttonVal {
+    padding: 5px 0;
+    border-radius: 40px;
+  }
+  .sidebar a .dashsidelogo {
+    display: none;
+  }
+  .sidebar .excSideLogo {
+    margin-top: 0;
+  }
+  .sidebar .exitButton {
+    padding: 0.6rem 1rem;
+    font-size: small;
+  }
+
+  .centralLessonsInner {
+    width: 100% !important;
+  }
+  .centralLessonsInner .cupCount {
+    margin-right: 1.5rem;
+  }
+
+  .ratingCentral {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .ratingCentral .listInRating {
+    margin-bottom: 1.5rem;
+  }
+
+  .ratingCentral .ratinginfo {
+    padding: 40px;
+  }
+}
