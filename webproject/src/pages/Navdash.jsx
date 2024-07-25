@@ -9,7 +9,7 @@ import Loader from "./Loader";
 import {useTranslation} from "react-i18next";
 import i18next from "i18next";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faCalendarDays, faTrophy, faUser} from "@fortawesome/free-solid-svg-icons";
 
 const Navdash = (props) => {
     const {t} = useTranslation();
@@ -57,19 +57,31 @@ const Navdash = (props) => {
                 <img src={nostreak} alt="streak" className="cupIcon"/>
                 {user.streak}
             </div>
-            {props.urlPath === "dashboard" ? (
+            {props.urlPath === "dashboard"
+                ? (
                     <div className={`icons profile`} onClick={() => {
                         props.setIsProfileSwitched(!props.isProfileSwitched);
                         props.setIsMenuOpen(false);
-                        console.log("switchin sides")
                     }}>
                         <FontAwesomeIcon icon={faUser} style={{color: "#339cbd"}}/>
                     </div>)
                 : null}
+            {
+                props.urlPath === "lesson"
+                ? (
+                        <div className={`icons program`} onClick={() => {
+                            props.setIsProgramSwitched(!props.isProgramSwitched);
+                            props.setIsMenuOpen(false);
+                        }}>
+                            <FontAwesomeIcon icon={faCalendarDays} style={{color: "#339cbd"}}/>
+                        </div>
+                )
+                : null
+            }
             <div className="rndsh gradeNum">{user.grade || props.gradeNum} {t('studClass')}</div>
             <div className="rndsh langSelect">
                 <div className="button b2" id="button-10">
-                    <input type="checkbox" className="checkbox" checked={checked} onChange={handleChange}/>
+                <input type="checkbox" className="checkbox" checked={checked} onChange={handleChange}/>
                     <div className="knobs">
                         <span>ҚАЗ</span>
                     </div>

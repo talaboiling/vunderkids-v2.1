@@ -20,11 +20,31 @@ import { useTranslation } from "react-i18next";
 const Lessons = () => {
 
   const { t } = useTranslation();
-  const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
-  const [courses, setCourses] = useState([]); // State to store courses
+    const [user, setUser] = useState({ first_name: t("student"), last_name: "studentson", stars: 2, cups: 4, grade: 5, id: 1 }); // Default values
+  // const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
+    const [courses, setCourses] = useState([
+        {
+            id: 1,
+            name: "Математика",
+            percentage_completed: 50
+        },
+        {
+            id: 2,
+            name: "Английский язык",
+            percentage_completed: 70
+        },
+        {
+            id: 2,
+            name: "Математика",
+            percentage_completed: 30
+        },
+    ]); // State to store courses
 
   const [loading, setLoading] = useState(true); // Add loading state
   const avatarUrl = user.avatar || placeholderPfp; // Use placeholder if avatar is null
+
+    const [isCertificatesSwitched, setIsCertificatesSwitched] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,13 +71,18 @@ const Lessons = () => {
   }
   return (
     <div className="rtdash certpage">
-      <Sidebar />
+        <Sidebar isMenuOpen={isMenuOpen} />
       <div className="centralLessons">
-        <div style={{width:"fit-content"}}>
+        <div className="centralLessonsInner">
           <Navdash
             starCount={user.stars}
             cupCount={user.cups}
             gradeNum={user.grade}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+            isCertificatesSwitched={isCertificatesSwitched}
+            setIsCertificatesSwitched={setIsCertificatesSwitched}
+            urlPath={"certificate"}
           />
         </div>
         <div className="mainContent">

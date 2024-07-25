@@ -1118,9 +1118,15 @@ img.childcard {
   display: none;
 }
 
+.centralLessonsInner {
+  width: fit-content;
+}
+
 @media (max-width: 450px) {
   .rtdash {
     overflow-x: hidden;
+  }
+  .rtdash .courseItem {
   }
   .off {
     display: block;
@@ -1172,7 +1178,7 @@ img.childcard {
   }
   .navdashboard .icons svg {
     transform: scale(1.5);
-    padding: 10px 20px;
+    padding: 10px 15px;
   }
   .navdashboard .lndsh {
     margin-right: 0;
@@ -1248,7 +1254,8 @@ img.childcard {
   }
 
   .centralLessonsInner {
-    width: 100% !important;
+    width: auto;
+    max-width: 450px !important;
   }
   .centralLessonsInner .cupCount {
     margin-right: 1.5rem;
@@ -1265,5 +1272,153 @@ img.childcard {
 
   .ratingCentral .ratinginfo {
     padding: 40px;
+  }
+
+  .certpage {
+    overflow: visible;
+  }
+
+  .certpage .ratinginfo {
+    padding: 2.5rem 0;
+    max-width: 450px;
+  }
+
+  .certpage .mainContent {
+    /*max-width: 450px;*/
+    height: auto;
+  }
+  .certpage .sectCertificates {
+    margin-left: 0;
+    padding: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .certpage .certbanner {
+    padding: 1.5rem 0;
+  }
+  .certpage .certificate {
+    margin-right: 0;
+  }
+  .certpage .navdashboard {
+    width: 100% !important;
+  }
+  .certpage .centralLessonsInner {
+    width: 100%;
+  }
+  .certpage .streak {
+    margin-right: 0;
+  }
+
+  .gamesPage {
+    min-height: 100vh;
+  }
+  .game-div {
+    display: flex;
+    flex-direction: column;
+    padding-right: 0;
+    margin: 0 1rem;
+  }
+  .game-button {
+    font-size: 2.2rem;
+  }
+  .mathLesson {
+    overflow-x: hidden;
+    height: auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .mathLesson .centralLessons {
+    max-width: 450px;
+    width: auto;
+  }
+  .mathLesson .ratingCentral {
+    max-width: 450px;
+    width: auto;
+  }
+  .mathLesson .coursesCards {
+    max-width: 450px;
+    width: auto;
+  }
+  .mathLesson .courseItem {
+    flex-direction: column-reverse;
+    width: auto;
+    max-width: 450px;
+  }
+  .mathLesson .courseItemLeft {
+    margin-right: 0;
+    justify-content: center;
+  }
+  .mathLesson .courseItemLeft p {
+    text-align: center;
+    padding-top: 1rem;
+  }
+  .mathLesson .courseItemLeft .defaultStyle {
+    text-align: left;
+    font-size: 1.4rem;
+  }
+  .mathLesson .courseItemLeft progress {
+    width: 100%;
+  }
+  .mathLesson .coursesCards {
+    margin: 0;
+    width: auto;
+  }
+  .mathLesson .lessonsMain {
+    width: 100%;
+  }
+  .mathLesson .maths {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .mathLesson .navdashboard {
+    width: 95%;
+    margin-right: 0;
+  }
+  .mathLesson .lessonsCont {
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+  .mathLesson .defaultStyle {
+    font-size: 2rem;
+  }
+  .mathLesson .lessonsHr {
+    max-width: 450px;
+    width: 6rem;
+  }
+  .mathLesson .contWrapper {
+    padding: 0 .5rem 1rem .5rem;
+  }
+  .lessonsCont .title {
+    padding-top: 2rem;
+  }
+  .courseItemLeft p {
+    font-size: 1.5rem;
+  }
+  .lessonsProg {
+    margin-right: 1rem;
+  }
+  .mathLesson .maths {
+    margin-right: 1rem;
+  }
+  .mathLesson .streak {
+    margin-right: 0;
+  }
+  .mathLesson .lessonsProg {
+    /*display: none;*/
+    position: absolute;
+    top: 10.85%;
+    right: -100%;
+    transition: .5s ease;
+    z-index: 100;
+  }
+  .mathLesson .activeProgram {
+    right: 0;
+  }
+  .mathLesson .lessonsProg .progList .progItem p {
+    text-align: center;
+  }
+  .mathLesson .lessonsProg .progList .progItem progress {
+    width: 100%;
   }
 }

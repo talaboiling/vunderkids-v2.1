@@ -35,13 +35,45 @@ import VolumeUp from "@mui/icons-material/VolumeUp";
 const Math = () => {
   const { t } = useTranslation();
   const { courseId } = useParams();
-  const [course, setCourse] = useState();
-  const [sections, setSections] = useState([]);
-  const [user, setUser] = useState({});
+  const [course, setCourse] = useState(
+      {
+        id: 1,
+        name: "Maths",
+        percentage_completed: 0,
+        completed_tasks: 0,
+        total_tasks: 10,
+      }
+  );
+  const [sections, setSections] = useState([
+    {
+      title: "Arithmetics",
+      percentage_completed: 0,
+      contents: [
+        {
+          id: 1,
+          content_type: "lesson",
+          video_url: "https://www.youtube.com/watch?v=e_pYHdSkG54",
+          title: "title",
+          section: "arithmetics",
+          id_completed: false
+        },
+        {
+          id: 2,
+          content_type: "task",
+          video_url: "https://www.youtube.com/watch?v=e_pYHdSkG54",
+          title: "title",
+          section: "arithmetics",
+          id_completed: false
+        },
+      ]
+    }
+  ]);
+  const [user, setUser] = useState({ first_name: t("student"), last_name: "studentson", stars: 2, cups: 4, grade: 5, id: 1 }); // Default values
+  // const [user, setUser] = useState({});
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [videoUrl, setVideoUrl] = useState("");
-  const [taskContent, setTaskContent] = useState({});
+  const [videoUrl, setVideoUrl] = useState("https://www.youtube.com/watch?v=e_pYHdSkG54");
+  const [taskContent, setTaskContent] = useState({ section: "arithmetics", id: 1 });
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -62,6 +94,9 @@ const Math = () => {
   const [isBackgroundAudioPlaying, setIsBackgroundAudioPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.5);
+
+  const [isProgramSwitched, setIsProgramSwitched] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -301,14 +336,19 @@ const Math = () => {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="rtdash rtrat">
-      <Sidebar className="courseSidebar" />
+    <div className="rtdash rtrat mathLesson">
+      <Sidebar className="courseSidebar" isMenuOpen={isMenuOpen} />
       <div className="centralLessons">
-        <div style={{width:"fit-content"}}>
+        <div className="centralLessonsInner maths">
           <Navdash
             starCount={user.stars}
             cupCount={user.cups}
             gradeNum={user.grade}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+            isProgramSwitched={isProgramSwitched}
+            setIsProgramSwitched={setIsProgramSwitched}
+            urlPath={"lesson"}
           />
         </div>
         <div className="ratingCentral">
@@ -336,7 +376,7 @@ const Math = () => {
             </div>
             <div className="lessonsCont">
               <h2
-                className="defaultStyle"
+                className="defaultStyle title"
                 style={{ color: "black", fontWeight: "700" }}
               >
                 {" "}
@@ -344,7 +384,7 @@ const Math = () => {
               </h2>
 
               {sections.map((section, sectionIndex) => (
-                <div key={sectionIndex}>
+                <div key={sectionIndex} className="contWrapper">
                   <div
                     style={{
                       display: "flex",
@@ -352,11 +392,11 @@ const Math = () => {
                       alignItems: "center",
                     }}
                   >
-                    <hr />
+                    <hr className="lessonsHr" />
                     <h2 className="defaultStyle" style={{ color: "#aaa" }}>
                       {section.title}
                     </h2>
-                    <hr />
+                    <hr className="lessonsHr"/>
                   </div>
                   {section.contents.map((content, contentIndex) => (
                     <div className="lessonsLinks" key={contentIndex}>
@@ -426,7 +466,7 @@ const Math = () => {
               ))}
             </div>
           </div>
-          <div className="lessonsProg">
+          <div className={`lessonsProg ${isProgramSwitched ? "activeProgram" : ""}`}>
             <h3
               className="defaultStyle"
               style={{ color: "black", fontWeight: "800", fontSize: "x-large" }}

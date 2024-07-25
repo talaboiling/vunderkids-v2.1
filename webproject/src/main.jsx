@@ -57,7 +57,6 @@ const router = createBrowserRouter([
     path: "/dashboard/rating",
     element: <Rating />,
   },
-  //   TODO
   // {
   //   path: "/dashboard/progress",
   //   element: <AuthRoute element={<Progress />} allowedRoles={["student", "parent"]} />,
@@ -66,17 +65,29 @@ const router = createBrowserRouter([
     path: "/dashboard/progress",
     element: <Progress />
   },
+  // {
+  //   path: "/dashboard/lessons",
+  //   element: <AuthRoute element={<Lessons />} allowedRoles={["student", "parent"]} />,
+  // },
   {
     path: "/dashboard/lessons",
-    element: <AuthRoute element={<Lessons />} allowedRoles={["student", "parent"]} />,
+    element: <Lessons />
   },
+  // {
+  //   path: "/dashboard/games",
+  //   element: <AuthRoute element={<Games />} allowedRoles={["student", "parent"]} />,
+  // },
   {
     path: "/dashboard/games",
-    element: <AuthRoute element={<Games />} allowedRoles={["student", "parent"]} />,
+    element: <Games />
   },
+  // {
+  //   path: "/dashboard/courses/:courseId/lessons",
+  //   element: <AuthRoute element={<MathCourse />} allowedRoles={["student", "parent"]} />,
+  // },
   {
     path: "/dashboard/courses/:courseId/lessons",
-    element: <AuthRoute element={<MathCourse />} allowedRoles={["student", "parent"]} />,
+    element: <MathCourse />
   },
   {
     path: "/admindashboard",
