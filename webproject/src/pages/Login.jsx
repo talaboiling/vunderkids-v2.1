@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logoImg from "/src/assets/logo_blue.png";
+import logoImg from "/src/assets/logo_blue.webp";
 import { loginUser, logout } from "../utils/authService";
 import { useTranslation } from "react-i18next";
-import Loader from "./Loader.jsx"
+import Loader from "./Loader.jsx";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -29,7 +29,7 @@ function Login() {
       setLoading(true);
       const user = await loginUser(formData.email, formData.password);
       // console.log("Logged in user:", user); // Debugging log
-      setResponseMessage(t('loginSuccessful'));
+      setResponseMessage(t("loginSuccessful"));
       if (user.is_superuser) {
         //console.log("Navigating to /admindashboard");
         navigate("/admindashboard"); // Redirect to admin dashboard
@@ -60,8 +60,8 @@ function Login() {
     navigate("/");
   };
 
-  if(loading){
-    return <Loader/>
+  if (loading) {
+    return <Loader />;
   }
 
   return (
@@ -79,19 +79,19 @@ function Login() {
           <div className="excLogo">
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
-                { t('aboutPlatform')}
+                {t("aboutPlatform")}
               </a>
               <a href="/#obuchenie" className="navLink">
-                { t('education')}
+                {t("education")}
               </a>
               <a href="/#otzyvy" className="navLink">
-                {t('reviews')}
+                {t("reviews")}
               </a>
               <a href="/#contakty" className="navLink">
-                {t('contacts')}
+                {t("contacts")}
               </a>
               <a href="/subscription-details" className="navLink">
-                {t('tariff')}
+                {t("tariff")}
               </a>
             </div>
           </div>
@@ -102,9 +102,9 @@ function Login() {
         >
           <div className="regform">
             <div className="formTitle">
-              <h3 className="form-h3">{t('login')}</h3>
+              <h3 className="form-h3">{t("login")}</h3>
               <Link to={"/registration"} className="formLink">
-                {t('noAccount')}
+                {t("noAccount")}
               </Link>
             </div>
             <form className="registrationInput" onSubmit={handleSubmit}>
@@ -118,7 +118,7 @@ function Login() {
                 onChange={handleInputChange}
                 required
               />
-              <label htmlFor="password">{t('yourPassword')}</label>
+              <label htmlFor="password">{t("yourPassword")}</label>
               <input
                 type="password"
                 id="password"
@@ -129,12 +129,12 @@ function Login() {
                 required
               />
               <Link to={"/password-renewal"} className="formLink">
-                {t('forgotPassword')}
+                {t("forgotPassword")}
               </Link>
               <br />
               <input
                 type="submit"
-                value={t('loginButton')}
+                value={t("loginButton")}
                 className="orangeButton"
                 style={{
                   position: "relative",
@@ -150,20 +150,28 @@ function Login() {
               className="modal supermodal"
               onClose={() => setShowErrModal(false)}
             >
-              <div className="modal-content" style={{display:"flex", flexDirection:"column", alignItems:"center", gap:"1rem", border:"3px solid darkred"}}>
+              <div
+                className="modal-content"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "1rem",
+                  border: "3px solid darkred",
+                }}
+              >
                 {responseMessage}
                 <button
                   onClick={() => setShowErrModal(false)}
                   style={{
-                    borderRadius:"10px",
+                    borderRadius: "10px",
                     backgroundColor: "transparent",
                     boxShadow: "none",
-                    color:"#666",
+                    color: "#666",
                   }}
                 >
                   Продолжить
                 </button>
-                
               </div>
             </dialog>
           )}

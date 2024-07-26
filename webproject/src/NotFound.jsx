@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import lion_incorrect from "./assets/lion_incorrect.png";
+import lion_incorrect from "./assets/lion_incorrect.webp";
 
 const NotFound = () => {
   return (

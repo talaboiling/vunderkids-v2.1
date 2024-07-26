@@ -1,6 +1,6 @@
 import League from "./dashboard_sections/League";
 import Ratinglist from "./dashboard_sections/Ratinglist";
-import placeholderPfp from "../assets/placehoder_pfp.png"; // Import the placeholder image
+import placeholderPfp from "../assets/placehoder_pfp.webp"; // Import the placeholder image
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { fetchRatings } from "../utils/apiService";
@@ -35,7 +35,7 @@ const Profile = ({ user }) => {
             padding: "0",
           }}
         >
-          {t ('myProfile')}
+          {t("myProfile")}
         </p>
       </div>
       <div className="sidepfp">
@@ -70,7 +70,7 @@ const Profile = ({ user }) => {
             padding: "0",
           }}
         >
-          {t ('student')}
+          {t("student")}
         </p>
       </div>
       <League />

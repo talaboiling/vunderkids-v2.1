@@ -1,6 +1,6 @@
 import React from "react";
 import mascotImg from "./assets/lionmascot_main.svg";
-import logoImg from "./assets/logo_blue.png";
+import logoImg from "./assets/logo_blue.webp";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "./utils/authService";
 import i18next from "i18next";
@@ -25,7 +25,7 @@ function Header() {
             <img className="navLogo" src={logoImg} alt="logo" />
           </Link>
           <span>
-            <p className="rev">{t ('ourContacts')}:</p>
+            <p className="rev">{t("ourContacts")}:</p>
             <p className="rev">+7 775 303 7432</p>
           </span>
         </div>
@@ -33,49 +33,73 @@ function Header() {
           <div className="navList">
             <div className="navLink dropdown">
               <a href="#oplatforme" className="navLink">
-                { t('aboutPlatform')}
+                {t("aboutPlatform")}
               </a>
               <div className="friendly-box"></div>
               <div className="dropdownContent">
-                <Link to="/oferty" className="dropdownLink">{t('platformPage1')}</Link>
-                <Link to="/users-terms-and-conditions" className="dropdownLink">{t('platformPage2')}</Link>
+                <Link to="/oferty" className="dropdownLink">
+                  {t("platformPage1")}
+                </Link>
+                <Link to="/users-terms-and-conditions" className="dropdownLink">
+                  {t("platformPage2")}
+                </Link>
               </div>
             </div>
             <a href="#obuchenie" className="navLink">
-              { t('education')}
+              {t("education")}
             </a>
             <a href="#otzyvy" className="navLink">
-              {t('reviews')}
+              {t("reviews")}
             </a>
             <a href="#contakty" className="navLink">
-              {t('contacts')}
+              {t("contacts")}
             </a>
             <a href="/subscription-details" className="navLink">
-              {t('tariff')}
+              {t("tariff")}
             </a>
           </div>
           <div className="navButton">
             <div className="langSelector">
-              <button className="transBtn" onClick={() => i18next.changeLanguage('ru')}>РУС</button>
-              <button className="transBtn" onClick={() => i18next.changeLanguage('kk')}>ҚАЗ</button>
+              <button
+                className="transBtn"
+                onClick={() => i18next.changeLanguage("ru")}
+              >
+                РУС
+              </button>
+              <button
+                className="transBtn"
+                onClick={() => i18next.changeLanguage("kk")}
+              >
+                ҚАЗ
+              </button>
             </div>
             {isLoggedIn ? (
               <>
-                <Link to={`${role === "superadmin" ? "/admindashboard" : role === "supervisor" ? "/supervisor-dashboard" : role === "parent" ? "/parent" : "/dashboard"}`} style={{ textDecoration: "none" }}>
-
-                  <button>{t('continue')}</button>
+                <Link
+                  to={`${
+                    role === "superadmin"
+                      ? "/admindashboard"
+                      : role === "supervisor"
+                      ? "/supervisor-dashboard"
+                      : role === "parent"
+                      ? "/parent"
+                      : "/dashboard"
+                  }`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <button>{t("continue")}</button>
                 </Link>
                 <button className="orangeButton" onClick={handleLogout}>
-                  {t('exit')}
+                  {t("exit")}
                 </button>
               </>
             ) : (
               <>
                 <Link to="/login">
-                  <button>{t('enter')}</button>
+                  <button>{t("enter")}</button>
                 </Link>
                 <Link to="/registration">
-                  <button className="orangeButton">{t('register')}</button>
+                  <button className="orangeButton">{t("register")}</button>
                 </Link>
               </>
             )}
@@ -85,18 +109,16 @@ function Header() {
       <div className="hooks">
         <div className="hook1">
           <div className="hook1Desc">
-            <p style={{ fontWeight: 600, margin: 0 }}>
-              {t('eduAge')}
-            </p>
+            <p style={{ fontWeight: 600, margin: 0 }}>{t("eduAge")}</p>
             <div className="hook1Title">
               <span className="spanAnim">
-                <h1>{t('mathEng1')}</h1>
+                <h1>{t("mathEng1")}</h1>
               </span>
               <span className="spanAnim">
-                <h1>{t('mathEng2')}</h1>
+                <h1>{t("mathEng2")}</h1>
               </span>
               <span className="spanAnim">
-                <h1>{t('mathEng3')}</h1>
+                <h1>{t("mathEng3")}</h1>
               </span>
             </div>
             <Link to="/registration">
@@ -108,7 +130,7 @@ function Header() {
                   borderColor: "white",
                 }}
               >
-                {t('tryForFree')}
+                {t("tryForFree")}
               </button>
             </Link>
           </div>

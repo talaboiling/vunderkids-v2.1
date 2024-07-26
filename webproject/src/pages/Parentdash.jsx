@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import { FileUploader } from "react-drag-drop-files";
-import logoImg from "../assets/logo_blue.png";
-import plusicon from "../assets/plus_icon.png";
-import pfplaceholder from "../assets/placehoder_pfp.png";
+import logoImg from "../assets/logo_blue.webp";
+import plusicon from "../assets/plus_icon.webp";
+import pfplaceholder from "../assets/placehoder_pfp.webp";
 import "/src/dashboard.css";
-import staricon from "../assets/navStars.png";
-import cupicon from "../assets/navCups.png";
-import streak from "../assets/streak.png";
-import nostreak from "../assets/nostreak.png";
+import staricon from "../assets/navStars.webp";
+import cupicon from "../assets/navCups.webp";
+import streak from "../assets/streak.webp";
+import nostreak from "../assets/nostreak.webp";
 import { logout } from "../utils/authService";
 import {
   fetchUserData,
@@ -20,12 +20,11 @@ import {
 import Loader from "./Loader";
 import { useTranslation } from "react-i18next";
 
-
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 const Parentdash = () => {
   const { t } = useTranslation();
-  const [user, setUser] = useState({ first_name: t ('parent'), last_name: "" }); // Default values
+  const [user, setUser] = useState({ first_name: t("parent"), last_name: "" }); // Default values
   const [children, setChildren] = useState([]); // State to store children
   const [file, setFile] = useState(null);
   const [formData, setFormData] = useState({
@@ -126,7 +125,7 @@ const Parentdash = () => {
         >
           <img src={plusicon} alt="add child" />
           <p style={{ fontSize: "x-large", fontWeight: "500" }}>
-            {t ('addChildButton')}
+            {t("addChildButton")}
           </p>
         </button>
       );
@@ -146,7 +145,7 @@ const Parentdash = () => {
         <div className="excLogo">
           <div className="mailname">{user.email}</div>
           <div className="navButton">
-            <button onClick={handleLogout}>{t ('exit')}</button>
+            <button onClick={handleLogout}>{t("exit")}</button>
           </div>
         </div>
       </div>
@@ -157,13 +156,19 @@ const Parentdash = () => {
             <img
               src={child.avatar || pfplaceholder}
               alt="child avatar"
-              style={{ maxWidth: "100px", maxHeight: "100px", borderRadius:"50%"}}
+              style={{
+                maxWidth: "100px",
+                maxHeight: "100px",
+                borderRadius: "50%",
+              }}
             />
             <p style={{ fontSize: "x-large" }}>
               {child.first_name} {child.last_name}
             </p>
             <div className="rndsh" style={{ marginBottom: "20px" }}>
-              <p>{child.grade} {t ('classLowercase')} ({child.language})</p>
+              <p>
+                {child.grade} {t("classLowercase")} ({child.language})
+              </p>
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "2rem" }}>
               <div
@@ -175,28 +180,26 @@ const Parentdash = () => {
                   position: "relative",
                 }}
               >
-                <img
-                  src={staricon}
-                  alt=""
-                  className="starIcon"
-                />
+                <img src={staricon} alt="" className="starIcon" />
                 <p>{child.stars}</p>
               </div>
               <div className="lndsh">
-                <img
-                  src={cupicon}
-                  alt=""
-                  className="cupIcon"
-                />
+                <img src={cupicon} alt="" className="cupIcon" />
                 <p>{child.cups}</p>
               </div>
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "2rem" }}>
               <div className="lndsh">
-                <p>{t ('lvl')}: {child.level}</p>
+                <p>
+                  {t("lvl")}: {child.level}
+                </p>
               </div>
               <div className="lndsh">
-                <img src={nostreak} alt="streak" style={{width:"30px", height:"30px"}}/>
+                <img
+                  src={nostreak}
+                  alt="streak"
+                  style={{ width: "30px", height: "30px" }}
+                />
                 <p>{child.streak}</p>
               </div>
             </div>
@@ -210,7 +213,7 @@ const Parentdash = () => {
                 onClick={() => handleNavigate(child.id)}
                 className="orangeButton"
               >
-                {t ('goToPlatform')}
+                {t("goToPlatform")}
               </button>
               <button
                 onClick={() => {
@@ -219,7 +222,7 @@ const Parentdash = () => {
                 }}
                 style={{ backgroundColor: "rgb(204, 47, 47)" }}
               >
-                {t ('delete')}
+                {t("delete")}
               </button>
             </div>
           </div>
@@ -257,7 +260,7 @@ const Parentdash = () => {
                     types={fileTypes}
                   />
                 </div>
-                <label htmlFor="first_name">{t ('firstNameChild')}</label>
+                <label htmlFor="first_name">{t("firstNameChild")}</label>
                 <input
                   type="text"
                   id="first_name"
@@ -267,7 +270,7 @@ const Parentdash = () => {
                   placeholder="Мақсат"
                   required
                 />
-                <label htmlFor="last_name">{t ('lastNameChild')}</label>
+                <label htmlFor="last_name">{t("lastNameChild")}</label>
                 <input
                   type="text"
                   id="last_name"
@@ -277,7 +280,7 @@ const Parentdash = () => {
                   placeholder="Бектұрғын"
                   required
                 />
-                <label htmlFor="birth_date">{t ('birthDate')}</label>
+                <label htmlFor="birth_date">{t("birthDate")}</label>
                 <input
                   type="date"
                   id="birth_date"
@@ -286,44 +289,49 @@ const Parentdash = () => {
                   onChange={handleInputChange}
                   required
                 />
-                  <div className="gendgrade">
-                    <label htmlFor="gender">{t ('gender')}</label>
-                    <label htmlFor="grade">{t ('studClass')}</label>
-                    <select
-                      list="genders"
-                      id="gender"
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleInputChange}
-                      placeholder={t ('boy')}
-                      required
-                    >
-                      <option value="">{t ('Choose gender')}</option>
-                      <option value="M">{t ('boy')}</option>
-                      <option value="F">{t ('girl')}</option>
-                      <option value="O">{t ('other')}</option>
-                    </select>                    
-                    <select
-                      list="grades"
-                      id="grade"
-                      name="grade"
-                      value={formData.grade}
-                      onChange={handleInputChange}
-                      placeholder={t ('preschool')}
-                      required
-                    >
-                      <option value="0">{t ('preschool')}</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                    </select>
-                  </div>
-                    <label htmlFor="language">{t ('Язык обучения')}</label>
-                    <select name="language" id="language" value={formData.language} onChange={handleInputChange}>
-                      <option value="">{t ('Язык обучения')}</option>
-                      <option value="ru">Русский</option>
-                      <option value="kz">Қазақша</option>
-                    </select>
+                <div className="gendgrade">
+                  <label htmlFor="gender">{t("gender")}</label>
+                  <label htmlFor="grade">{t("studClass")}</label>
+                  <select
+                    list="genders"
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleInputChange}
+                    placeholder={t("boy")}
+                    required
+                  >
+                    <option value="">{t("Choose gender")}</option>
+                    <option value="M">{t("boy")}</option>
+                    <option value="F">{t("girl")}</option>
+                    <option value="O">{t("other")}</option>
+                  </select>
+                  <select
+                    list="grades"
+                    id="grade"
+                    name="grade"
+                    value={formData.grade}
+                    onChange={handleInputChange}
+                    placeholder={t("preschool")}
+                    required
+                  >
+                    <option value="0">{t("preschool")}</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
+                <label htmlFor="language">{t("Язык обучения")}</label>
+                <select
+                  name="language"
+                  id="language"
+                  value={formData.language}
+                  onChange={handleInputChange}
+                >
+                  <option value="">{t("Язык обучения")}</option>
+                  <option value="ru">Русский</option>
+                  <option value="kz">Қазақша</option>
+                </select>
                 <div
                   style={{
                     display: "flex",
@@ -331,7 +339,7 @@ const Parentdash = () => {
                     marginTop: "20px",
                   }}
                 >
-                  <button type="submit">{t ('addChildButton')}</button>
+                  <button type="submit">{t("addChildButton")}</button>
                 </div>
               </form>
             </div>
@@ -345,9 +353,11 @@ const Parentdash = () => {
             onClose={() => setShowDeleteModal(false)}
           >
             <div className="modal-content">
-              <p>{t ('confirmDelete')}</p>
-              <button onClick={handleDelete}>{t ('yes')}</button>
-              <button onClick={() => setShowDeleteModal(false)}>{t ('no')}</button>
+              <p>{t("confirmDelete")}</p>
+              <button onClick={handleDelete}>{t("yes")}</button>
+              <button onClick={() => setShowDeleteModal(false)}>
+                {t("no")}
+              </button>
             </div>
           </dialog>
         )}

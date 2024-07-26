@@ -1,9 +1,9 @@
 import React, { useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import staricon from "../../assets/navStars.png";
-import cupicon from "../../assets/navCups.png";
-import correctlion from "../../assets/lion_correct.png";
-import wronglion from "../../assets/lion_incorrect.png";
+import staricon from "../../assets/navStars.webp";
+import cupicon from "../../assets/navCups.webp";
+import correctlion from "../../assets/lion_correct.webp";
+import wronglion from "../../assets/lion_incorrect.webp";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";

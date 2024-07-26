@@ -4,10 +4,10 @@ import "/src/dashboard.css";
 import Sidebar from "../Sidebar";
 import Navdash from "../Navdash";
 import Profile from "../Profile";
-import cupicon from "../../assets/navCups.png";
+import cupicon from "../../assets/navCups.webp";
 import League from "./League";
-import tempRating from "../../assets/tempMainRating.png";
-import placeholderPfp from "../../assets/placehoder_pfp.png"; // Import the placeholder image
+import tempRating from "../../assets/tempMainRating.webp";
+import placeholderPfp from "../../assets/placehoder_pfp.webp"; // Import the placeholder image
 import Ratinglist from "./Ratinglist"; // Import the Ratinglist component
 import Loader from "../Loader";
 import { fetchRatings, fetchUserData } from "../../utils/apiService";
@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 
 const Rating = () => {
   const { t } = useTranslation();
-  const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
+  const [user, setUser] = useState({ first_name: t("student"), last_name: "" }); // Default values
   const [ratings, setRatings] = useState([]); // State to store ratings
   const [loading, setLoading] = useState(true); // Add loading state
   const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
@@ -48,14 +48,13 @@ const Rating = () => {
     <div className="rtdash rtrat">
       <Sidebar />
       <div className="centralLessons">
-        <div style={{width:"fit-content"}}>
+        <div style={{ width: "fit-content" }}>
           <Navdash
             starCount={user.stars}
             cupCount={user.cups}
             gradeNum={user.grade}
           />
         </div>
-        
 
         <div className="ratingCentral">
           <div className="ratinginfo">
@@ -69,7 +68,7 @@ const Rating = () => {
                   padding: "0",
                 }}
               >
-                {t ('myProfile')}
+                {t("myProfile")}
               </p>
             </div>
             <div className="sidepfp">
@@ -104,7 +103,7 @@ const Rating = () => {
                   padding: "0",
                 }}
               >
-                {t ('student')}
+                {t("student")}
               </p>
             </div>
             <div className="lndsh cupCount">

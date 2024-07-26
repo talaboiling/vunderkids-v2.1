@@ -5,9 +5,9 @@ import Sidebar from "./Sidebar";
 import Navdash from "./Navdash";
 import Profile from "./Profile";
 import Loader from "./Loader";
-import lionimg from "../assets/lion_hellocont.png";
-import mathIcon from "../assets/calculator.png";
-import englishIcon from "../assets/english.png";
+import lionimg from "../assets/lion_hellocont.webp";
+import mathIcon from "../assets/calculator.webp";
+import englishIcon from "../assets/english.webp";
 import {
   Chart as ChartJS,
   CategoryScale,

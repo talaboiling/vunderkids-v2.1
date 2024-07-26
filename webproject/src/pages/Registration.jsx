@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import logoImg from "/src/assets/logo_blue.png";
+import logoImg from "/src/assets/logo_blue.webp";
 import { registerParent } from "../utils/apiService"; // Import the function
 import { useTranslation } from "react-i18next";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -43,7 +43,11 @@ function Registration() {
     e.preventDefault();
 
     if (!validatePassword(formData.password)) {
-      setResponseMessage(t("Пароль должен содержать минимум 8 символов, 1 заглавную букву и 1 цифру"));
+      setResponseMessage(
+        t(
+          "Пароль должен содержать минимум 8 символов, 1 заглавную букву и 1 цифру"
+        )
+      );
       setShowModal(true);
       return;
     }
@@ -56,7 +60,7 @@ function Registration() {
 
     if (!captchaValue) {
       setResponseMessage(t("Пожалуйста пройдите CAPTCHA."));
-      setShowModal(true)
+      setShowModal(true);
       return;
     }
 
@@ -83,7 +87,7 @@ function Registration() {
         phone: "",
         first_name: "",
         last_name: "",
-        confirmPassword: ""
+        confirmPassword: "",
       });
       setConfirmPassword("");
     }
@@ -91,20 +95,20 @@ function Registration() {
 
   const formatPhone = (e) => {
     const input = e.target;
-    let value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
-    if (value.startsWith('7') || value.startsWith('8')) {
+    let value = input.value.replace(/\D/g, ""); // Remove all non-digit characters
+    if (value.startsWith("7") || value.startsWith("8")) {
       value = value.slice(1); // Remove the leading '7' or '8' if present
     }
-    let formattedValue = '+7 ';
+    let formattedValue = "+7 ";
 
     if (value.length > 0) {
-      formattedValue += '(' + value.slice(0, 3);
+      formattedValue += "(" + value.slice(0, 3);
     }
     if (value.length >= 3) {
-      formattedValue += ') ' + value.slice(3, 6);
+      formattedValue += ") " + value.slice(3, 6);
     }
     if (value.length >= 6) {
-      formattedValue += ' ' + value.slice(6, 10);
+      formattedValue += " " + value.slice(6, 10);
     }
 
     setFormData({ ...formData, phone: formattedValue.slice(0, 18) });
@@ -130,19 +134,19 @@ function Registration() {
           <div className="excLogo">
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
-                {t('aboutPlatform')}
+                {t("aboutPlatform")}
               </a>
               <a href="/#obuchenie" className="navLink">
-                {t('education')}
+                {t("education")}
               </a>
               <a href="/#otzyvy" className="navLink">
-                {t('reviews')}
+                {t("reviews")}
               </a>
               <a href="/#contakty" className="navLink">
-                {t('contacts')}
+                {t("contacts")}
               </a>
               <a href="/subscription-details" className="navLink">
-                {t('tariff')}
+                {t("tariff")}
               </a>
             </div>
             <div className="navButton" style={{ marginLeft: "80px" }}>
@@ -238,7 +242,7 @@ function Registration() {
                 sitekey="6LdOuxAqAAAAAOZuSbWfPWcvYSbu-vMtAmhYM5f7"
                 onChange={handleCaptchaChange}
               />
-              
+
               <input
                 type="submit"
                 value={t("registration")}
@@ -256,9 +260,16 @@ function Registration() {
         </div>
         {showHomeModal && (
           <dialog className="modal supermodal" open>
-            <div className="modal-content" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div
+              className="modal-content"
+              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+            >
               <div className="">
-                <button className="transBtn" onClick={() => setShowHomeModal(false)} style={{ float: "right" }}>
+                <button
+                  className="transBtn"
+                  onClick={() => setShowHomeModal(false)}
+                  style={{ float: "right" }}
+                >
                   <CloseIcon />
                 </button>
               </div>
@@ -280,7 +291,10 @@ function Registration() {
         )}
         {showModal && (
           <dialog className="modal supermodal" open>
-            <div className="modal-content" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div
+              className="modal-content"
+              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+            >
               {responseMessage}
               <button
                 style={{

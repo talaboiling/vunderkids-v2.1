@@ -1,6 +1,6 @@
 import React from "react";
-import mathIcon from "../../assets/calculator.png";
-import englishIcon from "../../assets/english.png";
+import mathIcon from "../../assets/calculator.webp";
+import englishIcon from "../../assets/english.webp";
 
 const CourseCard = ({ course, t }) => {
   return (
