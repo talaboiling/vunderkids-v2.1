@@ -399,6 +399,9 @@
 .progressChart {
   align-self: center;
 }
+.progressPage {
+  min-height: 100vh;
+}
 
 .ratinginfo {
   display: flex;
@@ -1123,6 +1126,26 @@ img.childcard {
 }
 
 @media (max-width: 450px) {
+  .dashMain .coursesCards {
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  .dashMain .courseItem {
+    min-width: 74%;
+    max-width: 75%;
+  }
+  .dashMain .mainContent {
+    justify-content: center;
+    align-items: center;
+  }
+  .dashMain .courseItemLeft {
+    margin-right: 3%;
+  }
+
+  .rtrat .centralLessonsInner {
+    width: 100% !important;
+  }
   .rtdash {
     overflow-x: hidden;
   }
@@ -1255,7 +1278,7 @@ img.childcard {
 
   .centralLessonsInner {
     width: auto;
-    max-width: 450px !important;
+    max-width: 100vw !important;
   }
   .centralLessonsInner .cupCount {
     margin-right: 1.5rem;
@@ -1280,7 +1303,7 @@ img.childcard {
 
   .certpage .ratinginfo {
     padding: 2.5rem 0;
-    max-width: 450px;
+    max-width: 100vw;
   }
 
   .certpage .mainContent {
@@ -1289,8 +1312,12 @@ img.childcard {
   }
   .certpage .sectCertificates {
     margin-left: 0;
-    padding: 2.5rem;
+    padding: 1rem;
     margin-bottom: 1.5rem;
+    max-width: 100vw;
+  }
+  .certpage .sectCertificates .certbanner .defaultStyle {
+    font-size: 1.5rem !important;
   }
   .certpage .certbanner {
     padding: 1.5rem 0;
@@ -1300,6 +1327,9 @@ img.childcard {
   }
   .certpage .navdashboard {
     width: 100% !important;
+  }
+  .certpage .centralLessons {
+    width: 100vw;
   }
   .certpage .centralLessonsInner {
     width: 100%;
@@ -1369,7 +1399,8 @@ img.childcard {
   .mathLesson .maths {
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 100% !important;
+    margin-right: 0 !important;
   }
   .mathLesson .navdashboard {
     width: 95%;
@@ -1420,5 +1451,113 @@ img.childcard {
   }
   .mathLesson .lessonsProg .progList .progItem progress {
     width: 100%;
+  }
+
+  .gamesPage {
+    overflow: visible;
+  }
+
+  .studmodal {
+    overflow: visible;
+    width: 100vw;
+    padding: 0;
+  }
+
+  .game-modal {
+    width: 80%;
+    height: auto;
+  }
+
+  .game-modal iframe {
+    width: 100%;
+    /*height: 50vh;*/
+  }
+
+  .game-modal div h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .mathLesson .studmodal-content {
+    width: 80%;
+  }
+  .mathLesson .studmodal-content iframe {
+    width: 100%;
+    height: auto;
+  }
+  .mathLesson .studmodal-content .modalHeader .defaultStyle {
+    font-size: 1.5rem;
+  }
+
+  .mathLesson .incompleteTask {
+    font-size: 1rem;
+  }
+
+  .mathLesson .studtaskDetails {
+    width: 80%;
+    height: 60vh;
+    align-items: center;
+    justify-content: center;
+    background-size: inherit;
+    background-position: center;
+  }
+
+  .mathLesson .studtaskDetails .audioContainer {
+    top: -15%;
+    right: -5% !important;
+    flex-direction: row !important;
+    width: auto;
+  }
+
+  .mathLesson .studtaskDetails .audioContainer .transBtn {
+    width: auto;
+  }
+
+  .mathLesson .studtaskDetails .audioContainer .transBtn svg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent .studTaskOptions {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent {
+    padding-top: 2rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent ul {
+    margin: 0;
+  }
+
+  .mathLesson .studtaskDetails .questionContent strong {
+    margin: 1rem 0;
+  }
+
+  .mathLesson .studtaskDetails .questionContent .questionTitle {
+    padding: 0;
+  }
+
+  .mathLesson .studtaskDetails .questionContent .studTaskOptions .studTaskOption:not(:last-child) {
+    margin-bottom: .5rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent .studTaskOptions .studTaskOption {
+    font-size: 1.1rem;
+  }
+  .mathLesson .studmodal-content .navigationButtons span {
+    flex-direction: column !important;
+    width: 100%;
+  }
+  .mathLesson .studmodal-content .navigationButtons span progress {
+    margin: 1rem;
+    width: 100% !important;
+  }
+  .mathLesson .studmodal-content .navigationButtons span button {
+    width: 100%;
+  }
+  .mathLesson .studmodal-content .feedbackContent {
+    flex-direction: column-reverse;
   }
 }

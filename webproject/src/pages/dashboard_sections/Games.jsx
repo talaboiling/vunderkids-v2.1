@@ -57,7 +57,47 @@ const Games = () => {
     }
   };
 
+  // const openGameWindow = async (path) => {
+  //   try {
+  //     const savedTime = localStorage.getItem('time');
+  //
+  //     if (!savedTime || parseInt(savedTime, 10) <= 0) {
+  //       const childId = localStorage.getItem("child_id");
+  //       let response;
+  //
+  //       if (childId) {
+  //         console.log(childId);
+  //         response = await playGame(childId);
+  //       } else {
+  //         response = await playGame();
+  //       }
+  //
+  //       if (!response.is_enough) {
+  //         alert(t('notEnoughStars'));
+  //         return;
+  //       }
+  //
+  //       await loadData();
+  //       localStorage.setItem('time', 300);
+  //     }
+  //
+  //     if (!open) {
+  //       const updatedPath = path.endsWith('/') ? `${path}index.html` : path;
+  //       setGamePath(updatedPath);
+  //       setOpen(true);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert(error.message || "Something went wrong");
+  //   }
+  // };
+
   const openGameWindow = async (path) => {
+    if (path === "/games/3ryad/index.html") {
+      openLocalGame(path);
+      return;
+    }
+
     try {
       const savedTime = localStorage.getItem('time');
 
@@ -76,11 +116,11 @@ const Games = () => {
           alert(t('notEnoughStars'));
           return;
         }
-  
+
         await loadData();
         localStorage.setItem('time', 300);
       }
-  
+
       if (!open) {
         const updatedPath = path.endsWith('/') ? `${path}index.html` : path;
         setGamePath(updatedPath);
@@ -91,7 +131,12 @@ const Games = () => {
       alert(error.message || "Something went wrong");
     }
   };
-  
+
+  const openLocalGame = (path) => {
+    const updatedPath = path.endsWith('/') ? `${path}index.html` : path;
+    setGamePath(updatedPath);
+    setOpen(true);
+  };
 
   const closeModal = () => {
     if (modalRef.current) {

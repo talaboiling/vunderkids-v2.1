@@ -149,7 +149,7 @@ const Dashboard = () => {
   }
 
   return (
-      <div className="rtdash">
+      <div className="rtdash dashMain">
         <Sidebar isMenuOpen={isMenuOpen} />
         <div className="centralDash">
           <Navdash

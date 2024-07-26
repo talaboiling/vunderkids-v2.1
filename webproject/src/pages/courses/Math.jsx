@@ -52,15 +52,15 @@ const Math = () => {
         {
           id: 1,
           content_type: "lesson",
-          video_url: "https://www.youtube.com/watch?v=e_pYHdSkG54",
+          video_url: "https://www.youtube.com/watch?v=12Vv5-lHqaQ",
           title: "title",
           section: "arithmetics",
           id_completed: false
         },
         {
-          id: 2,
+          id: 1,
           content_type: "task",
-          video_url: "https://www.youtube.com/watch?v=e_pYHdSkG54",
+          video_url: "https://www.youtube.com/watch?v=12Vv5-lHqaQ",
           title: "title",
           section: "arithmetics",
           id_completed: false
@@ -74,7 +74,70 @@ const Math = () => {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [videoUrl, setVideoUrl] = useState("https://www.youtube.com/watch?v=e_pYHdSkG54");
   const [taskContent, setTaskContent] = useState({ section: "arithmetics", id: 1 });
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState([
+      {
+        "id": 10,
+        "is_attempted": true,
+        "is_correct": true,
+        "images": [],
+        "title": "1-уровень",
+        "question_text": "1.Запиши число, в котором: 5 сотен, 3 десятка, 7 единиц.",
+        "question_type": "multiple_choice_text",
+        "options": [
+          {
+            "id": 1,
+            "value": "537"
+          },
+          {
+            "id": 2,
+            "value": "357"
+          },
+          {
+            "id": 3,
+            "value": "753"
+          },
+          {
+            "id": 4,
+            "value": "нет правильного ответа"
+          }
+        ],
+        "correct_answer": 1,
+        "template": "",
+        "audio": null,
+        "task": 1
+      },
+      {
+        "id": 11,
+        "is_attempted": false,
+        "is_correct": false,
+        "images": [],
+        "title": "1-уровень",
+        "question_text": "Какое число следует за числом 399?",
+        "question_type": "multiple_choice_text",
+        "options": [
+          {
+            "id": 1,
+            "value": "388"
+          },
+          {
+            "id": 2,
+            "value": "399"
+          },
+          {
+            "id": 3,
+            "value": "400"
+          },
+          {
+            "id": 4,
+            "value": "0"
+          }
+        ],
+        "correct_answer": 3,
+        "template": "",
+        "audio": null,
+        "task": 1
+      }
+    ]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -132,37 +195,65 @@ const Math = () => {
     setShowVideoModal(true);
   };
 
-  const openTaskModal = async (sectionId, taskId) => {
-    try {
-      const task = await fetchTask(courseId, sectionId, taskId, childId);
-      const taskQuestions = await fetchQuestions(
-        courseId,
-        task.section,
-        taskId,
-        childId
-      );
-      if (taskQuestions.length === 0) {
-        alert(t ('noQuestions'));
-        return;
-      }
-      setTaskContent(task);
-      setQuestions(taskQuestions);
-      setCurrentQuestionIndex(0);
-      setSelectedOption(null);
-      setShowFeedback(false);
-      setDroppedOrder([]);
-      setShowTaskModal(true);
-      
-      // Play background music
-      if (backgroundAudioRef.current) {
-        backgroundAudioRef.current.play();
-        setIsBackgroundAudioPlaying(true);
-      }
-    } catch (error) {
-      console.error("Error fetching task data:", error);
+  // const openTaskModal = async (sectionId, taskId) => {
+  //   try {
+  //     const task = await fetchTask(courseId, sectionId, taskId, childId);
+  //     const taskQuestions = await fetchQuestions(
+  //       courseId,
+  //       task.section,
+  //       taskId,
+  //       childId
+  //     );
+  //     if (taskQuestions.length === 0) {
+  //       alert(t ('noQuestions'));
+  //       return;
+  //     }
+  //     setTaskContent(task);
+  //     setQuestions(taskQuestions);
+  //     setCurrentQuestionIndex(0);
+  //     setSelectedOption(null);
+  //     setShowFeedback(false);
+  //     setDroppedOrder([]);
+  //     setShowTaskModal(true);
+  //
+  //     // Play background music
+  //     if (backgroundAudioRef.current) {
+  //       backgroundAudioRef.current.play();
+  //       setIsBackgroundAudioPlaying(true);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching task data:", error);
+  //   }
+  // };
+
+  const openTaskModal = (sectionId, taskId) => {
+    console.log("taskId: ", taskId);
+    const task = sections
+        .find((section) => section.title === sectionId)
+        ?.contents.find((content) => content.id === taskId);
+
+    const taskQuestions = questions.filter((question) => question.task === taskId);
+
+    if (taskQuestions.length === 0) {
+      alert(t('noQuestions'));
+      return;
+    }
+
+    setTaskContent(task);
+    setQuestions(taskQuestions);
+    setCurrentQuestionIndex(0);
+    setSelectedOption(null);
+    setShowFeedback(false);
+    setDroppedOrder([]);
+    setShowTaskModal(true);
+
+    // Play background music
+    if (backgroundAudioRef.current) {
+      backgroundAudioRef.current.play();
+      setIsBackgroundAudioPlaying(true);
     }
   };
-  
+
 
   const closeVideoModal = () => {
     setShowVideoModal(false);
@@ -661,7 +752,7 @@ const Math = () => {
                               right:"0",
                               display:"flex",
                               flexDirection:"column",
-                            }}>
+                            }} className="audioContainer">
                           <button
                             className="transBtn"
                             onClick={toggleMute}

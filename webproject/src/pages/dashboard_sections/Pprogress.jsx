@@ -128,7 +128,7 @@ const Pprogress = () => {
   }
 
   return (
-      <div className="rtdash">
+      <div className="rtdash progressPage">
         <Sidebar isMenuOpen={isMenuOpen} />
         <div className="centralDash">
           <Navdash
