@@ -12,6 +12,7 @@ html{
 body{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 .contain{
     font-family: 'Montserrat', Arial, Helvetica, sans-serif;
@@ -27,9 +28,9 @@ body{
 
 .navBar{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-    padding: 2rem;
+    padding: 2vh 0;
     background-color: white;
     top: 0;
     z-index: 100;
@@ -938,7 +939,119 @@ input, select {
     display: none;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1375px) {
+    .menuWrapper {
+        display: block;
+        font-size: 2.5rem;
+    }
+    .bm-menu {
+        background: #fff;
+        padding: 2.5em 1.5em 0;
+        font-size: 1.15em;
+    }
+    .menu-item {
+        display: none !important;
+    }
+    .mob-right {
+        display: none;
+    }
+    .burger-rev {
+        display: none;
+    }
+    .burger-ln {
+        display: none !important;
+    }
+    .burger-login {
+        display: block;
+        margin-bottom: 2vh;
+    }
+    .burger-login button {
+        width: 100%;
+    }
+    /* Color/shape of burger icon bars */
+    .bm-burger-bars {
+        background: #00639E;
+    }
+
+    /* Position and sizing of clickable cross button */
+    .bm-cross-button {
+        display: none;
+    }
+
+    /* Color/shape of close button cross */
+    .bm-cross {
+        background: #bdc3c7;
+    }
+
+    .bm-item {
+        display: inline-block;
+        /* Our sidebar item styling */
+        text-decoration: none;
+        margin-bottom: 10px;
+        color: #005B92;
+        font-weight: 800;
+        transition: color 0.2s;
+    }
+
+    .bm-item:hover {
+        color: white;
+    }
+
+    .laptop-icon img {
+        width: 100% !important;
+    }
+    .contLeft {
+        margin-left: 45vw;
+    }
+    .titleAnim span h2 {
+        font-size: 2rem;
+    }
+    .contRight {
+        padding: 7rem 6rem;
+        padding-right: 12rem;
+    }
+    .offersTop, .offersBottom {
+        flex-wrap: wrap;
+    }
+    .planLaptop:before {
+        width: 35vw;
+        height: 60vh;
+    }
+    .laptop-mob-none {
+        width: auto !important;
+    }
+    .bottomCard {
+        padding: 1% 10% 10% 10%;
+    }
+    .bottomCard .mob-none {
+        font-size: 3rem;
+        margin: 1rem 0;
+    }
+    .planImg {
+        width: 35vw;
+        height: 60vh;
+    }
+}
+
+@media (max-width: 1163px) {
+    .langSelector {
+        display: none;
+    }
+    .planTop .mob-none {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 1100px) {
+    .contacts {
+        display: none;
+    }
+    .burger-contacts {
+        display: block;
+    }
+}
+
+@media (max-width: 1024px) {
     .mob-right {
         margin-left: auto;
     }
@@ -949,6 +1062,7 @@ input, select {
     .navBar {
         padding: 1rem;
         position: relative;
+        justify-content: space-between;
     }
     .mascotImg {
         display: none;

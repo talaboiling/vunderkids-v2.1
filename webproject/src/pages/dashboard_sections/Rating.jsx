@@ -84,6 +84,7 @@ const Rating = () => {
 
                 <div className="ratingCentral">
                     <div className="ratinginfo">
+
                         <div className="prowfirst">
                             <p
                                 style={{

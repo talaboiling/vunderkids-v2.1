@@ -120,7 +120,7 @@ function Contents() {
                     <img src={laptops} alt="" className="planImg"/>
                 </div>
                 <div className="planTop">
-                    <h1 className='mob-none' style={{lineHeight:"50px", width:"557px"}}>{t ('mathPlan')}</h1>
+                    <h1 className='laptop-mob-none mob-none' style={{lineHeight:"50px", width:"557px"}}>{t ('mathPlan')}</h1>
                     <h2 className='mob-display' style={{lineHeight:"50px", width:"100%", fontSize: "35px"}}>{t ('mathPlan')}</h2>
                     <ul className="planCardBot">
                         <li className='planCardList'>{t ('numeration')}</li>
@@ -133,7 +133,7 @@ function Contents() {
                     </ul>
                 </div>
                 <div className="planTop">
-                    <h1 className='mob-none' style={{lineHeight:"50px", width:"577px"}}>{t ('engPlan')}</h1>
+                    <h1 className='laptop-mob-none mob-none' style={{lineHeight:"50px", width:"577px"}}>{t ('engPlan')}</h1>
                     <h2 className='mob-display' style={{lineHeight:"50px", width:"90%", fontSize: "35px"}}>{t ('engPlan')}</h2>
                     <ul className="planCardBot">
                         <li className='planCardList'>Phonics</li>
