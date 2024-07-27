@@ -1164,16 +1164,23 @@ img.childcard {
   .off {
     display: block !important;
   }
-  .dashMain .gradeNum {
+  .gradeNum {
     display: none;
   }
-  .dashMain .langSelect {
+  .langSelect {
     display: none;
   }
-  .dashMain .navdashboard {
+  .navdashboard {
     width: 100%;
     display: flex;
     justify-content: space-around;
+  }
+  .gamesPage .navdashboard {
+    padding: 44px 0;
+  }
+  .gamesPage .game-div {
+    display: flex;
+    flex-direction: column;
   }
   .mainContent .helloContent img {
     /*width: 15vw;*/
@@ -1182,6 +1189,7 @@ img.childcard {
     /*scale: .8 !important;*/
     /*left: 10vw !important;*/
   }
+
 }
 
 @media (max-width: 1025px) {
@@ -1206,7 +1214,7 @@ img.childcard {
   .certpage {
     min-height: 100vh;
   }
-  .certpage .sidebar {
+  .sidebar {
     margin: 2.5rem 1rem;
   }
   .certpage .sectCertificates {
@@ -1223,6 +1231,9 @@ img.childcard {
   }
   .certpage .dashsidelogo {
     padding: 1vh 1vw;
+  }
+  .rtrat {
+    min-height: 100vh;
   }
 }
 
@@ -1778,7 +1789,7 @@ img.childcard {
   }
   .mainContent .helloContent img {
     width: auto;
-    top: 49px !important;
+    top: 15px !important;
     left: 46% !important;
     scale: 0.65 !important;
   }
@@ -2153,7 +2164,7 @@ img.childcard {
     font-size: .9rem;
   }
   .mainContent .helloContent img {
-    top: -25% !important;
+    top: -15% !important;
     left: 40% !important;
     scale: .5 !important;
   }

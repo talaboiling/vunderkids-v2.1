@@ -1059,6 +1059,15 @@ input, select {
         width: 90%;
         align-self: center;
     }
+    .burger-contacts {
+        display: block !important;
+    }
+    .burger-ln {
+        display: block !important;
+    }
+    .burger-rev {
+        display: block !important;
+    }
     .navBar {
         padding: 1rem;
         position: relative;
@@ -1074,13 +1083,13 @@ input, select {
         display: none;
     }
     .navList {
-        flex-direction: column;
-        position: absolute;
-        z-index: 100;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: none;
+        /*flex-direction: column;*/
+        /*position: absolute;*/
+        /*z-index: 100;*/
+        /*top: 50%;*/
+        /*left: 50%;*/
+        /*transform: translate(-50%, -50%);*/
+        /*display: none;*/
     }
     /* .navButton {
         display: none;
@@ -1589,4 +1598,13 @@ input, select {
     /*    flex-direction: column;*/
     /*}*/
 
+}
+
+@media (max-width: 768px) {
+    .navList {
+        display: none;
+    }
+    .bm-item {
+        display: block !important;
+    }
 }

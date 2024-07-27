@@ -87,9 +87,9 @@ function Header() {
                             </div>
                         )}
                     </div>
-                    <div className="menuWrapper" onClick={toggleMenu}>
-                        <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
-                    </div>
+                </div>
+                <div className="menuWrapper" onClick={toggleMenu}>
+                    <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
                 </div>
             </div>
             <Menu isOpen={isOpen} onStateChange={handleStateChange}>
