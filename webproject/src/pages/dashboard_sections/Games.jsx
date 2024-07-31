@@ -9,10 +9,8 @@ import { useTranslation } from "react-i18next";
 const Games = () => {
   const { t } = useTranslation();
 
-  const [user, setUser] = useState({ first_name: t("student"), last_name: "studentson", stars: 2, cups: 4, grade: 5, id: 1 }); // Default values
-  // const [user, setUser] = useState({});
-  const [isChild, setIsChild] = useState(false);
-  // const [isChild, setIsChild] = useState(true);
+  const [user, setUser] = useState({});
+  const [isChild, setIsChild] = useState(true);
   const [childId, setChildId] = useState("1");
   const [open, setOpen] = useState(false);
   const [gamePath, setGamePath] = useState("");
@@ -57,47 +55,7 @@ const Games = () => {
     }
   };
 
-  // const openGameWindow = async (path) => {
-  //   try {
-  //     const savedTime = localStorage.getItem('time');
-  //
-  //     if (!savedTime || parseInt(savedTime, 10) <= 0) {
-  //       const childId = localStorage.getItem("child_id");
-  //       let response;
-  //
-  //       if (childId) {
-  //         console.log(childId);
-  //         response = await playGame(childId);
-  //       } else {
-  //         response = await playGame();
-  //       }
-  //
-  //       if (!response.is_enough) {
-  //         alert(t('notEnoughStars'));
-  //         return;
-  //       }
-  //
-  //       await loadData();
-  //       localStorage.setItem('time', 300);
-  //     }
-  //
-  //     if (!open) {
-  //       const updatedPath = path.endsWith('/') ? `${path}index.html` : path;
-  //       setGamePath(updatedPath);
-  //       setOpen(true);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert(error.message || "Something went wrong");
-  //   }
-  // };
-
   const openGameWindow = async (path) => {
-    if (path === "/games/3ryad/index.html") {
-      openLocalGame(path);
-      return;
-    }
-
     try {
       const savedTime = localStorage.getItem('time');
 
@@ -132,11 +90,6 @@ const Games = () => {
     }
   };
 
-  const openLocalGame = (path) => {
-    const updatedPath = path.endsWith('/') ? `${path}index.html` : path;
-    setGamePath(updatedPath);
-    setOpen(true);
-  };
 
   const closeModal = () => {
     if (modalRef.current) {

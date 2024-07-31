@@ -35,109 +35,14 @@ import VolumeUp from "@mui/icons-material/VolumeUp";
 const Math = () => {
   const { t } = useTranslation();
   const { courseId } = useParams();
-  const [course, setCourse] = useState(
-      {
-        id: 1,
-        name: "Maths",
-        percentage_completed: 0,
-        completed_tasks: 0,
-        total_tasks: 10,
-      }
-  );
-  const [sections, setSections] = useState([
-    {
-      title: "Arithmetics",
-      percentage_completed: 0,
-      contents: [
-        {
-          id: 1,
-          content_type: "lesson",
-          video_url: "https://www.youtube.com/watch?v=12Vv5-lHqaQ",
-          title: "title",
-          section: "arithmetics",
-          id_completed: false
-        },
-        {
-          id: 1,
-          content_type: "task",
-          video_url: "https://www.youtube.com/watch?v=12Vv5-lHqaQ",
-          title: "title",
-          section: "arithmetics",
-          id_completed: false
-        },
-      ]
-    }
-  ]);
-  const [user, setUser] = useState({ first_name: t("student"), last_name: "studentson", stars: 2, cups: 4, grade: 5, id: 1 }); // Default values
-  // const [user, setUser] = useState({});
+  const [course, setCourse] = useState();
+  const [sections, setSections] = useState([]);
+  const [user, setUser] = useState({});
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [videoUrl, setVideoUrl] = useState("https://www.youtube.com/watch?v=e_pYHdSkG54");
-  const [taskContent, setTaskContent] = useState({ section: "arithmetics", id: 1 });
-  const [questions, setQuestions] = useState([
-      {
-        "id": 10,
-        "is_attempted": true,
-        "is_correct": true,
-        "images": [],
-        "title": "1-уровень",
-        "question_text": "1.Запиши число, в котором: 5 сотен, 3 десятка, 7 единиц.",
-        "question_type": "multiple_choice_text",
-        "options": [
-          {
-            "id": 1,
-            "value": "537"
-          },
-          {
-            "id": 2,
-            "value": "357"
-          },
-          {
-            "id": 3,
-            "value": "753"
-          },
-          {
-            "id": 4,
-            "value": "нет правильного ответа"
-          }
-        ],
-        "correct_answer": 1,
-        "template": "",
-        "audio": null,
-        "task": 1
-      },
-      {
-        "id": 11,
-        "is_attempted": false,
-        "is_correct": false,
-        "images": [],
-        "title": "1-уровень",
-        "question_text": "Какое число следует за числом 399?",
-        "question_type": "multiple_choice_text",
-        "options": [
-          {
-            "id": 1,
-            "value": "388"
-          },
-          {
-            "id": 2,
-            "value": "399"
-          },
-          {
-            "id": 3,
-            "value": "400"
-          },
-          {
-            "id": 4,
-            "value": "0"
-          }
-        ],
-        "correct_answer": 3,
-        "template": "",
-        "audio": null,
-        "task": 1
-      }
-    ]);
+  const [videoUrl, setVideoUrl] = useState("");
+  const [taskContent, setTaskContent] = useState({});
+  const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -195,62 +100,34 @@ const Math = () => {
     setShowVideoModal(true);
   };
 
-  // const openTaskModal = async (sectionId, taskId) => {
-  //   try {
-  //     const task = await fetchTask(courseId, sectionId, taskId, childId);
-  //     const taskQuestions = await fetchQuestions(
-  //       courseId,
-  //       task.section,
-  //       taskId,
-  //       childId
-  //     );
-  //     if (taskQuestions.length === 0) {
-  //       alert(t ('noQuestions'));
-  //       return;
-  //     }
-  //     setTaskContent(task);
-  //     setQuestions(taskQuestions);
-  //     setCurrentQuestionIndex(0);
-  //     setSelectedOption(null);
-  //     setShowFeedback(false);
-  //     setDroppedOrder([]);
-  //     setShowTaskModal(true);
-  //
-  //     // Play background music
-  //     if (backgroundAudioRef.current) {
-  //       backgroundAudioRef.current.play();
-  //       setIsBackgroundAudioPlaying(true);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching task data:", error);
-  //   }
-  // };
+  const openTaskModal = async (sectionId, taskId) => {
+    try {
+      const task = await fetchTask(courseId, sectionId, taskId, childId);
+      const taskQuestions = await fetchQuestions(
+          courseId,
+          task.section,
+          taskId,
+          childId
+      );
+      if (taskQuestions.length === 0) {
+        alert(t ('noQuestions'));
+        return;
+      }
+      setTaskContent(task);
+      setQuestions(taskQuestions);
+      setCurrentQuestionIndex(0);
+      setSelectedOption(null);
+      setShowFeedback(false);
+      setDroppedOrder([]);
+      setShowTaskModal(true);
 
-  const openTaskModal = (sectionId, taskId) => {
-    console.log("taskId: ", taskId);
-    const task = sections
-        .find((section) => section.title === sectionId)
-        ?.contents.find((content) => content.id === taskId);
-
-    const taskQuestions = questions.filter((question) => question.task === taskId);
-
-    if (taskQuestions.length === 0) {
-      alert(t('noQuestions'));
-      return;
-    }
-
-    setTaskContent(task);
-    setQuestions(taskQuestions);
-    setCurrentQuestionIndex(0);
-    setSelectedOption(null);
-    setShowFeedback(false);
-    setDroppedOrder([]);
-    setShowTaskModal(true);
-
-    // Play background music
-    if (backgroundAudioRef.current) {
-      backgroundAudioRef.current.play();
-      setIsBackgroundAudioPlaying(true);
+      // Play background music
+      if (backgroundAudioRef.current) {
+        backgroundAudioRef.current.play();
+        setIsBackgroundAudioPlaying(true);
+      }
+    } catch (error) {
+      console.error("Error fetching task data:", error);
     }
   };
 
@@ -262,7 +139,7 @@ const Math = () => {
   const closeTaskModal = async () => {
     setShowTaskModal(false);
     await loadData();
-    
+
     // Stop background music
     if (backgroundAudioRef.current) {
       backgroundAudioRef.current.pause();
@@ -300,8 +177,8 @@ const Math = () => {
 
     if (currentQuestion.question_type.startsWith("drag_and_drop")) {
       isCorrect =
-        JSON.stringify(droppedOrder) ===
-        JSON.stringify(currentQuestion.correct_answer);
+          JSON.stringify(droppedOrder) ===
+          JSON.stringify(currentQuestion.correct_answer);
     } else {
       isCorrect = selectedOption === currentQuestion.correct_answer;
     }
@@ -316,12 +193,12 @@ const Math = () => {
     }
 
     await answerQuestion(
-      courseId,
-      taskContent.section,
-      taskContent.id,
-      currentQuestion.id,
-      selectedOption,
-      childId
+        courseId,
+        taskContent.section,
+        taskContent.id,
+        currentQuestion.id,
+        selectedOption,
+        childId
     );
 
     setTimeout(() => {
@@ -340,8 +217,8 @@ const Math = () => {
 
     if (currentQuestion.question_type.startsWith("drag_and_drop")) {
       isCorrect =
-        JSON.stringify(droppedOrder) ===
-        JSON.stringify(currentQuestion.correct_answer);
+          JSON.stringify(droppedOrder) ===
+          JSON.stringify(currentQuestion.correct_answer);
     } else {
       isCorrect = selectedOption === currentQuestion.correct_answer;
     }
@@ -356,12 +233,12 @@ const Math = () => {
     }
 
     await answerQuestion(
-      courseId,
-      taskContent.section,
-      taskContent.id,
-      currentQuestion.id,
-      selectedOption,
-      childId
+        courseId,
+        taskContent.section,
+        taskContent.id,
+        currentQuestion.id,
+        selectedOption,
+        childId
     );
 
     setTimeout(async () => {
@@ -410,7 +287,7 @@ const Math = () => {
       setIsMuted(!isMuted);
     }
   };
-  
+
   const handleVolumeChange = (e) => {
     const newVolume = parseFloat(e.target.value);
     if (backgroundAudioRef.current) {
@@ -418,7 +295,7 @@ const Math = () => {
     }
     setVolume(newVolume);
   };
-  
+
   if (loading) {
     return <Loader></Loader>;
   }

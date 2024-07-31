@@ -34,60 +34,34 @@ const router = createBrowserRouter([
   {
     path: "/parent",
     element: (
-      <AuthRoute element={<Parentdash />} allowedRoles={["parent"]} />
+        <AuthRoute element={<Parentdash />} allowedRoles={["parent"]} />
     ),
   },
-  // {
-  //   path: "/dashboard",
-  //   element: (
-  //     <AuthRoute element={<Dashboard />} allowedRoles={["student", "parent"]} />
-  //   ),
-  // },
   {
     path: "/dashboard",
     element: (
-      <Dashboard />
+        <AuthRoute element={<Dashboard />} allowedRoles={["student", "parent"]} />
     ),
   },
-  // {
-  //   path: "/dashboard/rating",
-  //   element: <AuthRoute element={<Rating />} allowedRoles={["student", "parent"]} />,
-  // },
   {
     path: "/dashboard/rating",
-    element: <Rating />,
+    element: <AuthRoute element={<Rating />} allowedRoles={["student", "parent"]} />,
   },
-  // {
-  //   path: "/dashboard/progress",
-  //   element: <AuthRoute element={<Progress />} allowedRoles={["student", "parent"]} />,
-  // },
   {
     path: "/dashboard/progress",
-    element: <Progress />
+    element: <AuthRoute element={<Progress />} allowedRoles={["student", "parent"]} />,
   },
-  // {
-  //   path: "/dashboard/lessons",
-  //   element: <AuthRoute element={<Lessons />} allowedRoles={["student", "parent"]} />,
-  // },
   {
     path: "/dashboard/lessons",
-    element: <Lessons />
+    element: <AuthRoute element={<Lessons />} allowedRoles={["student", "parent"]} />,
   },
-  // {
-  //   path: "/dashboard/games",
-  //   element: <AuthRoute element={<Games />} allowedRoles={["student", "parent"]} />,
-  // },
   {
     path: "/dashboard/games",
-    element: <Games />
+    element: <AuthRoute element={<Games />} allowedRoles={["student", "parent"]} />,
   },
-  // {
-  //   path: "/dashboard/courses/:courseId/lessons",
-  //   element: <AuthRoute element={<MathCourse />} allowedRoles={["student", "parent"]} />,
-  // },
   {
     path: "/dashboard/courses/:courseId/lessons",
-    element: <MathCourse />
+    element: <AuthRoute element={<MathCourse />} allowedRoles={["student", "parent"]} />,
   },
   {
     path: "/admindashboard",
@@ -124,5 +98,5 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+    <RouterProvider router={router} />
 );

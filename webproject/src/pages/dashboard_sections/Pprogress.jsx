@@ -34,14 +34,8 @@ ChartJS.register(
 
 const Pprogress = () => {
   const { t } = useTranslation();
-  const [user, setUser] = useState({ first_name: t("student"), last_name: "studentson", stars: 2, cups: 4, grade: 5, id: 1 }); // Default values
-  // const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
-  const [weeklyProgress, setWeeklyProgress] = useState([
-    {
-      day: "mon",
-      cups: 4
-    }
-  ]);
+  const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
+  const [weeklyProgress, setWeeklyProgress] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileSwitched, setIsProfileSwitched] = useState(false);
