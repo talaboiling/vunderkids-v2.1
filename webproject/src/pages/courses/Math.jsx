@@ -775,7 +775,7 @@ const Math = () => {
           t={t}
           isButtonDisabled={isButtonDisabled}
         />
-      )}
+      
 
       {showSubscriptionError && (
         <SubscriptionErrorModal
