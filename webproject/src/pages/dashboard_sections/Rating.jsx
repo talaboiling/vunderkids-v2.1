@@ -65,7 +65,7 @@ const Rating = () => {
   }
 
     return (
-        <div className="rtdash rtrat">
+        <div className="rtdash rtrat ratingPage">
             <Sidebar isMenuOpen={isMenuOpen} />
             <div className="centralLessons">
                 <div style={{width:"fit-content"}} className="centralLessonsInner">
