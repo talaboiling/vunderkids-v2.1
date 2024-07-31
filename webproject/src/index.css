@@ -778,7 +778,7 @@ footer{
 }
 
 .regPage{
-    background-image: url(/src/assets/regBackground.png);
+    background-image: url(/src/assets/regBackground.webp);
     background-repeat: no-repeat;
     background-size: cover;
     background-position:bottom;
@@ -1393,7 +1393,7 @@ input, select {
     }
 
     li.planCardList::marker{
-        content: url(./assets/marker.png);
+        content: url(./assets/marker.webp);
     }
 
     li.planCardList{
@@ -1484,6 +1484,12 @@ input, select {
         height: 50px;
         animation: hithere 8s ease infinite;
         filter: drop-shadow(0 0 20px rgb(150, 255, 150));
+    }
+
+    .passValidation{
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        column-gap: 1rem;
     }
 
     .bm-item {

@@ -14,13 +14,14 @@ const SectionContent = ({
   return (
     <div className="lessonsCont">
       <h2
-        className="defaultStyle"
+        className="defaultStyle title"
         style={{ color: "black", fontWeight: "700" }}
       >
-        {t("courseStart")}
+        {" "}
+        {t ('courseStart')}{" "}
       </h2>
       {sections.map((section, sectionIndex) => (
-        <div key={sectionIndex}>
+        <div key={sectionIndex} className="contWrapper">
           <div
             style={{
               display: "flex",
@@ -28,11 +29,11 @@ const SectionContent = ({
               alignItems: "center",
             }}
           >
-            <hr />
+            <hr className="lessonsHr"/>
             <h2 className="defaultStyle" style={{ color: "#aaa" }}>
               {section.title}
             </h2>
-            <hr />
+            <hr className="lessonsHr"/>
           </div>
           {section.contents.map((content, contentIndex) => (
             <div className="lessonsLinks" key={contentIndex}>

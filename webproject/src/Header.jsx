@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import mascotImg from "./assets/lionmascot_main.svg";
-import logoImg from "./assets/logo_blue.png";
+import logoImg from "./assets/logo_blue.webp";
 import {Link, useNavigate} from "react-router-dom";
 import {logout} from "./utils/authService";
 import i18next from "i18next";

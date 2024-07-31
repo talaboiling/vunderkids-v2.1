@@ -40,7 +40,9 @@ const TaskModal = ({
     <dialog className="studmodal" open>
       <div className="studmodal-content">
         <div className="modalHeader">
-          <span style={{ display: "flex", flexDirection: "row", gap: "2rem" }}>
+          <span
+            style={{ display: "flex", flexDirection: "row", gap: "2rem" }}
+          >
             <p
               className="lndsh"
               style={{
@@ -77,7 +79,7 @@ const TaskModal = ({
             }}
             onClick={closeTaskModal}
           >
-            {t("close")}
+            {t ('close')}
           </button>
         </div>
         <div
@@ -90,28 +92,27 @@ const TaskModal = ({
           {showFeedback && (
             <div
               className={`feedbackMessage ${
-                feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
+                feedbackMessage === "Correct!"
+                  ? "fbmcorrect"
+                  : "fbmincorrect"
               }`}
             >
               <div className="feedbackContent">
-                <img
-                  src={feedbackMessage === "Correct!" ? correctlion : wronglion}
-                  alt="lion mascot"
-                />
+                <img src={feedbackMessage === "Correct!" ? correctlion : wronglion} alt="lion mascot" />
                 <p
                   style={{
                     color: "black",
                     fontSize: "xx-large",
                     fontWeight: "700",
                     textAlign: "center",
-                    backgroundColor: "white",
-                    padding: "10px",
-                    borderRadius: "10px",
+                    backgroundColor:"white",
+                    padding:"10px",
+                    borderRadius:"10px",
                   }}
                 >
                   {feedbackMessage === "Correct!"
-                    ? t("correct")
-                    : t("incorrect")}
+                  ? t ('correct')
+                  : t ('incorrect')}
                 </p>
               </div>
             </div>
@@ -137,73 +138,49 @@ const TaskModal = ({
                       gap: "0.33rem",
                       maxWidth: "500px",
                       textAlign: "center",
+                      
                     }}
                   >
-                    <span
-                      className={`questionTitle ${
-                        currentQuestion?.template
-                          ? `qt-template-${currentQuestion.template}`
-                          : ""
-                      }`}
-                    >
+                    <span 
+                      className=
+                        {`questionTitle ${
+                          currentQuestion?.template 
+                            ? `qt-template-${currentQuestion.template}` 
+                            : ""
+                          }`}>
                       <strong>{currentQuestionIndex + 1}. </strong>
-                      <i>{currentQuestion.title}:</i> <br />
-                      <strong>
-                        {currentQuestion.question_text
-                          .split("_")
-                          .map((part, index) => (
-                            <React.Fragment key={index}>
-                              {part}
-                              {index <
-                                currentQuestion.question_text.split("_")
-                                  .length -
-                                  1 && (
-                                <span className="dnd-placeholder">
-                                  {droppedOrder[index]?.value || "_____"}
-                                </span>
-                              )}
-                            </React.Fragment>
-                          ))}
-                      </strong>
+                      <i>{currentQuestion.title}:</i>{" "} <br />
+                      <strong>{currentQuestion.question_text}</strong>
                     </span>
                     {currentQuestion.is_attempted && (
                       <strong style={{ color: "green", marginTop: "50px" }}>
-                        {t("alreadyAnswered")}
+                        {t ('alreadyAnswered')}
                       </strong>
                     )}
                     {currentQuestion.audio && (
                       <>
                         <div className="taskmodalaudio">
                           <button className="" onClick={toggleAudio}>
-                            {isAudioPlaying ? (
-                              <PauseIcon sx={{ fontSize: 50 }} />
-                            ) : (
-                              <PlayArrowIcon sx={{ fontSize: 50 }} />
-                            )}
+                            {isAudioPlaying ? <PauseIcon sx={{ fontSize: 50 }} /> : <PlayArrowIcon sx={{ fontSize: 50 }} />}
                           </button>
                         </div>
+                        
                         <audio ref={audioRef} src={currentQuestion.audio} />
                       </>
                     )}
-                    <div
-                      style={{
-                        float: "right",
-                        position: "absolute",
-                        right: "0",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
+                    <div style={{
+                          float: "right",
+                          position:"absolute",
+                          right:"0",
+                          display:"flex",
+                          flexDirection:"column",
+                        }} className="audioContainer">
                       <button
                         className="transBtn"
                         onClick={toggleMute}
-                        style={{ color: "gray" }}
+                        style={{color:"gray"}}
                       >
-                        {isMuted ? (
-                          <VolumeOffIcon sx={{ fontSize: "70px" }} />
-                        ) : (
-                          <VolumeUpIcon sx={{ fontSize: "70px" }} />
-                        )}
+                        {isMuted ? <VolumeOffIcon sx={{fontSize:"70px"}}/> : <VolumeUpIcon sx={{fontSize:"70px"}}/>}
                       </button>
                       <input
                         type="range"
@@ -216,164 +193,61 @@ const TaskModal = ({
                       />
                     </div>
                   </span>
-                  {currentQuestion.question_type.startsWith("drag_and_drop") ? (
-                    <DragDropContext onDragEnd={handleDragEnd}>
-                      <Droppable droppableId="droppable" direction="horizontal">
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="dndPlaceholders"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              flexWrap: "wrap",
-                              gap: "1rem",
-                            }}
-                          >
-                            {currentQuestion.question_text
-                              .split("_")
-                              .map((text, index) => (
-                                <span key={index}>
-                                  {text}
-                                  {index <
-                                    currentQuestion.question_text.split("_")
-                                      .length -
-                                      1 && (
-                                    <Droppable
-                                      droppableId={`droppable-${index}`}
-                                      direction="horizontal"
-                                    >
-                                      {(provided, snapshot) => (
-                                        <div
-                                          ref={provided.innerRef}
-                                          {...provided.droppableProps}
-                                          className="placeholder"
-                                          style={{
-                                            width: "100px",
-                                            height: "100px",
-                                            border: "2px dashed #ccc",
-                                            display: "inline-block",
-                                            backgroundColor:
-                                              snapshot.isDraggingOver
-                                                ? "lightblue"
-                                                : "inherit",
-                                          }}
-                                        >
-                                          {droppedOrder[index] && (
-                                            <Draggable
-                                              key={`option-${droppedOrder[index].id}`}
-                                              draggableId={`option-${droppedOrder[index].id}`}
-                                              index={index}
-                                            >
-                                              {(provided, snapshot) => (
-                                                <div
-                                                  ref={provided.innerRef}
-                                                  {...provided.draggableProps}
-                                                  {...provided.dragHandleProps}
-                                                  style={{
-                                                    ...provided.draggableProps
-                                                      .style,
-                                                    width: "100px",
-                                                    height: "100px",
-                                                    background:
-                                                      snapshot.isDragging
-                                                        ? "lightgreen"
-                                                        : "lightgray",
-                                                  }}
-                                                >
-                                                  {
-                                                    currentQuestion.options.find(
-                                                      (option) =>
-                                                        option.id ===
-                                                        droppedOrder[index]
-                                                    )?.value
-                                                  }
-                                                </div>
-                                              )}
-                                            </Draggable>
-                                          )}
-                                          {provided.placeholder}
-                                        </div>
-                                      )}
-                                    </Droppable>
-                                  )}
-                                </span>
-                              ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                      <Droppable droppableId="options" direction="horizontal">
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="dndOptions"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              flexWrap: "wrap",
-                              gap: "1rem",
-                            }}
-                          >
-                            {currentQuestion.options.map((option, idx) => (
-                              <Draggable
-                                key={`option-${option.id}`}
-                                draggableId={`option-${option.id}`}
-                                index={idx}
-                              >
-                                {(provided, snapshot) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      ...provided.draggableProps.style,
-                                      width: "100px",
-                                      height: "100px",
-                                      background: snapshot.isDragging
-                                        ? "lightgreen"
-                                        : "lightgray",
-                                      textAlign: "center",
-                                      lineHeight: "100px",
-                                    }}
-                                  >
-                                    {option.value}
-                                  </div>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </DragDropContext>
-                  ) : (
+                  {currentQuestion.question_type.startsWith(
+                    "drag_and_drop"
+                  ) ? (
                     <ul
-                      className={
-                        currentQuestion.question_type === "multiple_choice_text"
-                          ? "studTaskOptions"
-                          : "studTaskImgs"
-                      }
+                      className="studTaskOptions"
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexWrap: "wrap",
+                        gap: "1rem",
+                      }}
                     >
                       {currentQuestion.options.map((option, idx) => (
                         <li
                           key={idx}
-                          className={
-                            currentQuestion.question_type ===
-                            "multiple_choice_text"
-                              ? `studTaskOption ${
-                                  selectedOption === option.id
-                                    ? "studTaskOptionSelected"
-                                    : ""
-                                }`
-                              : `studTaskImg ${
-                                  selectedOption === option.id
-                                    ? "studTaskImgSelected"
-                                    : ""
-                                }`
-                          }
+                          className="studTaskOption"
+                          draggable
+                          onDragStart={() => handleDragStart(option.id)}
+                          onDrop={(event) => handleDrop(event, idx)}
+                          onDragOver={allowDrop}
+                          style={{ cursor: "move" }}
+                        >
+                          {currentQuestion.question_type ===
+                          "drag_and_drop_images" ? (
+                            <img
+                              src={option.value}
+                              alt={`option-${idx}`}
+                              style={{ width: "100px", height: "100px" }}
+                            />
+                          ) : (
+                            option.value
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <ul className={currentQuestion.question_type === "multiple_choice_text" ?
+                      "studTaskOptions" : "studTaskImgs"
+                    }>
+                      {currentQuestion.options.map((option, idx) => (
+                        <li
+                          key={idx}
+                          className={currentQuestion.question_type === "multiple_choice_text" ? (
+                            `studTaskOption ${
+                            selectedOption === option.id
+                              ? "studTaskOptionSelected"
+                              : ""
+                          }`
+                          ) : (
+                            `studTaskImg ${
+                            selectedOption === option.id
+                              ? "studTaskImgSelected"
+                              : ""
+                            }`
+                          )}
                           onClick={() => {
                             handleOptionClick(option.id);
                           }}
@@ -418,8 +292,7 @@ const TaskModal = ({
                   : handleNextQuestion
               }
               disabled={
-                (selectedOption === null && droppedOrder.length === 0) ||
-                isButtonDisabled
+                (selectedOption === null && droppedOrder.length === 0) || isButtonDisabled
               }
               className={`${
                 currentQuestionIndex === questions.length - 1
@@ -429,8 +302,8 @@ const TaskModal = ({
               style={{ float: "right" }}
             >
               {currentQuestionIndex === questions.length - 1
-                ? t("finish")
-                : t("next")}
+                ? t ('finish')
+                : t ('next')}
             </button>
           </span>
         </div>

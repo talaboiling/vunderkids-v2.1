@@ -57,7 +57,7 @@ const Sidebar = ({isMenuOpen}) => {
         {/* Conditionally render the "Назад" button based on user role */}
         {user.role === "parent" && (
           <button className="exitButton" onClick={goBack}>
-            {t("back")}
+            {t ('back')}
           </button>
         )}
         <button
@@ -65,7 +65,7 @@ const Sidebar = ({isMenuOpen}) => {
           onClick={handleLogout}
           style={{ backgroundColor: "rgb(204, 47, 47)" }}
         >
-          {t("exitAccount")}
+          {t ('exitAccount')}
         </button>
       </div>
     </div>

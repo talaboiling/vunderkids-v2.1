@@ -249,7 +249,6 @@ function Registration() {
               </span>
               <div className="passValidation">
                 <label htmlFor="password">{t("comeUpWithPassword")}</label>
-                <label htmlFor="validation">{t("Повторите пароль")}</label>
                 <input
                   type="password"
                   id="password"
@@ -259,6 +258,7 @@ function Registration() {
                   onChange={handleInputChange}
                   required
                 />
+                <label htmlFor="validation">{t("Повторите пароль")}</label>
                 <input
                   type="password"
                   id="validation"

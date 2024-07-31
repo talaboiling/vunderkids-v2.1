@@ -9,10 +9,8 @@ const CourseCard = ({ course, t }) => {
         <p style={{ margin: "0" }}>{course.name}</p>
         <progress value={course.percentage_completed} />
         <p className="defaultStyle">
-          {t("completedTasks1")}
-          {course.completed_tasks}
-          {t("completedTasks2")}
-          {course.total_tasks} {t("completedTasks3")}
+          {t ('completedTasks1')}{course.completed_tasks}{t ('completedTasks2')}{course.total_tasks}{" "}
+          {t ('completedTasks3')}
         </p>
       </div>
       <img
