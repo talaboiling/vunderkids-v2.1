@@ -37,6 +37,8 @@ const Pprogress = () => {
   const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
   const [weeklyProgress, setWeeklyProgress] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileSwitched, setIsProfileSwitched] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -120,23 +122,29 @@ const Pprogress = () => {
   }
 
   return (
-    <div className="rtdash">
-      <Sidebar />
-      <div className="centralDash">
-        <Navdash />
-        <div className="centralProg">
-          <div style={{ width: "100%", height: "200px" }}>
-            <Line data={data} options={options} />
-          </div>
-          <div className="progcalendar">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar />
-            </LocalizationProvider>
+      <div className="rtdash progressPage">
+        <Sidebar isMenuOpen={isMenuOpen} />
+        <div className="centralDash">
+          <Navdash
+              isMenuOpen={isMenuOpen}
+              setIsMenuOpen={setIsMenuOpen}
+              isProfileSwitched={isProfileSwitched}
+              setIsProfileSwitched={setIsProfileSwitched}
+              urlPath={"dashboard"}
+          />
+          <div className="centralProg">
+            <div style={{ width: "100%", height: "200px" }}>
+              <Line data={data} options={options} />
+            </div>
+            <div className="progcalendar">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateCalendar />
+              </LocalizationProvider>
+            </div>
           </div>
         </div>
+        <Profile user={user} isProfileSwitched={isProfileSwitched} setIsProfileSwitched={setIsProfileSwitched} />
       </div>
-      <Profile user={user} />
-    </div>
   );
 };
 

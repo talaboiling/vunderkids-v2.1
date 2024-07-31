@@ -43,12 +43,14 @@ const router = createBrowserRouter([
   { path: "/users-terms-and-conditions", element: <Confidentiality /> },
   {
     path: "/parent",
-    element: <AuthRoute element={<Parentdash />} allowedRoles={["parent"]} />,
+    element: (
+        <AuthRoute element={<Parentdash />} allowedRoles={["parent"]} />
+    ),
   },
   {
     path: "/dashboard",
     element: (
-      <AuthRoute element={<Dashboard />} allowedRoles={["student", "parent"]} />
+        <AuthRoute element={<Dashboard />} allowedRoles={["student", "parent"]} />
     ),
   },
   {
@@ -143,5 +145,5 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+    <RouterProvider router={router} />
 );

@@ -1,7 +1,7 @@
 import "/src/dashboard.css";
 import Sidebar from "../Sidebar";
 import Navdash from "../Navdash";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { playGame, fetchUserData } from "../../utils/apiService";
 import Timer from "../../components/Timer";
 import { useTranslation } from "react-i18next";
@@ -10,11 +10,12 @@ const Games = () => {
   const { t } = useTranslation();
 
   const [user, setUser] = useState({});
-  const [isChild, setIsChild] = useState(false);
-  const [childId, setChildId] = useState("");
+  const [isChild, setIsChild] = useState(true);
+  const [childId, setChildId] = useState("1");
   const [open, setOpen] = useState(false);
   const [gamePath, setGamePath] = useState("");
   const modalRef = useRef(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -57,27 +58,27 @@ const Games = () => {
   const openGameWindow = async (path) => {
     try {
       const savedTime = localStorage.getItem('time');
-  
+
       if (!savedTime || parseInt(savedTime, 10) <= 0) {
         const childId = localStorage.getItem("child_id");
         let response;
-  
+
         if (childId) {
           console.log(childId);
           response = await playGame(childId);
         } else {
           response = await playGame();
         }
-  
+
         if (!response.is_enough) {
           alert(t('notEnoughStars'));
           return;
         }
-  
+
         await loadData();
         localStorage.setItem('time', 300);
       }
-  
+
       if (!open) {
         const updatedPath = path.endsWith('/') ? `${path}index.html` : path;
         setGamePath(updatedPath);
@@ -88,7 +89,7 @@ const Games = () => {
       alert(error.message || "Something went wrong");
     }
   };
-  
+
 
   const closeModal = () => {
     if (modalRef.current) {
@@ -103,10 +104,10 @@ const Games = () => {
   };
 
   return (
-    <div className="rtdash rtrat">
-      <Sidebar />
+    <div className="rtdash rtrat gamesPage">
+      <Sidebar isMenuOpen={isMenuOpen} />
       <div className="centralDash">
-        <Navdash />
+        <Navdash isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <div className="game-div">
           <button onClick={() => openGameWindow("/games/3ryad/index.html")} className="game-button">Fantasy Forest</button>
           <button onClick={() => openGameWindow("/games/duckhunt/index.html")} className="game-button">Duck Hunt</button>

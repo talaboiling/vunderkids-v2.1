@@ -8,6 +8,8 @@ import { fetchUserData } from "../utils/apiService"; // Import the fetch functio
 import Loader from "./Loader";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBars, faCalendarDays, faTrophy, faUser} from "@fortawesome/free-solid-svg-icons";
 
 const Navdash = (props) => {
   const { t } = useTranslation();

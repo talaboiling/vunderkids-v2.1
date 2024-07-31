@@ -3,13 +3,25 @@ import Ratinglist from "./dashboard_sections/Ratinglist";
 import placeholderPfp from "../assets/placehoder_pfp.webp"; // Import the placeholder image
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { fetchRatings } from "../utils/apiService";
-import { useTranslation } from "react-i18next";
+import {fetchRatings} from "../utils/apiService";
+import {useTranslation} from "react-i18next";
+import i18next from "i18next";
+import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-const Profile = ({ user }) => {
-  const { t } = useTranslation();
+const Profile = ({user, isProfileSwitched, setIsProfileSwitched}) => {
+    const {t} = useTranslation();
   const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
-  const [ratings, setRatings] = useState([]); // State to store ratings
+    const [ratings, setRatings] = useState([
+        {
+            id: 1,
+            first_name: "first_name",
+            last_name: "last_name",
+            cups: 150,
+            streak: 149
+        }
+    ]); // State to store ratings
+    const [checked, setChecked] = useState(i18next.language === 'ru');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,8 +35,25 @@ const Profile = ({ user }) => {
     };
     fetchData();
   }, []);
+    const handleChange = () => {
+        const newLang = checked ? 'ru' : 'kk';
+        i18next.changeLanguage(newLang);
+        setChecked(!checked);
+    }
   return (
-    <div className="dashProfile">
+        <div className={`dashProfile ${isProfileSwitched ? "activeProfile" : ""}`}>
+            <div className="backButton" onClick={() => setIsProfileSwitched(!isProfileSwitched)}>
+                <FontAwesomeIcon icon={faXmark} style={{color: "#339cbd"}}/>
+            </div>
+            <div className="rndsh gradeNum off">{user.grade || user.gradeNum} {t('studClass')}</div>
+            <div className="rndsh langSelect off">
+                <div className="button b2" id="button-10">
+                    <input type="checkbox" className="checkbox" checked={checked} onChange={handleChange}/>
+                    <div className="knobs">
+                        <span>ҚАЗ</span>
+                    </div>
+                </div>
+            </div>
       <div className="prowfirst">
         <p
           style={{
@@ -35,7 +64,7 @@ const Profile = ({ user }) => {
             padding: "0",
           }}
         >
-          {t("myProfile")}
+                    {t('myProfile')}
         </p>
       </div>
       <div className="sidepfp">
@@ -70,11 +99,11 @@ const Profile = ({ user }) => {
             padding: "0",
           }}
         >
-          {t("student")}
+                    {t('student')}
         </p>
       </div>
-      <League />
-      <Ratinglist ratings={ratings} />
+            <League/>
+            <Ratinglist ratings={ratings}/>
     </div>
   );
 };
