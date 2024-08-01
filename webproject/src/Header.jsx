@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import mascotImg from "./assets/lionmascot_main.svg";
 import logoImg from "./assets/logo_blue.webp";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,6 +6,9 @@ import { logout } from "./utils/authService";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { getUserRole, isAuthenticated } from "./utils/authService.js";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faBars} from '@fortawesome/free-solid-svg-icons';
+import {slide as Menu} from "react-burger-menu";
 
 function Header() {
   const navigate = useNavigate();
@@ -17,6 +20,16 @@ function Header() {
     navigate("/login");
   };
   const { t } = useTranslation();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const handleStateChange = (state) => {
+    setIsOpen(state.isOpen);
+  };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="headerImg">
       <div className="navBar">
@@ -51,30 +64,31 @@ function Header() {
             <a href="#otzyvy" className="navLink">
               {t("reviews")}
             </a>
-            <a href="#contakty" className="navLink">
+            <a href="#contakty" className="navLink contacts">
               {t("contacts")}
             </a>
             <a href="/subscription-details" className="navLink">
               {t("tariff")}
             </a>
           </div>
-          <div className="navButton">
-            <div className="langSelector">
-              <button
-                className="transBtn"
-                onClick={() => i18next.changeLanguage("ru")}
-              >
-                РУС
-              </button>
-              <button
-                className="transBtn"
-                onClick={() => i18next.changeLanguage("kk")}
-              >
-                ҚАЗ
-              </button>
-            </div>
+
+          <div className="langSelector">
+            <button
+              className="transBtn"
+              onClick={() => i18next.changeLanguage("ru")}
+            >
+              РУС
+            </button>
+            <button
+              className="transBtn"
+              onClick={() => i18next.changeLanguage("kk")}
+            >
+              ҚАЗ
+            </button>
+          </div>
+          <div className="navButton mob-right">
             {isLoggedIn ? (
-              <>
+              <div className="mob-right">
                 <Link
                   to={`${
                     role === "superadmin"
@@ -85,31 +99,78 @@ function Header() {
                       ? "/parent"
                       : "/dashboard"
                   }`}
+                  className="mob-right"
                   style={{ textDecoration: "none" }}
                 >
                   <button>{t("continue")}</button>
                 </Link>
-                <button className="orangeButton" onClick={handleLogout}>
+                <button className="orangeButton mob-none" onClick={handleLogout}>
                   {t("exit")}
                 </button>
-              </>
+              </div>
             ) : (
-              <>
-                <Link to="/login">
+              <div className="mob-right">
+                <Link to="/login" className="mob-right">
                   <button>{t("enter")}</button>
                 </Link>
-                <Link to="/registration">
-                  <button className="orangeButton">{t("register")}</button>
+                <Link to="/registration" className="orangeButtonWrapper">
+                  <button className="orangeButton mob-none">{t("register")}</button>
                 </Link>
-              </>
+              </div>
             )}
           </div>
         </div>
+        <div className="menuWrapper" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
+        </div>
       </div>
+      <Menu isOpen={isOpen} onStateChange={handleStateChange}>
+        <a href="#oplatforme" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('aboutPlatform')}
+        </a>
+        <a href="#obuchenie" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('education')}
+        </a>
+        <a href="#otzyvy" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('reviews')}
+        </a>
+        <a href="#contakty" className="menu-item burger-contacts" onClick={() => setIsOpen(false)}>
+            {t('contacts')}
+        </a>
+        <a href="/subscription-details" className="menu-item" onClick={() => setIsOpen(false)}>
+          {t("tariff")}
+        </a>
+        <div className="langSelector burger-ln">
+            <button className="" onClick={() => i18next.changeLanguage('ru')}>РУС</button>
+            <button className="" style={{marginLeft: "15px"}} onClick={() => i18next.changeLanguage('kk')}>ҚАЗ</button>
+        </div>
+        <div className="navButton">
+            {isLoggedIn ? (
+                <div>
+                    <button className="orangeButton" onClick={handleLogout}>
+                        {t('exit')}
+                    </button>
+                </div>
+            ) : (
+                <div>
+                    <Link to="/login" className="mob-right burger-login">
+                        <button>{t('enter')}</button>
+                    </Link>
+                    <Link to="/registration" className="orangeButtonWrapper">
+                        <button className="orangeButton" style={{width: "100%"}}>{t('register')}</button>
+                    </Link>
+                </div>
+            )}
+        </div>
+        <span>
+          <p className="rev burger-rev">Наши контакты:</p>
+          <p className="rev burger-rev">+7 775 303 7432</p>
+        </span>
+      </Menu>
       <div className="hooks">
         <div className="hook1">
           <div className="hook1Desc">
-            <p style={{ fontWeight: 600, margin: 0 }}>{t("eduAge")}</p>
+            <p className="mob-text" style={{ fontWeight: 600, margin: 0 }}>{t("eduAge")}</p>
             <div className="hook1Title">
               <span className="spanAnim">
                 <h1>{t("mathEng1")}</h1>

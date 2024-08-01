@@ -25,6 +25,9 @@ const Lessons = () => {
   const [loading, setLoading] = useState(true); // Add loading state
   const avatarUrl = user.avatar || placeholderPfp; // Use placeholder if avatar is null
 
+  const [isCertificatesSwitched, setIsCertificatesSwitched] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
@@ -50,13 +53,18 @@ const Lessons = () => {
   }
   return (
     <div className="rtdash certpage">
-      <Sidebar />
+      <Sidebar isMenuOpen={isMenuOpen}/>
       <div className="centralLessons">
-        <div style={{ width: "fit-content" }}>
+        <div className="centralLessonsInner">
           <Navdash
             starCount={user.stars}
             cupCount={user.cups}
             gradeNum={user.grade}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+            isCertificatesSwitched={isCertificatesSwitched}
+            setIsCertificatesSwitched={setIsCertificatesSwitched}
+            urlPath={"certificate"}
           />
         </div>
         <div className="mainContent">

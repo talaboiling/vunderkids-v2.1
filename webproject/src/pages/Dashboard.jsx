@@ -43,6 +43,8 @@ const Dashboard = () => {
   const [courses, setCourses] = useState([]); // State to store courses
   const [weeklyProgress, setWeeklyProgress] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileSwitched, setIsProfileSwitched] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -131,14 +133,18 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="rtdash">
-      <Sidebar />
+    <div className="rtdash dashMain">
+      <Sidebar isMenuOpen={isMenuOpen}/>
       <div className="centralDash">
         <Navdash
           starCount={user.stars}
           cupCount={user.cups}
           gradeNum={user.grade}
-          notif={3}
+          isMenuOpen={isMenuOpen}
+          setIsMenuOpen={setIsMenuOpen}
+          isProfileSwitched={isProfileSwitched}
+          setIsProfileSwitched={setIsProfileSwitched}
+          urlPath={"dashboard"}
         />
         <div className="mainContent">
           <h2 style={{ color: "#22222244" }}>{t("main")}</h2>
@@ -223,7 +229,10 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <Profile user={user} />
+      <div className={`${isProfileSwitched ? "activeProfile" : ""}`}>
+        <Profile user={user} isProfileSwitched={isProfileSwitched} setIsProfileSwitched={setIsProfileSwitched}/>
+      </div>
+      
     </div>
   );
 };

@@ -15,6 +15,7 @@ const Games = () => {
   const [open, setOpen] = useState(false);
   const [gamePath, setGamePath] = useState("");
   const modalRef = useRef(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -103,10 +104,10 @@ const Games = () => {
   };
 
   return (
-    <div className="rtdash rtrat">
-      <Sidebar />
+    <div className="rtdash rtrat gamesPage">
+      <Sidebar isMenuOpen={isMenuOpen}/>
       <div className="centralDash">
-        <Navdash />
+        <Navdash isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <div className="game-div">
           <button onClick={() => openGameWindow("/games/3ryad/index.html")} className="game-button">Fantasy Forest</button>
           <button onClick={() => openGameWindow("/games/duckhunt/index.html")} className="game-button">Duck Hunt</button>

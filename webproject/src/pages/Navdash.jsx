@@ -8,6 +8,8 @@ import { fetchUserData } from "../utils/apiService"; // Import the fetch functio
 import Loader from "./Loader";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBars, faCalendarDays, faTrophy, faUser} from "@fortawesome/free-solid-svg-icons";
 
 const Navdash = (props) => {
   const { t } = useTranslation();
@@ -36,6 +38,13 @@ const Navdash = (props) => {
 
   return (
     <div className="navdashboard">
+      <div className={`icons burger`} onClick={() => {
+                props.setIsMenuOpen(!props.isMenuOpen);
+                props.setIsProfileSwitched(false);
+                console.log("switchin sides")
+            }}>
+                <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
+            </div>
       <div className="lndsh starCount">
         <img src={staricon} alt="stars" className="starIcon" />
         {user.stars || props.starCount}
@@ -48,6 +57,27 @@ const Navdash = (props) => {
         <img src={nostreak} alt="streak" className="cupIcon" />
         {user.streak}
       </div>
+      {props.urlPath === "dashboard"
+                ? (
+                    <div className={`icons profile`} onClick={() => {
+                        props.setIsProfileSwitched(!props.isProfileSwitched);
+                        props.setIsMenuOpen(false);
+                    }}>
+                        <FontAwesomeIcon icon={faUser} style={{color: "#339cbd"}}/>
+                    </div>)
+                : null}
+      {
+          props.urlPath === "lesson"
+          ? (
+                  <div className={`icons program`} onClick={() => {
+                      props.setIsProgramSwitched(!props.isProgramSwitched);
+                      props.setIsMenuOpen(false);
+                  }}>
+                      <FontAwesomeIcon icon={faCalendarDays} style={{color: "#339cbd"}}/>
+                  </div>
+          )
+          : null
+      }
       <div className="rndsh gradeNum">
         {user.grade || props.gradeNum} {t("studClass")}
       </div>

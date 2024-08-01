@@ -9,7 +9,8 @@ const Reviews = () => {
   return (
     <>
       <div className="rateus" id="otzyvy">
-        <h1>{t("eachReview")}</h1>
+        <h1 className="mob-none">{t ('eachReview')}</h1>
+        <h1 className="mob-display" style={{lineHeight: "40px"}}>{t ('eachReview')}</h1>
         <div className="reviewSect">
           <ReviewCard
             pfp={pfp1}

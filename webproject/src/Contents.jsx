@@ -125,15 +125,11 @@ function Contents() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <span>
-              <h2>{t("parentDepend1")}</h2>
-            </span>
-            <span>
-              <h2>{t("parentDepend2")}</h2>
-            </span>
-            <span>
-              <h2>{t("parentDepend3")}</h2>
-            </span>
+            <span><h2>{t ('parentDepend1')}</h2></span>
+            <span className='mob-none'><h2>{t ('parentDepend2')}</h2></span>
+            <span className='mob-display'><h2>{t ('parentDepend2_mob')}</h2></span>
+            <span className='mob-display'><h2>{t ('parentDepend22_mob')}</h2></span>
+            <span><h2>{t ('parentDepend3')}</h2></span>
           </motion.div>
 
           <div
@@ -232,9 +228,8 @@ function Contents() {
           <img src={laptops} alt="" className="planImg" />
         </div>
         <div className="planTop">
-          <h1 style={{ lineHeight: "50px", width: "557px" }}>
-            {t("mathPlan")}
-          </h1>
+          <h1 className='laptop-mob-none mob-none' style={{lineHeight:"50px", width:"557px"}}>{t ('mathPlan')}</h1>
+          <h2 className='mob-display' style={{lineHeight:"50px", width:"100%", fontSize: "35px"}}>{t ('mathPlan')}</h2>
           <ul className="planCardBot">
             <li className="planCardList">{t("numeration")}</li>
             <li className="planCardList">{t("numCompare")}</li>
@@ -246,7 +241,8 @@ function Contents() {
           </ul>
         </div>
         <div className="planTop">
-          <h1 style={{ lineHeight: "50px", width: "577px" }}>{t("engPlan")}</h1>
+          <h1 className='laptop-mob-none mob-none' style={{lineHeight:"50px", width:"577px"}}>{t ('engPlan')}</h1>
+          <h2 className='mob-display' style={{lineHeight:"50px", width:"90%", fontSize: "35px"}}>{t ('engPlan')}</h2>
           <ul className="planCardBot">
             <li className="planCardList">Phonics</li>
             <li className="planCardList">Grammar</li>
@@ -270,18 +266,9 @@ function Contents() {
       </div>
       <div className="bottomCont">
         <div className="bottomCard">
-          <img
-            src={logoImg}
-            alt="logo"
-            style={{ width: "136px", height: "34px" }}
-          />
-          <h1>
-            {t("eduInvest1")}
-            <br />
-            <br />
-            <br />
-            {t("eduInvest2")}
-          </h1>
+          <img className='mob-none' src={logoImg} alt="logo" style={{width:"136px", height:"34px"}}/>
+          <h1 className='mob-none'>{t ('eduInvest1')}<br/><br/><br/>{t ('eduInvest2')}</h1>
+          <span><h2 className='mob-display' style={{width: "100%", lineHeight: "40px", fontSize: "35px"}}>{t ('eduInvest3')}</h2></span>
           <ol style={{}}>
             <li>
               <div className="contDisplay">

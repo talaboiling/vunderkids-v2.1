@@ -21,6 +21,7 @@ import SectionContent from "./SectionContent";
 import VideoModal from "./VideoModal";
 import TaskModal from "./TaskModal";
 import SubscriptionErrorModal from "./SubscriptionErrorModal";
+import LessonProgress from "./LessonProgress";
 
 const Math = () => {
   const { t } = useTranslation();
@@ -55,6 +56,8 @@ const Math = () => {
   const [hasSubscription, setHasSubscription] = useState(false);
   const [isFreeTrial, setIsFreeTrial] = useState(false);
   const [showSubscriptionError, setShowSubscriptionError] = useState(false);
+  const [isProgramSwitched, setIsProgramSwitched] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -319,14 +322,19 @@ const Math = () => {
   }
 
   return (
-    <div className="rtdash rtrat">
-      <Sidebar className="courseSidebar" />
+    <div className="rtdash rtrat mathLesson">
+      <Sidebar className="courseSidebar" isMenuOpen={isMenuOpen} />
       <div className="centralLessons">
-        <div style={{ width: "fit-content" }}>
+        <div className="centralLessonsInner maths">
           <Navdash
             starCount={user.stars}
             cupCount={user.cups}
             gradeNum={user.grade}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+            isProgramSwitched={isProgramSwitched}
+            setIsProgramSwitched={setIsProgramSwitched}
+            urlPath={"lesson"}
           />
         </div>
         <div className="ratingCentral">
@@ -339,6 +347,12 @@ const Math = () => {
               openVideoModal={openVideoModal}
               openTaskModal={openTaskModal}
               hasSubscription={hasSubscription}
+              t={t}
+            />
+          </div>
+          <div className={`lessonsProg ${isProgramSwitched ? "activeProgram" : ""}`}>
+            <LessonProgress 
+              sections={sections}
               t={t}
             />
           </div>

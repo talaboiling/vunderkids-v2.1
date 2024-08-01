@@ -399,6 +399,9 @@
 .progressChart {
   align-self: center;
 }
+.progressPage {
+  min-height: 100vh;
+}
 
 .ratinginfo {
   display: flex;
@@ -679,7 +682,7 @@ img.childcard {
   margin-left: 20px;
 }
 
-.certbanner {
+.certbanner{
   background-image: url(./assets/certbanner.webp);
   background-size: cover;
   background-position: center;
@@ -777,11 +780,11 @@ img.childcard {
   background-color: white;
 }
 
-.progList {
+.progList{
   margin-top: 20px;
 }
 
-.progItem {
+.progItem{
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -802,7 +805,7 @@ img.childcard {
   padding: 10px;
 }
 
-.studtaskDetails {
+.studtaskDetails{
   position: relative;
   display: flex;
   flex-direction: column;
@@ -816,14 +819,14 @@ img.childcard {
   overflow: hidden;
 }
 
-.studTaskOptions {
+.studTaskOptions{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin-top: 70px;
 }
 
-.studTaskImgs {
+.studTaskImgs{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
@@ -831,7 +834,7 @@ img.childcard {
   margin-top: 20px;
 }
 
-.studTaskOption {
+.studTaskOption{
   padding: 5px 10px;
   background-color: #3fa8e9;
   color: white;
@@ -842,22 +845,22 @@ img.childcard {
   font-weight: 700;
 }
 
-.studTaskOptionSelected {
+.studTaskOptionSelected{
   background-color: #03a7a4;
 }
 
-.studTaskImg {
+.studTaskImg{
   width: 100px;
   height: 100px;
   object-fit: cover;
 }
 
-.studTaskImgSelected {
+.studTaskImgSelected{
   border: 4px solid #03a7a4;
   scale: 1.02;
 }
 
-.feedbackContent {
+.feedbackContent{
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -865,7 +868,7 @@ img.childcard {
   gap: 2rem;
 }
 
-.feedbackMessage {
+.feedbackMessage{
   position: absolute;
   top: 0;
   left: 0;
@@ -878,19 +881,19 @@ img.childcard {
   z-index: 100;
 }
 
-.feedbackMessage::backdrop {
+.feedbackMessage::backdrop{
   backdrop-filter: blur(13px);
 }
 
-.fbmcorrect {
+.fbmcorrect{
   background-color: #3ecb7e82;
 }
 
-.fbmincorrect {
+.fbmincorrect{
   background-color: #fa3b3b82;
 }
 
-.completedTask {
+.completedTask{
   background-color: #6beda6;
   color: white;
   border-radius: 10px;
@@ -903,31 +906,31 @@ img.childcard {
   align-items: center;
 }
 
-.incompleteTask {
+.incompleteTask{
   background-color: lightgray;
 }
 
-.courseSidebar {
+.courseSidebar{
   position: fixed;
 }
 
-.navigationButtons {
+.navigationButtons{
   margin-top: 20px;
 }
 
-.game-modal {
+.game-modal{
   overflow: hidden;
   width: 90vw;
   height: 90vh;
   z-index: 1000;
 }
 
-.game-iframe {
+.game-iframe{
   overflow: hidden;
   position: relative;
 }
 
-.game-button {
+.game-button{
   background-color: rgb(152, 247, 152);
   color: white;
   border: none;
@@ -936,40 +939,40 @@ img.childcard {
   width: 100%;
 }
 
-.game-button:hover {
+.game-button:hover{
   background-color: rgb(71, 236, 71);
 }
 
-.game-div {
+.game-div{
   display: grid;
   padding-right: 50px;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
 
-.questionContent {
+.questionContent{
   position: relative;
 }
 
-.taskmodalaudio {
+.taskmodalaudio{
   position: absolute;
   left: 0;
 }
 
-.subscriptionBanners {
+.subscriptionBanners{
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5rem;
 }
 
-.subBanners {
+.subBanners{
   display: flex;
   flex-direction: row;
   gap: 3rem;
 }
 
-.subBanner {
+.subBanner{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -980,42 +983,42 @@ img.childcard {
   overflow: hidden;
 }
 
-.submonth {
+.submonth{
   backdrop-filter: blur(3px);
   border: 1px solid rgba(255, 255, 255, 0.4);
-  background-color: rgb(255, 255, 255, 0.4);
+  background-color: rgb(255,255,255,0.4);
   margin: 0;
   padding: 7px 14px;
   border-radius: 10px;
-  color: #444;
+  color: #444
 }
 
-.subban-1 {
+.subban-1{
   background-color: #48bff226;
-  color: #48bff2;
+  color: #48BFF2;
   position: relative;
 }
 
-.subban-2 {
+.subban-2{
   background-color: #b148f22c;
   border-radius: 40px;
   color: #b148f2;
   position: relative;
 }
 
-.subban-1::after {
+.subban-1::after{
   content: "";
   position: absolute;
   top: -25%;
   left: 25%;
   width: 150px;
   height: 150px;
-  background-color: #48bff2;
+  background-color: #48BFF2;
   border-radius: 50%;
   z-index: 1;
 }
 
-.subban-2::after {
+.subban-2::after{
   content: "";
   position: absolute;
   top: -25%;
@@ -1027,19 +1030,19 @@ img.childcard {
   z-index: 1;
 }
 
-.subban-1::before {
+.subban-1::before{
   content: "";
   position: absolute;
   top: 80%;
   left: 15%;
   width: 200px;
   height: 200px;
-  background-color: #48bff2;
+  background-color: #48BFF2;
   border-radius: 50%;
   z-index: 1;
 }
 
-.subban-2::before {
+.subban-2::before{
   content: "";
   position: absolute;
   top: 80%;
@@ -1051,7 +1054,7 @@ img.childcard {
   z-index: 1;
 }
 
-.subBanner-content {
+.subBanner-content{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1059,49 +1062,1429 @@ img.childcard {
   gap: 2rem;
   z-index: 2;
   backdrop-filter: blur(25px);
-  padding: 20px;
+  padding: 20px
 }
 
-.questionTitle {
+.questionTitle{
   max-width: 500px;
   scale: 1.1;
   margin-top: -30px;
   padding: 40px 0 40px 0;
 }
 
-.qt-template-1 {
+.qt-template-1{
   background-image: url(./assets/title-template-1.svg);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  color: #0024b5;
+  color: #0024B5;
   text-shadow: 0 0 1px black;
   font-weight: 800;
 }
-.qt-template-2 {
+.qt-template-2{
   background-image: url(./assets/title-template-2.svg);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  color: #234fff;
+  color: #234FFF;
   font-weight: 800;
   text-shadow: 0 0 5px white;
 }
-.qt-template-3 {
+.qt-template-3{
   background-image: url(./assets/title-template-3.svg);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  color: #0024b5;
+  color: #0024B5;
   text-shadow: 0 0 1px black;
   font-weight: 800;
 }
-.qt-template-4 {
+.qt-template-4{
   background-image: url(./assets/title-template-1.svg);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  color: #3d6400;
+  color: #3D6400;
   font-weight: 800;
   text-shadow: 0 0 5px white;
+}
+
+.icons {
+  display: none;
+}
+
+.off {
+  display: none;
+}
+
+.backButton {
+  display: none;
+}
+
+.centralLessonsInner {
+  width: fit-content;
+}
+
+/*  Additional  */
+@media (max-width: 1445px) {
+  .helloContent img {
+    scale: 1 !important;
+    top: -10% !important;
+    left: 65% !important;
+  }
+  /*.mathLesson {*/
+  /*  display: flex;*/
+  /*  width: 100vw;*/
+  /*  overflow-x: hidden;*/
+  /*}*/
+  /*.mathLesson .ratingCentral {*/
+  /*  padding: 0;*/
+  /*  position: relative;*/
+  /*}*/
+  /*.mathLesson .ratingCentral .lessonsCont {*/
+  /*  padding: 5vh 5vw;*/
+  /*}*/
+  /*.mathLesson .lessonsProg {*/
+  /*  !*display: none;*!*/
+  /*  position: absolute;*/
+  /*  top: 10.85%;*/
+  /*  right: -120%;*/
+  /*  transition: .5s ease;*/
+  /*}*/
+  /*.mathLesson .lessonsMain, .mathLesson .lessonsCont {*/
+  /*  width: 100%;*/
+  /*}*/
+  /*.mathLesson .lessonsCont {*/
+  /*  padding: ;*/
+  /*}*/
+  .lessonsCont .contWrapper {
+    width: 90%;
+  }
+  .mathLesson .lessonsHr {
+    width: 100%;
+    margin: 0;
+    flex-grow: 1;
+  }
+  .mathLesson .contWrapper > div:first-child {
+    justify-content: center;
+  }
+}
+
+/*  Additional  */
+@media (max-width: 1365px) {
+  .dashMain {
+    position: relative;
+  }
+  .dashProfile {
+    transition: .5s ease;
+    padding: 50px 0 0 0;
+    /*position: relative;*/
+    left: 130%;
+  }
+  .dashsidelogo {
+    padding: 1rem;
+  }
+  .league {
+    padding: 1.25rem;
+    margin: 0 .75rem;
+  }
+  .ratingItem {
+    padding: 0.625rem;
+  }
+  .dashMain .sidebar {
+    margin: 3.125rem 1rem;
+  }
+  .activeProfile {
+    right: 0;
+  }
+  .off {
+    display: block !important;
+  }
+  .gradeNum {
+    display: none;
+  }
+  .langSelect {
+    display: none;
+  }
+  .navdashboard {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .gamesPage .navdashboard {
+    padding: 44px 0;
+  }
+  .gamesPage .game-div {
+    display: flex;
+    flex-direction: column;
+  }
+  .mainContent .helloContent img {
+    /*width: 15vw;*/
+    width: auto;
+    top: -5% !important;
+    /*scale: .8 !important;*/
+    /*left: 10vw !important;*/
+  }
+
+}
+
+@media (max-width: 1025px) {
+  .helloCont {
+    padding: 2.5rem;
+  }
+  .mainContent .helloContent img {
+    scale: .65 !important;
+    left: 55% !important;
+    top: -10% !important;
+  }
+  /*  Rating  Page Styles   */
+  .rtrat  .ratingCentral {
+    /*flex-direction: column;*/
+  }
+  .listInRating {
+    margin-top: 2rem;
+    width: auto;
+  }
+
+  /*  Certificates */
+  .certpage {
+    min-height: 100vh;
+  }
+  .sidebar {
+    margin: 2.5rem 1rem;
+  }
+  .certpage .ratingCentral {
+    gap: 1rem;
+  }
+  .certpage .sectCertificates {
+    margin: 0;
+    padding: 1rem;
+  }
+  .certpage .sectCertificates .certbanner {
+    padding: 1rem 2rem;
+  }
+  .certpage .ratinginfo {
+
+  }
+  .certpage .mainContent {
+    height: auto;
+  }
+  .certpage .ratinginfo {
+    padding: 5vh 0 0 0;
+    height: auto;
+  }
+  .certpage .downloadCert {
+    padding: 1rem;
+  }
+  .certpage .linkbuttonVal {
+    padding: 2vh 2vw;
+  }
+  .certpage .dashsidelogo {
+    padding: 1vh 1vw;
+  }
+  .rtrat {
+    min-height: 100vh;
+  }
+  /*  Do Kontsa   */
+  .lessonsMain .coursesCards, .lessonsMain .lessonsCont {
+    width: 90%;
+    max-width: none;
+  }
+  .mathLesson {
+    display: flex;
+  }
+  .mathLesson .sidebar {
+    transition: .5s ease;
+    /* display: none; */
+    position: absolute;
+    top: 10%;
+    left: -50%;
+    z-index: 10;
+    margin: 10px;
+    padding: 10px 10px 20px 10px;
+  }
+  .mathLesson .sidebar .excSideLogo {
+    margin-top: 0;
+  }
+  .mathLesson .sidebar .exitButton {
+    padding: 0.6rem 1rem;
+    font-size: small;
+  }
+  .mathLesson .centralLessons {
+    width: 100%;
+    max-width: none;
+  }
+  .mathLesson .maths {
+    display: flex;
+    justify-content: center;
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+  .mathLesson .navdashboard {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 44px 0;
+    width: 95%;
+    margin-right: 0;
+  }
+  .mathLesson .navdashboard .icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 9px;
+    background-color: white;
+    box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-right: 10px;
+    max-width: fit-content;
+  }
+  .mathLesson .burger {
+    margin-right: 0 !important;
+  }
+  .mathLesson .icons {
+    font-size: 1rem;
+  }
+  .mathLesson .navdashboard .icons svg {
+    transform: scale(1.5);
+    padding: 10px 15px;
+  }
+  .mathLesson .navdashboard .lndsh {
+    margin-right: 0;
+  }
+  .mathLesson .ratingCentral {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+  .mathLesson .ratingCentral .lessonsMain {
+    width: auto;
+  }
+  .mathLesson .lessonsMain .coursesCards .courseItem {
+    max-width: none;
+    width: 100%;
+    flex-direction: column-reverse;
+  }
+  .mathLesson .courseItemLeft {
+    margin-right: 0;
+    justify-content: center;
+    width: 50%;
+  }
+  .mathLesson .lessonsCont {
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+  .mathLesson .lessonsCont .title {
+    padding-top: 2rem;
+  }
+  .mathLesson .defaultStyle {
+    font-size: 2rem;
+  }
+  .mathLesson .lessonsProg {
+    /* display: none; */
+    position: absolute;
+    top: 10.85%;
+    right: -100%;
+    transition: .5s ease;
+    z-index: 100;
+  }
+  .mathLesson .lessonsProg {
+    margin-right: 1rem;
+  }
+  .mathLesson {
+    overflow-x: hidden;
+    height: auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .mathLesson .activeProgram {
+    right: 0;
+  }
+  .mathLesson .defaultStyle {
+    text-align: center;
+  }
+  .mathLesson .courseItemLeft p {
+    font-size: 2rem;
+    text-align: center;
+  }
+  .mathLesson .courseItemLeft progress {
+    width: 100%;
+  }
+  .mathLesson .activeMenu {
+    left: 0;
+  }
+  .mathLesson .ratingCentral .lessonsMain {
+    width: 80%;
+  }
+  .mathLesson .ratingCentral .lessonsCont {
+    padding-bottom: 2rem;
+    box-shadow: 0px 5px 12px #00000035;
+  }
+  .studmodal {
+    padding: 0;
+    max-height: 100vh;
+  }
+  .gamesPage .game-modal {
+    width: 80vw;
+    max-width: none;
+  }
+  .gamesPage .game-modal iframe {
+    width: 100%;
+    max-height: 70vh;
+  }
+  .mathLesson .studmodal-content {
+    padding: 1rem;
+    width: 80vw;
+    height: 80vh;
+  }
+  .mathLesson .studmodal-content .studtaskDetails {
+    width: fit-content;
+    height: fit-content;
+  }
+  .mathLesson .studmodal-content .questionTitle {
+    padding: 1rem 0;
+    text-align: left;
+  }
+  /*.mathLesson .studmodal-content .questionTitle {}*/
+  .mathLesson .studmodal-content .questionContent ul{
+    margin: 1rem 0 !important;
+  }
+
+  .ratingPage .ratingCentral {
+    gap: 1rem;
+  }
+  .ratingPage .ratingCentral .listInRating {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 945px) {
+  .rtrat .gradeNum {
+    padding: 5px 10px;
+  }
+  .rtrat .lndsh {
+    margin-right: 0;
+  }
+  .rtrat .streak {
+    margin-right: 0;
+  }
+}
+
+/*  Main  */
+@media (max-width: 768px) {
+  .dashMain .coursesCards {
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  .icons {
+    font-size: 1rem;
+  }
+  .lndsh img {
+    width: 8vw;
+    height: 2rem;
+  }
+    .dashMain .courseItem {
+      min-width: 74%;
+      max-width: 75%;
+    }
+    .dashMain .mainContent {
+      justify-content: center;
+      align-items: center;
+    }
+    .dashMain .courseItemLeft {
+      margin-right: 3%;
+    }
+
+    .rtrat .centralLessonsInner {
+      width: 100% !important;
+    }
+    .rtdash {
+      overflow-x: hidden;
+    }
+    .rtdash .courseItem {
+    }
+    .off {
+      display: block;
+    }
+    /*  Content  */
+    .centralDash {
+      width: 100vw;
+    }
+    .navdashboard {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 44px 0;
+      margin-right: .5rem;
+    }
+    .backButton {
+      width: 90%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+    .backButton svg {
+      font-size: 2rem;
+    }
+    .cups {
+      margin-right: 0 !important;
+    }
+    .streak {
+      /*margin-right: 2rem !important;*/
+    }
+    .navdashboard .lndsh {
+    }
+    .navdashboard .icons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      border-radius: 9px;
+      background-color: white;
+      box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.3);
+      margin-right: 10px;
+      max-width: fit-content;
+    }
+    .burger {
+      margin-right: 0 !important;
+    }
+    .profile {
+      margin-right: 0 !important;
+    }
+    .navdashboard .icons svg {
+      transform: scale(1.5);
+      padding: 10px 15px;
+    }
+    .navdashboard .lndsh {
+      margin-right: 0;
+    }
+    .navdashboard .langSelect {
+      display: none;
+    }
+    .navdashboard .gradeNum {
+      display: none;
+    }
+    .mainContent h2 {
+      text-align: center;
+    }
+    .mainContent h3 {
+      text-align: center;
+    }
+    .coursesCards {
+      margin: 20px auto;
+    }
+  .coursesCards .courseItemLeft {
+    width: 50%;
+  }
+
+    .progressChart {
+      padding: 2rem;
+    }
+    /*  Left hand sidebar  */
+    .sidebar {
+      transition: .5s ease;
+      /*display: none;*/
+      position: absolute;
+      top: 10%;
+      left: -50%;
+      z-index: 10;
+      margin: 10px;
+      padding: 10px 10px 20px 10px;
+    }
+    .activeMenu {
+      left: 0;
+    }
+    .sidebar #active {
+
+    }
+    .sidebar .linkbuttonVal {
+      padding: 5px 0;
+      border-radius: 40px;
+    }
+    .sidebar a .dashsidelogo {
+      display: none;
+    }
+    .sidebar .excSideLogo {
+      margin-top: 0;
+    }
+    .sidebar .exitButton {
+      padding: 0.6rem 1rem;
+      font-size: small;
+    }
+
+    .centralLessonsInner {
+      width: auto;
+      max-width: 100vw !important;
+    }
+    .centralLessonsInner .cupCount {
+      margin-right: 1.5rem;
+    }
+
+    .ratingCentral {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .ratingCentral .listInRating {
+      margin-bottom: 1.5rem;
+    }
+
+    .ratingCentral .ratinginfo {
+      padding: 40px;
+    }
+
+    .certpage {
+      overflow: visible;
+    }
+
+    .certpage .ratinginfo {
+      padding: 2.5rem 0;
+      max-width: 100vw;
+    }
+
+    .certpage .mainContent {
+      /*max-width: 450px;*/
+      height: auto;
+    }
+    .certpage .sectCertificates {
+      margin-left: 0;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      max-width: 100vw;
+    }
+    .certpage .sectCertificates .certbanner .defaultStyle {
+      font-size: 1.5rem !important;
+    }
+    .certpage .certbanner {
+      padding: 1.5rem 0;
+    }
+    .certpage .certificate {
+      margin-right: 0;
+    }
+    .certpage .navdashboard {
+      width: 100% !important;
+    }
+    .certpage .centralLessons {
+      width: 100vw;
+    }
+    .certpage .centralLessonsInner {
+      width: 100%;
+    }
+    .certpage .streak {
+      margin-right: 0;
+    }
+    .helloContent {
+      margin: 0 2vw 5vh 2vw;
+    }
+    .gamesPage {
+      min-height: 100vh;
+    }
+    .game-div {
+      display: flex;
+      flex-direction: column;
+      padding-right: 0;
+      margin: 0 1rem;
+    }
+    .game-button {
+      font-size: 2.2rem;
+    }
+    .mathLesson {
+      overflow-x: hidden;
+      height: auto;
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+    .mathLesson .centralLessons {
+      max-width: 450px;
+      width: auto;
+    }
+    .mathLesson .ratingCentral {
+      max-width: 450px;
+      width: auto;
+    }
+    .mathLesson .coursesCards {
+      max-width: 450px;
+      width: auto;
+    }
+    .mathLesson .courseItem {
+      flex-direction: column-reverse;
+      width: auto;
+      max-width: 450px;
+    }
+    .mathLesson .courseItemLeft {
+      margin-right: 0;
+      justify-content: center;
+    }
+    .mathLesson .courseItemLeft p {
+      text-align: center;
+      padding-top: 1rem;
+    }
+    .mathLesson .courseItemLeft .defaultStyle {
+      text-align: left;
+      font-size: 1.4rem;
+    }
+    .mathLesson .courseItemLeft progress {
+      width: 100%;
+    }
+    .mathLesson .coursesCards {
+      margin: 0;
+      width: auto;
+    }
+    .mathLesson .lessonsMain {
+      width: 100%;
+    }
+    .mathLesson .maths {
+      display: flex;
+      justify-content: center;
+      width: 100% !important;
+      margin-right: 0 !important;
+    }
+    .mathLesson .navdashboard {
+      width: 95%;
+      margin-right: 0;
+    }
+    .mathLesson .lessonsCont {
+      padding: 0;
+      margin-bottom: 2rem;
+    }
+    .mathLesson .defaultStyle {
+      font-size: 2rem;
+    }
+    .lessonsCont .contWrapper {
+      width: 90%;
+    }
+    .mathLesson .lessonsHr {
+      width: 100%;
+      margin: 0;
+      flex-grow: 1;
+    }
+    .mathLesson .contWrapper > div:first-child {
+      justify-content: center;
+    }
+    .mathLesson .contWrapper {
+      padding: 0 .5rem 1rem .5rem;
+    }
+    .lessonsCont .title {
+      padding-top: 2rem;
+    }
+    .courseItemLeft p {
+      font-size: 1.5rem;
+    }
+    .lessonsProg {
+      margin-right: 1rem;
+    }
+    .mathLesson .maths {
+      margin-right: 1rem;
+    }
+    .mathLesson .streak {
+      margin-right: 0;
+    }
+    .mathLesson .lessonsProg {
+      /*display: none;*/
+      position: absolute;
+      top: 10.85%;
+      right: -100%;
+      transition: .5s ease;
+      z-index: 100;
+    }
+    .mathLesson .activeProgram {
+      right: 0;
+    }
+    .mathLesson .lessonsProg .progList .progItem p {
+      text-align: center;
+    }
+    .mathLesson .lessonsProg .progList .progItem progress {
+      width: 100%;
+    }
+
+    .gamesPage {
+      overflow: visible;
+    }
+
+    .studmodal {
+      overflow: visible;
+      width: 100vw;
+      max-height: 100vh;
+      padding: 0;
+    }
+
+    .game-modal {
+      width: 80%;
+      height: auto;
+    }
+
+    .game-modal iframe {
+      width: 100%;
+      /*height: 50vh;*/
+    }
+
+    .game-modal div h1 {
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    .mathLesson .studmodal-content {
+      width: 80%;
+      max-height: 100vh;
+    }
+    .mathLesson .studmodal-content iframe {
+      width: 100%;
+      height: auto;
+    }
+    .mathLesson .studmodal-content .modalHeader .defaultStyle {
+      font-size: 1.5rem;
+    }
+
+    .mathLesson .incompleteTask {
+      font-size: 1rem;
+    }
+
+    .mathLesson .studtaskDetails {
+      width: 80%;
+      height: 60vh;
+      align-items: center;
+      justify-content: center;
+      background-size: inherit;
+      background-position: center;
+    }
+
+    .mathLesson .studtaskDetails .audioContainer {
+      top: -1vh;
+      right: -5% !important;
+      flex-direction: row !important;
+      width: auto;
+    }
+
+    .mathLesson .studtaskDetails .audioContainer .transBtn {
+      width: auto;
+    }
+
+    .mathLesson .studtaskDetails .audioContainer .transBtn svg {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .mathLesson .studtaskDetails .questionContent .studTaskOptions {
+      display: block;
+      margin-top: 1rem;
+    }
+
+    .mathLesson .studtaskDetails .questionContent {
+      padding-top: 2rem;
+    }
+
+    .mathLesson .studtaskDetails .questionContent ul {
+      margin: 0;
+    }
+
+    .mathLesson .studtaskDetails .questionContent strong {
+      margin: 1rem 0;
+    }
+
+    .mathLesson .studtaskDetails .questionContent .questionTitle {
+      padding: 0;
+    }
+
+    .mathLesson .studtaskDetails .questionContent .studTaskOptions .studTaskOption:not(:last-child) {
+      margin-bottom: .5rem;
+    }
+
+    .mathLesson .studtaskDetails .questionContent .studTaskOptions .studTaskOption {
+      font-size: 1.1rem;
+    }
+    .mathLesson .studmodal-content .navigationButtons span {
+      flex-direction: column !important;
+      width: 100%;
+    }
+    .mathLesson .studmodal-content .navigationButtons span progress {
+      margin: 1rem;
+      width: 100% !important;
+    }
+    .mathLesson .studmodal-content .navigationButtons span button {
+      width: 100%;
+    }
+    .mathLesson .studmodal-content .feedbackContent {
+      flex-direction: column-reverse;
+    }
+
+  .rtrat {
+    display: flex;
+  }
+  .rtrat .centralLessons {
+    width: 100%;
+  }
+
+  .mathLesson .centralLessons {
+    width: 100%;
+    max-width: none;
+  }
+  .mathLesson .ratingCentral {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+  .mathLesson .ratingCentral .lessonsMain {
+    width: auto;
+  }
+  .lessonsMain .coursesCards, .lessonsMain .lessonsCont {
+    width: 90%;
+    max-width: none;
+  }
+  .mathLesson .courseItemLeft .defaultStyle {
+    text-align: center;
+  }
+  .lessonsMain .coursesCards .courseItem {
+    max-width: none;
+    width: 100%;
+  }
+  .mathLesson .lessonsHr {
+    width: 5rem;
+  }
+  .lessonsCont {
+    box-shadow: 0px 5px 12px #00000035;
+  }
+  .mathLesson .studmodal-content {
+    padding: 3vh 3vw;
+  }
+  .mathLesson .studmodal-content .modalHeader span {
+    gap: 2vw !important;
+  }
+  .mathLesson .studmodal-content .modalHeader span p {
+    margin: 1vh 0;
+    padding: 5px 10px !important;
+  }
+  .mathLesson .studmodal-content .questionTitle {
+    text-align: left;
+    font-size: 1.2rem;
+  }
+  .mathLesson .studmodal-content .questionContent ul li strong {
+    margin: 0 !important;
+  }
+  .mathLesson .feedbackContent img {
+    width: 20vw;
+  }
+  .progressPage .activeProfile {
+    right: 0;
+  }
+  .progressPage .dashProfile {
+    position: relative;
+  }
+}
+
+/*  Additional  */
+@media (max-width: 660px) {
+  .helloContent img {
+    scale: 0.8 !important;
+  }
+}
+
+/*  Main  */
+@media (max-width: 450px) {
+  .dashMain .coursesCards {
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  .dashMain .courseItem {
+    min-width: 74%;
+    max-width: 75%;
+    justify-content: space-between;
+  }
+  .dashMain .mainContent {
+    justify-content: center;
+    align-items: center;
+  }
+  .dashMain .courseItemLeft {
+    margin-right: 3%;
+  }
+
+  .rtrat .centralLessonsInner {
+    width: 100% !important;
+  }
+  .rtdash {
+    overflow-x: hidden;
+  }
+  .rtdash .courseItem {
+  }
+  .off {
+    display: block;
+  }
+  /*  Content  */
+  .centralDash {
+    width: 100vw;
+  }
+  .navdashboard {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 44px 0;
+    margin-right: .5rem;
+  }
+  .backButton {
+    width: 90%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+  .backButton svg {
+    font-size: 2rem;
+  }
+  .cups {
+    margin-right: 0 !important;
+  }
+  .streak {
+    /*margin-right: 2rem !important;*/
+  }
+  .navdashboard .lndsh {
+  }
+  .navdashboard .icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 9px;
+    background-color: white;
+    box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-right: 10px;
+    max-width: fit-content;
+  }
+  .burger {
+    margin-right: 0 !important;
+  }
+  .profile {
+    margin-right: 0 !important;
+  }
+  .navdashboard .icons svg {
+    transform: scale(1.5);
+    padding: 10px 15px;
+  }
+  .navdashboard .lndsh {
+    margin-right: 0;
+  }
+  .navdashboard .langSelect {
+    display: none;
+  }
+  .navdashboard .gradeNum {
+    display: none;
+  }
+  .mainContent .helloContent img {
+    width: auto;
+    top: 15px !important;
+    left: 46% !important;
+    scale: 0.65 !important;
+  }
+  .mainContent h2 {
+    text-align: center;
+  }
+  .mainContent h3 {
+    text-align: center;
+  }
+  .coursesCards {
+    flex-direction: column;
+    margin: 20px auto;
+  }
+
+  .progressChart {
+    padding: 2rem;
+  }
+  /*  Right hand sidebar  */
+  .dashProfile {
+    transition: .5s ease;
+    padding: 50px 0 0 0;
+    position: relative;
+    left: 20%;
+  }
+  .activeProfile {
+    right: 0;
+  }
+  .league {
+    margin: 0 10px;
+  }
+  /*  Left hand sidebar  */
+  .sidebar {
+    transition: .5s ease;
+    /*display: none;*/
+    position: absolute;
+    top: 10%;
+    left: -50%;
+    z-index: 10;
+    margin: 10px;
+    padding: 10px 10px 20px 10px;
+  }
+  .activeMenu {
+    left: 0;
+  }
+  .sidebar #active {
+
+  }
+  .sidebar .linkbuttonVal {
+    padding: 5px 0;
+    border-radius: 40px;
+  }
+  .sidebar a .dashsidelogo {
+    display: none;
+  }
+  .sidebar .excSideLogo {
+    margin-top: 0;
+  }
+  .sidebar .exitButton {
+    padding: 0.6rem 1rem;
+    font-size: small;
+  }
+
+  .centralLessonsInner {
+    width: auto;
+    max-width: 100vw !important;
+  }
+  .centralLessonsInner .cupCount {
+    margin-right: 1.5rem;
+  }
+
+  .ratingCentral {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .ratingCentral .listInRating {
+    margin-bottom: 1.5rem;
+  }
+
+  .ratingCentral .ratinginfo {
+    padding: 40px;
+  }
+
+  .certpage {
+    overflow: visible;
+  }
+
+  .certpage .ratinginfo {
+    padding: 2.5rem 0;
+    max-width: 100vw;
+  }
+
+  .certpage .mainContent {
+    /*max-width: 450px;*/
+    height: auto;
+  }
+  .certpage .sectCertificates {
+    margin-left: 0;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    max-width: 100vw;
+  }
+  .certpage .sectCertificates .certbanner .defaultStyle {
+    font-size: 1.5rem !important;
+  }
+  .certpage .certbanner {
+    padding: 1.5rem 0;
+  }
+  .certpage .certificate {
+    margin-right: 0;
+  }
+  .certpage .navdashboard {
+    width: 100% !important;
+  }
+  .certpage .centralLessons {
+    width: 100vw;
+  }
+  .certpage .centralLessonsInner {
+    width: 100%;
+  }
+  .certpage .streak {
+    margin-right: 0;
+  }
+
+  .gamesPage {
+    min-height: 100vh;
+  }
+  .game-div {
+    display: flex;
+    flex-direction: column;
+    padding-right: 0;
+    margin: 0 1rem;
+  }
+  .game-button {
+    font-size: 2.2rem;
+  }
+  .mathLesson {
+    overflow-x: hidden;
+    height: auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .mathLesson .centralLessons {
+    max-width: 450px;
+    width: auto;
+  }
+  .mathLesson .ratingCentral {
+    max-width: 450px;
+    width: auto;
+  }
+  .mathLesson .coursesCards {
+    max-width: 450px;
+    width: auto;
+  }
+  .lessonsMain .coursesCards .courseItem {
+    flex-direction: column-reverse;
+    width: auto;
+    max-width: 450px;
+  }
+  .mathLesson .courseItemLeft {
+    margin-right: 0;
+    justify-content: center;
+  }
+  .mathLesson .courseItemLeft p {
+    text-align: center;
+    padding-top: 1rem;
+  }
+  .mathLesson .courseItemLeft .defaultStyle {
+    text-align: left;
+    font-size: 1.4rem;
+  }
+  .mathLesson .feedbackContent img {
+    width: 40vw;
+  }
+  .mathLesson .courseItemLeft progress {
+    width: 100%;
+  }
+  .mathLesson .coursesCards {
+    margin: 0;
+    width: auto;
+  }
+  .mathLesson .lessonsMain {
+    width: 100%;
+  }
+  .mathLesson .maths {
+    display: flex;
+    justify-content: center;
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+  .mathLesson .navdashboard {
+    width: 95%;
+    margin-right: 0;
+  }
+  .mathLesson .lessonsCont {
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+  .mathLesson .defaultStyle {
+    font-size: 2rem;
+  }
+  .mathLesson .lessonsHr {
+    max-width: 450px;
+    width: 6rem;
+  }
+  .mathLesson .contWrapper {
+    padding: 0 .5rem 1rem .5rem;
+  }
+  .lessonsCont .title {
+    padding-top: 2rem;
+  }
+  .courseItemLeft p {
+    font-size: 1.5rem;
+  }
+  .lessonsProg {
+    margin-right: 1rem;
+  }
+  .mathLesson .maths {
+    margin-right: 1rem;
+  }
+  .mathLesson .streak {
+    margin-right: 0;
+  }
+  .mathLesson .lessonsProg {
+    /*display: none;*/
+    position: absolute;
+    padding: 5vh 5vw;
+    top: 10.85%;
+    right: -150%;
+    transition: .5s ease;
+    z-index: 100;
+    margin: 0;
+    max-width: 100vw;
+  }
+  .mathLesson .activeProgram {
+    right: 1%;
+  }
+  .mathLesson .lessonsMain .coursesCards .courseItem {
+    width: auto;
+  }
+  .mathLesson .lessonsProg .progList .progItem p {
+    text-align: center;
+  }
+  .mathLesson .lessonsProg .progList .progItem progress {
+    width: 100%;
+  }
+
+  .gamesPage {
+    overflow: visible;
+  }
+
+  .studmodal {
+    overflow: visible;
+    width: 100vw;
+    padding: 0;
+  }
+
+  .game-modal {
+    width: 80%;
+    height: auto;
+  }
+
+  .game-modal iframe {
+    width: 100%;
+    /*height: 50vh;*/
+  }
+
+  .game-modal div h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .mathLesson .studmodal-content {
+    width: 80%;
+  }
+  .mathLesson .studmodal-content iframe {
+    width: 100%;
+    height: auto;
+  }
+  .mathLesson .studmodal-content .modalHeader .defaultStyle {
+    font-size: 1.5rem;
+  }
+
+  .mathLesson .incompleteTask {
+    font-size: 1rem;
+  }
+
+  .mathLesson .studtaskDetails {
+    width: fit-content;
+    height: 60vh;
+    align-items: center;
+    justify-content: center;
+    background-size: inherit;
+    background-position: center;
+  }
+
+  .mathLesson .studtaskDetails .audioContainer {
+    top: -15%;
+    right: -5% !important;
+    flex-direction: row !important;
+    width: auto;
+  }
+
+  .mathLesson .studtaskDetails .audioContainer .transBtn {
+    width: auto;
+  }
+
+  .mathLesson .studtaskDetails .audioContainer .transBtn svg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent .studTaskOptions {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent {
+    padding-top: 2rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent ul {
+    margin: 0;
+  }
+
+  .mathLesson .studtaskDetails .questionContent strong {
+    margin: 1rem 0;
+  }
+
+  .mathLesson .studtaskDetails .questionContent .questionTitle {
+    padding: 0;
+    font-size: 1rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent ul li span strong {
+    font-size: .85rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent .studTaskOptions .studTaskOption:not(:last-child) {
+    margin-bottom: .5rem;
+  }
+
+  .mathLesson .studtaskDetails .questionContent .studTaskOptions .studTaskOption {
+    font-size: 1rem;
+  }
+  .mathLesson .studmodal-content .navigationButtons span {
+    flex-direction: column !important;
+    width: 100%;
+  }
+  .mathLesson .studmodal-content .navigationButtons span progress {
+    margin: .5rem;
+    margin-top: 0 !important;
+    width: 100% !important;
+  }
+  .mathLesson .studmodal-content .navigationButtons span button {
+    width: 100%;
+  }
+  .mathLesson .studmodal-content .feedbackContent {
+    flex-direction: column-reverse;
+  }
+}
+
+@media (max-width: 375px) {
+  .navdashboard {
+    margin: 0 .5rem;
+  }
+  .sidebar {
+    top: 3%;
+  }
+  .icons {
+    font-size: .8rem;
+  }
+  .lndsh {
+    padding: 0 .625rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .helloCont {
+    padding: 1rem;
+  }
+  .helloCont p:first-child {
+    font-size: x-large;
+  }
+  .helloCont p:last-child {
+    font-size: .9rem;
+  }
+  .mainContent .helloContent img {
+    top: -15% !important;
+    left: 40% !important;
+    scale: .5 !important;
+  }
+  .lndsh img {
+    height: 5vh;
+  }
+  .courseItem {
+    flex-direction: column-reverse;
+    justify-content: center;
+    padding: 1rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .coursesCards .courseItemLeft {
+    width: 100%;
+  }
+  .coursesCards .courseItemLeft p {
+    text-align: center;
+  }
+  .coursesCards .courseItemLeft progress {
+    width: 100%;
+  }
+  .coursesCards .courseItemLeft a button {
+    width: 100%;
+  }
 }

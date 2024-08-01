@@ -5,6 +5,9 @@ import { registerParent } from "../utils/apiService"; // Import the function
 import { useTranslation } from "react-i18next";
 import ReCAPTCHA from "react-google-recaptcha";
 import CloseIcon from "@mui/icons-material/Close";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
+import {slide as Menu} from "react-burger-menu";
 import Loader from "./Loader.jsx";
 
 function Registration() {
@@ -119,6 +122,16 @@ function Registration() {
     formatPhone(e);
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleStateChange = (state) => {
+    setIsOpen(state.isOpen);
+  };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
       <div className="regacss">
@@ -154,8 +167,28 @@ function Registration() {
                 <button>{t("enter")}</button>
               </Link>
             </div>
+            <div className="menuWrapper" onClick={toggleMenu}>
+              <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
+            </div>
           </div>
         </div>
+        <Menu isOpen={isOpen} onStateChange={handleStateChange}>
+          <a href="#oplatforme" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('aboutPlatform')}
+          </a>
+          <a href="#obuchenie" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('education')}
+          </a>
+          <a href="#otzyvy" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('reviews')}
+          </a>
+          <a href="#contakty" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t('contacts')}
+          </a>
+          <a href="/subscription-details" className="menu-item" onClick={() => setIsOpen(false)}>
+            {t("tariff")}
+          </a>
+        </Menu>
         <div className="regPage">
           <div className="regform">
             <div className="formTitle">
