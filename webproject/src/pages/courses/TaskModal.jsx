@@ -98,21 +98,32 @@ const TaskModal = ({
                   src={feedbackMessage === "Correct!" ? correctlion : wronglion}
                   alt="lion mascot"
                 />
-                <p
-                  style={{
-                    color: "black",
-                    fontSize: "xx-large",
-                    fontWeight: "700",
-                    textAlign: "center",
-                    backgroundColor: "white",
-                    padding: "10px",
-                    borderRadius: "10px",
-                  }}
-                >
-                  {feedbackMessage === "Correct!"
-                    ? t("correct")
-                    : t("incorrect")}
-                </p>
+                {feedbackMessage === "Correct!"
+                  ? <p
+                      style={{
+                        color: "limegreen",
+                        fontSize: "xx-large",
+                        fontWeight: "700",
+                        textAlign: "center",
+                        backgroundColor: "white",
+                        padding: "10px",
+                        borderRadius: "15px",
+                        border: "5px solid green",
+                      }}
+                    >{t("correct")}</p>
+                  : <p
+                      style={{
+                        color: "black",
+                        fontSize: "xx-large",
+                        fontWeight: "700",
+                        textAlign: "center",
+                        backgroundColor: "white",
+                        padding: "10px",
+                        borderRadius: "15px",
+                        border: "5px solid #fa3b3b",
+                      }}
+                    >{t("incorrect")}</p>
+                }
               </div>
             </div>
           )}
@@ -132,9 +143,8 @@ const TaskModal = ({
                   <span
                     style={{
                       display: "flex",
-                      alignItems: "center",
                       flexDirection: "column",
-                      gap: "0.33rem",
+                      alignItems: "center",
                       maxWidth: "500px",
                       textAlign: "center",
                     }}
@@ -167,7 +177,7 @@ const TaskModal = ({
                       </strong>
                     </span>
                     {currentQuestion.is_attempted && (
-                      <strong style={{ color: "green", marginTop: "50px" }}>
+                      <strong style={{ color: "green", padding:"35px", backdropFilter: "blur(2px)"}}>
                         {t("alreadyAnswered")}
                       </strong>
                     )}
@@ -200,9 +210,9 @@ const TaskModal = ({
                         style={{ color: "gray" }}
                       >
                         {isMuted ? (
-                          <VolumeOffIcon sx={{ fontSize: "70px" }} />
+                          <VolumeOffIcon sx={{ fontSize: "50px" }} />
                         ) : (
-                          <VolumeUpIcon sx={{ fontSize: "70px" }} />
+                          <VolumeUpIcon sx={{ fontSize: "50px" }} />
                         )}
                       </button>
                       <input
@@ -213,6 +223,7 @@ const TaskModal = ({
                         step="0.01"
                         value={volume}
                         onChange={handleVolumeChange}
+                        style={{scale:"0.6"}}
                       />
                     </div>
                   </span>

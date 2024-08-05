@@ -832,6 +832,8 @@ img.childcard {
   align-items: center;
   justify-items: center;
   margin-top: 20px;
+  box-shadow: 0 0 25px 5px white;
+  backdrop-filter: blur(3px);
 }
 
 .studTaskOption{
@@ -879,19 +881,20 @@ img.childcard {
   align-content: center;
   display: inline;
   z-index: 100;
+  backdrop-filter: blur(2px);
 }
 
-.feedbackMessage::backdrop{
-  backdrop-filter: blur(13px);
-}
+/* .feedbackMessage::backdrop{
+  
+} */
 
-.fbmcorrect{
+/* .fbmcorrect{
   background-color: #3ecb7e82;
 }
 
 .fbmincorrect{
   background-color: #fa3b3b82;
-}
+} */
 
 .completedTask{
   background-color: #6beda6;
@@ -1067,43 +1070,25 @@ img.childcard {
 
 .questionTitle{
   max-width: 500px;
-  scale: 1.1;
-  margin-top: -30px;
-  padding: 40px 0 40px 0;
+  font-size: 30px;
 }
 
 .qt-template-1{
-  background-image: url(./assets/title-template-1.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   color: #0024B5;
   text-shadow: 0 0 1px black;
   font-weight: 800;
 }
 .qt-template-2{
-  background-image: url(./assets/title-template-2.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   color: #234FFF;
   font-weight: 800;
   text-shadow: 0 0 5px white;
 }
 .qt-template-3{
-  background-image: url(./assets/title-template-3.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   color: #0024B5;
   text-shadow: 0 0 1px black;
   font-weight: 800;
 }
 .qt-template-4{
-  background-image: url(./assets/title-template-1.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   color: #3D6400;
   font-weight: 800;
   text-shadow: 0 0 5px white;
