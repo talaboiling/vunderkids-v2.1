@@ -4,12 +4,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { FileUploader } from "react-drag-drop-files";
 import logoImg from "../assets/logo_blue.webp";
 import plusicon from "../assets/plus_icon.webp";
-import pfplaceholder from "../assets/placehoder_pfp.webp";
 import "/src/dashboard.css";
 import staricon from "../assets/navStars.webp";
 import cupicon from "../assets/navCups.webp";
 import streak from "../assets/streak.webp";
 import nostreak from "../assets/nostreak.webp";
+import pfplaceholder from "../assets/placehoder_pfp.webp";
 import { logout } from "../utils/authService";
 import {
   fetchUserData,
@@ -27,6 +27,7 @@ const Parentdash = () => {
   const [user, setUser] = useState({ first_name: t("parent"), last_name: "" }); // Default values
   const [children, setChildren] = useState([]); // State to store children
   const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(pfplaceholder);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -38,11 +39,16 @@ const Parentdash = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [childToDelete, setChildToDelete] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [imageLoading, setImageLoading] = useState(true);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/");
+  };
+
+  const handleImageLoading = () => {
+    setImageLoading(false);
   };
 
   useEffect(() => {
@@ -67,6 +73,11 @@ const Parentdash = () => {
 
   const handleFileChange = (file) => {
     setFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleInputChange = (e) => {
@@ -134,8 +145,9 @@ const Parentdash = () => {
   };
 
   if (loading) {
-    <Loader></Loader>;
+    return <Loader></Loader>;
   }
+
   return (
     <div className="parentdash">
       <div className="navBar" style={{ margin: "0" }}>
@@ -153,33 +165,33 @@ const Parentdash = () => {
       <div className="addchildren">
         {children.map((child) => (
           <div key={child.id} className="childcard">
+            {imageLoading && <div className="skeleton"></div>}
             <img
               src={child.avatar || pfplaceholder}
               alt="child avatar"
-              style={{
-                maxWidth: "100px",
-                maxHeight: "100px",
-                borderRadius: "50%",
-              }}
+              className="childAvatar"
+              onLoad={handleImageLoading}
+              loading="laze"
+              style={{ display: imageLoading ? "none" : "block" }}
             />
-            <p style={{ fontSize: "x-large" }}>
+            <p className="childName">
               {child.first_name} {child.last_name}
             </p>
             <div className="rndsh" style={{ marginBottom: "20px" }}>
               <p>
-                {child.grade} {t("classLowercase")} ({child.language})
+                {child.grade} {t("classLowercase")} (
+                {child.language === "kz"
+                  ? "Қаз"
+                  : child.language === "ru"
+                  ? "Рус"
+                  : child.language === "en"
+                  ? "Англ"
+                  : ""}
+                )
               </p>
             </div>
-            <div style={{ display: "flex", flexDirection: "row", gap: "2rem" }}>
-              <div
-                className="lndsh"
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  position: "relative",
-                }}
-              >
+            <div className="lndshContainer">
+              <div className="lndsh">
                 <img src={staricon} alt="" className="starIcon" />
                 <p>{child.stars}</p>
               </div>
@@ -188,7 +200,7 @@ const Parentdash = () => {
                 <p>{child.cups}</p>
               </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "row", gap: "2rem" }}>
+            <div className="lndshContainer">
               <div className="lndsh">
                 <p>
                   {t("lvl")}: {child.level}
@@ -196,17 +208,13 @@ const Parentdash = () => {
               </div>
               <div className="lndsh">
                 <img
-                  src={nostreak}
+                  src={child.streak !== 0 ? streak : nostreak}
                   alt="streak"
-                  style={{ width: "30px", height: "30px" }}
+                  className="streakIcon"
                 />
                 <p>{child.streak}</p>
               </div>
             </div>
-
-            <div
-              style={{ display: "flex", flexDirection: "row", gap: "5rem" }}
-            ></div>
 
             <div className="childcardBtns">
               <button
@@ -220,7 +228,7 @@ const Parentdash = () => {
                   setChildToDelete(child.id);
                   setShowDeleteModal(true);
                 }}
-                style={{ backgroundColor: "rgb(204, 47, 47)" }}
+                className="deleteButton"
               >
                 {t("delete")}
               </button>
@@ -239,21 +247,18 @@ const Parentdash = () => {
             <div className="modal-content">
               <button
                 onClick={() => setShowModal(false)}
-                style={{
-                  border: "none",
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                  float: "right",
-                  padding: "0",
-                  margin: "0",
-                }}
+                className="closeButton"
               >
                 <CloseIcon sx={{ color: "grey" }} />
               </button>
 
               <form className="registrationInput" onSubmit={handleSubmit}>
                 <div className="childavatar">
-                  <img src={pfplaceholder} alt="pfp" />
+                  <img
+                    src={imagePreview}
+                    alt="pfp"
+                    className="childAvatarPreview"
+                  />
                   <FileUploader
                     handleChange={handleFileChange}
                     name="file"
@@ -290,56 +295,52 @@ const Parentdash = () => {
                   required
                 />
                 <div className="gendgrade">
-                  <label htmlFor="gender">{t("gender")}</label>
-                  <label htmlFor="grade">{t("studClass")}</label>
-                  <select
-                    list="genders"
-                    id="gender"
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleInputChange}
-                    placeholder={t("boy")}
-                    required
-                  >
-                    <option value="">{t("Choose gender")}</option>
-                    <option value="M">{t("boy")}</option>
-                    <option value="F">{t("girl")}</option>
-                    <option value="O">{t("other")}</option>
-                  </select>
-                  <select
-                    list="grades"
-                    id="grade"
-                    name="grade"
-                    value={formData.grade}
-                    onChange={handleInputChange}
-                    placeholder={t("preschool")}
-                    required
-                  >
-                    <option value="0">{t("preschool")}</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
+                  <div>
+                    <label htmlFor="gender">{t("gender")}</label>
+                    <select
+                      id="gender"
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">{t("choose_gender")}</option>
+                      <option value="M">{t("boy")}</option>
+                      <option value="F">{t("girl")}</option>
+                      <option value="O">{t("other")}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="grade">{t("studClass")}</label>
+                    <select
+                      id="grade"
+                      name="grade"
+                      value={formData.grade}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="0">{t("preschool")}</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                  </div>
                 </div>
-                <label htmlFor="language">{t("Язык обучения")}</label>
+                <label htmlFor="language">{t("study_language")}</label>
                 <select
                   name="language"
                   id="language"
                   value={formData.language}
                   onChange={handleInputChange}
                 >
-                  <option value="">{t("Язык обучения")}</option>
-                  <option value="ru">Русский</option>
-                  <option value="kz">Қазақша</option>
+                  <option value="">{t("choose_study_language")}</option>
+                  <option value="ru">{t("russian")}</option>
+                  <option value="kz">{t("kazakh")}</option>
                 </select>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <button type="submit">{t("addChildButton")}</button>
+                <div className="submitContainer">
+                  <button type="submit" className="submitButton">
+                    {t("addChildButton")}
+                  </button>
                 </div>
               </form>
             </div>

@@ -134,7 +134,7 @@ const Dashboard = () => {
 
   return (
     <div className="rtdash dashMain">
-      <Sidebar isMenuOpen={isMenuOpen}/>
+      <Sidebar isMenuOpen={isMenuOpen} />
       <div className="centralDash">
         <Navdash
           starCount={user.stars}
@@ -213,6 +213,7 @@ const Dashboard = () => {
                 <img
                   src={course.name === "Математика" ? mathIcon : englishIcon}
                   alt={course.name}
+                  className="courseImage"
                   style={{
                     backgroundColor: "#F8753D",
                     border: "1px solid black",
@@ -230,9 +231,12 @@ const Dashboard = () => {
         </div>
       </div>
       <div className={`${isProfileSwitched ? "activeProfile" : ""}`}>
-        <Profile user={user} isProfileSwitched={isProfileSwitched} setIsProfileSwitched={setIsProfileSwitched}/>
+        <Profile
+          user={user}
+          isProfileSwitched={isProfileSwitched}
+          setIsProfileSwitched={setIsProfileSwitched}
+        />
       </div>
-      
     </div>
   );
 };

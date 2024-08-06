@@ -6,9 +6,9 @@ import { logout } from "./utils/authService";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { getUserRole, isAuthenticated } from "./utils/authService.js";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faBars} from '@fortawesome/free-solid-svg-icons';
-import {slide as Menu} from "react-burger-menu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { slide as Menu } from "react-burger-menu";
 
 function Header() {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ function Header() {
     navigate("/login");
   };
   const { t } = useTranslation();
+  const [checked, setChecked] = useState(i18next.language === "ru");
 
   const [isOpen, setIsOpen] = useState(false);
   const handleStateChange = (state) => {
@@ -28,6 +29,12 @@ function Header() {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleChange = () => {
+    const newLang = i18next.language === "ru" ? "kk" : "ru";
+    i18next.changeLanguage(newLang);
+    setChecked(newLang === "ru");
   };
 
   return (
@@ -72,19 +79,18 @@ function Header() {
             </a>
           </div>
 
-          <div className="langSelector">
-            <button
-              className="transBtn"
-              onClick={() => i18next.changeLanguage("ru")}
-            >
-              РУС
-            </button>
-            <button
-              className="transBtn"
-              onClick={() => i18next.changeLanguage("kk")}
-            >
-              ҚАЗ
-            </button>
+          <div className="rndsh langSelect">
+            <div className="button b2" id="button-10">
+              <input
+                type="checkbox"
+                className="checkbox"
+                checked={checked}
+                onChange={handleChange}
+              />
+              <div className="knobs">
+                <span style={{ fontWeight: "bold" }}>ҚАЗ</span>
+              </div>
+            </div>
           </div>
           <div className="navButton mob-right">
             {isLoggedIn ? (
@@ -104,7 +110,10 @@ function Header() {
                 >
                   <button>{t("continue")}</button>
                 </Link>
-                <button className="orangeButton mob-none" onClick={handleLogout}>
+                <button
+                  className="orangeButton mob-none"
+                  onClick={handleLogout}
+                >
                   {t("exit")}
                 </button>
               </div>
@@ -114,53 +123,99 @@ function Header() {
                   <button>{t("enter")}</button>
                 </Link>
                 <Link to="/registration" className="orangeButtonWrapper">
-                  <button className="orangeButton mob-none">{t("register")}</button>
+                  <button className="orangeButton mob-none">
+                    {t("register")}
+                  </button>
                 </Link>
               </div>
             )}
           </div>
         </div>
         <div className="menuWrapper" onClick={toggleMenu}>
-          <FontAwesomeIcon icon={faBars} style={{color: "#00639E"}}/>
+          <FontAwesomeIcon icon={faBars} style={{ color: "#00639E" }} />
         </div>
       </div>
       <Menu isOpen={isOpen} onStateChange={handleStateChange}>
-        <a href="#oplatforme" className="menu-item" onClick={() => setIsOpen(false)}>
-            {t('aboutPlatform')}
+        <a
+          href="#oplatforme"
+          className="menu-item"
+          onClick={() => setIsOpen(false)}
+        >
+          {t("aboutPlatform")}
         </a>
-        <a href="#obuchenie" className="menu-item" onClick={() => setIsOpen(false)}>
-            {t('education')}
+        <a
+          href="#obuchenie"
+          className="menu-item"
+          onClick={() => setIsOpen(false)}
+        >
+          {t("education")}
         </a>
-        <a href="#otzyvy" className="menu-item" onClick={() => setIsOpen(false)}>
-            {t('reviews')}
+        <a
+          href="#otzyvy"
+          className="menu-item"
+          onClick={() => setIsOpen(false)}
+        >
+          {t("reviews")}
         </a>
-        <a href="#contakty" className="menu-item burger-contacts" onClick={() => setIsOpen(false)}>
-            {t('contacts')}
+        <a
+          href="#contakty"
+          className="menu-item burger-contacts"
+          onClick={() => setIsOpen(false)}
+        >
+          {t("contacts")}
         </a>
-        <a href="/subscription-details" className="menu-item" onClick={() => setIsOpen(false)}>
+        <a
+          href="/subscription-details"
+          className="menu-item"
+          onClick={() => setIsOpen(false)}
+        >
           {t("tariff")}
         </a>
         <div className="langSelector burger-ln">
-            <button className="" onClick={() => i18next.changeLanguage('ru')}>РУС</button>
-            <button className="" style={{marginLeft: "15px"}} onClick={() => i18next.changeLanguage('kk')}>ҚАЗ</button>
+          <button className="" onClick={() => i18next.changeLanguage("ru")}>
+            РУС
+          </button>
+          <button
+            className=""
+            style={{ marginLeft: "15px" }}
+            onClick={() => i18next.changeLanguage("kk")}
+          >
+            ҚАЗ
+          </button>
         </div>
         <div className="navButton">
-            {isLoggedIn ? (
-                <div>
-                    <button className="orangeButton" onClick={handleLogout}>
-                        {t('exit')}
-                    </button>
-                </div>
-            ) : (
-                <div>
-                    <Link to="/login" className="mob-right burger-login">
-                        <button>{t('enter')}</button>
-                    </Link>
-                    <Link to="/registration" className="orangeButtonWrapper">
-                        <button className="orangeButton" style={{width: "100%"}}>{t('register')}</button>
-                    </Link>
-                </div>
-            )}
+          {isLoggedIn ? (
+            <div>
+              <Link
+                to={`${
+                  role === "superadmin"
+                    ? "/admindashboard"
+                    : role === "supervisor"
+                    ? "/supervisor-dashboard"
+                    : role === "parent"
+                    ? "/parent"
+                    : "/dashboard"
+                }`}
+                style={{ textDecoration: "none" }}
+              >
+                <button>{t("continue")}</button>
+              </Link>
+              <button className="orangeButton" onClick={handleLogout}>
+                {t("exit")}
+              </button>
+            </div>
+          ) : (
+            <div>
+              <Link to="/login" className="mob-right burger-login">
+                <button>{t("enter")}</button>
+              </Link>
+              <Link to="/registration" className="orangeButtonWrapper">
+                <button className="orangeButton" style={{ width: "100%" }}>
+                  {t("register")}
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
         <span>
           <p className="rev burger-rev">Наши контакты:</p>
@@ -170,7 +225,9 @@ function Header() {
       <div className="hooks">
         <div className="hook1">
           <div className="hook1Desc">
-            <p className="mob-text" style={{ fontWeight: 600, margin: 0 }}>{t("eduAge")}</p>
+            <p className="mob-text" style={{ fontWeight: 600, margin: 0 }}>
+              {t("eduAge")}
+            </p>
             <div className="hook1Title">
               <span className="spanAnim">
                 <h1>{t("mathEng1")}</h1>
