@@ -373,7 +373,7 @@
   align-items: center;
   justify-content: space-evenly;
   padding: 20px;
-  border-radius: 35px;
+  border-radius: 30px;
   margin-bottom: 10px;
   background-color: white;
   box-shadow: 0px 5px 12px #00000035;
@@ -1358,7 +1358,7 @@ img.childcard {
     margin: 3.125rem 1rem;
   }
   .activeProfile {
-    right: 0;
+    left: 0;
   }
   .off {
     display: block !important;
@@ -1684,7 +1684,7 @@ img.childcard {
   .backButton {
     width: 90%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: flex-end;
   }
   .backButton svg {
@@ -1754,10 +1754,27 @@ img.childcard {
     margin: 10px;
     padding: 10px 10px 20px 10px;
   }
+  .dashProfile {
+    transition: 0.5s ease;
+    padding: 50px 20px;
+    position: absolute;
+    left: 130%;
+    top: 0%;
+    z-index: 10;
+  }
+
   .activeMenu {
     left: 0;
   }
+
+  .activeProfile {
+    left: 45%;
+  }
   .sidebar #active {
+  }
+
+  .dashProfile #active {
+
   }
   .sidebar .linkbuttonVal {
     padding: 5px 0;
@@ -2136,7 +2153,7 @@ img.childcard {
     width: 20vw;
   }
   .progressPage .activeProfile {
-    right: 0;
+    left: 50%;
   }
   .progressPage .dashProfile {
     position: relative;
@@ -2147,6 +2164,11 @@ img.childcard {
 @media (max-width: 660px) {
   .helloContent img {
     scale: 0.8 !important;
+  }
+  .subBanners {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
   }
 }
 
@@ -2196,7 +2218,7 @@ img.childcard {
   .backButton {
     width: 90%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: flex-end;
   }
   .backButton svg {
@@ -2262,12 +2284,12 @@ img.childcard {
   /*  Right hand sidebar  */
   .dashProfile {
     transition: 0.5s ease;
-    padding: 50px 0 0 0;
-    position: relative;
-    left: 20%;
+    position: absolute;
+    padding: 40px 30px;
+    left: 100%;
   }
   .activeProfile {
-    right: 0;
+    left: 0;
   }
   .league {
     margin: 0 10px;
@@ -2615,6 +2637,7 @@ img.childcard {
 @media (max-width: 375px) {
   .navdashboard {
     margin: 0 0.5rem;
+    gap: 0;
   }
   .sidebar {
     top: 3%;
@@ -2624,6 +2647,12 @@ img.childcard {
   }
   .lndsh {
     padding: 0 0.625rem;
+  }
+  .dashProfile {
+    left: 100%;
+  }
+  .activeProfile {
+    left: 0;
   }
 }
 
@@ -2686,18 +2715,6 @@ img.childcard {
   }
 }
 
-.courseItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  margin-bottom: 15px;
-  margin: 2px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
 .courseItemLeft {
   display: flex;

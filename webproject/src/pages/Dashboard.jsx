@@ -230,13 +230,11 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className={`${isProfileSwitched ? "activeProfile" : ""}`}>
         <Profile
           user={user}
           isProfileSwitched={isProfileSwitched}
           setIsProfileSwitched={setIsProfileSwitched}
         />
-      </div>
     </div>
   );
 };

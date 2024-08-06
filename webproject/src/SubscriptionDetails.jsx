@@ -1,9 +1,12 @@
-import React from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import logoImg from "./assets/logo_blue.webp";
 import i18next from "i18next";
 import { getUserRole, isAuthenticated } from "./utils/authService.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { slide as Menu } from "react-burger-menu";
 const SubscriptionDetails = () => {
   const { t } = useTranslation();
   const isLoggedIn = localStorage.getItem("access_token") !== null;
@@ -13,12 +16,22 @@ const SubscriptionDetails = () => {
     logout();
     navigate("/login");
   };
+
+  const [isOpen, setIsOpen] = useState(false);
+  const handleStateChange = (state) => {
+    setIsOpen(state.isOpen);
+  };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div
       className="contain"
-      style={{ backgroundColor: "#ccd6eb", height: "100vh" }}
+      style={{ height: "100vh" }}
     >
-      <div className="navBar">
+      <div className="navBar" style={{boxShadow:"0 -5px 10px black"}}>
         <div className="logo">
           <Link to="/" style={{ textDecoration: "none" }}>
             <img className="navLogo" src={logoImg} alt="logo" />
@@ -72,39 +85,131 @@ const SubscriptionDetails = () => {
                 ҚАЗ
               </button>
             </div>
-            {isLoggedIn ? (
-              <>
-                <Link
-                  to={`${
-                    role === "superadmin"
-                      ? "/admindashboard"
-                      : role === "supervisor"
-                      ? "/supervisor-dashboard"
-                      : role === "parent"
-                      ? "/parent"
-                      : "/dashboard"
-                  }`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <button>{t("continue")}</button>
-                </Link>
-                <button className="orangeButton" onClick={handleLogout}>
-                  {t("exit")}
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login">
-                  <button>{t("enter")}</button>
-                </Link>
-                <Link to="/registration">
-                  <button className="orangeButton">{t("register")}</button>
-                </Link>
-              </>
-            )}
+            <div className="navButton mob-right">
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    to={`${
+                      role === "superadmin"
+                        ? "/admindashboard"
+                        : role === "supervisor"
+                        ? "/supervisor-dashboard"
+                        : role === "parent"
+                        ? "/parent"
+                        : "/dashboard"
+                    }`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <button>{t("continue")}</button>
+                  </Link>
+                  <button className="orangeButton" onClick={handleLogout}>
+                    {t("exit")}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <button>{t("enter")}</button>
+                  </Link>
+                  <Link to="/registration">
+                    <button className="orangeButton">{t("register")}</button>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
+        <div className="menuWrapper" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faBars} style={{ color: "#00639E" }} />
+        </div>
       </div>
+      <Menu isOpen={isOpen} onStateChange={handleStateChange}>
+        <a
+          href="/#oplatforme"
+          className="menu-item"
+          onClick={() => setIsOpen(false)}
+        >
+          {t("aboutPlatform")}
+        </a>
+        <a
+          href="/#obuchenie"
+          className="menu-item"
+          onClick={() => setIsOpen(false)}
+        >
+          {t("education")}
+        </a>
+        <a
+          href="/#otzyvy"
+          className="menu-item"
+          onClick={() => setIsOpen(false)}
+        >
+          {t("reviews")}
+        </a>
+        <a
+          href="/#contakty"
+          className="menu-item burger-contacts"
+          onClick={() => setIsOpen(false)}
+        >
+          {t("contacts")}
+        </a>
+        <a
+          href="/subscription-details"
+          className="menu-item"
+          onClick={() => setIsOpen(false)}
+        >
+          {t("tariff")}
+        </a>
+        <div className="langSelector burger-ln">
+          <button className="" onClick={() => i18next.changeLanguage("ru")}>
+            РУС
+          </button>
+          <button
+            className=""
+            style={{ marginLeft: "15px" }}
+            onClick={() => i18next.changeLanguage("kk")}
+          >
+            ҚАЗ
+          </button>
+        </div>
+        <div className="navButton">
+          {isLoggedIn ? (
+            <div>
+              <Link
+                to={`${
+                  role === "superadmin"
+                    ? "/admindashboard"
+                    : role === "supervisor"
+                    ? "/supervisor-dashboard"
+                    : role === "parent"
+                    ? "/parent"
+                    : "/dashboard"
+                }`}
+                style={{ textDecoration: "none" }}
+              >
+                <button>{t("continue")}</button>
+              </Link>
+              <button className="orangeButton" onClick={handleLogout}>
+                {t("exit")}
+              </button>
+            </div>
+          ) : (
+            <div>
+              <Link to="/login" className="mob-right burger-login">
+                <button>{t("enter")}</button>
+              </Link>
+              <Link to="/registration" className="orangeButtonWrapper">
+                <button className="orangeButton" style={{ width: "100%" }}>
+                  {t("register")}
+                </button>
+              </Link>
+            </div>
+          )}
+        </div>
+        <span>
+          <p className="rev burger-rev">Наши контакты:</p>
+          <p className="rev burger-rev">+7 775 303 7432</p>
+        </span>
+      </Menu>
       <div className="subscriptionBanners" style={{ marginTop: "40px" }}>
         <div className="certbanner" style={{ width: "500px" }}>
           <p

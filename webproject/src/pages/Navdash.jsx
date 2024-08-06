@@ -5,14 +5,12 @@ import cupicon from "../assets/navCups.webp";
 import streak from "../assets/streak.webp";
 import nostreak from "../assets/nostreak.webp";
 import { fetchUserData } from "../utils/apiService"; // Import the fetch function
-import Loader from "./Loader";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faCalendarDays,
-  faTrophy,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -45,11 +43,11 @@ const Navdash = (props) => {
   return (
     <div className="navdashboard">
       <div
-        className={`icons burger`}
+        className="icons burger"
         onClick={() => {
           props.setIsMenuOpen(!props.isMenuOpen);
           props.setIsProfileSwitched(false);
-          console.log("switchin sides");
+          console.log("Menu sidebar toggled");
         }}
       >
         <FontAwesomeIcon icon={faBars} style={{ color: "#00639E" }} />
@@ -72,10 +70,11 @@ const Navdash = (props) => {
       </div>
       {props.urlPath === "dashboard" ? (
         <div
-          className={`icons profile`}
+          className="icons profile"
           onClick={() => {
             props.setIsProfileSwitched(!props.isProfileSwitched);
             props.setIsMenuOpen(false);
+            console.log("Profile sidebar toggled: ", props.isProfileSwitched);
           }}
         >
           <FontAwesomeIcon icon={faUser} style={{ color: "#339cbd" }} />
@@ -83,7 +82,7 @@ const Navdash = (props) => {
       ) : null}
       {props.urlPath === "lesson" ? (
         <div
-          className={`icons program`}
+          className="icons program"
           onClick={() => {
             props.setIsProgramSwitched(!props.isProgramSwitched);
             props.setIsMenuOpen(false);
@@ -104,7 +103,7 @@ const Navdash = (props) => {
             onChange={handleChange}
           />
           <div className="knobs">
-            <span>ҚАЗ</span>
+            <span><strong>ҚАЗ</strong></span>
           </div>
         </div>
       </div>
@@ -118,6 +117,11 @@ Navdash.propTypes = {
   gradeNum: PropTypes.number,
   langSelect: PropTypes.bool,
   notif: PropTypes.number,
+  setIsMenuOpen: PropTypes.func.isRequired,
+  setIsProfileSwitched: PropTypes.func.isRequired,
+  isMenuOpen: PropTypes.bool,
+  isProfileSwitched: PropTypes.bool,
+  urlPath: PropTypes.string,
 };
 
 Navdash.defaultProps = {
@@ -126,6 +130,9 @@ Navdash.defaultProps = {
   gradeNum: 1,
   langSelect: false,
   notif: 0,
+  isMenuOpen: false,
+  isProfileSwitched: false,
+  urlPath: "dashboard",
 };
 
 export default Navdash;
