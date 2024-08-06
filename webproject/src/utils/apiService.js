@@ -710,3 +710,16 @@ export const changePassword = async (currentPassword, newPassword) => {
     }
   }
 };
+
+export const getProgressForDay = async (date, childId = null) => {
+  try {
+    let endpoint = `/progress/day?date=${date}`;
+    if (childId) {
+      endpoint += `&child_id=${childId}`;
+    }
+    const response = await instance.get(endpoint);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Something went wrong");
+  }
+};

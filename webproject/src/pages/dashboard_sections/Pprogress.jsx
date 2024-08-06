@@ -19,8 +19,25 @@ import {
   Legend,
 } from "chart.js";
 import { fetchUserData, fetchWeeklyProgress } from "../../utils/apiService";
+import { getProgressForDay } from "../../utils/apiService"; // Import the new function
 import Loader from "../Loader";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
+import updateLocale from "dayjs/plugin/updateLocale";
+import weekday from "dayjs/plugin/weekday";
+import localeData from "dayjs/plugin/localeData";
+import "dayjs/locale/ru";
+
+dayjs.extend(updateLocale);
+dayjs.extend(weekday);
+dayjs.extend(localeData);
+
+dayjs.locale("ru");
+dayjs.updateLocale("ru", {
+  week: {
+    dow: 1, // Monday is the first day of the week
+  },
+});
 
 ChartJS.register(
   CategoryScale,
@@ -39,6 +56,8 @@ const Pprogress = () => {
   const [loading, setLoading] = useState(true); // Add loading state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileSwitched, setIsProfileSwitched] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(dayjs()); // State for selected date
+  const [dailyProgress, setDailyProgress] = useState(null); // State for daily progress
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,8 +136,22 @@ const Pprogress = () => {
     maintainAspectRatio: false,
   };
 
+  const handleDateChange = async (date) => {
+    setSelectedDate(date);
+    const childId = localStorage.getItem("child_id");
+    try {
+      const progressData = await getProgressForDay(
+        date.format("YYYY-MM-DD"),
+        childId
+      );
+      setDailyProgress(progressData);
+    } catch (error) {
+      console.error("Error fetching daily progress:", error);
+    }
+  };
+
   if (loading) {
-    return <Loader></Loader>;
+    return <Loader />;
   }
 
   return (
@@ -139,8 +172,28 @@ const Pprogress = () => {
           </div>
           <div className="progcalendar">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar />
+              <DateCalendar value={selectedDate} onChange={handleDateChange} />
             </LocalizationProvider>
+
+            {dailyProgress !== null && (
+              <div>
+                {" "}
+                <p>
+                  {t("selected_date")}: {selectedDate.format("DD-MM-YYYY")}
+                </p>
+                <p>
+                  {t("cups_for_selected_date")}: {dailyProgress.total_cups}
+                </p>
+                <p>
+                  {t("total_correct_answers")}:{" "}
+                  {dailyProgress.total_correct_answers}
+                </p>
+                <p>
+                  {t("total_wrong_answers")}:{" "}
+                  {dailyProgress.total_wrong_answers}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

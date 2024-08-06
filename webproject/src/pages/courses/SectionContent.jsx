@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import bgtask from "../../assets/bgtask.svg";
 import bgvideo from "../../assets/videolessonthumb.svg";
+import SubscriptionErrorModal from "./SubscriptionErrorModal"; // Import the modal
 
 const SectionContent = ({
   sections,
@@ -11,13 +11,15 @@ const SectionContent = ({
   hasSubscription,
   t,
 }) => {
+  const [showSubscriptionError, setShowSubscriptionError] = useState(false);
+
   return (
     <div className="lessonsCont">
       <h2
         className="defaultStyle title"
         style={{ color: "black", fontWeight: "700" }}
       >
-        {" "}{t("courseStart")}{" "}
+        {t("courseStart")}
       </h2>
       {sections.map((section, sectionIndex) => (
         <div key={sectionIndex} className="contWrapper">
@@ -32,7 +34,7 @@ const SectionContent = ({
             <h2 className="defaultStyle" style={{ color: "#aaa" }}>
               {section.title}
             </h2>
-            <hr className="lessonsHr"/>
+            <hr className="lessonsHr" />
           </div>
           {section.contents.map((content, contentIndex) => (
             <div className="lessonsLinks" key={contentIndex}>
@@ -108,6 +110,12 @@ const SectionContent = ({
           ))}
         </div>
       ))}
+      {showSubscriptionError && (
+        <SubscriptionErrorModal
+          setShowSubscriptionError={setShowSubscriptionError}
+          t={t}
+        />
+      )}
     </div>
   );
 };

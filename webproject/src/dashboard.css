@@ -2785,3 +2785,12 @@ img.childcard {
     font-size: medium; /* Adjust text font size */
   }
 }
+
+/* Custom styles for the calendar */
+.MuiPickersDay-dayWithMargin {
+  border-radius: 10px !important; /* Makes the days rectangular */
+}
+
+.Mui-selected {
+  background-color: #339cbd !important; /* Custom selected day color */
+}

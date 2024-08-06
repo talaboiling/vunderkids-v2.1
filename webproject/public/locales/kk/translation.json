@@ -160,5 +160,9 @@
   "study_language": "Оқу тілі",
   "choose_study_language": "Оқу тілін таңдаңыз",
   "russian": "Орысша",
-  "kazakh": "Қазақша"
+  "kazakh": "Қазақша",
+  "selected_date": "Таңдалған күн",
+  "cups_for_selected_date": "Таңдалған күн үшін ұпайлар",
+  "total_correct_answers": "Дұрыс жауаптардың жалпы саны",
+  "total_wrong_answers": "Қате жауаптардың жалпы саны"
 }
