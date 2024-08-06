@@ -34,7 +34,7 @@ ChartJS.register(
 
 const Pprogress = () => {
   const { t } = useTranslation();
-  const [user, setUser] = useState({ first_name: t ('student'), last_name: "" }); // Default values
+  const [user, setUser] = useState({ first_name: t("student"), last_name: "" }); // Default values
   const [weeklyProgress, setWeeklyProgress] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,20 +62,20 @@ const Pprogress = () => {
   }, []);
 
   const daysInRussian = {
-    Monday: t ('mon'),
-    Tuesday: t ('tue'),
-    Wednesday: t ('wed'),
-    Thursday: t ('thu'),
-    Friday: t ('fri'),
-    Saturday: t ('sat'),
-    Sunday: t ('sun'),
+    Monday: t("mon"),
+    Tuesday: t("tue"),
+    Wednesday: t("wed"),
+    Thursday: t("thu"),
+    Friday: t("fri"),
+    Saturday: t("sat"),
+    Sunday: t("sun"),
   };
 
   const data = {
     labels: weeklyProgress.map((day) => daysInRussian[day.day] || day.day),
     datasets: [
       {
-        label: t ('cups'),
+        label: t("cups"),
         data: weeklyProgress.map((day) => day.cups),
         fill: true,
         backgroundColor: "rgba(75,192,192,0.2)",
@@ -91,7 +91,7 @@ const Pprogress = () => {
         beginAtZero: true,
         title: {
           display: true,
-          text: t ('cups'),
+          text: t("cups"),
           font: {
             size: 20,
           },
@@ -125,13 +125,14 @@ const Pprogress = () => {
     <div className="rtdash progressPage">
       <Sidebar isMenuOpen={isMenuOpen} />
       <div className="centralDash">
-        <Navdash 
+        <Navdash
           isMenuOpen={isMenuOpen}
           setIsMenuOpen={setIsMenuOpen}
           isProfileSwitched={isProfileSwitched}
           setIsProfileSwitched={setIsProfileSwitched}
           urlPath={"dashboard"}
         />
+        <h2 className="progressText">Прогресс</h2>
         <div className="centralProg">
           <div style={{ width: "100%", height: "200px" }}>
             <Line data={data} options={options} />

@@ -53,7 +53,7 @@ const Lessons = () => {
   }
   return (
     <div className="rtdash certpage">
-      <Sidebar isMenuOpen={isMenuOpen}/>
+      <Sidebar isMenuOpen={isMenuOpen} />
       <div className="centralLessons">
         <div className="centralLessonsInner">
           <Navdash
@@ -159,7 +159,10 @@ const Lessons = () => {
               </div>
               <div className="achievements">
                 <ul className="certificates">
-                  <li className="certificate c90" id="">
+                  <li
+                    className="certificate c90"
+                    style={{ opacity: user.tasks_completed > 0 ? 1 : 0.5 }}
+                  >
                     <img src={cert90} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
                       {t("pass1")}{" "}
@@ -167,7 +170,11 @@ const Lessons = () => {
                       {t("pass2")}
                     </p>
                   </li>
-                  <li className="certificate c200" id="">
+                  <li
+                    className="certificate c200"
+                    id=""
+                    style={{ opacity: user.tasks_completed > 1 ? 1 : 0.5 }}
+                  >
                     <img src={cert200} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
                       {t("pass1")}{" "}
@@ -175,7 +182,10 @@ const Lessons = () => {
                       {t("pass2")}
                     </p>
                   </li>
-                  <li className="certificate c500">
+                  <li
+                    className="certificate c500"
+                    style={{ opacity: user.tasks_completed > 2 ? 1 : 0.5 }}
+                  >
                     <img src={cert500} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
                       {t("pass1")}{" "}

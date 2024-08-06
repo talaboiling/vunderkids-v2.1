@@ -9,6 +9,7 @@ import staricon from "../assets/navStars.webp";
 import cupicon from "../assets/navCups.webp";
 import streak from "../assets/streak.webp";
 import nostreak from "../assets/nostreak.webp";
+import i18next from "i18next";
 import pfplaceholder from "../assets/placehoder_pfp.webp";
 import { logout } from "../utils/authService";
 import {
@@ -40,6 +41,8 @@ const Parentdash = () => {
   const [childToDelete, setChildToDelete] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
   const [imageLoading, setImageLoading] = useState(true);
+  const [checked, setChecked] = useState(i18next.language === "ru");
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -78,6 +81,12 @@ const Parentdash = () => {
       setImagePreview(reader.result);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleChange = () => {
+    const newLang = i18next.language === "ru" ? "kk" : "ru";
+    i18next.changeLanguage(newLang);
+    setChecked(newLang === "ru");
   };
 
   const handleInputChange = (e) => {
@@ -156,6 +165,19 @@ const Parentdash = () => {
         </Link>
         <div className="excLogo">
           <div className="mailname">{user.email}</div>
+          <div className="rndsh langSelect">
+            <div className="button b2" id="button-10">
+              <input
+                type="checkbox"
+                className="checkbox"
+                checked={checked}
+                onChange={handleChange}
+              />
+              <div className="knobs">
+                <span>ҚАЗ</span>
+              </div>
+            </div>
+          </div>
           <div className="navButton">
             <button onClick={handleLogout}>{t("exit")}</button>
           </div>

@@ -81,7 +81,7 @@ const Ratinglist = ({ ratings }) => {
                   {student.streak}
                 </p>
                 <img
-                  src={nostreak}
+                  src={student.streak !== 0 ? streak : nostreak}
                   alt=""
                   style={{ width: "20px", height: "20px", marginRight: "5px" }}
                 />
