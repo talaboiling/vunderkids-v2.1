@@ -336,6 +336,17 @@
   padding: 10px 20px;
   border-radius: 25px;
   margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+.medals img {
+  scale: 2.7;
+}
+
+.notMedals {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 .namePoints {
@@ -605,14 +616,17 @@ img.childcard {
 
 @media (max-width: 480px) {
   .navBar {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
   }
 
-  .excLogo {
+  .passValidation{
     display: flex;
     flex-direction: column;
-    align-items: center;
+  }
+
+  .validation2 {
+    display: none;
   }
 
   .mailname {
@@ -656,7 +670,7 @@ img.childcard {
 .modal {
   border: none;
   height: 100vh;
-  width: 90vw;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -885,21 +899,21 @@ img.childcard {
   flex-direction: column;
   align-items: center;
   margin-right: 20px;
-  /* opacity: %; */
+  opacity: 60%;
   margin-bottom: 20px;
 }
 
-#active.c90 {
+.activeC90 {
   border-color: #91dcb3;
   opacity: 100%;
 }
 
-#active.c200 {
+.activeC200 {
   border-color: #ffd991;
   opacity: 100%;
 }
 
-#active.c500 {
+.activeC500 {
   border-color: #ff7763;
   opacity: 100%;
 }

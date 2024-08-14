@@ -1,12 +1,34 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import placeholderPfp from "../../assets/placehoder_pfp.webp"; // Import the placeholder image
 import { useTranslation } from "react-i18next";
 import streak from "../../assets/streak.webp";
 import nostreak from "../../assets/nostreak.webp";
+import goldmedal from "../../assets/gold.svg";
+import silvermedal from "../../assets/silver.svg";
+import bronzemedal from "../../assets/bronze.svg";
+import {
+  fetchUserData,
+} from "../../utils/apiService";
 
 const Ratinglist = ({ ratings }) => {
+  const [user, setUser] = useState({ first_name: "Student", last_name: "" });
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const childId = localStorage.getItem("child_id");
+      try {
+        const userData = await fetchUserData(childId);
+        console.log("userData", userData);
+        setUser(userData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="ratingList">
       <p
@@ -37,55 +59,91 @@ const Ratinglist = ({ ratings }) => {
                   : "#F0F7FF",
             }}
           >
-            <img
-              src={student.avatar || placeholderPfp}
-              alt="pfp"
-              className="pfprating"
-              style={{ borderRadius: "50%", width: "50px", height: "50px" }}
-            />
-            <div className="namePoints">
-              <p
-                style={{
-                  fontSize: "large",
-                  color: index > 2 ? "#222222" : "#fff",
-                  margin: "0",
-                  padding: "0",
-                  fontWeight: "600",
-                }}
-              >
-                {student.first_name} {student.last_name}
-              </p>
-              <p
-                style={{
-                  fontSize: "large",
-                  color: index > 2 ? "#222222" : "#fff",
-                  margin: "0",
-                  padding: "0",
-                  fontWeight: "700",
-                }}
-              >
-                <strong style={{ fontSize: "x-large" }}>{student.cups}</strong>{" "}
-                {t("points")}
-              </p>
-              <span
-                style={{
-                  margin: "0",
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
+            <div className="notMedals">
+              <img
+                src={student.avatar || placeholderPfp}
+                alt="pfp"
+                className="pfprating"
+                style={{ borderRadius: "50%", width: "50px", height: "50px" }}
+              />
+              <div className="namePoints">
                 <p
-                  style={{ margin: "0", color: index > 2 ? "#222222" : "#fff" }}
+                  style={{
+                    fontSize: "large",
+                    color: index > 2 ? "#222222" : "#fff",
+                    margin: "0",
+                    padding: "0",
+                    fontWeight: "600",
+                  }}
                 >
-                  {student.streak}
+                  {student.first_name} {student.last_name}
                 </p>
-                <img
-                  src={student.streak !== 0 ? streak : nostreak}
-                  alt=""
-                  style={{ width: "20px", height: "20px", marginRight: "5px" }}
-                />
-              </span>
+                <p
+                  style={{
+                    fontSize: "large",
+                    color: index > 2 ? "#222222" : "#fff",
+                    margin: "0",
+                    padding: "0",
+                    fontWeight: "700",
+                  }}
+                >
+                  <strong style={{ fontSize: "x-large" }}>{student.cups}</strong>{" "}
+                  {t("points")}
+                </p>
+                <span
+                  style={{
+                    margin: "0",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    style={{ margin: "0", color: index > 2 ? "#222222" : "#fff" }}
+                  >
+                    {student.streak}
+                  </p>
+                  <img
+                    src={student.streak !== 0 ? streak : nostreak}
+                    alt=""
+                    style={{ width: "20px", height: "20px", marginRight: "5px" }}
+                  />
+                </span>
+              </div>
+            </div>
+            
+            <div className="medals">
+              {index === 0 && (
+                <>
+                  <img src={goldmedal} alt="gold" />
+                  {/* <img src={silvermedal} alt="silver" />
+                  <img src={bronzemedal} alt="bronze" /> */}
+                </>
+              )}
+              {index === 1 && (
+                <>
+                  <img src={silvermedal} alt="silver" />
+                  {/* <img src={bronzemedal} alt="bronze" /> */}
+                </>
+              )}
+              {index === 2 && (
+                <>
+                  <img src={bronzemedal} alt="bronze" />
+                </>
+              )}
+              {index > 2 && (
+                <p
+                  style={{
+                    fontSize: "40px",
+                    fontWeight: "800",
+                    color: "#55A2FA",
+                    margin: "0",
+                    padding: "0",
+                  }}
+                >
+                  {index + 1}
+                </p>
+              )}
             </div>
           </div>
         ))}

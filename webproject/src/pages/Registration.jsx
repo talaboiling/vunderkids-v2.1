@@ -144,7 +144,7 @@ function Registration() {
               style={{ marginRight: "100px" }}
             />
           </Link>
-          <div className="excLogo">
+          <div className="excLogo excLogoRega">
             <div className="navList">
               <a href="/#oplatforme" className="navLink">
                 {t("aboutPlatform")}
@@ -164,7 +164,7 @@ function Registration() {
             </div>
             <div className="navButton" style={{ marginLeft: "80px" }}>
               <Link to={"/login"}>
-                <button>{t("enter")}</button>
+                <button className="mob-right">{t("enter")}</button>
               </Link>
             </div>
             <div className="menuWrapper" onClick={toggleMenu}>
@@ -188,6 +188,11 @@ function Registration() {
           <a href="/subscription-details" className="menu-item" onClick={() => setIsOpen(false)}>
             {t("tariff")}
           </a>
+          <div className="navButton" style={{  }}>
+            <Link to={"/login"} className="mob-right burger-login">
+              <button>{t("enter")}</button>
+            </Link>
+          </div>
         </Menu>
         <div className="regPage">
           <div className="regform">
@@ -251,7 +256,7 @@ function Registration() {
               </span>
               <div className="passValidation">
                 <label htmlFor="password">{t("comeUpWithPassword")}</label>
-                <label htmlFor="validation">{t("Повторите пароль")}</label>
+                <label htmlFor="validation" className="validation2">{t("Повторите пароль")}</label>
                 <input
                   type="password"
                   id="password"

@@ -14,13 +14,12 @@ import cert90 from "../../assets/90lessons.webp";
 import cert200 from "../../assets/200lessons.webp";
 import cert500 from "../../assets/500lessons.webp";
 import Loader from "../Loader";
-import { fetchUserData, fetchCourses } from "../../utils/apiService";
+import { fetchUserData } from "../../utils/apiService"
 import { useTranslation } from "react-i18next";
 
 const Lessons = () => {
   const { t } = useTranslation();
   const [user, setUser] = useState({ first_name: t("student"), last_name: "" }); // Default values
-  const [courses, setCourses] = useState([]); // State to store courses
 
   const [loading, setLoading] = useState(true); // Add loading state
   const avatarUrl = user.avatar || placeholderPfp; // Use placeholder if avatar is null
@@ -32,12 +31,11 @@ const Lessons = () => {
     const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
       try {
-        const [userData, coursesData] = await Promise.all([
+        const [userData] = await Promise.all([
           fetchUserData(childId),
-          fetchCourses(childId),
         ]);
         setUser(userData);
-        setCourses(coursesData);
+        console.log(user.id);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -160,8 +158,7 @@ const Lessons = () => {
               <div className="achievements">
                 <ul className="certificates">
                   <li
-                    className="certificate c90"
-                    style={{ opacity: user.tasks_completed > 0 ? 1 : 0.5 }}
+                    className={`certificate c90 ${user.tasks_completed > 0 ? "activeC90" : ""}`}
                   >
                     <img src={cert90} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
@@ -171,9 +168,7 @@ const Lessons = () => {
                     </p>
                   </li>
                   <li
-                    className="certificate c200"
-                    id=""
-                    style={{ opacity: user.tasks_completed > 1 ? 1 : 0.5 }}
+                    className={`certificate c200 ${user.tasks_completed > 0 ? "activeC200" : ""}`}
                   >
                     <img src={cert200} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
@@ -183,8 +178,7 @@ const Lessons = () => {
                     </p>
                   </li>
                   <li
-                    className="certificate c500"
-                    style={{ opacity: user.tasks_completed > 2 ? 1 : 0.5 }}
+                    className={`certificate c500 ${user.tasks_completed > 0 ? "activeC500" : ""}`}
                   >
                     <img src={cert500} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>

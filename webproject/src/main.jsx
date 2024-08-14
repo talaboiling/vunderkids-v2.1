@@ -27,6 +27,7 @@ import MainSubs from "./SubscriptionDetails.jsx";
 import Oferty from "./Oferta.jsx";
 import Confidentiality from "./Confidentiality.jsx";
 import NotFound from "./NotFound.jsx";
+import Chapters from "./pages/admin_sections/Chapters.jsx"
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SubscriptionDetails from "./SubscriptionDetails.jsx";
@@ -118,10 +119,16 @@ const router = createBrowserRouter([
       />
     ),
   },
+  // {
+  //   path: "/admindashboard/tasks/courses/:courseId/sections/:sectionId",
+  //   element: (
+  //     <AuthRoute element={<TaskSection />} allowedRoles={["superadmin"]} />
+  //   ),
+  // },
   {
     path: "/admindashboard/tasks/courses/:courseId/sections/:sectionId",
     element: (
-      <AuthRoute element={<TaskSection />} allowedRoles={["superadmin"]} />
+      <AuthRoute element={<Chapters />} allowedRoles={["superadmin"]} />
     ),
   },
   {

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { playGame, fetchUserData } from "../../utils/apiService";
 import Timer from "../../components/Timer";
 import { useTranslation } from "react-i18next";
+import Loader from "../Loader.jsx"
 
 const Games = () => {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ const Games = () => {
   const [gamePath, setGamePath] = useState("");
   const modalRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadData();
@@ -52,6 +54,8 @@ const Games = () => {
       setUser(userData);
     } catch (error) {
       console.error("Error loading data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,6 +106,10 @@ const Games = () => {
     closeModal();
     setOpen(false);
   };
+
+  if(loading) {
+    return <Loader />
+  }
 
   return (
     <div className="rtdash rtrat gamesPage">

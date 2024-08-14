@@ -94,7 +94,7 @@ function Header() {
           </div>
           <div className="navButton mob-right">
             {isLoggedIn ? (
-              <div className="mob-right">
+              <div className="mob-right" style={{display:"flex", flexDirection:"column"}}>
                 <Link
                   to={`${
                     role === "superadmin"
@@ -118,7 +118,7 @@ function Header() {
                 </button>
               </div>
             ) : (
-              <div className="mob-right">
+              <div className="mob-right" style={{display:"flex", flexDirection:"column", width:""}}>
                 <Link to="/login" className="mob-right">
                   <button>{t("enter")}</button>
                 </Link>
@@ -197,12 +197,16 @@ function Header() {
                     : "/dashboard"
                 }`}
                 style={{ textDecoration: "none" }}
+                className="mob-right burger-login"
               >
-                <button>{t("continue")}</button>
+                <button className="mob-right burger-login">{t("continue")}</button>
               </Link>
-              <button className="orangeButton" onClick={handleLogout}>
-                {t("exit")}
-              </button>
+              <Link className="orangeButtonWrapper">
+                <button className="orangeButton" onClick={handleLogout}>
+                  {t("exit")}
+                </button>
+              </Link>
+              
             </div>
           ) : (
             <div>
