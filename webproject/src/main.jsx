@@ -119,12 +119,12 @@ const router = createBrowserRouter([
       />
     ),
   },
-  // {
-  //   path: "/admindashboard/tasks/courses/:courseId/sections/:sectionId",
-  //   element: (
-  //     <AuthRoute element={<TaskSection />} allowedRoles={["superadmin"]} />
-  //   ),
-  // },
+  {
+    path: "/admindashboard/tasks/courses/:courseId/sections/:sectionId/chapters/:chapterId",
+    element: (
+      <AuthRoute element={<TaskSection />} allowedRoles={["superadmin"]} />
+    ),
+  },
   {
     path: "/admindashboard/tasks/courses/:courseId/sections/:sectionId",
     element: (

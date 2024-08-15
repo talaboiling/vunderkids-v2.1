@@ -295,7 +295,7 @@ export const fetchChapters = async (courseId, sectionId, child_id) => {
 export const fetchChapter = async (courseId, sectionId, chapterId, child_id) => {
   try {
     const endpoint = child_id
-      ? `/courses/${courseId}/sections/${sectionId}/chapters/chapters/${chapterId}/?child_id=${child_id}`
+      ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/?child_id=${child_id}`
       : `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/`;
     const response = await instance.get(endpoint);
     return response.data;
@@ -307,7 +307,7 @@ export const fetchChapter = async (courseId, sectionId, chapterId, child_id) => 
 export const fetchContents = async (courseId, sectionId, chapterId, child_id) => {
   try {
     const endpoint = child_id
-      ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/contents?child_id=${child_id}`
+      ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/contents/?child_id=${child_id}`
       : `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/contents`;
     const response = await instance.get(endpoint);
     return response.data;
@@ -341,7 +341,7 @@ export const fetchTasks = async (courseId, sectionId, chapterId, childId) => {
 export const fetchQuestions = async (courseId, sectionId, chapterId, taskId, childId) => {
   try {
     const endpoint = childId
-      ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/questions?child_id=${childId}`
+      ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/questions/?child_id=${childId}`
       : `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/questions`;
     const response = await instance.get(endpoint);
     return response.data;
