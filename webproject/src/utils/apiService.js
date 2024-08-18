@@ -248,7 +248,7 @@ export const fetchSection = async (courseId, sectionId, child_id) => {
 export const createChapters = async (courseId, sectionId, chapters) => {
   try {
     const response = await instance.post(
-      `/courses/${courseId}/sections/${sectionId}/chapters`,
+      `/courses/${courseId}/sections/${sectionId}/chapters/`,
       chapters
     );
     return response.data;
@@ -260,7 +260,7 @@ export const createChapters = async (courseId, sectionId, chapters) => {
 export const updateChapter = async (courseId, sectionId, chapterId, chapterData) => {
   try {
     const response = await instance.patch(
-      `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}`,
+      `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/`,
       chapterData
     );
     return response.data;
@@ -272,7 +272,7 @@ export const updateChapter = async (courseId, sectionId, chapterId, chapterData)
 export const deleteChapter = async (courseId, sectionId, chapterId) => {
   try {
     const response = await instance.delete(
-      `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}`
+      `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/`
     );
     return response.data;
   } catch (error) {
@@ -308,7 +308,7 @@ export const fetchContents = async (courseId, sectionId, chapterId, child_id) =>
   try {
     const endpoint = child_id
       ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/contents/?child_id=${child_id}`
-      : `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/contents`;
+      : `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/contents/`;
     const response = await instance.get(endpoint);
     return response.data;
   } catch (error) {

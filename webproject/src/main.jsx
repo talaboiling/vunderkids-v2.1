@@ -28,9 +28,11 @@ import Oferty from "./Oferta.jsx";
 import Confidentiality from "./Confidentiality.jsx";
 import NotFound from "./NotFound.jsx";
 import Chapters from "./pages/admin_sections/Chapters.jsx"
+import CourseContent from "./pages/courses/CourseContent.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SubscriptionDetails from "./SubscriptionDetails.jsx";
+
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
@@ -77,14 +79,32 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/dashboard/courses/:courseId/lessons",
+    path: "/dashboard/courses/:courseId/sections",
     element: (
       <AuthRoute
-        element={<MathCourse />}
+        element={<CourseContent/>}
         allowedRoles={["student", "parent"]}
       />
     ),
   },
+  // {
+  //   path: "/dashboard/courses/:courseId/sections/:sectionId/chapters",
+  //   element: (
+  //     <AuthRoute
+  //       element={<MathCourse />}
+  //       allowedRoles={["student", "parent"]}
+  //     />
+  //   ),
+  // },
+  // {
+  //   path: "/dashboard/courses/:courseId/sections/:sectionId/chapters/:chapterId/lessons",
+  //   element: (
+  //     <AuthRoute
+  //       element={<MathCourse />}
+  //       allowedRoles={["student", "parent"]}
+  //     />
+  //   ),
+  // },
   {
     path: "/admindashboard",
     element: (
