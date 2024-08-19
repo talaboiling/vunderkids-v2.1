@@ -257,7 +257,12 @@ export const createChapters = async (courseId, sectionId, chapters) => {
   }
 };
 
-export const updateChapter = async (courseId, sectionId, chapterId, chapterData) => {
+export const updateChapter = async (
+  courseId,
+  sectionId,
+  chapterId,
+  chapterData
+) => {
   try {
     const response = await instance.patch(
       `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/`,
@@ -292,7 +297,12 @@ export const fetchChapters = async (courseId, sectionId, child_id) => {
   }
 };
 
-export const fetchChapter = async (courseId, sectionId, chapterId, child_id) => {
+export const fetchChapter = async (
+  courseId,
+  sectionId,
+  chapterId,
+  child_id
+) => {
   try {
     const endpoint = child_id
       ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/?child_id=${child_id}`
@@ -304,7 +314,12 @@ export const fetchChapter = async (courseId, sectionId, chapterId, child_id) => 
   }
 };
 
-export const fetchContents = async (courseId, sectionId, chapterId, child_id) => {
+export const fetchContents = async (
+  courseId,
+  sectionId,
+  chapterId,
+  child_id
+) => {
   try {
     const endpoint = child_id
       ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/contents/?child_id=${child_id}`
@@ -338,7 +353,13 @@ export const fetchTasks = async (courseId, sectionId, chapterId, childId) => {
   }
 };
 
-export const fetchQuestions = async (courseId, sectionId, chapterId, taskId, childId) => {
+export const fetchQuestions = async (
+  courseId,
+  sectionId,
+  chapterId,
+  taskId,
+  childId
+) => {
   try {
     const endpoint = childId
       ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/questions/?child_id=${childId}`
@@ -351,7 +372,13 @@ export const fetchQuestions = async (courseId, sectionId, chapterId, taskId, chi
 };
 
 // Fetch specific objects
-export const fetchTask = async (courseId, sectionId, chapterId, taskId, childId) => {
+export const fetchTask = async (
+  courseId,
+  sectionId,
+  chapterId,
+  taskId,
+  childId
+) => {
   try {
     const endpoint = childId
       ? `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/?child_id=${childId}`
@@ -477,7 +504,13 @@ export const createLesson = async (courseId, sectionId, chapterId, data) => {
   }
 };
 
-export const updateLesson = async (courseId, sectionId, chapterId, lessonId, data) => {
+export const updateLesson = async (
+  courseId,
+  sectionId,
+  chapterId,
+  lessonId,
+  data
+) => {
   try {
     const endpoint = `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons/${lessonId}/`;
     const response = await instance.patch(endpoint, data);
@@ -487,7 +520,12 @@ export const updateLesson = async (courseId, sectionId, chapterId, lessonId, dat
   }
 };
 
-export const deleteLesson = async (courseId, sectionId, chapterId, lessonId) => {
+export const deleteLesson = async (
+  courseId,
+  sectionId,
+  chapterId,
+  lessonId
+) => {
   try {
     const endpoint = `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons/${lessonId}/`;
     const response = await instance.delete(endpoint);
@@ -505,7 +543,13 @@ export const createTask = async (courseId, sectionId, chapterId, data) => {
     throw new Error(error || "Something went wrong");
   }
 };
-export const updateTask = async (courseId, sectionId, chapterId, taskId, data) => {
+export const updateTask = async (
+  courseId,
+  sectionId,
+  chapterId,
+  taskId,
+  data
+) => {
   try {
     const endpoint = `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/`;
     const response = await instance.patch(endpoint, data);
@@ -524,7 +568,13 @@ export const deleteTask = async (courseId, sectionId, chapterId, taskId) => {
   }
 };
 
-export const createQuestion = async (courseId, sectionId, chapterId, taskId, data) => {
+export const createQuestion = async (
+  courseId,
+  sectionId,
+  chapterId,
+  taskId,
+  data
+) => {
   try {
     const endpoint = `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/questions/`;
     const headers = { "Content-Type": "multipart/form-data" };
@@ -689,7 +739,15 @@ export const answerQuestion = async (
   childId
 ) => {
   try {
-    console.log(courseId, sectionId, chapterId, taskId, questionId, data, childId);
+    console.log(
+      courseId,
+      sectionId,
+      chapterId,
+      taskId,
+      questionId,
+      data,
+      childId
+    );
     const endpoint = `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/questions/${questionId}/answer/`;
     const requestData = {
       answer: data,
@@ -784,5 +842,18 @@ export const getProgressForDay = async (date, childId = null) => {
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Something went wrong");
+  }
+};
+
+export const initiatePayment = async (duration) => {
+  try {
+    const response = await instance.post("/payments/initiate-payment/", {
+      duration,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Failed to initiate payment"
+    );
   }
 };

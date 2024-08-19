@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import logoImg from "./assets/logo_blue.webp";
@@ -7,7 +7,54 @@ import { getUserRole, isAuthenticated } from "./utils/authService.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { slide as Menu } from "react-burger-menu";
+import { initiatePayment } from "./utils/apiService.js";
 const SubscriptionDetails = () => {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://test-epay.homebank.kz/payform/payment-api.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const handleSubscription = async (planDuration) => {
+    try {
+      const paymentData = await initiatePayment(planDuration);
+      // Now you have payment data and token, you can proceed to call halyk.pay()
+      const { payment, token } = paymentData;
+
+      if (window.halyk && typeof window.halyk.pay === "function") {
+        const paymentObject = {
+          invoiceId: payment.invoice_id,
+          invoiceIdAlt: payment.invoice_id_alt,
+          backLink: "https://example.kz/success.html",
+          failureBackLink: "https://example.kz/failure.html",
+          postLink: "https://example.kz/",
+          failurePostLink: "https://example.kz/order/1123/fail",
+          language: "rus",
+          description: "Оплата в интернет магазине",
+          accountId: "testuser1",
+          terminal: "67e34d63-102f-4bd1-898e-370781d0074d",
+          amount: payment.amount,
+          data: `{\"statement\":{\"name\":\"${payment.email}\",\"invoiceID\":\"${payment.invoice_id}\"}}`,
+          currency: payment.currency,
+          phone: payment.phone,
+          name: payment.email.split("@")[0],
+          email: payment.email,
+          cardSave: true,
+        };
+
+        paymentObject.auth = token;
+        window.halyk.pay(paymentObject);
+      }
+    } catch (error) {
+      console.error("Payment initiation failed:", error.message);
+    }
+  };
+
   const { t } = useTranslation();
   const isLoggedIn = localStorage.getItem("access_token") !== null;
   const role = getUserRole();
@@ -27,11 +74,8 @@ const SubscriptionDetails = () => {
   };
 
   return (
-    <div
-      className="contain"
-      style={{ height: "100vh" }}
-    >
-      <div className="navBar" style={{boxShadow:"0 -5px 10px black"}}>
+    <div className="contain" style={{ height: "100vh" }}>
+      <div className="navBar" style={{ boxShadow: "0 -5px 10px black" }}>
         <div className="logo">
           <Link to="/" style={{ textDecoration: "none" }}>
             <img className="navLogo" src={logoImg} alt="logo" />
@@ -254,6 +298,7 @@ const SubscriptionDetails = () => {
                 {t("standardForStart")}
               </p>
               <button
+                onClick={() => handleSubscription("6-month")}
                 style={{
                   backgroundColor: "#F8753D",
                   fontWeight: "550",
@@ -293,6 +338,7 @@ const SubscriptionDetails = () => {
                 {t("standardForStart")}
               </p>
               <button
+                onClick={() => handleSubscription("annual")}
                 style={{
                   backgroundColor: "#F8753D",
                   fontWeight: "550",
