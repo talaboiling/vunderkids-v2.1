@@ -4,10 +4,10 @@ import staricon from "../../assets/navStars.webp";
 import cupicon from "../../assets/navCups.webp";
 import correctlion from "../../assets/lion_correct.webp";
 import wronglion from "../../assets/lion_incorrect.webp";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import PauseIcon from "@mui/icons-material/Pause";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import audioOn from "../../assets/taskaudio_new.svg";
+import audioOff from "../../assets/notaskaudio.svg";
+import bgmusicOn from "../../assets/bgmusic_new.svg";
+import bgmusicOff from "../../assets/nobgmusic.svg";
 
 const TaskModal = ({
   user,
@@ -186,9 +186,13 @@ const TaskModal = ({
                         <div className="taskmodalaudio">
                           <button className="" onClick={toggleAudio}>
                             {isAudioPlaying ? (
-                              <PauseIcon sx={{ fontSize: 50 }} />
+                              <div className="audioOn">
+                                <img src={audioOn} alt="audio on" />
+                              </div>
                             ) : (
-                              <PlayArrowIcon sx={{ fontSize: 50 }} />
+                              <div className="audioOff">
+                                <img src={audioOff} alt="audio off" />
+                              </div>
                             )}
                           </button>
                         </div>
@@ -210,9 +214,14 @@ const TaskModal = ({
                         style={{ color: "gray" }}
                       >
                         {isMuted ? (
-                          <VolumeOffIcon sx={{ fontSize: "50px" }} />
+                          <div className="bgmusicOff">
+                            <img src={bgmusicOff} alt="music off" />
+                          </div>
+                          
                         ) : (
-                          <VolumeUpIcon sx={{ fontSize: "50px" }} />
+                          <div className="bgmusicOn">
+                            <img src={bgmusicOn} alt="music on" />
+                          </div>
                         )}
                       </button>
                       <input

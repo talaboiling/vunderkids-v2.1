@@ -428,6 +428,11 @@
   border: 4px solid lightgray;
 }
 
+.activeSection {
+  background-color: #00ff2a40;
+  border-color: #00FF29;
+}
+
 .sectionProgress {
   display: flex;
   flex-direction: column;
@@ -440,6 +445,23 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.courseNav {
+  padding: 10px 25px;
+  border-radius: 20px;
+  background-color: lightgray;
+  margin-right: 20px;
+  max-width: 100px;
+  text-align: center;
+  color: black;
+}
+
+.courseNav#active {
+  background-color: #F8753D;
+  color: white;
 }
 
 .progressChart {

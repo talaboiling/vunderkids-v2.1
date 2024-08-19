@@ -12,16 +12,18 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {
   fetchUserData,
   fetchCourse,
-  fetchSections,
+  fetchSection,
+  fetchChapters,
 } from "../../utils/apiService";
 import { useTranslation } from "react-i18next";
 
-const CourseContent = () => {
+const ChapterContent = () => {
     const { t } = useTranslation();
-    const { courseId } = useParams();
+    const { courseId, sectionId } = useParams();
     const [user, setUser] = useState({ first_name: t("student"), last_name: "" }); // Default values
     const [course, setCourse] = useState(); // State to store courses
-    const [sections, setSections] = useState([]); // State to store sections
+    const [section, setSection] = useState([]); // State to store sections
+    const [chapters, setChapters] = useState([]);
     const [loading, setLoading] = useState(true); // Add loading state
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isProfileSwitched, setIsProfileSwitched] = useState(false);
@@ -41,8 +43,10 @@ const CourseContent = () => {
           setUser(userData);
           const courseData = await fetchCourse(courseId, childId);
           setCourse(courseData);
-          const sectionsData = await fetchSections(courseId, childId);
-          setSections(sectionsData);
+          const sectionData = await fetchSection(courseId, childId);
+          setSection(sectionData);
+          const chaptersData = await fetchChapters(courseId, sectionId, childId);
+          setChapters(chaptersData);
         } catch (error) {
           console.error("Error fetching data:", error);
         } finally {
@@ -51,7 +55,7 @@ const CourseContent = () => {
       };
   
       fetchData();
-    }, [courseId]);
+    }, [courseId, sectionId]);
 
     const handleClickSection = (sectionId) => {
         if (activeSection !== sectionId) {
@@ -88,23 +92,30 @@ const CourseContent = () => {
                                 Разделы
                         </p>
                     </Link>
+                    <Link to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters`}>
+                        <p
+                            className="defaultStyle courseNav"
+                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections/${sectionId}/chapters` ? "active" : ""}>
+                                Темы
+                        </p>
+                    </Link>
                 </div>
                 <ul className="sectionsList">
-                    {sections.map((section) => (
-                        <li key={section.id} 
-                            className={`sectionItem ${activeSection === section.id ? "activeSection" : ""}`} 
-                            onClick={() => handleClickSection(section.id)}>
-                            <p>{section.title}</p>
+                    {chapters.map((chapter) => (
+                        <li key={chapter.id} 
+                            className={`sectionItem ${activeSection === chapter.id ? "activeSection" : ""}`} 
+                            onClick={() => handleClickSection(chapter.id)}>
+                            <p>{chapter.title}</p>
                             <div className="sectionProgress">
                                 <p className="defaultStyle">
                                     {t("completedTasks1")}
-                                    {section.completed_tasks}
+                                    {chapter.completed_tasks}
                                     {t("completedTasks2")}
-                                    {section.total_tasks} {t("completedTasks3")}
+                                    {chapter.total_tasks} {t("completedTasks3")}
                                 </p>
-                                <progress value={section.percentage_completed} />
+                                <progress value={chapter.percentage_completed} />
                             </div>
-                            <Link to={`/dashboard/courses/${courseId}/sections/${section.id}/chapters`}>
+                            <Link to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapter.id}/lessons`}>
                                 <button className="orangeButton"><PlayArrowIcon /></button>
                             </Link>
                         </li>
@@ -116,4 +127,4 @@ const CourseContent = () => {
   );
 };
 
-export default CourseContent;
+export default ChapterContent;
