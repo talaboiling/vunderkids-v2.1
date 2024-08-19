@@ -350,11 +350,12 @@ const Math = () => {
               t={t}
             />
           </div>
-          <div className={`lessonsProg ${isProgramSwitched ? "activeProgram" : ""}`}>
-            <LessonProgress 
-              sections={sections}
-              t={t}
-            />
+          <div
+            className={`lessonsProg ${
+              isProgramSwitched ? "activeProgram" : ""
+            }`}
+          >
+            <LessonProgress sections={sections} t={t} />
           </div>
         </div>
       </div>
