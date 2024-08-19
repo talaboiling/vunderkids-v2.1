@@ -16,6 +16,7 @@ import {
   createTask,
   updateTask,
   deleteTask,
+  fetchChapter,
   fetchSection,
   fetchCourse,
   fetchQuestions,
@@ -25,8 +26,9 @@ import {
 } from "../../utils/apiService";
 
 const Tasksection = () => {
-  const { courseId, sectionId } = useParams();
+  const { courseId, sectionId, chapterId } = useParams();
   const [contents, setContents] = useState([]);
+  const [chapter, setChapter] = useState();
   const [section, setSection] = useState();
   const [course, setCourse] = useState();
   const [loading, setLoading] = useState(true);
@@ -64,8 +66,10 @@ const Tasksection = () => {
   useEffect(() => {
     const fetchContentsData = async () => {
       try {
-        const contentsData = await fetchContents(courseId, sectionId);
+        const contentsData = await fetchContents(courseId, sectionId, chapterId);
         setContents(contentsData);
+        const chapterData = await fetchChapter(courseId, sectionId, chapterId);
+        setChapter(chapterData);
         const sectionData = await fetchSection(courseId, sectionId);
         setSection(sectionData);
         const courseData = await fetchCourse(courseId);
@@ -78,7 +82,7 @@ const Tasksection = () => {
     };
 
     fetchContentsData();
-  }, [courseId, sectionId]);
+  }, [courseId, sectionId, chapterId]);
 
   const handleTaskSubmit = async (e) => {
     e.preventDefault();
@@ -94,6 +98,7 @@ const Tasksection = () => {
         const updatedTask = await updateTask(
           courseId,
           sectionId,
+          chapterId,
           contents[selectedTaskIndex].id,
           taskData
         );
@@ -101,7 +106,7 @@ const Tasksection = () => {
           index === selectedTaskIndex ? updatedTask : content
         );
       } else {
-        const newTask = await createTask(courseId, sectionId, taskData);
+        const newTask = await createTask(courseId, sectionId, chapterId, taskData);
         updatedContents = [...contents, newTask];
       }
 
@@ -138,7 +143,7 @@ const Tasksection = () => {
       ...videoDetails,
       content_type: "lesson",
       order: contents.length + 1,
-      section: sectionId,
+      chapter: chapterId,
     };
 
     let updatedContents;
@@ -146,6 +151,7 @@ const Tasksection = () => {
       const updatedLesson = await updateLesson(
         courseId,
         sectionId,
+        chapterId,
         contents[selectedTaskIndex].id,
         updatedVideoDetails
       );
@@ -156,6 +162,7 @@ const Tasksection = () => {
       const newLesson = await createLesson(
         courseId,
         sectionId,
+        chapterId,
         updatedVideoDetails
       );
       updatedContents = [...contents, newLesson];
@@ -186,10 +193,10 @@ const Tasksection = () => {
     if (window.confirm("Вы действительно хотите удалить этот элемент?")) {
       let updatedContents;
       if (type === "lesson") {
-        await deleteLesson(courseId, sectionId, id);
+        await deleteLesson(courseId, sectionId, chapterId, id);
         updatedContents = contents.filter((content) => content.id !== id);
       } else if (type === "task") {
-        await deleteTask(courseId, sectionId, id);
+        await deleteTask(courseId, sectionId, chapterId, id);
         updatedContents = contents.filter((content) => content.id !== id);
       }
 
@@ -198,7 +205,7 @@ const Tasksection = () => {
   };
 
   const fetchTaskQuestions = async (taskId) => {
-    const response = await fetchQuestions(courseId, sectionId, taskId);
+    const response = await fetchQuestions(courseId, sectionId, chapterId, taskId);
     return response;
   };
 
@@ -296,6 +303,7 @@ const Tasksection = () => {
         response = await updateQuestion(
           courseId,
           sectionId,
+          chapterId,
           contents[selectedTaskIndex].id,
           questions[editingQuestionIndex].id,
           formData,
@@ -309,6 +317,7 @@ const Tasksection = () => {
         response = await createQuestion(
           courseId,
           sectionId,
+          chapterId,
           contents[selectedTaskIndex].id,
           formData,
           true // Indicate that this is a multipart request
@@ -411,6 +420,7 @@ const Tasksection = () => {
       await deleteQuestion(
         courseId,
         sectionId,
+        chapterId,
         contents[selectedTaskIndex].id,
         questionId
       );
@@ -450,20 +460,28 @@ const Tasksection = () => {
             alignItems: "center",
           }}
         >
+          <Link to={"/admindashboard/tasks"} style={{color:"black"}}>
+            <p
+              className="defaultStyle"
+              style={{
+                padding: "10px 25px",
+                borderRadius: "20px",
+                backgroundColor: "lightgray",
+                marginRight: "20px",
+              }}
+            >
+              {course.name} ({course.grade} класс)
+            </p>
+          </Link>
+          <Link to={`/admindashboard/tasks/courses/${course.id}/sections/${section.id}`}>
+            <p style={{ fontSize: "x-large", fontWeight: "500", color: "#666" , marginRight:"20px"}}>
+              {'>'} {section.title}
+            </p>
+          </Link>
           <p style={{ fontSize: "x-large", fontWeight: "500", color: "#666" }}>
-            {section.title}
+            {'>'} {chapter.title}
           </p>
-          <p
-            className="defaultStyle"
-            style={{
-              padding: "10px 25px",
-              borderRadius: "20px",
-              backgroundColor: "lightgray",
-              marginLeft: "20px",
-            }}
-          >
-            {course.name} ({course.grade} класс)
-          </p>
+          
         </div>
 
         <div className="superCont sectCont ">
@@ -832,10 +850,10 @@ const Tasksection = () => {
           open={showQuestionModal}
           onClose={() => setShowQuestionModal(false)}
           className="modal supermodal"
-          style={{ padding: "60px" }}
+          // style={{ padding: "60px" }}
         >
           {loading ? (<Loader />) : (
-          <div className="modal-content">
+          <div className="modal-content" style={{width:"70vw"}}>
             <button
               style={{
                 border: "none",

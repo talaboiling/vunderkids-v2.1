@@ -109,7 +109,7 @@ const Chapters = () => {
 
   const handleChapterClick = (chapterId) => {
     navigate(
-      `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}`
+      `/admindashboard/tasks/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}`
     );
   };
 
@@ -142,19 +142,21 @@ const Chapters = () => {
             alignItems: "center",
           }}
         >
+          <Link to={"/admindashboard/tasks"} style={{color:"black"}}>
+            <p
+              className="defaultStyle"
+              style={{
+                padding: "10px 25px",
+                borderRadius: "20px",
+                backgroundColor: "lightgray",
+                marginRight: "20px",
+              }}
+            >
+              {course.name} ({course.grade} класс)
+            </p>
+          </Link>
           <p style={{ fontSize: "x-large", fontWeight: "500", color: "#666" }}>
-            {section.title}
-          </p>
-          <p
-            className="defaultStyle"
-            style={{
-              padding: "10px 25px",
-              borderRadius: "20px",
-              backgroundColor: "lightgray",
-              marginLeft: "20px",
-            }}
-          >
-            {course.name} ({course.grade} класс)
+            {'>'} {section.title}
           </p>
         </div>
         <div className="superCont chapterCont">
@@ -254,7 +256,7 @@ const Chapters = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseEditDialog}>Отоменить</Button>
+          <Button onClick={handleCloseEditDialog}>Отменить</Button>
           <Button onClick={handleEditChapter} disabled={!chapterTitle}>
             Сохранить
           </Button>

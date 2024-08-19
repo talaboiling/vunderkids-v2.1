@@ -11,7 +11,8 @@ import Loader from "../Loader";
 import {
   fetchUserData,
   fetchCourse,
-  fetchSections,
+  fetchSection,
+  fetchChapter,
   fetchTask,
   fetchQuestions,
   answerQuestion,
@@ -25,9 +26,10 @@ import LessonProgress from "./LessonProgress";
 
 const Math = () => {
   const { t } = useTranslation();
-  const { courseId } = useParams();
+  const { courseId, sectionId, chapterId } = useParams();
   const [course, setCourse] = useState();
-  const [sections, setSections] = useState([]);
+  const [section, setSection] = useState();
+  const [chapter, setChapter] = useState();
   const [user, setUser] = useState({});
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
@@ -61,7 +63,7 @@ const Math = () => {
 
   useEffect(() => {
     loadData();
-  }, [courseId]);
+  }, [courseId, sectionId, chapterId]);
 
   const loadData = async () => {
     setLoading(true);
@@ -77,8 +79,10 @@ const Math = () => {
       }
 
       const courseData = await fetchCourse(courseId, child_id);
-      const sectionsData = await fetchSections(courseId, child_id);
-      setSections(sectionsData);
+      const sectionData = await fetchSection(courseId, sectionId, child_id);
+      const chapterData = await fetchChapter(courseId, sectionId, chapterId, child_id);
+      setChapter(chapterData);
+      setSection(sectionData);
       setCourse(courseData);
       setUser(userData);
       setHasSubscription(userData.has_subscription);
@@ -100,16 +104,17 @@ const Math = () => {
     setShowVideoModal(true);
   };
 
-  const openTaskModal = async (sectionId, taskId) => {
+  const openTaskModal = async (taskId) => {
     if (!isFreeTrial && !hasSubscription) {
       setShowSubscriptionError(true);
       return;
     }
     try {
-      const task = await fetchTask(courseId, sectionId, taskId, childId);
+      const task = await fetchTask(courseId, sectionId, chapterId, taskId, childId);
       const taskQuestions = await fetchQuestions(
         courseId,
-        task.section,
+        sectionId,
+        task.chapter,
         taskId,
         childId
       );
@@ -196,7 +201,8 @@ const Math = () => {
     try {
       await answerQuestion(
         courseId,
-        taskContent.section,
+        sectionId,
+        taskContent.chapter,
         taskContent.id,
         currentQuestion.id,
         selectedOption,
@@ -248,7 +254,8 @@ const Math = () => {
     try {
       await answerQuestion(
         courseId,
-        taskContent.section,
+        sectionId,
+        taskContent.chapter,
         taskContent.id,
         currentQuestion.id,
         selectedOption,
@@ -342,20 +349,45 @@ const Math = () => {
             <div className="coursesCards">
               <CourseCard course={course} t={t} />
             </div>
+            <div className="courseNavigation">
+                    <Link to={`/dashboard/courses/${courseId}/sections`}>
+                        <p
+                            className="defaultStyle courseNav"
+                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections` ? "active" : ""}>
+                                Разделы
+                        </p>
+                    </Link>
+                    <Link to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters`}>
+                        <p
+                            className="defaultStyle courseNav"
+                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections/${sectionId}/chapters` ? "active" : ""}>
+                                Темы
+                        </p>
+                    </Link>
+                    <Link to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons`}>
+                        <p
+                            className="defaultStyle courseNav"
+                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons` ? "active" : ""}>
+                                Задания
+                        </p>
+                    </Link>
+                </div>
             <SectionContent
-              sections={sections}
+              section={section}
+              chapter={chapter}
               openVideoModal={openVideoModal}
               openTaskModal={openTaskModal}
               hasSubscription={hasSubscription}
               t={t}
             />
           </div>
-          <div className={`lessonsProg ${isProgramSwitched ? "activeProgram" : ""}`}>
+          {/* <div className={`lessonsProg ${isProgramSwitched ? "activeProgram" : ""}`}>
             <LessonProgress 
-              sections={sections}
+              section={section}
+              chapter={chapter}
               t={t}
             />
-          </div>
+          </div> */}
         </div>
       </div>
 

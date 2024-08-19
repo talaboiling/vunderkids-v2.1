@@ -23,6 +23,7 @@ import {
   fetchUserData,
   fetchCourses,
   fetchWeeklyProgress,
+  fetchSections,
   changePassword,
 } from "../utils/apiService";
 import { useTranslation } from "react-i18next";
@@ -41,6 +42,7 @@ const Dashboard = () => {
   const { t } = useTranslation();
   const [user, setUser] = useState({ first_name: t("student"), last_name: "" }); // Default values
   const [courses, setCourses] = useState([]); // State to store courses
+  const [sections, setSections] = useState([]); // State to store sections
   const [weeklyProgress, setWeeklyProgress] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,6 +64,8 @@ const Dashboard = () => {
         setWeeklyProgress(weeklyProgressData.weekly_progress);
         const coursesData = await fetchCourses(childId);
         setCourses(coursesData);
+        const sectionsData = await fetchSections(childId);
+        setSections(sectionsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -191,12 +195,12 @@ const Dashboard = () => {
             {t("myCourses")}
           </h3>
           <div className="coursesCards">
-            {courses.map((course) => (
+            {courses.map((course, section) => (
               <div className="courseItem" key={course.id}>
                 <div className="courseItemLeft">
                   <p style={{ margin: "0" }}>{course.name}</p>
                   <progress value={course.percentage_completed / 100} />
-                  <Link to={`/dashboard/courses/${course.id}/lessons`}>
+                  <Link to={`/dashboard/courses/${course.id}/sections`}>
                     <button
                       style={{
                         backgroundColor: "#F8753D",

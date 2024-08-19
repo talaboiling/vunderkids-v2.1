@@ -5,7 +5,8 @@ import bgvideo from "../../assets/videolessonthumb.svg";
 import SubscriptionErrorModal from "./SubscriptionErrorModal"; // Import the modal
 
 const SectionContent = ({
-  sections,
+  section,
+  chapter,
   openVideoModal,
   openTaskModal,
   hasSubscription,
@@ -21,8 +22,7 @@ const SectionContent = ({
       >
         {t("courseStart")}
       </h2>
-      {sections.map((section, sectionIndex) => (
-        <div key={sectionIndex} className="contWrapper">
+        <div className="contWrapper">
           <div
             style={{
               display: "flex",
@@ -32,11 +32,11 @@ const SectionContent = ({
           >
             <hr className="lessonsHr" />
             <h2 className="defaultStyle" style={{ color: "#aaa" }}>
-              {section.title}
+              {section.title} {chapter.title}
             </h2>
             <hr className="lessonsHr" />
           </div>
-          {section.contents.map((content, contentIndex) => (
+          {chapter.contents.map((content, contentIndex) => (
             <div className="lessonsLinks" key={contentIndex}>
               {content.content_type === "lesson" ? (
                 <div
@@ -74,7 +74,7 @@ const SectionContent = ({
                   }`}
                   onClick={() =>
                     hasSubscription
-                      ? openTaskModal(content.section, content.id)
+                      ? openTaskModal(content.chapter, content.id)
                       : setShowSubscriptionError(true)
                   }
                 >
@@ -109,7 +109,7 @@ const SectionContent = ({
             </div>
           ))}
         </div>
-      ))}
+      
       {showSubscriptionError && (
         <SubscriptionErrorModal
           setShowSubscriptionError={setShowSubscriptionError}

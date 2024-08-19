@@ -1,6 +1,6 @@
 import React from "react";
 
-const LessonProgress = ({ sections, t }) => {
+const LessonProgress = ({ section, chapter, t }) => {
   return (
     <>
       <h3
@@ -10,7 +10,6 @@ const LessonProgress = ({ sections, t }) => {
         {t("whatWeLearn")}
       </h3>
       <div className="progList">
-        {sections.map((section, index) => (
           <div className="progItem" key={index}>
             <p style={{ margin: "0", marginBottom: "15px" }}>
               {section.title} {section.completed_tasks}/{section.total_tasks}
@@ -20,7 +19,6 @@ const LessonProgress = ({ sections, t }) => {
               max="1"
             ></progress>
           </div>
-        ))}
       </div>
     </>
   );
