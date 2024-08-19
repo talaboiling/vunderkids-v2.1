@@ -109,7 +109,7 @@ const Chapters = () => {
 
   const handleChapterClick = (chapterId) => {
     navigate(
-      `/admindashboard/tasks/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}`
+      `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}`
     );
   };
 
