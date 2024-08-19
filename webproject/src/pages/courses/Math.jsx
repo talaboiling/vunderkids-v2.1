@@ -80,7 +80,12 @@ const Math = () => {
 
       const courseData = await fetchCourse(courseId, child_id);
       const sectionData = await fetchSection(courseId, sectionId, child_id);
-      const chapterData = await fetchChapter(courseId, sectionId, chapterId, child_id);
+      const chapterData = await fetchChapter(
+        courseId,
+        sectionId,
+        chapterId,
+        child_id
+      );
       setChapter(chapterData);
       setSection(sectionData);
       setCourse(courseData);
@@ -105,12 +110,19 @@ const Math = () => {
   };
 
   const openTaskModal = async (taskId) => {
+    console.log(taskId);
     if (!isFreeTrial && !hasSubscription) {
       setShowSubscriptionError(true);
       return;
     }
     try {
-      const task = await fetchTask(courseId, sectionId, chapterId, taskId, childId);
+      const task = await fetchTask(
+        courseId,
+        sectionId,
+        chapterId,
+        taskId,
+        childId
+      );
       const taskQuestions = await fetchQuestions(
         courseId,
         sectionId,
@@ -350,28 +362,50 @@ const Math = () => {
               <CourseCard course={course} t={t} />
             </div>
             <div className="courseNavigation">
-                    <Link to={`/dashboard/courses/${courseId}/sections`}>
-                        <p
-                            className="defaultStyle courseNav"
-                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections` ? "active" : ""}>
-                                Разделы
-                        </p>
-                    </Link>
-                    <Link to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters`}>
-                        <p
-                            className="defaultStyle courseNav"
-                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections/${sectionId}/chapters` ? "active" : ""}>
-                                Темы
-                        </p>
-                    </Link>
-                    <Link to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons`}>
-                        <p
-                            className="defaultStyle courseNav"
-                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons` ? "active" : ""}>
-                                Задания
-                        </p>
-                    </Link>
-                </div>
+              <Link to={`/dashboard/courses/${courseId}/sections`}>
+                <p
+                  className="defaultStyle courseNav"
+                  id={
+                    window.location.pathname ===
+                    `/dashboard/courses/${courseId}/sections`
+                      ? "active"
+                      : ""
+                  }
+                >
+                  Разделы
+                </p>
+              </Link>
+              <Link
+                to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters`}
+              >
+                <p
+                  className="defaultStyle courseNav"
+                  id={
+                    window.location.pathname ===
+                    `/dashboard/courses/${courseId}/sections/${sectionId}/chapters`
+                      ? "active"
+                      : ""
+                  }
+                >
+                  Темы
+                </p>
+              </Link>
+              <Link
+                to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons`}
+              >
+                <p
+                  className="defaultStyle courseNav"
+                  id={
+                    window.location.pathname ===
+                    `/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons`
+                      ? "active"
+                      : ""
+                  }
+                >
+                  Задания
+                </p>
+              </Link>
+            </div>
             <SectionContent
               section={section}
               chapter={chapter}
