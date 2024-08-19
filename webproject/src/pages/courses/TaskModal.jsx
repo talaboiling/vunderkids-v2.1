@@ -184,7 +184,7 @@ const TaskModal = ({
                     {currentQuestion.audio && (
                       <>
                         <div className="taskmodalaudio">
-                          <button className="" onClick={toggleAudio}>
+                          <button className="transBtn" onClick={toggleAudio}>
                             {isAudioPlaying ? (
                               <div className="audioOn">
                                 <img src={audioOn} alt="audio on" />

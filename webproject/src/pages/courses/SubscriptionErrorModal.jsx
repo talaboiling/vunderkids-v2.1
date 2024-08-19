@@ -36,7 +36,7 @@ const SubscriptionErrorModal = ({ setShowSubscriptionError, t }) => {
         >
           {t("subscriptionMessage")}
         </p>
-        <Link to="/subscriptions">
+        <Link to="/subscription-details">
           <button className="orangeButton" style={{ fontSize: "x-large" }}>
             {t("gotosubscribe")}
           </button>

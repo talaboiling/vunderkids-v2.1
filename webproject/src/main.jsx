@@ -162,12 +162,12 @@ const router = createBrowserRouter([
       />
     ),
   },
-  {
-    path: "/subscriptions",
-    element: (
-      <AuthRoute element={<Subscriptions />} allowedRoles={["parent"]} />
-    ),
-  },
+  // {
+  //   path: "/subscriptions",
+  //   element: (
+  //     <AuthRoute element={<Subscriptions />} allowedRoles={["parent"]} />
+  //   ),
+  // },
   { path: "*", element: <NotFound /> },
 ]);
 
