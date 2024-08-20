@@ -9,6 +9,10 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { slide as Menu } from "react-burger-menu";
 import { initiatePayment } from "./utils/apiService.js";
 const SubscriptionDetails = () => {
+  const { t } = useTranslation();
+  const isLoggedIn = localStorage.getItem("access_token") !== null;
+  const role = getUserRole();
+  
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://test-epay.homebank.kz/payform/payment-api.js";
@@ -21,6 +25,7 @@ const SubscriptionDetails = () => {
   }, []);
 
   const handleSubscription = async (planDuration) => {
+    const navigate = useNavigate();
     try {
       const paymentData = await initiatePayment(planDuration);
       // Now you have payment data and token, you can proceed to call halyk.pay()
@@ -54,12 +59,13 @@ const SubscriptionDetails = () => {
       }
     } catch (error) {
       console.error("Payment initiation failed:", error.message);
+      if(error.response.status === 401) {
+        navigate("/login");
+      }
     }
   };
 
-  const { t } = useTranslation();
-  const isLoggedIn = localStorage.getItem("access_token") !== null;
-  const role = getUserRole();
+  
 
   const handleLogout = () => {
     logout();
@@ -301,13 +307,7 @@ const SubscriptionDetails = () => {
               </p>
               <button
                 onClick={() => handleSubscription("6-month")}
-                style={{
-                  backgroundColor: "#F8753D",
-                  fontWeight: "550",
-                  fontSize: "large",
-                  borderColor: "#FFB99C",
-                  boxShadow: "none",
-                }}
+                className="payBtn"
               >
                 {t("choose")}
               </button>
@@ -341,13 +341,7 @@ const SubscriptionDetails = () => {
               </p>
               <button
                 onClick={() => handleSubscription("annual")}
-                style={{
-                  backgroundColor: "#F8753D",
-                  fontWeight: "550",
-                  fontSize: "large",
-                  borderColor: "#FFB99C",
-                  boxShadow: "none",
-                }}
+                className="payBtn"
               >
                 {t("choose")}
               </button>

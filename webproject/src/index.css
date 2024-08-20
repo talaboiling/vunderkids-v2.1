@@ -885,6 +885,19 @@ footer{
     gap: 1rem;
 }
 
+.payBtn{
+    background-color: #F8753D;
+    font-weight: 550;
+    font-size: large;
+    border-color: #FFB99C;
+    box-shadow: none;
+}
+
+.payBtn:hover{
+    background-color: #ff6600;
+    border-color: #f48d65;
+}
+
 input, select {
     padding: 0.8rem 1rem;
     border: 2px solid #C1C1C1;

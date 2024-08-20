@@ -30,7 +30,8 @@ import NotFound from "./NotFound.jsx";
 import Chapters from "./pages/admin_sections/Chapters.jsx"
 import CourseContent from "./pages/courses/CourseContent.jsx";
 import ChapterContent from "./pages/courses/ChapterContent.jsx";
-
+import Payment from "./pages/Payment.jsx";
+import Nopayment from "./pages/Nopayment.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SubscriptionDetails from "./SubscriptionDetails.jsx";
 
@@ -46,6 +47,8 @@ const router = createBrowserRouter([
   { path: "/subscription-details", element: <MainSubs /> },
   { path: "/oferty", element: <Oferty /> },
   { path: "/users-terms-and-conditions", element: <Confidentiality /> },
+  { path: "/payment-successful", element: <Payment />},
+  { path: "/payment-failed", element: <Nopayment />},
   {
     path: "/parent",
     element: <AuthRoute element={<Parentdash />} allowedRoles={["parent"]} />,
