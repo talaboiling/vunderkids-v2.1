@@ -30,10 +30,12 @@ const SubscriptionDetails = () => {
         const paymentObject = {
           invoiceId: payment.invoice_id,
           invoiceIdAlt: payment.invoice_id_alt,
-          backLink: "https://example.kz/success.html",
-          failureBackLink: "https://example.kz/failure.html",
-          postLink: "https://example.kz/",
-          failurePostLink: "https://example.kz/order/1123/fail",
+          backLink: "https://vunderkids.kz/dashboard/",
+          failureBackLink: "https://vunderkids.kz/",
+          postLink:
+            "https://api.vunderkids.kz/api/payments/payment-confirmation/",
+          failurePostLink:
+            "https://api.vunderkids.kz/api/payments/payment-confirmation/",
           language: "rus",
           description: "Оплата в интернет магазине",
           accountId: "testuser1",
