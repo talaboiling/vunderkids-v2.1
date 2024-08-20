@@ -12,6 +12,7 @@ const SubscriptionDetails = () => {
   const { t } = useTranslation();
   const isLoggedIn = localStorage.getItem("access_token") !== null;
   const role = getUserRole();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -25,7 +26,6 @@ const SubscriptionDetails = () => {
   }, []);
 
   const handleSubscription = async (planDuration) => {
-    const navigate = useNavigate();
     try {
       const paymentData = await initiatePayment(planDuration);
       // Now you have payment data and token, you can proceed to call halyk.pay()
