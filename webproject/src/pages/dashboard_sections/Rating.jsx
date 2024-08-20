@@ -22,16 +22,15 @@ const Rating = () => {
   const avatarUrl = user.avatar ? user.avatar : placeholderPfp; // Use placeholder if avatar is null
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileSwitched, setIsProfileSwitched] = useState(false);
-  const [checked, setChecked] = useState(i18next.language === 'ru');
+  const [checked, setChecked] = useState(i18next.language === "ru");
 
   useEffect(() => {
     const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
       try {
-        const [userData, ratingsData] = await Promise.all([
-          fetchUserData(childId),
-          fetchRatings(childId),
-        ]);
+        console.log("childId", childId);
+        const userData = await fetchUserData(childId);
+        const ratingsData = await fetchRatings(childId);
 
         setUser(userData);
         setRatings(ratingsData);
@@ -45,10 +44,10 @@ const Rating = () => {
   }, []);
 
   const handleChange = () => {
-    const newLang = checked ? 'ru' : 'kk';
+    const newLang = checked ? "ru" : "kk";
     i18next.changeLanguage(newLang);
     setChecked(!checked);
-  }
+  };
 
   if (loading) {
     return <Loader></Loader>;
@@ -56,7 +55,7 @@ const Rating = () => {
 
   return (
     <div className="rtdash rtrat ratingPage">
-      <Sidebar isMenuOpen={isMenuOpen}/>
+      <Sidebar isMenuOpen={isMenuOpen} />
       <div className="centralLessons">
         <div style={{ width: "fit-content" }}>
           <Navdash
