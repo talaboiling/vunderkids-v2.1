@@ -12,7 +12,7 @@ const SubscriptionDetails = () => {
   const { t } = useTranslation();
   const isLoggedIn = localStorage.getItem("access_token") !== null;
   const role = getUserRole();
-  
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://test-epay.homebank.kz/payform/payment-api.js";
@@ -35,8 +35,8 @@ const SubscriptionDetails = () => {
         const paymentObject = {
           invoiceId: payment.invoice_id,
           invoiceIdAlt: payment.invoice_id_alt,
-          backLink: "https://vunderkids.kz/dashboard/",
-          failureBackLink: "https://vunderkids.kz/",
+          backLink: "https://vunderkids.kz/payment-successful/",
+          failureBackLink: "https://vunderkids.kz/payment-failed/",
           postLink:
             "https://api.vunderkids.kz/api/payments/payment-confirmation/",
           failurePostLink:
@@ -59,13 +59,11 @@ const SubscriptionDetails = () => {
       }
     } catch (error) {
       console.error("Payment initiation failed:", error.message);
-      if(error.response.status === 401) {
+      if (error.response.status === 401) {
         navigate("/login");
       }
     }
   };
-
-  
 
   const handleLogout = () => {
     logout();
