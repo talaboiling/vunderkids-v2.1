@@ -80,7 +80,12 @@ const Math = () => {
 
       const courseData = await fetchCourse(courseId, child_id);
       const sectionData = await fetchSection(courseId, sectionId, child_id);
-      const chapterData = await fetchChapter(courseId, sectionId, chapterId, child_id);
+      const chapterData = await fetchChapter(
+        courseId,
+        sectionId,
+        chapterId,
+        child_id
+      );
       setChapter(chapterData);
       setSection(sectionData);
       setCourse(courseData);
@@ -91,6 +96,37 @@ const Math = () => {
       console.error("Error loading data:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateUserData = async () => {
+    try {
+      const child_id = localStorage.getItem("child_id");
+      let userData;
+      if (child_id) {
+        userData = await fetchUserData(child_id);
+        setIsChild(true);
+        setChildId(child_id);
+      } else {
+        userData = await fetchUserData();
+      }
+
+      const courseData = await fetchCourse(courseId, child_id);
+      const sectionData = await fetchSection(courseId, sectionId, child_id);
+      const chapterData = await fetchChapter(
+        courseId,
+        sectionId,
+        chapterId,
+        child_id
+      );
+      setChapter(chapterData);
+      setSection(sectionData);
+      setCourse(courseData);
+      setUser(userData);
+      setHasSubscription(userData.has_subscription);
+      setIsFreeTrial(userData.is_free_trial);
+    } catch (error) {
+      console.error("Error loading data:", error);
     }
   };
 
@@ -110,7 +146,13 @@ const Math = () => {
       return;
     }
     try {
-      const task = await fetchTask(courseId, sectionId, chapterId, taskId, childId);
+      const task = await fetchTask(
+        courseId,
+        sectionId,
+        chapterId,
+        taskId,
+        childId
+      );
       const taskQuestions = await fetchQuestions(
         courseId,
         sectionId,
@@ -208,6 +250,8 @@ const Math = () => {
         selectedOption,
         childId
       );
+
+      await updateUserData();
 
       setTimeout(() => {
         setShowFeedback(false);
@@ -350,28 +394,50 @@ const Math = () => {
               <CourseCard course={course} t={t} />
             </div>
             <div className="courseNavigation">
-                    <Link to={`/dashboard/courses/${courseId}/sections`}>
-                        <p
-                            className="defaultStyle courseNav"
-                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections` ? "active" : ""}>
-                                Разделы
-                        </p>
-                    </Link>
-                    <Link to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters`}>
-                        <p
-                            className="defaultStyle courseNav"
-                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections/${sectionId}/chapters` ? "active" : ""}>
-                                Темы
-                        </p>
-                    </Link>
-                    <Link to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons`}>
-                        <p
-                            className="defaultStyle courseNav"
-                            id={window.location.pathname === `/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons` ? "active" : ""}>
-                                Задания
-                        </p>
-                    </Link>
-                </div>
+              <Link to={`/dashboard/courses/${courseId}/sections`}>
+                <p
+                  className="defaultStyle courseNav"
+                  id={
+                    window.location.pathname ===
+                    `/dashboard/courses/${courseId}/sections`
+                      ? "active"
+                      : ""
+                  }
+                >
+                  Разделы
+                </p>
+              </Link>
+              <Link
+                to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters`}
+              >
+                <p
+                  className="defaultStyle courseNav"
+                  id={
+                    window.location.pathname ===
+                    `/dashboard/courses/${courseId}/sections/${sectionId}/chapters`
+                      ? "active"
+                      : ""
+                  }
+                >
+                  Темы
+                </p>
+              </Link>
+              <Link
+                to={`/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons`}
+              >
+                <p
+                  className="defaultStyle courseNav"
+                  id={
+                    window.location.pathname ===
+                    `/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons`
+                      ? "active"
+                      : ""
+                  }
+                >
+                  Задания
+                </p>
+              </Link>
+            </div>
             <SectionContent
               section={section}
               chapter={chapter}
@@ -422,6 +488,8 @@ const Math = () => {
           closeTaskModal={closeTaskModal}
           t={t}
           isButtonDisabled={isButtonDisabled}
+          audioRef={audioRef}
+          setIsAudioPlaying={setIsAudioPlaying}
         />
       )}
 

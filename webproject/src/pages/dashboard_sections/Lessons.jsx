@@ -14,7 +14,7 @@ import cert90 from "../../assets/90lessons.webp";
 import cert200 from "../../assets/200lessons.webp";
 import cert500 from "../../assets/500lessons.webp";
 import Loader from "../Loader";
-import { fetchUserData } from "../../utils/apiService"
+import { fetchUserData } from "../../utils/apiService";
 import { useTranslation } from "react-i18next";
 
 const Lessons = () => {
@@ -31,9 +31,7 @@ const Lessons = () => {
     const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
       try {
-        const [userData] = await Promise.all([
-          fetchUserData(childId),
-        ]);
+        const [userData] = await Promise.all([fetchUserData(childId)]);
         setUser(userData);
         console.log(user.id);
       } catch (error) {
@@ -133,11 +131,11 @@ const Lessons = () => {
                   {t("downloadCertificate1")}
                   {t("downloadCertificate2")}
                 </p>
-                <button className="orangeButton">{t("download")}</button>
+                {/* <button className="orangeButton">{t("download")}</button>
                 <form action="">
                   <input type="text" placeholder={t("yourMail")} />
                   <button>{t("send")}</button>
-                </form>
+                </form> */}
               </div>
             </div>
             <div className="sectCertificates">
@@ -158,7 +156,9 @@ const Lessons = () => {
               <div className="achievements">
                 <ul className="certificates">
                   <li
-                    className={`certificate c90 ${user.tasks_completed > 0 ? "activeC90" : ""}`}
+                    className={`certificate c90 ${
+                      user.tasks_completed > 90 ? "activeC90" : ""
+                    }`}
                   >
                     <img src={cert90} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
@@ -168,7 +168,9 @@ const Lessons = () => {
                     </p>
                   </li>
                   <li
-                    className={`certificate c200 ${user.tasks_completed > 0 ? "activeC200" : ""}`}
+                    className={`certificate c200 ${
+                      user.tasks_completed > 200 ? "activeC200" : ""
+                    }`}
                   >
                     <img src={cert200} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>
@@ -178,7 +180,9 @@ const Lessons = () => {
                     </p>
                   </li>
                   <li
-                    className={`certificate c500 ${user.tasks_completed > 0 ? "activeC500" : ""}`}
+                    className={`certificate c500 ${
+                      user.tasks_completed > 500 ? "activeC500" : ""
+                    }`}
                   >
                     <img src={cert500} alt="Сертификат" />
                     <p style={{ margin: "0", marginTop: "10px" }}>

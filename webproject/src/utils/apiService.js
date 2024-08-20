@@ -424,8 +424,10 @@ export const fetchRatings = async (childId) => {
       ? `/rating/global?child_id=${childId}`
       : `/rating/global`;
     const response = await instance.get(endpoint);
+    console.log(response.data);
     return response.data;
   } catch (error) {
+    console.log(error);
     throw new Error(error || "Something went wrong");
   }
 };

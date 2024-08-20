@@ -31,10 +31,11 @@ const TaskModal = ({
   closeTaskModal,
   t,
   isButtonDisabled,
+  audioRef,
+  setIsAudioPlaying,
 }) => {
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-  const audioRef = useRef(null);
 
   return (
     <dialog className="studmodal" open>
@@ -98,32 +99,37 @@ const TaskModal = ({
                   src={feedbackMessage === "Correct!" ? correctlion : wronglion}
                   alt="lion mascot"
                 />
-                {feedbackMessage === "Correct!"
-                  ? <p
-                      style={{
-                        color: "limegreen",
-                        fontSize: "xx-large",
-                        fontWeight: "700",
-                        textAlign: "center",
-                        backgroundColor: "white",
-                        padding: "10px",
-                        borderRadius: "15px",
-                        border: "5px solid green",
-                      }}
-                    >{t("correct")}</p>
-                  : <p
-                      style={{
-                        color: "black",
-                        fontSize: "xx-large",
-                        fontWeight: "700",
-                        textAlign: "center",
-                        backgroundColor: "white",
-                        padding: "10px",
-                        borderRadius: "15px",
-                        border: "5px solid #fa3b3b",
-                      }}
-                    >{t("incorrect")}</p>
-                }
+                {feedbackMessage === "Correct!" ? (
+                  <p
+                    style={{
+                      color: "limegreen",
+                      fontSize: "xx-large",
+                      fontWeight: "700",
+                      textAlign: "center",
+                      backgroundColor: "white",
+                      padding: "10px",
+                      borderRadius: "15px",
+                      border: "5px solid green",
+                    }}
+                  >
+                    {t("correct")}
+                  </p>
+                ) : (
+                  <p
+                    style={{
+                      color: "black",
+                      fontSize: "xx-large",
+                      fontWeight: "700",
+                      textAlign: "center",
+                      backgroundColor: "white",
+                      padding: "10px",
+                      borderRadius: "15px",
+                      border: "5px solid #fa3b3b",
+                    }}
+                  >
+                    {t("incorrect")}
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -177,7 +183,13 @@ const TaskModal = ({
                       </strong>
                     </span>
                     {currentQuestion.is_attempted && (
-                      <strong style={{ color: "green", padding:"35px", backdropFilter: "blur(2px)"}}>
+                      <strong
+                        style={{
+                          color: "green",
+                          padding: "35px",
+                          backdropFilter: "blur(2px)",
+                        }}
+                      >
                         {t("alreadyAnswered")}
                       </strong>
                     )}
@@ -196,7 +208,12 @@ const TaskModal = ({
                             )}
                           </button>
                         </div>
-                        <audio ref={audioRef} src={currentQuestion.audio} />
+                        <li></li>
+                        <audio
+                          ref={audioRef}
+                          src={currentQuestion.audio}
+                          onEnded={() => setIsAudioPlaying(false)}
+                        />
                       </>
                     )}
                     <div
@@ -217,7 +234,6 @@ const TaskModal = ({
                           <div className="bgmusicOff">
                             <img src={bgmusicOff} alt="music off" />
                           </div>
-                          
                         ) : (
                           <div className="bgmusicOn">
                             <img src={bgmusicOn} alt="music on" />
@@ -232,7 +248,7 @@ const TaskModal = ({
                         step="0.01"
                         value={volume}
                         onChange={handleVolumeChange}
-                        style={{scale:"0.6"}}
+                        style={{ scale: "0.6" }}
                       />
                     </div>
                   </span>
