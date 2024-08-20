@@ -114,7 +114,7 @@ const TaskModal = ({
                   >
                     {t("correct")}
                   </p>
-                ) : (
+                ) : feedbackMessage === "Incorrect!" ? (
                   <p
                     style={{
                       color: "black",
@@ -129,7 +129,22 @@ const TaskModal = ({
                   >
                     {t("incorrect")}
                   </p>
-                )}
+                ) : feedbackMessage === "Try Again" ? (
+                  <p
+                    style={{
+                      color: "orange",
+                      fontSize: "xx-large",
+                      fontWeight: "700",
+                      textAlign: "center",
+                      backgroundColor: "white",
+                      padding: "10px",
+                      borderRadius: "15px",
+                      border: "5px solid orange",
+                    }}
+                  >
+                    {t("tryAgain")}
+                  </p>
+                ) : null}
               </div>
             </div>
           )}

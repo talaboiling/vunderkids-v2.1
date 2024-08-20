@@ -60,6 +60,7 @@ const Math = () => {
   const [showSubscriptionError, setShowSubscriptionError] = useState(false);
   const [isProgramSwitched, setIsProgramSwitched] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAttempted, setIsAttempted] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -231,6 +232,20 @@ const Math = () => {
       isCorrect = selectedOption === currentQuestion.correct_answer;
     }
 
+    if (!isCorrect && !isAttempted) {
+      setIsAttempted(true);
+      setFeedbackMessage("Try Again");
+      setShowFeedback(true);
+      if (incorrectSoundRef.current) {
+        incorrectSoundRef.current.play();
+      }
+
+      setTimeout(() => {
+        setShowFeedback(false);
+        setIsButtonDisabled(false);
+      }, 1500);
+      return;
+    }
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
 
@@ -241,6 +256,7 @@ const Math = () => {
     }
 
     try {
+      setIsAttempted(false);
       await answerQuestion(
         courseId,
         sectionId,
@@ -286,6 +302,21 @@ const Math = () => {
       isCorrect = selectedOption === currentQuestion.correct_answer;
     }
 
+    if (!isCorrect && !isAttempted) {
+      setIsAttempted(true);
+      setFeedbackMessage("Try Again");
+      setShowFeedback(true);
+      if (incorrectSoundRef.current) {
+        incorrectSoundRef.current.play();
+      }
+
+      setTimeout(() => {
+        setShowFeedback(false);
+        setIsButtonDisabled(false);
+      }, 1500);
+      return;
+    }
+
     setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
     setShowFeedback(true);
 
@@ -296,6 +327,7 @@ const Math = () => {
     }
 
     try {
+      setIsAttempted(false);
       await answerQuestion(
         courseId,
         sectionId,

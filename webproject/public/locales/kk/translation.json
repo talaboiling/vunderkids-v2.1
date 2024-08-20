@@ -147,7 +147,7 @@
   "whatWeLearn": "Курс жоспары:",
   "videoLesson": "Видео сабақ",
   "correct": "Жарайсың!",
-  "incorrect": "Тағы да ойланып көр!",
+  "incorrect": "Қате жауап",
   "alreadyAnswered": "Сіз бұл сұраққа жауап бердіңіз",
   "finish": "Аяқтау",
   "next": "Келесі",
@@ -164,5 +164,6 @@
   "selected_date": "Таңдалған күн",
   "cups_for_selected_date": "Таңдалған күн үшін ұпайлар",
   "total_correct_answers": "Дұрыс жауаптардың жалпы саны",
-  "total_wrong_answers": "Қате жауаптардың жалпы саны"
+  "total_wrong_answers": "Қате жауаптардың жалпы саны",
+  "tryAgain": "Тағы да ойланып көр!"
 }

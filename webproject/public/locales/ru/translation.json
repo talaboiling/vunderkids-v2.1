@@ -152,7 +152,7 @@
   "whatWeLearn": "План курса:",
   "videoLesson": "Видеоурок",
   "correct": "Молодец!",
-  "incorrect": "Попробуй еще раз!",
+  "incorrect": "Неправильный ответ",
   "alreadyAnswered": "Вы уже ответили на этот вопрос",
   "ourContacts": "Наши контакты",
   "forgotPassword": "Забыли пароль?",
@@ -177,5 +177,6 @@
   "selected_date": "Выбранная дата",
   "cups_for_selected_date": "Кубки за выбранную дату",
   "total_correct_answers": "Всего правильных ответов",
-  "total_wrong_answers": "Всего неправильных ответов"
+  "total_wrong_answers": "Всего неправильных ответов",
+  "tryAgain": "Попробуй еще раз"
 }
