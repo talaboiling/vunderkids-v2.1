@@ -16,7 +16,7 @@ const SubscriptionDetails = () => {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://test-epay.homebank.kz/payform/payment-api.js";
+    script.src = "https://epay.homebank.kz/payform/payment-api.js";
     script.async = true;
     document.body.appendChild(script);
 
@@ -44,7 +44,7 @@ const SubscriptionDetails = () => {
           language: "rus",
           description: "Оплата в интернет магазине",
           accountId: "testuser1",
-          terminal: "67e34d63-102f-4bd1-898e-370781d0074d",
+          terminal: "cf443ee5-789c-4743-8685-db9ed3c9a9f3",
           amount: payment.amount,
           data: `{\"statement\":{\"name\":\"${payment.email}\",\"invoiceID\":\"${payment.invoice_id}\"}}`,
           currency: payment.currency,
