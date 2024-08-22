@@ -20,6 +20,7 @@ import offer_tablet from "./assets/offer_tablet.webp";
 import offer_progress from "./assets/offer_progress.webp";
 import offer_time from "./assets/offer_time.webp";
 import logoImg from "./assets/logo_blue.webp";
+import logoFuture from "./assets/futureschool.png";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -203,6 +204,12 @@ function Contents() {
           </div>
         </div>
       </div>
+      <div className="contPartners">
+          <h1 style={{animation:"none", margin:"0"}}>{t("ourPartners")}</h1>
+          <div className="partnerLogos">
+            <img src={logoFuture} alt="Future School Logo" style={{width:"300px", height:"300px"}}/>
+          </div>
+        </div>
       <div className="offers">
         <div className="offersTop">
           <Offers num={1} text={t("personalStudyProgram")} img={offer_books} />

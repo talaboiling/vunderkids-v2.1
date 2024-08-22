@@ -898,6 +898,19 @@ footer{
     border-color: #f48d65;
 }
 
+.contPartners {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 0;
+}
+
+.partnerLogos {
+    max-width: 300px;
+    max-height: 300px;
+}
+
 input, select {
     padding: 0.8rem 1rem;
     border: 2px solid #C1C1C1;
