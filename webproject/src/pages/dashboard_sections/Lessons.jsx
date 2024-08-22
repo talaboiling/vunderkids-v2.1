@@ -23,6 +23,7 @@ const Lessons = () => {
 
   const [loading, setLoading] = useState(true); // Add loading state
   const avatarUrl = user.avatar || placeholderPfp; // Use placeholder if avatar is null
+  const [status, setStatus] = useState("");
 
   const [isCertificatesSwitched, setIsCertificatesSwitched] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,9 +32,19 @@ const Lessons = () => {
     const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
       try {
-        const [userData] = await Promise.all([fetchUserData(childId)]);
+        const userData = await fetchUserData(childId);
         setUser(userData);
-        console.log(user.id);
+
+        // Calculate status based on the fetched userData
+        let user_status = "";
+        if (userData.has_subscription && !userData.is_free_trial) {
+          user_status = "ПРЕМИУМ";
+        } else if (userData.has_subscription && userData.is_free_trial) {
+          user_status = "ПРОБНЫЙ ПЕРИОД";
+        } else {
+          user_status = "НЕТ ПОДПИСКИ";
+        }
+        setStatus(user_status);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -42,7 +53,7 @@ const Lessons = () => {
     };
 
     fetchData();
-  }, []);
+  }, []); // The empty dependency array ensures this runs once on mount
 
   if (loading) {
     return <Loader></Loader>;
@@ -91,6 +102,50 @@ const Lessons = () => {
                     height: "100px",
                   }}
                 />
+                <p
+                  style={{
+                    backgroundColor:
+                      status === "ПРЕМИУМ"
+                        ? "#FFD700" // Gold background for premium
+                        : status === "ПРОБНЫЙ ПЕРИОД"
+                        ? "#E0E0E0" // Light grey background for free trial
+                        : "transparent", // No background for no subscription
+                    fontSize: status === "ПРЕМИУМ" ? "large" : "medium",
+                    fontWeight: status === "ПРЕМИУМ" ? "600" : "500",
+                    color:
+                      status === "ПРЕМИУМ"
+                        ? "#069046" // Green color for premium
+                        : status === "ПРОБНЫЙ ПЕРИОД"
+                        ? "#333333" // Dark grey color for free trial
+                        : "#666666", // Light grey color for no subscription
+                    margin: "10px 0",
+                    padding: status === "ПРЕМИУМ" ? "10px 20px" : "5px 10px",
+                    textAlign: "center",
+                    borderRadius: status === "ПРЕМИУМ" ? "5px" : "3px",
+                    border: status === "ПРЕМИУМ" ? "2px solid #FFD700" : "none",
+                  }}
+                >
+                  {status}
+                </p>
+                {(status === "НЕТ ПОДПИСКИ" || status === "ПРОБНЫЙ ПЕРИОД") && (
+                  <Link
+                    to="/subscription-details"
+                    style={{
+                      display: "inline-block",
+                      margin: "10px 0",
+                      padding: "10px 20px",
+                      backgroundColor: "#7a32d1",
+                      color: "#ffffff",
+                      borderRadius: "5px",
+                      textDecoration: "none",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      fontSize: "medium",
+                    }}
+                  >
+                    Перейти на премиум
+                  </Link>
+                )}
                 <p
                   style={{
                     fontSize: "x-large",
