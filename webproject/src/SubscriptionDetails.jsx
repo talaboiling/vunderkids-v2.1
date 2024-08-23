@@ -49,7 +49,6 @@ const SubscriptionDetails = () => {
           amount: payment.amount,
           data: `{\"statement\":{\"name\":\"${payment.email}\",\"invoiceID\":\"${payment.invoice_id}\"}}`,
           currency: payment.currency,
-          phone: payment.phone,
           name: payment.email.split("@")[0],
           email: payment.email,
           cardSave: false,
