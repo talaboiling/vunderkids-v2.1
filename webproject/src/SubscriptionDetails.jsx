@@ -28,6 +28,7 @@ const SubscriptionDetails = () => {
   const handleSubscription = async (planDuration) => {
     try {
       const paymentData = await initiatePayment(planDuration);
+      console.log(paymentData);
       // Now you have payment data and token, you can proceed to call halyk.pay()
       const { payment, token } = paymentData;
 
@@ -43,7 +44,7 @@ const SubscriptionDetails = () => {
             "https://api.vunderkids.kz/api/payments/payment-confirmation/",
           language: "rus",
           description: "Оплата в интернет магазине",
-          accountId: "testuser1",
+          // accountId: "testuser1",
           terminal: "cf443ee5-789c-4743-8685-db9ed3c9a9f3",
           amount: payment.amount,
           data: `{\"statement\":{\"name\":\"${payment.email}\",\"invoiceID\":\"${payment.invoice_id}\"}}`,
@@ -51,7 +52,7 @@ const SubscriptionDetails = () => {
           phone: payment.phone,
           name: payment.email.split("@")[0],
           email: payment.email,
-          cardSave: true,
+          cardSave: false,
         };
 
         paymentObject.auth = token;
