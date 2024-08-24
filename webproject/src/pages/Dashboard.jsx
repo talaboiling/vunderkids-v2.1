@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import Navdash from "./Navdash";
 import Profile from "./Profile";
 import Loader from "./Loader";
-import lionimg from "../assets/lion_hellocont.webp";
+import lionimg from "../assets/lionDash.svg";
 import mathIcon from "../assets/calculator.webp";
 import englishIcon from "../assets/english.webp";
 import {

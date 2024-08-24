@@ -205,7 +205,7 @@ function Contents() {
         </div>
       </div>
       <div className="contPartners">
-          <h1 style={{animation:"none", margin:"0"}}>{t("ourPartners")}</h1>
+          <h1 className="partnerTitle" style={{animation:"none", margin:"0", lineHeight:"normal"}}>{t("ourPartners")}</h1>
           <div className="partnerLogos">
             <img src={logoFuture} alt="Future School Logo" style={{width:"300px", height:"300px"}}/>
           </div>

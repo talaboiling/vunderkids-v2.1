@@ -8,6 +8,7 @@ import audioOn from "../../assets/taskaudio_new.svg";
 import audioOff from "../../assets/notaskaudio.svg";
 import bgmusicOn from "../../assets/bgmusic_new.svg";
 import bgmusicOff from "../../assets/nobgmusic.svg";
+import CloseIcon from '@mui/icons-material/Close';
 
 const TaskModal = ({
   user,
@@ -41,7 +42,7 @@ const TaskModal = ({
     <dialog className="studmodal" open>
       <div className="studmodal-content">
         <div className="modalHeader">
-          <span style={{ display: "flex", flexDirection: "row", gap: "2rem" }}>
+          <span style={{ display: "flex", flexDirection: "row", gap: "2rem", alignItems:"center" }}>
             <p
               className="lndsh"
               style={{
@@ -66,19 +67,56 @@ const TaskModal = ({
               <img src={cupicon} alt="" className="defaultIcon" />
               {user.cups}
             </p>
+            <button
+              className="transBtn"
+              onClick={toggleMute}
+              style={{ color: "gray" }}
+            >
+              {isMuted ? (
+                <div className="bgmusicOff" >
+                  <img src={bgmusicOff} alt="music off" style={{width:"40px", height:"40px"}}/>
+                </div>
+              ) : (
+                <div className="bgmusicOn">
+                  <img src={bgmusicOn} alt="music on" style={{width:"40px", height:"40px"}}/>
+                </div>
+              )}
+            </button>
+            {currentQuestion.audio && (
+              <>
+                <div className="taskmodalaudio">
+                  <button className="transBtn" onClick={toggleAudio}>
+                    {isAudioPlaying ? (
+                      <div className="audioOn">
+                        <img src={audioOn} alt="audio on" style={{width:"40px", height:"40px"}}/>
+                      </div>
+                    ) : (
+                      <div className="audioOff">
+                        <img src={audioOff} alt="audio off" style={{width:"40px", height:"40px"}}/>
+                      </div>
+                    )}
+                  </button>
+                </div>
+                <audio
+                  ref={audioRef}
+                  src={currentQuestion.audio}
+                  onEnded={() => setIsAudioPlaying(false)}
+                />
+              </>
+            )}
           </span>
 
           <button
-            style={{
-              float: "right",
-              backgroundColor: "lightgray",
-              border: "none",
-              borderRadius: "10px",
-              color: "#666",
-            }}
+            className="modalCloseBtn"
             onClick={closeTaskModal}
           >
             {t("close")}
+          </button>
+          <button
+            className="transBtn modalCloseBtnMob"
+            onClick={closeTaskModal}
+          >
+            <CloseIcon></CloseIcon>
           </button>
         </div>
         <div
@@ -208,29 +246,7 @@ const TaskModal = ({
                         {t("alreadyAnswered")}
                       </strong>
                     )}
-                    {currentQuestion.audio && (
-                      <>
-                        <div className="taskmodalaudio">
-                          <button className="transBtn" onClick={toggleAudio}>
-                            {isAudioPlaying ? (
-                              <div className="audioOn">
-                                <img src={audioOn} alt="audio on" />
-                              </div>
-                            ) : (
-                              <div className="audioOff">
-                                <img src={audioOff} alt="audio off" />
-                              </div>
-                            )}
-                          </button>
-                        </div>
-                        <li></li>
-                        <audio
-                          ref={audioRef}
-                          src={currentQuestion.audio}
-                          onEnded={() => setIsAudioPlaying(false)}
-                        />
-                      </>
-                    )}
+{/*                     
                     <div
                       style={{
                         float: "right",
@@ -240,21 +256,7 @@ const TaskModal = ({
                         flexDirection: "column",
                       }}
                     >
-                      <button
-                        className="transBtn"
-                        onClick={toggleMute}
-                        style={{ color: "gray" }}
-                      >
-                        {isMuted ? (
-                          <div className="bgmusicOff">
-                            <img src={bgmusicOff} alt="music off" />
-                          </div>
-                        ) : (
-                          <div className="bgmusicOn">
-                            <img src={bgmusicOn} alt="music on" />
-                          </div>
-                        )}
-                      </button>
+                      
                       <input
                         type="range"
                         id="volumeControl"
@@ -265,7 +267,7 @@ const TaskModal = ({
                         onChange={handleVolumeChange}
                         style={{ scale: "0.6" }}
                       />
-                    </div>
+                    </div> */}
                   </span>
                   {currentQuestion.question_type.startsWith("drag_and_drop") ? (
                     <DragDropContext onDragEnd={handleDragEnd}>

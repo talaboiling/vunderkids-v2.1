@@ -1211,9 +1211,25 @@ img.childcard {
   position: relative;
 }
 
-.taskmodalaudio {
+/* .taskmodalaudio {
   position: absolute;
   left: 0;
+} */
+
+.modalCloseBtn {
+  float: right;
+  background-color: lightgray;
+  border: none;
+  border-radius: 10px;
+  color: #666;
+}
+
+.modalCloseBtn:hover {
+  background-color: #ccc;
+}
+
+.modalCloseBtnMob {
+  display: none;
 }
 
 .subscriptionBanners {
@@ -1601,6 +1617,7 @@ img.childcard {
     max-width: none;
     width: 100%;
     flex-direction: column-reverse;
+    align-items: center;
   }
   .mathLesson .courseItemLeft {
     margin-right: 0;
@@ -1616,6 +1633,9 @@ img.childcard {
   }
   .mathLesson .defaultStyle {
     font-size: 2rem;
+  }
+  .mathLesson .courseNav {
+    font-size: medium;
   }
   .mathLesson .lessonsProg {
     /* display: none; */
@@ -1694,6 +1714,15 @@ img.childcard {
   .ratingPage .ratingCentral .listInRating {
     margin-top: 0;
   }
+  .mainContent .courseItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mainContent .courseItem progress {
+    width: 100%;
+  }
 }
 
 @media (max-width: 945px) {
@@ -1722,7 +1751,7 @@ img.childcard {
     width: 8vw;
     height: 2rem;
   }
-  .dashMain .courseItem {
+  .rtdash.courseItem {
     min-width: 74%;
     max-width: 75%;
   }
@@ -1731,13 +1760,14 @@ img.childcard {
     align-items: center;
   }
   .dashMain .courseItemLeft {
-    margin-right: 3%;
+    /* margin-right: 3%; */
   }
 
   .rtrat .centralLessonsInner {
     width: 100% !important;
   }
   .rtdash {
+    height: 100vh;
     overflow-x: hidden;
   }
   .rtdash .courseItem {
@@ -2006,6 +2036,9 @@ img.childcard {
   .mathLesson .defaultStyle {
     font-size: 2rem;
   }
+  .mathLesson .courseNav {
+    font-size: medium;
+  }
   .lessonsCont .contWrapper {
     width: 90%;
   }
@@ -2258,21 +2291,21 @@ img.childcard {
   .dashMain .courseItem {
     min-width: 74%;
     max-width: 75%;
-    justify-content: space-between;
+    /* justify-content: space-between; */
   }
   .dashMain .mainContent {
     justify-content: center;
     align-items: center;
   }
   .dashMain .courseItemLeft {
-    margin-right: 3%;
+    /* margin-right: 3%; */
   }
 
   .rtrat .centralLessonsInner {
     width: 100% !important;
   }
   .rtdash {
-    overflow-x: hidden;
+    height: 100vh;
   }
   .rtdash .courseItem {
   }
@@ -2541,6 +2574,9 @@ img.childcard {
   .mathLesson .defaultStyle {
     font-size: 2rem;
   }
+  .mathLesson .courseNav {
+    font-size: medium;
+  }
   .mathLesson .lessonsHr {
     max-width: 450px;
     width: 6rem;
@@ -2708,6 +2744,9 @@ img.childcard {
   .mathLesson .studmodal-content .feedbackContent {
     flex-direction: column-reverse;
   }
+  .courseNavigation {
+    font-size: small;
+  }
 }
 
 @media (max-width: 375px) {
@@ -2717,6 +2756,7 @@ img.childcard {
   }
   .sidebar {
     top: 3%;
+    /* left: -100%; */
   }
   .icons {
     font-size: 0.8rem;
@@ -2729,6 +2769,14 @@ img.childcard {
   }
   .activeProfile {
     left: 0;
+  }
+
+  .modalCloseBtn {
+    display: none;
+  }
+
+  .modalCloseBtnMob {
+    display: block;
   }
 }
 
@@ -2876,6 +2924,12 @@ img.childcard {
 
   .courseItemLeft p {
     font-size: medium; /* Adjust text font size */
+  }
+
+  .sectionItem {
+    padding: 10px; /* Adjust padding */
+    display: flex;
+    flex-direction: column;
   }
 }
 

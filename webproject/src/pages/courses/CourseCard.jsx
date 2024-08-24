@@ -16,7 +16,7 @@ const CourseCard = ({ course, t }) => {
         </p>
       </div>
       <img
-        src={course.name === "Математика" ? mathIcon : englishIcon}
+        src={mathIcon}
         alt={course.name}
         style={{
           backgroundColor: "#F8753D",
