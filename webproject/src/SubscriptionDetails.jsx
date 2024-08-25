@@ -7,12 +7,14 @@ import { getUserRole, isAuthenticated } from "./utils/authService.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { slide as Menu } from "react-burger-menu";
-import { initiatePayment } from "./utils/apiService.js";
+import { fetchUserData, initiatePayment } from "./utils/apiService.js";
 const SubscriptionDetails = () => {
   const { t } = useTranslation();
   const isLoggedIn = localStorage.getItem("access_token") !== null;
   const role = getUserRole();
   const navigate = useNavigate();
+  const [hasSubscription, setHasSubscription] = useState(false);
+  const [user, setUser] = useState();
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -23,6 +25,25 @@ const SubscriptionDetails = () => {
     return () => {
       document.body.removeChild(script);
     };
+    
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await fetchUserData();
+        setUser(userData);
+
+        // Assuming `userData` contains information about subscription status
+        if (userData.has_subscription) {
+          setHasSubscription(true);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleSubscription = async (planDuration) => {
@@ -61,8 +82,12 @@ const SubscriptionDetails = () => {
       console.error("Payment initiation failed:", error.message);
       if (error.response.status === 401) {
         navigate("/login");
+      } else if (error.response.status === 400) {
+        alert("У вас уже действует подписка: " + error.response.data.message);
       }
     }
+
+    
   };
 
   const handleLogout = () => {
@@ -86,7 +111,7 @@ const SubscriptionDetails = () => {
           <Link to="/" style={{ textDecoration: "none" }}>
             <img className="navLogo" src={logoImg} alt="logo" />
           </Link>
-          <span>
+          <span style={{paddingRight:"10px"}}>
             <p className="rev">{t("ourContacts")}:</p>
             <p className="rev">+7 775 303 7432</p>
           </span>
@@ -137,7 +162,7 @@ const SubscriptionDetails = () => {
             </div>
             <div className="navButton mob-right">
               {isLoggedIn ? (
-                <>
+                <div className="mob-right" style={{display:"flex", flexDirection:"column"}}>
                   <Link
                     to={`${
                       role === "superadmin"
@@ -155,7 +180,7 @@ const SubscriptionDetails = () => {
                   <button className="orangeButton" onClick={handleLogout}>
                     {t("exit")}
                   </button>
-                </>
+                </div>
               ) : (
                 <>
                   <Link to="/login">
@@ -306,6 +331,7 @@ const SubscriptionDetails = () => {
               <button
                 onClick={() => handleSubscription("6-month")}
                 className="payBtn"
+                disabled={hasSubscription}
               >
                 {t("choose")}
               </button>
@@ -340,6 +366,7 @@ const SubscriptionDetails = () => {
               <button
                 onClick={() => handleSubscription("annual")}
                 className="payBtn"
+                disabled={hasSubscription}
               >
                 {t("choose")}
               </button>

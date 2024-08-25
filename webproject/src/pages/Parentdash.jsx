@@ -11,6 +11,9 @@ import streak from "../assets/streak.webp";
 import nostreak from "../assets/nostreak.webp";
 import i18next from "i18next";
 import pfplaceholder from "../assets/placehoder_pfp.webp";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { slide as Menu } from "react-burger-menu";
 import { logout } from "../utils/authService";
 import {
   fetchUserData,
@@ -42,6 +45,7 @@ const Parentdash = () => {
   const [loading, setLoading] = useState(true); // Add loading state
   const [imageLoading, setImageLoading] = useState(true);
   const [checked, setChecked] = useState(i18next.language === "ru");
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -157,13 +161,22 @@ const Parentdash = () => {
     return <Loader></Loader>;
   }
 
+
+  const handleStateChange = (state) => {
+    setIsOpen(state.isOpen);
+  };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="parentdash">
       <div className="navBar" style={{ margin: "0" }}>
         <Link to="/" style={{ textDecoration: "none" }}>
           <img className="navLogo" src={logoImg} alt="logo" />
         </Link>
-        <div className="excLogo">
+        <div className="excLogo mob-right">
           <div className="mailname">{user.email}</div>
           <div className="rndsh langSelect">
             <div className="button b2" id="button-10">
@@ -182,8 +195,31 @@ const Parentdash = () => {
             <button onClick={handleLogout}>{t("exit")}</button>
           </div>
         </div>
+        <div className="menuWrapper" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faBars} style={{ color: "#00639E" }} />
+        </div>
       </div>
-
+      <Menu isOpen={isOpen} onStateChange={handleStateChange}>
+        <div className="menuParentElmnts">
+          <div className="mailname ">{user.email}</div>
+          <div className="rndsh langSelect">
+            <div className="button b2 " id="button-10">
+              <input
+                type="checkbox"
+                className="checkbox"
+                checked={checked}
+                onChange={handleChange}
+              />
+              <div className="knobs">
+                <span>ҚАЗ</span>
+              </div>
+            </div>
+          </div>
+          <div className="navButton">
+            <button onClick={handleLogout}>{t("exit")}</button>
+          </div>
+        </div>
+      </Menu>
       <div className="addchildren">
         {children.map((child) => (
           <div key={child.id} className="childcard">

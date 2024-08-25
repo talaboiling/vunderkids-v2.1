@@ -222,6 +222,21 @@ const Math = () => {
   const handleNextQuestion = async () => {
     setIsButtonDisabled(true);
     const currentQuestion = questions[currentQuestionIndex];
+
+    // Check if the user has provided an answer
+    if (
+      (currentQuestion.question_type.startsWith("drag_and_drop") && !droppedOrder.length) ||
+      (!currentQuestion.question_type.startsWith("drag_and_drop") && selectedOption === null)
+    ) {
+      setFeedbackMessage("Please answer the question before proceeding.");
+      setShowFeedback(true);
+      setTimeout(() => {
+        setShowFeedback(false);
+        setIsButtonDisabled(false);
+      }, 1500);
+      return;
+    }
+
     let isCorrect;
 
     if (currentQuestion.question_type.startsWith("drag_and_drop")) {
@@ -292,6 +307,21 @@ const Math = () => {
   const handleSubmit = async () => {
     setIsButtonDisabled(true);
     const currentQuestion = questions[currentQuestionIndex];
+
+    // Check if the user has provided an answer
+    if (
+      (currentQuestion.question_type.startsWith("drag_and_drop") && !droppedOrder.length) ||
+      (!currentQuestion.question_type.startsWith("drag_and_drop") && selectedOption === null)
+    ) {
+      setFeedbackMessage("Please answer the question before submitting.");
+      setShowFeedback(true);
+      setTimeout(() => {
+        setShowFeedback(false);
+        setIsButtonDisabled(false);
+      }, 1500);
+      return;
+    }
+
     let isCorrect;
 
     if (currentQuestion.question_type.startsWith("drag_and_drop")) {
