@@ -466,7 +466,7 @@ const Math = () => {
                       : ""
                   }
                 >
-                  Разделы
+                  {t("sections")}
                 </p>
               </Link>
               <Link
@@ -481,7 +481,7 @@ const Math = () => {
                       : ""
                   }
                 >
-                  Темы
+                  {t("topics")}
                 </p>
               </Link>
               <Link
@@ -496,7 +496,7 @@ const Math = () => {
                       : ""
                   }
                 >
-                  Задания
+                  {t("tasks")}
                 </p>
               </Link>
             </div>

@@ -179,5 +179,8 @@
   "total_correct_answers": "Всего правильных ответов",
   "total_wrong_answers": "Всего неправильных ответов",
   "tryAgain": "Попробуй еще раз",
-  "ourPartners": "Наши партнеры"
+  "ourPartners": "Наши партнеры",
+  "sections": "Разделы",
+  "topics": "Темы",
+  "tasks": "Задания"
 }
