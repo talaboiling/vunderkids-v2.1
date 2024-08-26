@@ -39,7 +39,7 @@ function Header() {
 
   return (
     <div className="headerImg">
-      <div className="navBar">
+      <div className="navBar" id="top1">
         <div className="logo">
           <Link to="/" style={{ textDecoration: "none" }}>
             <img className="navLogo" src={logoImg} alt="logo" />

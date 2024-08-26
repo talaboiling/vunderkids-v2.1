@@ -954,7 +954,7 @@ input, select {
     flex-direction: column;
     gap: 1rem;
     position: fixed;
-    top: 80%;
+    top: 65%;
     left: 90%;
     z-index: 1000;
 }

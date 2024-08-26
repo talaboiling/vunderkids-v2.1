@@ -17,6 +17,7 @@ function App() {
           <Reviews />
           <Footer />
           <Socials />
+          
         </Suspense>
       </div>
       
