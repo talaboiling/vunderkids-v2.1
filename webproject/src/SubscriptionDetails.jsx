@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { slide as Menu } from "react-burger-menu";
 import { fetchUserData, initiatePayment } from "./utils/apiService.js";
+import { logout } from "./utils/authService";
 const SubscriptionDetails = () => {
   const { t } = useTranslation();
   const isLoggedIn = localStorage.getItem("access_token") !== null;
