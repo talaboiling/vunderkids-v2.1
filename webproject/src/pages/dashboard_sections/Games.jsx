@@ -129,8 +129,8 @@ const Games = () => {
           <button onClick={() => openGameWindow("/games/3ryad/index.html")} className="game-button">Fantasy Forest</button>
           <button onClick={() => openGameWindow("/games/duckhunt/index.html")} className="game-button">Duck Hunt</button>
           <button onClick={() => openGameWindow("/games/gonki/index.html")} className="game-button">Gonki</button>
-          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/embed.js?game=FindTheOddOneOut&bgcolor=white", true)} className="game-button"><img src={OddOut} alt="" className="gameImg"/></button>
-          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/embed.js?game=TheWatermelonGame&amp;bgcolor=white", true)} className="game-button"><img src={Watermelon} alt="" className="gameImg"/></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/FindTheOddOneOut/", true)} className="game-button"><img src={OddOut} alt="" className="gameImg"/></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TheWatermelonGame/", true)} className="game-button"><img src={Watermelon} alt="" className="gameImg"/></button>
           <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TapItAway3D/", true)} className="game-button"><img src={TapItAway} alt="" className="gameImg"/></button>
           <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MergeCards/", true)} className="game-button"><img src={MergeCards} alt="" className="gameImg"/></button>
           <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MusicMahjong/", true)} className="game-button"><img src={MusicMahjong} alt="" className="gameImg"/></button>
