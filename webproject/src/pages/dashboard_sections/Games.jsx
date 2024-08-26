@@ -6,6 +6,14 @@ import { playGame, fetchUserData } from "../../utils/apiService";
 import Timer from "../../components/Timer";
 import { useTranslation } from "react-i18next";
 import Loader from "../Loader.jsx"
+import OddOut from "../../assets/findtheoddout800450.webp"
+import Watermelon from "../../assets/thewatermelongame800450.webp"
+import TapItAway from "../../assets/tapitaway3d800450.webp"
+import MergeCards from "../../assets/mergecards800450.webp"
+import MusicMahjong from "../../assets/musicmahjong800450.webp"
+import WaterSort from "../../assets/watersort800450.webp"
+import TrafficControl from "../../assets/trafficcontrol800450.webp"
+
 
 const Games = () => {
   const { t } = useTranslation();
@@ -59,7 +67,7 @@ const Games = () => {
     }
   };
 
-  const openGameWindow = async (path) => {
+  const openGameWindow = async (path, isFullUrl = false) => {
     try {
       const savedTime = localStorage.getItem('time');
   
@@ -84,7 +92,7 @@ const Games = () => {
       }
   
       if (!open) {
-        const updatedPath = path.endsWith('/') ? `${path}index.html` : path;
+        const updatedPath = isFullUrl ? path : (path.endsWith('/') ? `${path}index.html` : path);
         setGamePath(updatedPath);
         setOpen(true);
       }
@@ -93,6 +101,7 @@ const Games = () => {
       alert(error.message || "Something went wrong");
     }
   };
+  
   
 
   const closeModal = () => {
@@ -120,38 +129,55 @@ const Games = () => {
           <button onClick={() => openGameWindow("/games/3ryad/index.html")} className="game-button">Fantasy Forest</button>
           <button onClick={() => openGameWindow("/games/duckhunt/index.html")} className="game-button">Duck Hunt</button>
           <button onClick={() => openGameWindow("/games/gonki/index.html")} className="game-button">Gonki</button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/embed.js?game=FindTheOddOneOut&bgcolor=white", true)} className="game-button"><img src={OddOut} alt="" className="gameImg"/></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/embed.js?game=TheWatermelonGame&amp;bgcolor=white", true)} className="game-button"><img src={Watermelon} alt="" className="gameImg"/></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TapItAway3D/", true)} className="game-button"><img src={TapItAway} alt="" className="gameImg"/></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MergeCards/", true)} className="game-button"><img src={MergeCards} alt="" className="gameImg"/></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MusicMahjong/", true)} className="game-button"><img src={MusicMahjong} alt="" className="gameImg"/></button>
+          {/* <button onClick={() => openGameWindow("https://cdn.htmlgames.com/WaterSort/", true)} className="game-button"><img src={WaterSort} alt="" /></button> */}
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TrafficControl/", true)} className="game-button"><img src={TrafficControl} alt="" className="gameImg"/></button>
+          {/* <button onClick={() => openGameWindow("https://cdn.htmlgames.com/ConnectTheBlocks/", true)} className="game-button">Connect The Blocks</button> */}
+          {/* https://cdn.htmlgames.com/embed.js?game=TheWatermelonGame&amp;bgcolor=white */}
+          {/* https://cdn.htmlgames.com/TapItAway3D/ */}
+          {/* https://cdn.htmlgames.com/MergeCards/ */}
+          {/* https://cdn.htmlgames.com/MusicMahjong/ */}
+          {/* https://cdn.htmlgames.com/WaterSort/ */}
+          {/* https://cdn.htmlgames.com/ZigZagGate/ */}
+          {/* https://cdn.htmlgames.com/BubbleThrow/ */}
+          {/* https://cdn.htmlgames.com/TrafficControl/ */}
+          {/* https://cdn.htmlgames.com/ConnectTheBlocks/ */}
         </div>
         {open && (
-        <dialog className="studmodal" ref={modalRef}>
-          <div className="studmodal-content game-modal">
-            <div className="modalHeader" style={{ marginBottom: "20px" }}>
-              <h2 className="defaultStyle" style={{ color: "#666" }}>{t('game')}</h2>
-              <button
-                style={{
-                  float: "right",
-                  backgroundColor: "lightgray",
-                  border: "none",
-                  borderRadius: "10px",
-                  color: "#666",
-                }}
-                onClick={closeModal}
-              >
-                {t('close')}
-              </button>
+          <dialog className="studmodal" ref={modalRef}>
+            <div className="studmodal-content game-modal">
+              <div className="modalHeader" style={{ marginBottom: "20px" }}>
+                <h2 className="defaultStyle" style={{ color: "#666" }}>{t('game')}</h2>
+                <button
+                  style={{
+                    float: "right",
+                    backgroundColor: "lightgray",
+                    border: "none",
+                    borderRadius: "10px",
+                    color: "#666",
+                  }}
+                  onClick={closeModal}
+                >
+                  {t('close')}
+                </button>
+              </div>
+              <iframe
+                width="1000"
+                height="500"
+                src={gamePath.startsWith('http') ? gamePath : `https://games.vunderkids.kz${gamePath}`}
+                title="Game"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="game-iframe"
+              ></iframe>
+              {open && <Timer isActive={open} onTimeUp={handleTimeUp} />}
             </div>
-            <iframe
-              width="1000"
-              height="500"
-              src={`https://games.vunderkids.kz${gamePath}`}
-              title="Game"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="game-iframe"
-            ></iframe>
-            {open && <Timer isActive={open} onTimeUp={handleTimeUp} />}
-          </div>
-        </dialog>
+          </dialog>
         )}
       </div>
     </div>

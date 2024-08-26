@@ -1200,6 +1200,10 @@ img.childcard {
   background-color: rgb(71, 236, 71);
 }
 
+.gameImg {
+  width: 300px;
+}
+
 .game-div {
   display: grid;
   padding-right: 50px;
