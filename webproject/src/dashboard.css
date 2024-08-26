@@ -1071,6 +1071,8 @@ img.childcard {
   border: 4px solid lightgray;
   padding: 0 40px;
   overflow: hidden;
+  min-width: 170px;
+  min-height: 400px;
 }
 
 .studTaskOptions {
@@ -2751,6 +2753,13 @@ img.childcard {
   .courseNavigation {
     font-size: small;
   }
+  .modalCloseBtn {
+    display: none;
+  }
+
+  .modalCloseBtnMob {
+    display: block;
+  }
 }
 
 @media (max-width: 375px) {
@@ -2775,13 +2784,7 @@ img.childcard {
     left: 0;
   }
 
-  .modalCloseBtn {
-    display: none;
-  }
 
-  .modalCloseBtnMob {
-    display: block;
-  }
 }
 
 @media (max-width: 320px) {
