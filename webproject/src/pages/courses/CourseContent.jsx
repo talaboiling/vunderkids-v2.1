@@ -91,7 +91,7 @@ const CourseContent = () => {
                     : ""
                 }
               >
-                Разделы
+                {t("sections")}
               </p>
             </Link>
           </div>

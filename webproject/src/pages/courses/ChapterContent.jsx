@@ -95,7 +95,7 @@ const ChapterContent = () => {
                     : ""
                 }
               >
-                Разделы
+                {t("sections")}
               </p>
             </Link>
             <Link
@@ -110,7 +110,7 @@ const ChapterContent = () => {
                     : ""
                 }
               >
-                Темы
+                {t("topics")}
               </p>
             </Link>
           </div>
