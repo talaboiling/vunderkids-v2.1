@@ -1,4 +1,6 @@
 /* Activate.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 
 .activate-container {
     display: flex;
@@ -7,7 +9,7 @@
     height: 100vh;
     background: linear-gradient(to right, #6a11cb, #2575fc);
     color: white;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
   }
   
   .activate-card {

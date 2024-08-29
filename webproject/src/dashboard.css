@@ -2938,6 +2938,14 @@ img.childcard {
     display: flex;
     flex-direction: column;
   }
+
+  .ofertaTitle h1 {
+    font-size: 1.8rem; /* Adjust title font size */
+  }
+
+  .ofertaTitle .confidentialityOfertaTitle {
+    font-size: 1.5rem; /* Adjust subtitle font size */
+  }
 }
 
 /* Custom styles for the calendar */

@@ -21,6 +21,7 @@ const Confidentiality = () => {
             fontWeight: "650",
             margin: "0",
           }}
+          className="confidentialityOfertaTitle"
         >
           Политика конфиденциальности пользователей сайта Vunderkids.kz
         </h1>
