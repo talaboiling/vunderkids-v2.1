@@ -1,5 +1,9 @@
 import React, { useRef } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DndProvider } from 'react-dnd';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import DraggableItem from './DraggableItem';
+import DroppablePlaceholder from './DroppablePlaceholder';
+import CustomDragLayer from './CustomDragLayer';
 import staricon from "../../assets/navStars.webp";
 import cupicon from "../../assets/navCups.webp";
 import correctlion from "../../assets/lion_correct.webp";
@@ -218,21 +222,7 @@ const TaskModal = ({
                       <strong>{currentQuestionIndex + 1}. </strong>
                       <i>{currentQuestion.title}:</i> <br />
                       <strong>
-                        {currentQuestion.question_text
-                          .split("_")
-                          .map((part, index) => (
-                            <React.Fragment key={index}>
-                              {part}
-                              {index <
-                                currentQuestion.question_text.split("_")
-                                  .length -
-                                  1 && (
-                                <span className="dnd-placeholder">
-                                  {droppedOrder[index]?.value || "_____"}
-                                </span>
-                              )}
-                            </React.Fragment>
-                          ))}
+                        {currentQuestion.question_text}
                       </strong>
                     </span>
                     {currentQuestion.is_attempted && (
@@ -270,138 +260,28 @@ const TaskModal = ({
                     </div> */}
                   </span>
                   {currentQuestion.question_type.startsWith("drag_and_drop") ? (
-                    <DragDropContext onDragEnd={handleDragEnd}>
-                      <Droppable droppableId="droppable" direction="horizontal">
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="dndPlaceholders"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              flexWrap: "wrap",
-                              gap: "1rem",
-                            }}
-                          >
-                            {currentQuestion.question_text
-                              .split("_")
-                              .map((text, index) => (
-                                <span key={index}>
-                                  {text}
-                                  {index <
-                                    currentQuestion.question_text.split("_")
-                                      .length -
-                                      1 && (
-                                    <Droppable
-                                      droppableId={`droppable-${index}`}
-                                      direction="horizontal"
-                                    >
-                                      {(provided, snapshot) => (
-                                        <div
-                                          ref={provided.innerRef}
-                                          {...provided.droppableProps}
-                                          className="placeholder"
-                                          style={{
-                                            width: "100px",
-                                            height: "100px",
-                                            border: "2px dashed #ccc",
-                                            display: "inline-block",
-                                            backgroundColor:
-                                              snapshot.isDraggingOver
-                                                ? "lightblue"
-                                                : "inherit",
-                                          }}
-                                        >
-                                          {droppedOrder[index] && (
-                                            <Draggable
-                                              key={`option-${droppedOrder[index].id}`}
-                                              draggableId={`option-${droppedOrder[index].id}`}
-                                              index={index}
-                                            >
-                                              {(provided, snapshot) => (
-                                                <div
-                                                  ref={provided.innerRef}
-                                                  {...provided.draggableProps}
-                                                  {...provided.dragHandleProps}
-                                                  style={{
-                                                    ...provided.draggableProps
-                                                      .style,
-                                                    width: "100px",
-                                                    height: "100px",
-                                                    background:
-                                                      snapshot.isDragging
-                                                        ? "lightgreen"
-                                                        : "lightgray",
-                                                  }}
-                                                >
-                                                  {
-                                                    currentQuestion.options.find(
-                                                      (option) =>
-                                                        option.id ===
-                                                        droppedOrder[index]
-                                                    )?.value
-                                                  }
-                                                </div>
-                                              )}
-                                            </Draggable>
-                                          )}
-                                          {provided.placeholder}
-                                        </div>
-                                      )}
-                                    </Droppable>
-                                  )}
-                                </span>
-                              ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                      <Droppable droppableId="options" direction="horizontal">
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="dndOptions"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              flexWrap: "wrap",
-                              gap: "1rem",
-                            }}
-                          >
-                            {currentQuestion.options.map((option, idx) => (
-                              <Draggable
-                                key={`option-${option.id}`}
-                                draggableId={`option-${option.id}`}
+                    <DndProvider backend={TouchBackend} options ={{ enableMouseEvents: true }}>
+                      
+                      <ul className="studTaskImages">
+                        {currentQuestion.question_text.split("_").map((part, idx) => (
+                            <li key={idx}>
+                              <DroppablePlaceholder
                                 index={idx}
-                              >
-                                {(provided, snapshot) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      ...provided.draggableProps.style,
-                                      width: "100px",
-                                      height: "100px",
-                                      background: snapshot.isDragging
-                                        ? "lightgreen"
-                                        : "lightgray",
-                                      textAlign: "center",
-                                      lineHeight: "100px",
-                                    }}
-                                  >
-                                    {option.value}
-                                  </div>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </DragDropContext>
+                                droppedItem={droppedOrder[idx]?.value}
+                                onDrop={handleDragEnd}
+                              />
+                            </li>
+                        ))}
+                      </ul>
+                      <ul className="studTaskOptions">
+                        {currentQuestion.options.map((option, idx) => (
+                          <li key={idx} className="studTaskOption">
+                            <DraggableItem option={option} />
+                          </li>
+                        ))}
+                      </ul>
+                      <CustomDragLayer />
+                    </DndProvider>
                   ) : (
                     <ul
                       className={
