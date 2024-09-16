@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBars} from "@fortawesome/free-solid-svg-icons";
 import {slide as Menu} from "react-burger-menu";
 
-function TeacherRegger() {
+function ParentRegger() {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: "",
@@ -184,7 +184,7 @@ function TeacherRegger() {
         <div className="regPage olympRegPage">
           <div className="regform">
             <div className="formTitle">
-              <h3 className="form-h3">{t("Регистрация для Учителей")}</h3>
+              <h3 className="form-h3">{t("Регистрация для Родителей")}</h3>
               <Link to="/login" className="formLink">
                 {t("haveAccount")}
               </Link>
@@ -209,16 +209,6 @@ function TeacherRegger() {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                />
-                <label htmlFor="school">{t("Название вашей школы")}</label>
-                <input
-                    type="text"
-                    id="school"
-                    name="school"
-                    placeholder="Школа им. Абая"
-                    value={formData.school}
-                    onChange={handleInputChange}
-                    required
                 />
                 {/* <span>
                   <label htmlFor="phone">{t("phone")}</label>
@@ -316,4 +306,4 @@ function TeacherRegger() {
   );
 }
 
-export default TeacherRegger;
+export default ParentRegger;

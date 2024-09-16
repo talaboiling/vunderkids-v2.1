@@ -225,21 +225,21 @@ const OlympRegRoles = () => {
         <h2 style={{animation:"none", color:"white", maxWidth:"1000px", lineHeight:"normal", textAlign:"center"}}>ДЛЯ УЧАСТИЯ В ОЛИМПИАДЕ, ВЫБЕРИТЕ ВАШУ РОЛЬ</h2>
         <div className="regaRoles">
             <div className="regaRole">
-                <Link to={"/"}>
+                <Link to={"/registration-for-teachers"}>
                     <img src={teacher} alt="role-teacher" />
                 </Link>
                 <h2>УЧИТЕЛЬ</h2>
                 <p>Для регистраций нескольких учеников</p>
             </div>
             <div className="regaRole">
-                <Link to={"/"}>
+                <Link to={"/registration-for-parents"}>
                     <img src={parent} alt="role-teacher" />
                 </Link>
                 <h2>РОДИТЕЛЬ</h2>
                 <p>Для регистраций вашего ребенка (детей)</p>
             </div>
             <div className="regaRole">
-                <Link to={"/"}>
+                <Link to={"/registration-for-students"}>
                     <img src={student} alt="role-teacher" />
                 </Link>
                 <h2>УЧЕНИК</h2>

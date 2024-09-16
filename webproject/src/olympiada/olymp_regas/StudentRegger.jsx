@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBars} from "@fortawesome/free-solid-svg-icons";
 import {slide as Menu} from "react-burger-menu";
 
-function TeacherRegger() {
+function StudentRegger() {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: "",
@@ -184,7 +184,7 @@ function TeacherRegger() {
         <div className="regPage olympRegPage">
           <div className="regform">
             <div className="formTitle">
-              <h3 className="form-h3">{t("Регистрация для Учителей")}</h3>
+              <h3 className="form-h3">{t("Регистрация для Учеников")}</h3>
               <Link to="/login" className="formLink">
                 {t("haveAccount")}
               </Link>
@@ -210,16 +210,43 @@ function TeacherRegger() {
                 onChange={handleInputChange}
                 required
                 />
-                <label htmlFor="school">{t("Название вашей школы")}</label>
-                <input
-                    type="text"
-                    id="school"
-                    name="school"
-                    placeholder="Школа им. Абая"
-                    value={formData.school}
-                    onChange={handleInputChange}
-                    required
-                />
+              <div className="rowInput">
+                  <div className="colInput">
+                    <label htmlFor="birthday">Дата рождения</label>
+                    <input type="date" name="birthday" id="birthday" />
+                  </div>
+                  <div className="colInput">
+                    <label htmlFor="gender">{t("gender")}</label>
+                    <select
+                      id="gender"
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">{t("choose_gender")}</option>
+                      <option value="M">{t("boy")}</option>
+                      <option value="F">{t("girl")}</option>
+                      <option value="O">{t("other")}</option>
+                    </select>
+                  </div>
+                  <div className="colInput">
+                    <label htmlFor="grade">{t("studClass")}</label>
+                    <select
+                      id="grade"
+                      name="grade"
+                      value={formData.grade}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="0">{t("preschool")}</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                  </div>
+                </div>
+                
                 {/* <span>
                   <label htmlFor="phone">{t("phone")}</label>
                   <br />
@@ -316,4 +343,4 @@ function TeacherRegger() {
   );
 }
 
-export default TeacherRegger;
+export default StudentRegger;

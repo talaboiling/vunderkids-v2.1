@@ -36,6 +36,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SubscriptionDetails from "./SubscriptionDetails.jsx";
 import OlympRules from "./OlympRules.jsx";
 import OlympRegRoles from "./OlympRegRoles.jsx";
+import TeacherRegger from "./olympiada/olymp_regas/TeacherRegger.jsx";
+import ParentRegger from "./olympiada/olymp_regas/ParentRegger.jsx";
+import StudentRegger from "./olympiada/olymp_regas/StudentRegger.jsx";
 
 
 const router = createBrowserRouter([
@@ -52,6 +55,9 @@ const router = createBrowserRouter([
   { path: "/payment-failed", element: <Nopayment /> },
   { path: "/olympiad-rules", element: <OlympRules /> },
   { path: "/olympiad-registrations", element: <OlympRegRoles /> },
+  { path: "/registration-for-teachers", element: <TeacherRegger /> },
+  { path: "/registration-for-parents", element: <ParentRegger /> },
+  { path: "/registration-for-students", element: <StudentRegger /> },
   {
     path: "/parent",
     element: <AuthRoute element={<Parentdash />} allowedRoles={["parent"]} />,
