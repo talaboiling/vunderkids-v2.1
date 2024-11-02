@@ -58,12 +58,12 @@ const SubscriptionDetails = () => {
         const paymentObject = {
           invoiceId: payment.invoice_id,
           invoiceIdAlt: payment.invoice_id_alt,
-          backLink: "https://vunderkids.kz/payment-successful/",
-          failureBackLink: "https://vunderkids.kz/payment-failed/",
+          backLink: "https://protosedu.kz/payment-successful/",
+          failureBackLink: "https://protosedu.kz/payment-failed/",
           postLink:
-            "https://api.vunderkids.kz/api/payments/payment-confirmation/",
+            "https://api.protosedu.kz/api/payments/payment-confirmation/",
           failurePostLink:
-            "https://api.vunderkids.kz/api/payments/payment-confirmation/",
+            "https://api.protosedu.kz/api/payments/payment-confirmation/",
           language: "rus",
           description: "Оплата в интернет магазине",
           // accountId: "testuser1",
