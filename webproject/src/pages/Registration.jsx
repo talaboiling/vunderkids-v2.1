@@ -277,7 +277,7 @@ function Registration() {
                 />
               </div>
               <ReCAPTCHA
-                sitekey="6LcuAXEqAAAAANIOYV2SzA97q61sQwNuTjQlVUwQ"
+                sitekey="6Lc6NnEqAAAAADAwEVxqkfnc4TgfKgbeoVN1ibaf"
                 onChange={handleCaptchaChange}
               />
 
