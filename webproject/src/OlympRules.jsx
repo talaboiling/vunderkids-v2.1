@@ -224,9 +224,9 @@ const OlympRules = () => {
         <button className="orangeButton" onClick={() => setShowModal(true)}>ОЗНАКОМИТЬСЯ</button>
       </div>
       {showModal && (
-        <dialog ref={dialogRef} open className="olympmodal" onClick={handleBackgroundClick}>
+        <dialog ref={dialogRef} open className="olympmodal rulemodal" onClick={handleBackgroundClick}>
           <div className="modal-content">
-            <iframe src={tempdoc} frameborder="0" width={"1000px"} height={"500px"}></iframe>
+            <iframe src={tempdoc} frameborder="0" width={"100%"} height={"500px"}></iframe>
             <div className="modal-footer">
               <label htmlFor="">Я ознакомился с правилами проведения олимпиады</label>
               <input type="checkbox" onChange={handleCheckboxChange}/>

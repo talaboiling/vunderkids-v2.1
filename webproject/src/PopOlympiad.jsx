@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import CloseIcon from '@mui/icons-material/Close';
 const PopOlympiad = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dialogRef = useRef(null); // Use a ref to access the dialog element
@@ -33,6 +34,7 @@ const PopOlympiad = () => {
                     onClick={handleBackgroundClick} // Attach the background click handler
                 >
                     <div className="olympmodal-content">
+                        <CloseIcon className='popCloseIcon' onClick={handleClose} sx={{fontSize:"50px"}}/>
                         <span className='olympmodal-header'>
                             <h1 style={{ animation: "none", color: 'white' }}>ОЛИМПИАДА ПО МАТЕМАТИКЕ</h1>
                             <p className='olymp-info'>ПРИЗОВОЙ ФОНД 500 000 ТГ</p>

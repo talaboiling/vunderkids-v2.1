@@ -262,17 +262,17 @@ const TaskModal = ({
                   {currentQuestion.question_type.startsWith("drag_and_drop") ? (
                     <DndProvider backend={TouchBackend} options ={{ enableMouseEvents: true }}>
                       
-                      <ul className="studTaskImages">
+                      
                         {currentQuestion.question_text.split("_").map((part, idx) => (
-                            <li key={idx}>
+                            
                               <DroppablePlaceholder
                                 index={idx}
                                 droppedItem={droppedOrder[idx]?.value}
                                 onDrop={handleDragEnd}
                               />
-                            </li>
+                            
                         ))}
-                      </ul>
+                      
                       <ul className="studTaskOptions">
                         {currentQuestion.options.map((option, idx) => (
                           <li key={idx} className="studTaskOption">

@@ -1139,7 +1139,10 @@ column-gap: 1rem;
     flex-direction: column;
     align-items: center;
     padding: 150px 150px 70px 150px;
+    position: relative;
 }
+
+
 
 .olympmodal-header {
     display: flex;
@@ -1174,7 +1177,177 @@ column-gap: 1rem;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 85vh;
+    height: 100vh;
+}
+
+@media (max-width: 1024px) {
+    .olympmodal-content {
+        padding: 150px 50px 70px 50px;
+        background-size: contain;
+    }
+
+    .olympmodal-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.7rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.7rem;
+        margin-top: -40px;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 50px;
+        left: 10px;
+    }
+
+    .olympmodal-header {
+        gap: 1rem;
+    }
+
+    .rules-container dialog {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .olympmodal-content {
+        padding: 80px 20px 40px 20px;
+    }
+    .olympmodal-content h1 {
+        font-size: 1.7rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.7rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.6rem;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 20px;
+        left: 10px;
+        font-size: 2.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 1.5rem;
+        
+    }
+}
+
+@media (max-width: 580px) {
+    .olympmodal-content {
+        padding: 80px 10px 20px 10px;
+    }
+
+    .olympmodal-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 1rem;
+        margin-bottom: 60px;
+    }
+}
+
+@media (max-width: 490px) {
+    .olympmodal-content {
+        padding: 80px 10px 20px 10px;
+        background-size: fill;
+    }
+    .olympmodal-content h1 {
+        font-size: 1.1rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.4rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 20px;
+        left: 10px;
+        font-size: 1.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 1rem;
+        margin-bottom: 40px;
+    }
+
+}
+
+@media (max-width: 390px) {
+    .olympmodal-content {
+        padding: 80px 10px 20px 10px;
+        background-size: fill;
+    }
+    .olympmodal-content h1 {
+        font-size: 1rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.4rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 0px;
+        left: 10px;
+        font-size: 1.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 0.5rem;
+    }
+
+}
+@media (max-width: 390px) {
+    .olympmodal-content {
+        padding: 60px 10px 20px 10px;
+        background-size: fill;
+    }
+    .olympmodal-content h1 {
+        font-size: 1rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.4rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 20px;
+        left: 10px;
+        font-size: 1.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 0.7rem;
+        margin-bottom: 40px;
+    }
+
 }
 
 .modal-footer {
@@ -1203,6 +1376,8 @@ column-gap: 1rem;
     flex-direction: row;
     align-items: center;
     gap: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .regaRole {
@@ -1244,6 +1419,13 @@ column-gap: 1rem;
 .colInput {
     display: flex;
     flex-direction: column; 
+}
+
+.popCloseIcon {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    color: black;
 }
 
 
