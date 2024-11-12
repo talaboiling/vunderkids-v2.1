@@ -13,7 +13,7 @@ function App() {
     <>
       <div className="contain">
         <Suspense fallback={null}>
-          <PopOlympiad />
+          {/* <PopOlympiad /> */}
           <Header />
           <Contents />
           <Reviews />
