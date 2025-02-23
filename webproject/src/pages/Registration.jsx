@@ -61,11 +61,11 @@ function Registration() {
       return;
     }
 
-    if (!captchaValue) {
-      setResponseMessage(t("Пожалуйста пройдите CAPTCHA."));
-      setShowModal(true);
-      return;
-    }
+    // if (!captchaValue) {
+    //   setResponseMessage(t("Пожалуйста пройдите CAPTCHA."));
+    //   setShowModal(true);
+    //   return;
+    // }
 
     const body = {
       email: formData.email,
@@ -276,10 +276,10 @@ function Registration() {
                   required
                 />
               </div>
-              <ReCAPTCHA
+              {/* <ReCAPTCHA
                 sitekey="6Lc6NnEqAAAAADAwEVxqkfnc4TgfKgbeoVN1ibaf"
                 onChange={handleCaptchaChange}
-              />
+              /> */}
 
               <input
                 type="submit"

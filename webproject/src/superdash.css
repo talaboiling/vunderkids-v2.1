@@ -169,7 +169,7 @@
   margin-top: 30px;
 }
 
-.formLeft{
+.formLeft {
   display: flex;
   flex-direction: column;
 }
@@ -211,13 +211,12 @@
   background-color: transparent;
 }
 
-.transBtn .langBtn{
+.transBtn .langBtn {
   background-color: #077ac2;
   color: white;
   padding: 10px 20px;
   border-radius: 20px;
   font-weight: 600;
-
 }
 
 .addedCourses {
@@ -370,7 +369,8 @@
   overflow: hidden;
 }
 
-.noVidBlock, .noTask {
+.noVidBlock,
+.noTask {
   filter: grayscale(100%);
 }
 
@@ -415,7 +415,7 @@
   flex-direction: column;
 }
 
-.studVidBlock{
+.studVidBlock {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -459,24 +459,67 @@
   border-radius: 20px;
   margin-top: 20px;
   overflow-y: scroll;
-  max-height: 400px;
+  max-height: 500px;
   margin-top: 20px;
 }
 
+.taskCreationHeader{
+  width: 90%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 450px;
+}
+
+.taskToolsBar{
+  box-sizing: border-box;
+  background: #ececec;
+  height: 100%;
+  flex: 1.5;
+  width: 180px;
+  display: flex;
+  justify-content: start;
+  padding: 10px 0;
+  gap: 1rem;
+  align-items: center;
+  flex-direction: column;
+}
+
+
+.taskToolsBar_header{
+  width: 90%;
+  margin-inline: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
 .taskPreview {
-  border: 6px solid #ddd;
-  border-radius: 20px;
-  min-width: 500px;
-  min-height: 300px;
-  background-image: url(./assets/bgpicker1.svg);
+  /* border: 6px solid #ddd; */
+  /* border-radius: 20px; */
+  flex: 4;
+  height: 100%;
+  /* background-image: url(./assets/bgpicker1.svg); */
   object-fit: cover;
   background-size: cover;
   background-position: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
   overflow: hidden;
+}
+
+.taskCanvasSettings{
+  width: 80%;
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.taskCanvasSettings:empty {
+  padding: 0;
 }
 
 .previewContent {
@@ -487,7 +530,7 @@
   gap: 1rem;
 }
 
-.previewOptions{
+.previewOptions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 2rem;
@@ -495,7 +538,7 @@
   align-content: center;
 }
 
-.previewOption{
+.previewOption {
   background-color: #077ac2;
   color: white;
   border: 4px solid lightgray;
@@ -571,13 +614,13 @@
   align-content: center;
 }
 
-.questions{
+.questions {
   cursor: pointer;
   padding: 7px;
   border-bottom: 1px solid #ccc;
   display: flex;
   flex-direction: row;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -596,7 +639,7 @@
   }
 }
 
-.contentTitle{
+.contentTitle {
   background-color: white;
   border-radius: 7px;
   margin: 0;
@@ -606,19 +649,19 @@
   text-wrap: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  box-shadow: inset 5px 0 5px -5px rgb(0, 0, 0), inset -5px 0 5px -5px rgb(0, 0, 0);
+  box-shadow: inset 5px 0 5px -5px rgb(0, 0, 0),
+    inset -5px 0 5px -5px rgb(0, 0, 0);
 }
 
-.title-slide{
+.title-slide {
   display: inline-block;
 }
 
-.title-slider .title-slide{
+.title-slider .title-slide {
   animation: 15s slide infinite linear;
 }
 
-
-.supermodal{
+.supermodal {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -631,52 +674,52 @@
   z-index: 1000;
 }
 
-.modalHeader{
+.modalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .template-1 {
-  background-image: url('./assets/template-1.svg');
+  background-image: url("./assets/template-1.svg");
   background-size: cover;
   background-position: center;
 }
 
 .template-2 {
-  background-image: url('./assets/template-2.svg');
+  background-image: url("./assets/template-2.svg");
   background-size: cover;
   background-position: center;
 }
 
 .template-3 {
-  background-image: url('./assets/template-3.svg');
+  background-image: url("./assets/template-3.svg");
   background-size: cover;
   background-position: center;
 }
 
 .template-4 {
-  background-image: url('./assets/template-4.svg');
+  background-image: url("./assets/template-4.svg");
   background-size: cover;
   background-position: center;
 }
 
-.optionsImgUpload{
+.optionsImgUpload {
   display: flex;
   flex-direction: column;
 }
 
-.optionImgUpload{
+.optionImgUpload {
   display: flex;
   flex-direction: column;
   max-width: 200px;
 }
 
-.input-file{
+.input-file {
   position: relative;
 }
 
-.input-file input[type=file] {
+.input-file input[type="file"] {
   opacity: 0;
   position: absolute;
   top: 0;
@@ -686,7 +729,7 @@
   padding: 0;
 }
 
-.questionsList{
+.questionsList {
   max-height: 400px;
   overflow-y: scroll;
 }
