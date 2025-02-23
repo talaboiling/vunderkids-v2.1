@@ -6,6 +6,11 @@ function LayerList({canvas}){
     const [layers, setLayers] = useState([]);
     const [selectedLayer, setSelectedLayer] = useState(null);
 
+    const moveSelectedLayer = (direction) => {
+        if (!selectedLayer) return;
+
+    }
+
     console.log(layers, selectedLayer);
     const addItToObject = (object) => {
         if (!object.id){
@@ -80,13 +85,13 @@ function LayerList({canvas}){
     }, [canvas]);
 
     return (
-        <div className="layersList CanvasSettings darkmode">
-            <ul>
+        <div className={classes.layersListContainer}>
+            <ul className={`${classes.layersList}`}>
                 {layers.map(layer=>(
                     <li key={layer.id} onClick={()=>{selectedLayerInCanvas(layer.id)}}
-                        className={layer.id===selectedLayer ? "selected-layer" : ""}
+                        className={layer.id===selectedLayer ? classes["selected-layer"] : ""}
                     >
-                        {layer.type} {layer.zIndex}
+                        {layer.type} ({layer.zIndex})
                     </li>
                 ))}
             </ul>

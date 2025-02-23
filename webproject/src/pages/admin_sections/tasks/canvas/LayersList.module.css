@@ -1,4 +1,22 @@
 
+.layersListContainer{
+    width: 100%;
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: row-reverse;
+}
 .layersList {
-    
+    width: 60%;
+    height: 80px;
+    overflow-y: scroll;
+    font-size: 14px;
+}
+.layersList li {
+    width: auto;
+    padding: 4px 0;
+    font-weight: 700;
+}
+
+.selected-layer{
+    background-color: rgb(198, 198, 198);
 }
