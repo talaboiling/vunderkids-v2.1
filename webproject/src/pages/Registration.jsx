@@ -19,6 +19,7 @@ function Registration() {
     phone: "",
     first_name: "",
     last_name: "",
+    username: ""
   });
 
   const [responseMessage, setResponseMessage] = useState("");
@@ -74,6 +75,7 @@ function Registration() {
       first_name: formData.first_name,
       last_name: formData.last_name,
       captcha: captchaValue,
+      username: formData.username
     };
 
     try {
@@ -91,6 +93,7 @@ function Registration() {
         first_name: "",
         last_name: "",
         confirmPassword: "",
+        username: ""
       });
       setConfirmPassword("");
     }
@@ -220,6 +223,16 @@ function Registration() {
                 name="last_name"
                 placeholder="Бектұрғын"
                 value={formData.last_name}
+                onChange={handleInputChange}
+                required
+              />
+              <label htmlFor="username">{t("userName")}</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Bekturgyn123"
+                value={formData.username}
                 onChange={handleInputChange}
                 required
               />
