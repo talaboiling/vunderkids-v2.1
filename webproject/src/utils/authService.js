@@ -29,9 +29,21 @@ export const getUserRole = () => {
   // console.log("getUserRole:", role); // Debugging log
 };
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (username, password) => {
   try {
-    const response = await axios.post(`${API_URL}/login/`, { email, password });
+    const response = await axios.post(`${API_URL}/login/`, JSON.stringify({ username, password }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    // const response = await fetch(`${API_URL}/login/`, {
+    //   method: "POST",`
+    //   headers: {
+    //       "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({ username: username, password: password })
+    // });
     if (response.status === 200) {
       const { data } = response;
       setAccessToken(data.access);
