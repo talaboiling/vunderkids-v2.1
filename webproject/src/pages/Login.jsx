@@ -10,7 +10,7 @@ import Loader from "./Loader.jsx";
 
 function Login() {
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -27,10 +27,10 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(formData)
     try {
       setLoading(true);
-      const user = await loginUser(formData.email, formData.password);
+      const user = await loginUser(formData.username, formData.password);
       // console.log("Logged in user:", user); // Debugging log
       setResponseMessage(t("loginSuccessful"));
       if (user.is_superuser) {
@@ -141,13 +141,13 @@ function Login() {
               </Link>
             </div>
             <form className="registrationInput" onSubmit={handleSubmit}>
-              <label htmlFor="email">E-mail:</label>
+              <label htmlFor="username">{t("userName")}</label>
               <input
-                type="email"
-                id="email"
-                name="email"
+                type="text"
+                id="username"
+                name="username"
                 placeholder="maksat01@example.com"
-                value={formData.email}
+                value={formData.username}
                 onChange={handleInputChange}
                 required
               />
