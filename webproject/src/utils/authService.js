@@ -29,9 +29,9 @@ export const getUserRole = () => {
   // console.log("getUserRole:", role); // Debugging log
 };
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (username, password) => {
   try {
-    const response = await axios.post(`${API_URL}/login/`, { email, password });
+    const response = await axios.post(`${API_URL}/login/`, { username, password });
     if (response.status === 200) {
       const { data } = response;
       setAccessToken(data.access);
