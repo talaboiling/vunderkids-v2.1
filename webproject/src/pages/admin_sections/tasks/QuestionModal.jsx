@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Loader from '../../Loader';
 import CloseIcon from "@mui/icons-material/Close";
 import ToolsBar from './ToolsBar';
@@ -16,6 +16,9 @@ const QuestionModal = ({
     handleQuestionSubmit,
     handleImageUpload
 }) => {
+  const [content, setContent] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
+  
   return (
     <dialog
           open={showQuestionModal}
@@ -43,10 +46,10 @@ const QuestionModal = ({
                 : "Добавить вопрос"}
             </h2>
             <div className="taskConstructor">
-              <TaskInterface currentQuestion={currentQuestion} handleSelectCorrectAnswer={handleSelectCorrectAnswer}/>
+              <TaskInterface setContent={setContent} currentQuestion={currentQuestion} handleSelectCorrectAnswer={handleSelectCorrectAnswer}/>
 
               <div className="taskDetails">
-                <form onSubmit={handleQuestionSubmit}>
+                <form onSubmit={(e)=> handleQuestionSubmit(e, content)}>
                   <div className="formConstructor">
                     <div
                       style={{

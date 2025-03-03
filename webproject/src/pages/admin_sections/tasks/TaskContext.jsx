@@ -3,7 +3,7 @@ import {Circle, Rect} from "fabric";
 export const TaskInterfaceContext = createContext(null);
 import { handleObjectMoving, clearGuidelines } from "./canvas/snappingHelpers";
 
-const TaskInterfaceProvider = ({children, canvas, setCanvas}) => {
+const TaskInterfaceProvider = ({children, canvas, setCanvas, currentQuestion, setContent}) => {
     const [selectedObject, setSelectedObject] = useState(null);
     const [properties, setProperties] = useState({
         width: "",
@@ -12,6 +12,28 @@ const TaskInterfaceProvider = ({children, canvas, setCanvas}) => {
         color: "#fff"
     });
     const [onFocus, setOnFocus] = useState(false);
+    const [questionDetails, setQuestionDetails] = useState(null);
+    const [questionType, setQuestionType] = useState(null);
+    const [isChoosingDropZone, setIsChoosingDropZone] = useState(null);
+    const [dropZones, setDropZones] = useState(new Map());
+    
+    const addDropZone = (object) => {
+        setDropZones(prev => {
+            const newDropZones = new Map(prev);
+            newDropZones.set(object.id, object);
+            return newDropZones;
+        });
+    };
+
+    console.log(questionType, dropZones, isChoosingDropZone)
+    useEffect(()=>{
+        if (currentQuestion){
+            setQuestionDetails(currentQuestion);
+            setQuestionType(currentQuestion.question_type);
+        }
+    }, [currentQuestion]);
+
+    const [currentCanvas, setCurrentCanvas] = useState(null);
     console.log(canvas);
     const clearSettings = () => {
         setProperties({
@@ -26,6 +48,7 @@ const TaskInterfaceProvider = ({children, canvas, setCanvas}) => {
 
     useEffect(() => {
         if (canvas){
+            setCurrentCanvas(canvas);
             canvasRef.current = canvas;
             canvas.on("object:moving", event => {
                 handleObjectMoving(canvas, event.target, guidelines, setGuideLines);
@@ -82,13 +105,23 @@ const TaskInterfaceProvider = ({children, canvas, setCanvas}) => {
             }
         }
     }
-    console.log(onFocus)
+
+    const handleSaveClick = () => {
+        setContent({
+            dropZones: Array.from(dropZones.values()),
+            canvasData: canvas
+        });
+    }  
+
     return (
         <TaskInterfaceContext.Provider value={
             {onBackspace, selectedObject, setSelectedObject, 
             properties, setProperty, clearSettings, onPaste,
-            onFocus, setOnFocus}
-        }>
+            onFocus, setOnFocus, questionDetails, questionType, 
+            setQuestionType, isChoosingDropZone, setIsChoosingDropZone,
+            dropZones, addDropZone, handleSaveClick
+            }}
+        >
             {children}
         </TaskInterfaceContext.Provider>
     )

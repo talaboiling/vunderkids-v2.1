@@ -227,8 +227,9 @@ const Tasksection = () => {
     }
   };
 
-  const handleQuestionSubmit = async (e) => {
+  const handleQuestionSubmit = async (e, content) => {
     e.preventDefault();
+    console.log(content)
     setLoading(true);
 
     const formData = new FormData();
@@ -323,6 +324,7 @@ const Tasksection = () => {
           chapterId,
           contents[selectedTaskIndex].id,
           formData,
+          content,
           true // Indicate that this is a multipart request
         );
         setQuestions([...questions, response]);

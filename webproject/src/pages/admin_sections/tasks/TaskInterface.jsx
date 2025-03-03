@@ -2,14 +2,15 @@ import React, { useEffect, useRef, useState } from 'react'
 import Canvas from './Canvas'
 import ToolsBar from './ToolsBar'
 import { initializeFabric, handleCanvasMouseDown, handleResize } from '../../../lib/canvas'
-import { Circle, Rect } from 'fabric'
+import { Circle, Rect, IText } from 'fabric'
 import Settings from './canvas/Settings'
 import TaskInterfaceProvider from './TaskContext'
 
 
 const TaskInterface = ({
     currentQuestion,
-    handleSelectCorrectAnswer
+    handleSelectCorrectAnswer,
+    setContent
 }) => {
     const canvasRef = useRef(null);
     const fabricRef = useRef(null);
@@ -75,12 +76,11 @@ const TaskInterface = ({
         }
     }
 
-
     return (
         <div className="taskCreationHeader">
-            <TaskInterfaceProvider canvas={canvas}>
+            <TaskInterfaceProvider setContent={setContent} canvas={canvas} currentQuestion={currentQuestion}>
                 <Canvas onBackspace={onBackspace} canvasRef={canvasRef} currentQuestion={currentQuestion} handleSelectCorrectAnswer={handleSelectCorrectAnswer}/>
-                <ToolsBar canvas={canvas} functions={{addRectangle, addCircle}}/>
+                <ToolsBar canvas={canvas} functions={{addRectangle, addCircle}} />
             </TaskInterfaceProvider>
         </div>
     )

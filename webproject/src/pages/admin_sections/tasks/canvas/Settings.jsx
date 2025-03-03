@@ -4,9 +4,11 @@ import { useContext } from 'react';
 import { TaskInterfaceContext } from '../TaskContext';
 
 const Settings = ({canvas}) => {
-    const {selectedObject, setSelectedObject, properties, setProperty, clearSettings, onFocus, setOnFocus} = useContext(TaskInterfaceContext);
+    const {selectedObject, setSelectedObject, properties, setProperty, clearSettings, 
+        onFocus, setOnFocus, questionType, isChoosingDropZone, dropZones, addDropZone, setIsChoosingDropZone} = useContext(TaskInterfaceContext);
     const colorRef = useRef();
     const {width, height, color, diameter} = properties;
+    console.log(isChoosingDropZone)
 
     useEffect(()=>{
         if (canvas){
@@ -31,15 +33,36 @@ const Settings = ({canvas}) => {
                 handleObjectSelection(event.target);
             });
 
+            canvas.on("object:editing:entered", (event) => {
+                setOnFocus(true);
+            });
+
+            canvas.on("mouse:down", (event) => {
+                if (event.target) {
+                  handleObjectSelection(event.target);
+                }
+            });
+
+            // canvas.on("text:changed", (event) => {
+            //     const textObj = event.target;
+            //     console.log(textObj, onFocus)
+            //     if (textObj && (textObj.type === "i-text" || textObj.type === "textbox")) {
+            //       setOnFocus(true);
+            //     }
+            // });
+
         }
-    }, [canvas]);
+    }, [canvas, isChoosingDropZone]);
 
     const handleObjectSelection = (object) => {
-        if (!object){
-            return;
+        if (isChoosingDropZone){
+            console.log(object.id, dropZones)
+            addDropZone(object);
+            setIsChoosingDropZone(false);
+            console.log("chose drop zone, 12342134", selectedObject);
         }
 
-        console.log(object);
+        console.log(object, isChoosingDropZone);
         setSelectedObject(object);
         setOnFocus(false);
 
@@ -111,7 +134,7 @@ const Settings = ({canvas}) => {
     return (
         <div className='taskCanvasSettings'>
             <Color placeholder="color" attribute={color} inputRef={colorRef} handleInputChange={handleColorChange}/>
-            {selectedObject && selectedObject.type === "rect" && (
+            {/* {selectedObject && selectedObject.type === "rect" && (
                 <>
                     <input placeholder='Width' value={width || ""} onChange={handleWidthChange} onFocus={()=>setOnFocus(true)} onBlur={()=>setOnFocus(false)}/>
                     <input placeholder='Height' value={height || ""} onChange={handleHeightChange} onFocus={()=>setOnFocus(true)} onBlur={()=>setOnFocus(false)}/>
@@ -121,7 +144,7 @@ const Settings = ({canvas}) => {
                 <>
                     <input placeholder='Diameter' value={diameter || ""} onChange={handleDiameterChange} onFocus={()=>setOnFocus(true)} onBlur={()=>setOnFocus(false)} />
                 </>
-            )}
+            )} */}
         </div>
     )
 }

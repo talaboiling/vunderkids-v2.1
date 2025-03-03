@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react"
 import { Canvas } from "fabric"
 import classes from "./LayersList.module.css"
+import { ArrowUp, ArrowDown } from "lucide-react";
 
 function LayerList({canvas}){
     const [layers, setLayers] = useState([]);
@@ -8,6 +9,45 @@ function LayerList({canvas}){
 
     const moveSelectedLayer = (direction) => {
         if (!selectedLayer) return;
+
+        const objects = canvas.getObjects();
+
+        const object = objects.find(obj=>obj.id===selectedLayer);
+
+        if (object){
+            const currentIndex = objects.indexOf(object);
+
+            if (direction==="up" && currentIndex < objects.length-1){
+                const temp = objects[currentIndex];
+                objects[currentIndex] = objects[currentIndex+1]
+                objects[currentIndex+1] = temp;
+            } else if (direction==="down" && currentIndex > 0){
+                const temp = objects[currentIndex];
+                objects[currentIndex] = objects[currentIndex-1]
+                objects[currentIndex-1] = temp;
+            }
+
+            const backgroundColor = canvas.backgroundColor;
+
+            canvas.clear();
+
+            objects.forEach((obj)=>{
+                canvas.add(obj);
+            });
+
+            canvas.backgroundColor = backgroundColor;
+            canvas.renderAll();
+
+            objects.forEach((obj, index)=>{
+                obj.zIndex = index;
+            });
+
+            canvas.setActiveObject(object);
+
+            canvas.renderAll();
+
+            updateLayers();
+        }
 
     }
 
@@ -85,17 +125,25 @@ function LayerList({canvas}){
     }, [canvas]);
 
     return (
-        <div className={classes.layersListContainer}>
-            <ul className={`${classes.layersList}`}>
-                {layers.map(layer=>(
-                    <li key={layer.id} onClick={()=>{selectedLayerInCanvas(layer.id)}}
-                        className={layer.id===selectedLayer ? classes["selected-layer"] : ""}
-                    >
-                        {layer.type} ({layer.zIndex})
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <>
+            {layers.length>1 && (
+                <div className={classes.layersListContainer}>
+                    <div className={classes.layersListContainer_arrow}>
+                        <ArrowUp size={32} onClick={()=> moveSelectedLayer("up")}/>
+                        <ArrowDown size={32} onClick={()=> moveSelectedLayer("down")}/>
+                    </div>
+                    <ul className={`${classes.layersList}`}>
+                        {layers.map(layer=>(
+                            <li key={layer.id} onClick={()=>{selectedLayerInCanvas(layer.id)}}
+                                className={layer.id===selectedLayer ? classes["selected-layer"] : ""}
+                            >
+                                {layer.type} ({layer.zIndex})
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </>
     )
 };
 
