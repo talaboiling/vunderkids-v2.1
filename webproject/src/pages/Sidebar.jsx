@@ -31,7 +31,7 @@ const Sidebar = ({isMenuOpen}) => {
   return (
     <div className={`sidebar ${isMenuOpen ? "activeMenu" : ""}`}>
       <Link to={"/"}>
-        <img src={logo} alt="logo" className="dashsidelogo" />
+        <img src={logo} alt="logo" className="dashsidelogo"/>
       </Link>
 
       <div className="excSideLogo">

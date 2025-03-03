@@ -570,17 +570,38 @@ export const deleteTask = async (courseId, sectionId, chapterId, taskId) => {
   }
 };
 
+function formDataToObject(formData) {
+  const result = {};
+  for (const [key, value] of formData.entries()) {
+    if (key in result) {
+      if (!Array.isArray(result[key])) {
+        result[key] = [result[key]];
+      }
+      result[key].push(value);
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
+
 export const createQuestion = async (
   courseId,
   sectionId,
   chapterId,
   taskId,
-  data
+  data,
+  content
 ) => {
+  const updatedData = formDataToObject(data);
+  console.log(content)
+  updatedData["content"] = JSON.stringify(content);
+  console.log(updatedData);
   try {
     const endpoint = `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/questions/`;
     const headers = { "Content-Type": "multipart/form-data" };
-    const response = await instance.post(endpoint, data, { headers });
+    const response = await instance.post(endpoint, updatedData, { headers });
     return response.data;
   } catch (error) {
     throw new Error(error.message || "Something went wrong");

@@ -168,7 +168,7 @@ const Games = () => {
               <iframe
                 width="1000"
                 height="500"
-                src={gamePath.startsWith('http') ? gamePath : `https://games.vunderkids.kz${gamePath}`}
+                src={gamePath.startsWith('http') ? gamePath : `https://games.protosedu.kz${gamePath}`}
                 title="Game"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -7,7 +7,7 @@ function Footer() {
     <footer id="contakty">
       <div className="footer">
         <div>
-          <img src={logo} alt="logo" />
+          <img src={logo} alt="logo" style={{maxWidth:"200px"}} />
           <p style={{ color: "white" }}>
             &copy; {new Date().getFullYear()} Vunderkids
           </p>

@@ -1,5 +1,9 @@
-import React, { useRef } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import React, { useEffect, useRef, useState } from "react";
+import { DndProvider } from 'react-dnd';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import DraggableItem from './DraggableItem';
+import DroppablePlaceholder from './DroppablePlaceholder';
+import CustomDragLayer from './CustomDragLayer';
 import staricon from "../../assets/navStars.webp";
 import cupicon from "../../assets/navCups.webp";
 import correctlion from "../../assets/lion_correct.webp";
@@ -9,6 +13,9 @@ import audioOff from "../../assets/notaskaudio.svg";
 import bgmusicOn from "../../assets/bgmusic_new.svg";
 import bgmusicOff from "../../assets/nobgmusic.svg";
 import CloseIcon from '@mui/icons-material/Close';
+import { Canvas, Rect, Circle, StaticCanvas } from "fabric";
+import classes from "./TaskModal.module.css"
+import DnDquestion from "./DragAndDrop/DnDquestion";
 
 const TaskModal = ({
   user,
@@ -37,11 +44,78 @@ const TaskModal = ({
 }) => {
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+  const [content, setContent] = useState(null);
+  const [canvas, setCanvas] = useState(null);
+  const canvasRef = useRef(null);
+  const [dropZones, setDropZones] = useState(null);
+
+  console.log(currentQuestion)
+  useEffect(()=>{
+    if (currentQuestion){
+      setContent(currentQuestion.content);
+      loadCanvas(currentQuestion.content.canvasData, currentQuestion.content.dropZones);
+    }
+
+    return () => {
+      if (canvas){
+        canvas.dispose();
+      }
+    }
+  }, [currentQuestion]);
+
+  console.log(canvas);
+
+  useEffect(()=>{
+    if (canvas){
+      canvas.renderAll();
+    }
+  },[canvas]);
+
+  const loadCanvas = (canvasJson, dropZones) => {
+    const canvasElement = document.getElementById("clientcanvas");
+    
+    const newCanvas = new StaticCanvas(canvasRef.current, {
+      width: canvasElement?.clientWidth,
+      height: canvasElement?.clientHeight,
+    });
+
+    console.log(canvasJson, dropZones);
+
+
+    const nonDropZoneObjects = canvasJson.objects.filter(
+      (obj) => !obj.isDropZone
+    );
+    const filteredCanvasJson = { ...canvasJson, objects: nonDropZoneObjects };
+    
+    newCanvas.loadFromJSON(filteredCanvasJson, () => {
+      newCanvas.renderAll();
+      // Delay adding drop zones slightly to ensure loadFromJSON is fully done.
+      setTimeout(() => {
+        dropZones.forEach((dz) => {
+          const dropZone = new Rect({
+            left: dz.left,
+            top: dz.top,
+            width: dz.width,
+            height: dz.height,
+            fill: dz.fill || 'rgba(0,0,0,0.1)',
+            stroke: dz.stroke || 'blue',
+            strokeDashArray: dz.strokeDashArray || [5, 5],
+            selectable: false,
+            evented: false,
+          });
+          newCanvas.add(dropZone);
+        });
+        newCanvas.renderAll();
+        setCanvas(newCanvas);
+      }, 10); // adjust delay as needed
+    });
+  }
+
 
   return (
-    <dialog className="studmodal" open>
+    <dialog className="studmodal" open style={{display:"flex", justifyContent:"center"}}>
       <div className="studmodal-content">
-        <div className="modalHeader">
+        <div className="modalHeader" style={{position: "relative"}}>
           <span style={{ display: "flex", flexDirection: "row", gap: "2rem", alignItems:"center" }}>
             <p
               className="lndsh"
@@ -119,334 +193,198 @@ const TaskModal = ({
             <CloseIcon></CloseIcon>
           </button>
         </div>
-        <div
-          className={`studtaskDetails ${
-            currentQuestion?.template
-              ? `template-${currentQuestion.template}`
-              : ""
-          }`}
-        >
-          {showFeedback && (
-            <div
-              className={`feedbackMessage ${
-                feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
-              }`}
-            >
-              <div className="feedbackContent">
-                <img
-                  src={feedbackMessage === "Correct!" ? correctlion : wronglion}
-                  alt="lion mascot"
-                />
-                {feedbackMessage === "Correct!" ? (
-                  <p
-                    style={{
-                      color: "limegreen",
-                      fontSize: "xx-large",
-                      fontWeight: "700",
-                      textAlign: "center",
-                      backgroundColor: "white",
-                      padding: "10px",
-                      borderRadius: "15px",
-                      border: "5px solid green",
-                    }}
-                  >
-                    {t("correct")}
-                  </p>
-                ) : feedbackMessage === "Incorrect!" ? (
-                  <p
-                    style={{
-                      color: "black",
-                      fontSize: "xx-large",
-                      fontWeight: "700",
-                      textAlign: "center",
-                      backgroundColor: "white",
-                      padding: "10px",
-                      borderRadius: "15px",
-                      border: "5px solid #fa3b3b",
-                    }}
-                  >
-                    {t("incorrect")}
-                  </p>
-                ) : feedbackMessage === "Try Again" ? (
-                  <p
-                    style={{
-                      color: "orange",
-                      fontSize: "xx-large",
-                      fontWeight: "700",
-                      textAlign: "center",
-                      backgroundColor: "white",
-                      padding: "10px",
-                      borderRadius: "15px",
-                      border: "5px solid orange",
-                    }}
-                  >
-                    {t("tryAgain")}
-                  </p>
-                ) : null}
-              </div>
-            </div>
-          )}
-          <div className="questionCarousel">
-            <div className="questionContent">
-              <ul
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  fontSize: "x-large",
-                  padding: "7px 0",
-                  gap: "1rem",
-                }}
+        <div className={`studtaskDetails ${
+              currentQuestion?.template
+                ? `template-${currentQuestion.template}`
+                : ""
+            }`} style={{position: "relative"}}>
+          <canvas
+            id="clientcanvas"
+            ref={canvasRef}
+            style={{display: "block"}}
+          >
+          </canvas>
+          <div className={classes["overlay-content"]}>
+            {showFeedback && (
+              <div
+                className={`feedbackMessage ${
+                  feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
+                }`}
               >
-                <li key={currentQuestionIndex}>
-                  <span
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      maxWidth: "500px",
-                      textAlign: "center",
-                    }}
-                  >
-                    <span
-                      className={`questionTitle ${
-                        currentQuestion?.template
-                          ? `qt-template-${currentQuestion.template}`
-                          : ""
-                      }`}
-                    >
-                      <strong>{currentQuestionIndex + 1}. </strong>
-                      <i>{currentQuestion.title}:</i> <br />
-                      <strong>
-                        {currentQuestion.question_text
-                          .split("_")
-                          .map((part, index) => (
-                            <React.Fragment key={index}>
-                              {part}
-                              {index <
-                                currentQuestion.question_text.split("_")
-                                  .length -
-                                  1 && (
-                                <span className="dnd-placeholder">
-                                  {droppedOrder[index]?.value || "_____"}
-                                </span>
-                              )}
-                            </React.Fragment>
-                          ))}
-                      </strong>
-                    </span>
-                    {currentQuestion.is_attempted && (
-                      <strong
-                        style={{
-                          color: "green",
-                          padding: "35px",
-                          backdropFilter: "blur(2px)",
-                        }}
-                      >
-                        {t("alreadyAnswered")}
-                      </strong>
-                    )}
-{/*                     
-                    <div
+                <div className="feedbackContent">
+                  <img
+                    src={feedbackMessage === "Correct!" ? correctlion : wronglion}
+                    alt="lion mascot"
+                  />
+                  {feedbackMessage === "Correct!" ? (
+                    <p
                       style={{
-                        float: "right",
-                        position: "absolute",
-                        right: "0",
-                        display: "flex",
-                        flexDirection: "column",
+                        color: "limegreen",
+                        fontSize: "xx-large",
+                        fontWeight: "700",
+                        textAlign: "center",
+                        backgroundColor: "white",
+                        padding: "10px",
+                        borderRadius: "15px",
+                        border: "5px solid green",
                       }}
                     >
-                      
-                      <input
-                        type="range"
-                        id="volumeControl"
-                        min="0"
-                        max="1"
-                        step="0.01"
-                        value={volume}
-                        onChange={handleVolumeChange}
-                        style={{ scale: "0.6" }}
-                      />
-                    </div> */}
-                  </span>
-                  {currentQuestion.question_type.startsWith("drag_and_drop") ? (
-                    <DragDropContext onDragEnd={handleDragEnd}>
-                      <Droppable droppableId="droppable" direction="horizontal">
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="dndPlaceholders"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              flexWrap: "wrap",
-                              gap: "1rem",
-                            }}
-                          >
-                            {currentQuestion.question_text
-                              .split("_")
-                              .map((text, index) => (
-                                <span key={index}>
-                                  {text}
-                                  {index <
-                                    currentQuestion.question_text.split("_")
-                                      .length -
-                                      1 && (
-                                    <Droppable
-                                      droppableId={`droppable-${index}`}
-                                      direction="horizontal"
-                                    >
-                                      {(provided, snapshot) => (
-                                        <div
-                                          ref={provided.innerRef}
-                                          {...provided.droppableProps}
-                                          className="placeholder"
-                                          style={{
-                                            width: "100px",
-                                            height: "100px",
-                                            border: "2px dashed #ccc",
-                                            display: "inline-block",
-                                            backgroundColor:
-                                              snapshot.isDraggingOver
-                                                ? "lightblue"
-                                                : "inherit",
-                                          }}
-                                        >
-                                          {droppedOrder[index] && (
-                                            <Draggable
-                                              key={`option-${droppedOrder[index].id}`}
-                                              draggableId={`option-${droppedOrder[index].id}`}
-                                              index={index}
-                                            >
-                                              {(provided, snapshot) => (
-                                                <div
-                                                  ref={provided.innerRef}
-                                                  {...provided.draggableProps}
-                                                  {...provided.dragHandleProps}
-                                                  style={{
-                                                    ...provided.draggableProps
-                                                      .style,
-                                                    width: "100px",
-                                                    height: "100px",
-                                                    background:
-                                                      snapshot.isDragging
-                                                        ? "lightgreen"
-                                                        : "lightgray",
-                                                  }}
-                                                >
-                                                  {
-                                                    currentQuestion.options.find(
-                                                      (option) =>
-                                                        option.id ===
-                                                        droppedOrder[index]
-                                                    )?.value
-                                                  }
-                                                </div>
-                                              )}
-                                            </Draggable>
-                                          )}
-                                          {provided.placeholder}
-                                        </div>
-                                      )}
-                                    </Droppable>
-                                  )}
-                                </span>
-                              ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                      <Droppable droppableId="options" direction="horizontal">
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="dndOptions"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              flexWrap: "wrap",
-                              gap: "1rem",
-                            }}
-                          >
-                            {currentQuestion.options.map((option, idx) => (
-                              <Draggable
-                                key={`option-${option.id}`}
-                                draggableId={`option-${option.id}`}
-                                index={idx}
-                              >
-                                {(provided, snapshot) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      ...provided.draggableProps.style,
-                                      width: "100px",
-                                      height: "100px",
-                                      background: snapshot.isDragging
-                                        ? "lightgreen"
-                                        : "lightgray",
-                                      textAlign: "center",
-                                      lineHeight: "100px",
-                                    }}
-                                  >
-                                    {option.value}
-                                  </div>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </DragDropContext>
-                  ) : (
-                    <ul
-                      className={
-                        currentQuestion.question_type === "multiple_choice_text"
-                          ? "studTaskOptions"
-                          : "studTaskImgs"
-                      }
+                      {t("correct")}
+                    </p>
+                  ) : feedbackMessage === "Incorrect!" ? (
+                    <p
+                      style={{
+                        color: "black",
+                        fontSize: "xx-large",
+                        fontWeight: "700",
+                        textAlign: "center",
+                        backgroundColor: "white",
+                        padding: "10px",
+                        borderRadius: "15px",
+                        border: "5px solid #fa3b3b",
+                      }}
                     >
-                      {currentQuestion.options.map((option, idx) => (
-                        <li
-                          key={idx}
-                          className={
-                            currentQuestion.question_type ===
-                            "multiple_choice_text"
-                              ? `studTaskOption ${
-                                  selectedOption === option.id
-                                    ? "studTaskOptionSelected"
-                                    : ""
-                                }`
-                              : `studTaskImg ${
-                                  selectedOption === option.id
-                                    ? "studTaskImgSelected"
-                                    : ""
-                                }`
-                          }
-                          onClick={() => {
-                            handleOptionClick(option.id);
+                      {t("incorrect")}
+                    </p>
+                  ) : feedbackMessage === "Try Again" ? (
+                    <p
+                      style={{
+                        color: "orange",
+                        fontSize: "xx-large",
+                        fontWeight: "700",
+                        textAlign: "center",
+                        backgroundColor: "white",
+                        padding: "10px",
+                        borderRadius: "15px",
+                        border: "5px solid orange",
+                      }}
+                    >
+                      {t("tryAgain")}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+            )}
+            <div className="questionCarousel">
+              <div className="questionContent">
+                <ul
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    fontSize: "x-large",
+                    padding: "7px 0",
+                    gap: "1rem",
+                  }}
+                >
+                  <li key={currentQuestionIndex}>
+                    {/* <span
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        maxWidth: "500px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <span
+                        className={`questionTitle ${
+                          currentQuestion?.template
+                            ? `qt-template-${currentQuestion.template}`
+                            : ""
+                        }`}
+                      >
+                        <strong>{currentQuestionIndex + 1}. </strong>
+                        <i>{currentQuestion.title}:</i> <br />
+                        <strong>
+                          {currentQuestion.question_text}
+                        </strong>
+                      </span>
+                      {currentQuestion.is_attempted && (
+                        <strong
+                          style={{
+                            color: "green",
+                            padding: "35px",
+                            backdropFilter: "blur(2px)",
                           }}
                         >
-                          {currentQuestion.question_type ===
-                          "multiple_choice_images" ? (
-                            <img
-                              src={option.value}
-                              alt={`option-${idx}`}
-                              style={{ width: "100px", height: "100px" }}
-                            />
-                          ) : (
-                            option.value
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              </ul>
+                          {t("alreadyAnswered")}
+                        </strong>
+                      )}              
+                      <div
+                        style={{
+                          float: "right",
+                          position: "absolute",
+                          right: "0",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        
+                        <input
+                          type="range"
+                          id="volumeControl"
+                          min="0"
+                          max="1"
+                          step="0.01"
+                          value={volume}
+                          onChange={handleVolumeChange}
+                          style={{ scale: "0.6" }}
+                        />
+                      </div>
+                    </span> */}
+                    {currentQuestion.question_type.startsWith("drag_and_drop") ? (
+                      <DnDquestion 
+                        currentQuestion={currentQuestion} 
+                        droppedOrder={droppedOrder}
+                        handleDragEnd={handleDragEnd}
+                      />
+                    ) : (
+                      <ul
+                        className={
+                          currentQuestion.question_type === "multiple_choice_text"
+                            ? "studTaskOptions"
+                            : "studTaskImgs"
+                        }
+                      >
+                        {currentQuestion.options.map((option, idx) => (
+                          <li
+                            key={idx}
+                            className={
+                              currentQuestion.question_type ===
+                              "multiple_choice_text"
+                                ? `studTaskOption ${
+                                    selectedOption === option.id
+                                      ? "studTaskOptionSelected"
+                                      : ""
+                                  }`
+                                : `studTaskImg ${
+                                    selectedOption === option.id
+                                      ? "studTaskImgSelected"
+                                      : ""
+                                  }`
+                            }
+                            onClick={() => {
+                              handleOptionClick(option.id);
+                            }}
+                          >
+                            {currentQuestion.question_type ===
+                            "multiple_choice_images" ? (
+                              <img
+                                src={option.value}
+                                alt={`option-${idx}`}
+                                style={{ width: "100px", height: "100px" }}
+                              />
+                            ) : (
+                              option.value
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

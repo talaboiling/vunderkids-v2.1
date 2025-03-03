@@ -926,7 +926,6 @@ input, select {
 .registrationInput{
     display: flex;
     flex-direction: column;
-
 }
 
 .defaultIcon{
@@ -1111,6 +1110,325 @@ column-gap: 1rem;
 .menuParentElmnts {
     display: none;
 }
+
+.olympmodal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.304);
+    backdrop-filter: blur(3px);
+    z-index: 1001;
+    width: 100vw;
+    height: 100vh;
+    border: none;
+    opacity: 0;
+    animation: fade-in 0.8s 0.1s forwards cubic-bezier(0.11, 0, 0.5, 0);
+}
+
+.olympmodal-content {
+    background-image: url(./assets/Olimpiad.svg);
+    background-size: fill;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 150px 150px 70px 150px;
+    position: relative;
+}
+
+
+
+.olympmodal-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 100px;
+}
+
+.olympmodal-content h1 {
+    margin: 0;
+    max-width: 600px;
+    line-height: normal;
+    text-align: center;
+}
+
+.olymp-info {
+    background-color: #F4C200;
+    font-weight: 900;
+    padding: 0.7rem 2rem;
+    border-radius: 20px;
+}
+
+.rules-container {
+    background-image: url("./assets/olymprega_back.svg");
+    background-size: cover;
+    background-position: center;
+}
+
+.rules-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+@media (max-width: 1024px) {
+    .olympmodal-content {
+        padding: 150px 50px 70px 50px;
+        background-size: contain;
+    }
+
+    .olympmodal-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.7rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.7rem;
+        margin-top: -40px;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 50px;
+        left: 10px;
+    }
+
+    .olympmodal-header {
+        gap: 1rem;
+    }
+
+    .rules-container dialog {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .olympmodal-content {
+        padding: 80px 20px 40px 20px;
+    }
+    .olympmodal-content h1 {
+        font-size: 1.7rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.7rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.6rem;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 20px;
+        left: 10px;
+        font-size: 2.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 1.5rem;
+        
+    }
+}
+
+@media (max-width: 580px) {
+    .olympmodal-content {
+        padding: 80px 10px 20px 10px;
+    }
+
+    .olympmodal-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 1rem;
+        margin-bottom: 60px;
+    }
+}
+
+@media (max-width: 490px) {
+    .olympmodal-content {
+        padding: 80px 10px 20px 10px;
+        background-size: fill;
+    }
+    .olympmodal-content h1 {
+        font-size: 1.1rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.4rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 20px;
+        left: 10px;
+        font-size: 1.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 1rem;
+        margin-bottom: 40px;
+    }
+
+}
+
+@media (max-width: 390px) {
+    .olympmodal-content {
+        padding: 80px 10px 20px 10px;
+        background-size: fill;
+    }
+    .olympmodal-content h1 {
+        font-size: 1rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.4rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 0px;
+        left: 10px;
+        font-size: 1.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 0.5rem;
+    }
+
+}
+@media (max-width: 390px) {
+    .olympmodal-content {
+        padding: 60px 10px 20px 10px;
+        background-size: fill;
+    }
+    .olympmodal-content h1 {
+        font-size: 1rem;
+    }
+
+    .olympmodal-content p {
+        font-size: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content button {
+        font-size: 0.4rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .olympmodal-content .popCloseIcon {
+        top: 20px;
+        left: 10px;
+        font-size: 1.5rem;
+    }
+
+    .olympmodal-header {
+        gap: 0.7rem;
+        margin-bottom: 40px;
+    }
+
+}
+
+.modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 10px;
+}
+
+.modal-footer input {
+    margin: 0;
+}
+
+.inactive {
+    background-color: gray;
+}
+
+.inactive:hover {
+    background-color: gray;
+}
+
+.regaRoles {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.regaRole {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    transition-duration: 0.3s;
+}
+
+.regaRole h2 {
+    color: white;
+}
+
+.regaRole p {
+    max-width: 250px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+}
+
+.regaRole:hover {
+    cursor: pointer;
+    transform: scale(0.98);
+}
+
+.olympRegPage {
+    background-image: url("./assets/olymprega_back.svg");
+    padding: 0;
+    justify-content: center;
+}
+
+.rowInput {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.colInput {
+    display: flex;
+    flex-direction: column; 
+}
+
+.popCloseIcon {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    color: black;
+}
+
+
 @media (max-width: 1375px) {
     .menuWrapper {
         display: block;

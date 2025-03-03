@@ -62,11 +62,11 @@ function Registration() {
       return;
     }
 
-    if (!captchaValue) {
-      setResponseMessage(t("Пожалуйста пройдите CAPTCHA."));
-      setShowModal(true);
-      return;
-    }
+    // if (!captchaValue) {
+    //   setResponseMessage(t("Пожалуйста пройдите CAPTCHA."));
+    //   setShowModal(true);
+    //   return;
+    // }
 
     const body = {
       email: formData.email,
@@ -289,10 +289,10 @@ function Registration() {
                   required
                 />
               </div>
-              <ReCAPTCHA
-                sitekey="6LdOuxAqAAAAAOZuSbWfPWcvYSbu-vMtAmhYM5f7"
+              {/* <ReCAPTCHA
+                sitekey="6Lc6NnEqAAAAADAwEVxqkfnc4TgfKgbeoVN1ibaf"
                 onChange={handleCaptchaChange}
-              />
+              /> */}
 
               <input
                 type="submit"
