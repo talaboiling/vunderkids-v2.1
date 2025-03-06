@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
+// import "./tailwind.css";
 import Registration from "./pages/Registration.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Rating from "./pages/dashboard_sections/Rating.jsx";
@@ -40,10 +41,15 @@ import TeacherRegger from "./olympiada/olymp_regas/TeacherRegger.jsx";
 import ParentRegger from "./olympiada/olymp_regas/ParentRegger.jsx";
 import StudentRegger from "./olympiada/olymp_regas/StudentRegger.jsx";
 import Ktp from "./pages/Ktp.jsx";
-
+import TestsPage from "./pages/admin_components/TestsPage.jsx";
+import QuestionsPage from "./pages/admin_components/QuestionsPage.jsx";
+import QuestionDetailPage from "./pages/admin_components/QuestionDetailPage.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
+  { path: "/tests", element: <TestsPage /> },
+  { path: "/tests/:testId/questions", element: <QuestionsPage /> },
+  { path: "/questions/:questionId", element: <QuestionDetailPage /> },
   { path: "/ktp", element: <Ktp /> },
   { path: "/login", element: <Vhod /> },
   { path: "/registration", element: <Registration /> },
