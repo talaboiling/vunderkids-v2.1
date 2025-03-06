@@ -140,9 +140,16 @@ const Math = () => {
       setShowSubscriptionError(true);
       return;
     }
-    const embedUrl = url.replace("watch?v=", "embed/");
-    setVideoUrl(embedUrl);
-    setShowVideoModal(true);
+
+    const videoIdMatch = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    const videoId = videoIdMatch ? videoIdMatch[1] : null;
+    if (videoId) {
+      const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      setVideoUrl(embedUrl);
+      setShowVideoModal(true);
+    } else {
+      console.error("Invalid YouTube URL");
+    }
   };
 
   const openTaskModal = async (taskId) => {
@@ -465,7 +472,7 @@ const Math = () => {
                   className="defaultStyle courseNav"
                   id={
                     window.location.pathname ===
-                    `/dashboard/courses/${courseId}/sections`
+                      `/dashboard/courses/${courseId}/sections`
                       ? "active"
                       : ""
                   }
@@ -480,7 +487,7 @@ const Math = () => {
                   className="defaultStyle courseNav"
                   id={
                     window.location.pathname ===
-                    `/dashboard/courses/${courseId}/sections/${sectionId}/chapters`
+                      `/dashboard/courses/${courseId}/sections/${sectionId}/chapters`
                       ? "active"
                       : ""
                   }
@@ -495,7 +502,7 @@ const Math = () => {
                   className="defaultStyle courseNav"
                   id={
                     window.location.pathname ===
-                    `/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons`
+                      `/dashboard/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/lessons`
                       ? "active"
                       : ""
                   }

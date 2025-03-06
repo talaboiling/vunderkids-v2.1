@@ -44,10 +44,10 @@ function Header() {
           <Link to="/" style={{ textDecoration: "none" }}>
             <img className="navLogo" src={logoImg} alt="logo" />
           </Link>
-          <span>
+          {/* <span>
             <p className="rev">{t("ourContacts")}:</p>
             <p className="rev">+7 775 303 7432</p>
-          </span>
+          </span> */}
         </div>
         <div className="excLogo">
           <div className="navList">
@@ -68,6 +68,7 @@ function Header() {
             <a href="#obuchenie" className="navLink">
               {t("education")}
             </a>
+            <Link to="/ktp" className="navLink">КТП</Link>
             <a href="#otzyvy" className="navLink">
               {t("reviews")}
             </a>
@@ -94,17 +95,16 @@ function Header() {
           </div>
           <div className="navButton mob-right">
             {isLoggedIn ? (
-              <div className="mob-right" style={{display:"flex", flexDirection:"column"}}>
+              <div className="mob-right" style={{ display: "flex", flexDirection: "column" }}>
                 <Link
-                  to={`${
-                    role === "superadmin"
-                      ? "/admindashboard"
-                      : role === "supervisor"
+                  to={`${role === "superadmin"
+                    ? "/admindashboard"
+                    : role === "supervisor"
                       ? "/supervisor-dashboard"
                       : role === "parent"
-                      ? "/parent"
-                      : "/dashboard"
-                  }`}
+                        ? "/parent"
+                        : "/dashboard"
+                    }`}
                   className="mob-right"
                   style={{ textDecoration: "none" }}
                 >
@@ -118,7 +118,7 @@ function Header() {
                 </button>
               </div>
             ) : (
-              <div className="mob-right" style={{display:"flex", flexDirection:"column", width:""}}>
+              <div className="mob-right" style={{ display: "flex", flexDirection: "column", width: "" }}>
                 <Link to="/login" className="mob-right">
                   <button>{t("enter")}</button>
                 </Link>
@@ -187,15 +187,14 @@ function Header() {
           {isLoggedIn ? (
             <div>
               <Link
-                to={`${
-                  role === "superadmin"
-                    ? "/admindashboard"
-                    : role === "supervisor"
+                to={`${role === "superadmin"
+                  ? "/admindashboard"
+                  : role === "supervisor"
                     ? "/supervisor-dashboard"
                     : role === "parent"
-                    ? "/parent"
-                    : "/dashboard"
-                }`}
+                      ? "/parent"
+                      : "/dashboard"
+                  }`}
                 style={{ textDecoration: "none" }}
                 className="mob-right burger-login"
               >
@@ -206,7 +205,7 @@ function Header() {
                   {t("exit")}
                 </button>
               </Link>
-              
+
             </div>
           ) : (
             <div>

@@ -346,6 +346,7 @@ const Tasks = () => {
                     <option value="1">1 класс</option>
                     <option value="2">2 класс</option>
                     <option value="3">3 класс</option>
+                    <option value="4">4 класс</option>
                   </select>
                   <label htmlFor="courselang">Выберите язык обучения</label>
                   <select
@@ -359,7 +360,7 @@ const Tasks = () => {
                     <option value="ru">Русский</option>
                     <option value="kz">Қазақша</option>
                   </select>
-                  <span style={{display:"flex", flexDirection:"row", marginTop:"30px"}}>
+                  <span style={{ display: "flex", flexDirection: "row", marginTop: "30px" }}>
                     <button
                       type="submit"
                       className="superBtn"

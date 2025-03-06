@@ -5,13 +5,13 @@ const PopOlympiad = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dialogRef = useRef(null); // Use a ref to access the dialog element
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsOpen(true);
-        }, 3000);
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         setIsOpen(true);
+    //     }, 3000);
 
-        return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
-    }, []);
+    //     return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
+    // }, []);
 
     const handleClose = () => {
         setIsOpen(false);
@@ -34,7 +34,7 @@ const PopOlympiad = () => {
                     onClick={handleBackgroundClick} // Attach the background click handler
                 >
                     <div className="olympmodal-content">
-                        <CloseIcon className='popCloseIcon' onClick={handleClose} sx={{fontSize:"50px"}}/>
+                        <CloseIcon className='popCloseIcon' onClick={handleClose} sx={{ fontSize: "50px" }} />
                         <span className='olympmodal-header'>
                             <h1 style={{ animation: "none", color: 'white' }}>ОЛИМПИАДА ПО МАТЕМАТИКЕ</h1>
                             <p className='olymp-info'>ПРИЗОВОЙ ФОНД 500 000 ТГ</p>

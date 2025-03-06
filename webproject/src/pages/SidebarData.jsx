@@ -5,6 +5,7 @@ import cups from "../assets/sidecup.webp";
 import cert from "../assets/sideachieve.webp";
 import prog from "../assets/sideprog.webp";
 import game from "../assets/sidegame.webp";
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 export const SidebarData = [
   {
@@ -26,6 +27,11 @@ export const SidebarData = [
     title: "Прогресс",
     icon: <img src={prog} alt="progress" />,
     link: "/dashboard/progress",
+  },
+  {
+    title: "МОДО",
+    icon: <img src={prog} alt="progress" />,
+    link: "/dashboard/modo",
   },
   {
     title: "Игры",

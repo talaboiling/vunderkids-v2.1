@@ -39,10 +39,12 @@ import OlympRegRoles from "./OlympRegRoles.jsx";
 import TeacherRegger from "./olympiada/olymp_regas/TeacherRegger.jsx";
 import ParentRegger from "./olympiada/olymp_regas/ParentRegger.jsx";
 import StudentRegger from "./olympiada/olymp_regas/StudentRegger.jsx";
+import Ktp from "./pages/Ktp.jsx";
 
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
+  { path: "/ktp", element: <Ktp /> },
   { path: "/login", element: <Vhod /> },
   { path: "/registration", element: <Registration /> },
   { path: "/activate/:activation_token", element: <Activate /> },
@@ -96,7 +98,7 @@ const router = createBrowserRouter([
     path: "/dashboard/courses/:courseId/sections",
     element: (
       <AuthRoute
-        element={<CourseContent/>}
+        element={<CourseContent />}
         allowedRoles={["student", "parent"]}
       />
     ),

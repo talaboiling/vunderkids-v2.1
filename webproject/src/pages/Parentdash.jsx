@@ -241,10 +241,10 @@ const Parentdash = () => {
                 {child.language === "kz"
                   ? "Қаз"
                   : child.language === "ru"
-                  ? "Рус"
-                  : child.language === "en"
-                  ? "Англ"
-                  : ""}
+                    ? "Рус"
+                    : child.language === "en"
+                      ? "Англ"
+                      : ""}
                 )
               </p>
             </div>
@@ -381,6 +381,7 @@ const Parentdash = () => {
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
+                      <option value="4">4</option>
                     </select>
                   </div>
                 </div>

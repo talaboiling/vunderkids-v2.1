@@ -22,8 +22,7 @@ const VideoModal = ({ videoUrl, closeVideoModal, t }) => {
           </button>
         </div>
         <iframe
-          width="500px"
-          height="315px"
+          style={{ width: "100%", height: "auto", aspectRatio: "16/9" }}
           src={videoUrl}
           title="YouTube video player"
           frameBorder="0"
