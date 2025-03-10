@@ -585,7 +585,6 @@ function formDataToObject(formData) {
   return result;
 }
 
-
 export const createQuestion = async (
   courseId,
   sectionId,
@@ -595,7 +594,7 @@ export const createQuestion = async (
   content
 ) => {
   const updatedData = formDataToObject(data);
-  console.log(content)
+  console.log(content);
   updatedData["content"] = JSON.stringify(content);
   console.log(updatedData);
   try {
@@ -878,5 +877,23 @@ export const initiatePayment = async (duration) => {
     throw new Error(
       error.response?.data?.message || "Failed to initiate payment"
     );
+  }
+};
+
+export const importSchoolExcel = async (formData, school_id) => {
+  console.log(formData);
+  try {
+    const response = await instance.post(
+      "/schools/upload-excel/?school_id=" + school_id,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to import data");
   }
 };

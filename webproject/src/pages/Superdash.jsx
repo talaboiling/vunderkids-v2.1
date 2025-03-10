@@ -163,20 +163,6 @@ const Superdash = () => {
           >
             Добавить школу
           </button>
-          <button 
-            className="input-file"
-            style={{
-              border: "none",
-              borderRadius: "4px",
-              backgroundColor: "#509CDB",
-              fontSize: "large",
-              fontWeight: "600",
-              marginLeft: "10px",
-            }}>
-            
-              <input type="file" name="file"/>
-              <span>Импортировать школу</span>
-          </button>
           <button
             onClick={downloadExcel}
             style={{

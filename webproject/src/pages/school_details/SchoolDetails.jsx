@@ -8,7 +8,8 @@ import {
   fetchClassesData,
   fetchSchoolData,
   assignSupervisor,
-  deassignSupervisor, // Add these imports
+  deassignSupervisor,
+  importSchoolExcel
 } from "../../utils/apiService.js";
 
 import Loader from "../Loader.jsx";
@@ -31,6 +32,11 @@ const SchoolDetails = () => {
     email: "",
     phone_number: "",
   });
+
+  const [showUploadModal, setShowUploadModal] = useState(false); // Modal for Excel upload
+  const [excelFile, setExcelFile] = useState(null);  // State for Excel file
+  const [uploadStatus, setUploadStatus] = useState(null);  // State for upload status
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,6 +72,16 @@ const SchoolDetails = () => {
       [name]: value,
     });
   };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && (file.type.includes("excel") || file.type.includes("spreadsheetml") || file.name.endsWith(".xlsx") || file.name.endsWith(".xls"))) {
+      setExcelFile(file);
+    } else {
+      alert("Пожалуйста, загрузите файл Excel (.xlsx или .xls).");
+    }
+  };
+
 
   const handleSupervisorFormChange = (e) => {
     const { name, value } = e.target;
@@ -103,6 +119,29 @@ const SchoolDetails = () => {
       console.error("Error assigning supervisor:", error);
     }
   };
+
+  const handleUploadExcel = async () => {
+    if (!excelFile) {
+      alert("Пожалуйста, выберите файл для загрузки.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", excelFile);
+
+    try {
+      setUploadStatus("loading");
+      await importSchoolExcel(formData, schoolId);
+      setUploadStatus("success");
+      setExcelFile(null);
+      setShowUploadModal(false);
+      const updatedClasses = await fetchClassesData(schoolId);
+      setClasses(updatedClasses);
+    } catch (error) {
+      console.error("Ошибка загрузки:", error);
+      setUploadStatus("error");
+    }
+  };
+
 
   const handleDeassignSupervisor = async () => {
     try {
@@ -165,6 +204,21 @@ const SchoolDetails = () => {
             ))}
           </ul>
         )}
+        <button
+          onClick={() => setShowUploadModal(true)}
+          style={{
+            marginBottom: "20px",
+            border: "none",
+            borderRadius: "4px",
+            backgroundColor: "#509CDB",
+            fontSize: "large",
+            fontWeight: "600",
+          }}
+        >
+          Импортировать школу
+        </button>
+
+        <br />
         <button
           onClick={() => setShowModal(true)}
           style={{
@@ -270,6 +324,61 @@ const SchoolDetails = () => {
             </div>
           </dialog>
         )}
+
+
+        {showUploadModal && (
+          <dialog open className="modal supermodal">
+            <div className="modal-content">
+              <button
+                style={{
+                  border: "none",
+                  float: "right",
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                }}
+                onClick={() => setShowUploadModal(false)}
+              >
+                <CloseIcon sx={{ color: "gray" }} />
+              </button>
+              <h2 style={{ color: "#4F4F4F", fontSize: "x-large" }}>
+                Импортировать школы
+              </h2>
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                onChange={handleFileChange}
+                style={{ marginTop: "20px", marginBottom: "20px" }}
+              />
+              <button
+                onClick={handleUploadExcel}
+                style={{
+                  border: "none",
+                  borderRadius: "4px",
+                  backgroundColor: "#509CDB",
+                  fontSize: "large",
+                  fontWeight: "600",
+                  padding: "10px 20px",
+                }}
+              >
+                Импортировать
+              </button>
+              {uploadStatus === "loading" && (
+                <p style={{ color: "blue", marginTop: "10px" }}>Загрузка...</p>
+              )}
+              {uploadStatus === "success" && (
+                <p style={{ color: "green", marginTop: "10px" }}>
+                  Файл успешно загружен!
+                </p>
+              )}
+              {uploadStatus === "error" && (
+                <p style={{ color: "red", marginTop: "10px" }}>
+                  Ошибка при загрузке файла.
+                </p>
+              )}
+            </div>
+          </dialog>
+        )}
+
 
         {supervisorModal && (
           <dialog open className="modal supermodal">
