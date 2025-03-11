@@ -4,5 +4,5 @@ services:
   frontend:
     build: .
     ports:
-      - "5171:80"
+      - "5171:5171"
     restart: always

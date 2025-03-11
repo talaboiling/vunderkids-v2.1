@@ -7,7 +7,11 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Use Nginx to serve the build files
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
+# Use a Node.js image to serve the build files
+FROM node:18-alpine
+
+WORKDIR /app
+COPY --from=build /app/dist /app/dist
+RUN npm install -g serve
+CMD ["serve", "-s", "dist", "-l", "5171"]
+EXPOSE 5171
