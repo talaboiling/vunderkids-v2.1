@@ -96,50 +96,57 @@ const Profile = ({ user, isProfileSwitched, setIsProfileSwitched }) => {
             height: "110px",
           }}
         />
-        <p
+        <Link
+          to={status === "ПРЕМИУМ" ? "#" : "/subscription-details"}
           style={{
-            backgroundColor:
+            display: "inline-block",
+            margin: "15px 0",
+            padding: "12px 24px",
+            background:
               status === "ПРЕМИУМ"
-                ? "#FFD700" // Gold background for premium
+                ? "linear-gradient(135deg, #2FB0D7, #7B61FF)" // Blue-to-purple premium gradient
                 : status === "ПРОБНЫЙ ПЕРИОД"
-                ? "#E0E0E0" // Light grey background for free trial
-                : "transparent", // No background for no subscription
-            fontSize: status === "ПРЕМИУМ" ? "large" : "medium",
-            fontWeight: status === "ПРЕМИУМ" ? "600" : "500",
-            color:
-              status === "ПРЕМИУМ"
-                ? "#069046" // Green color for premium
-                : status === "ПРОБНЫЙ ПЕРИОД"
-                ? "#333333" // Dark grey color for free trial
-                : "#666666", // Light grey color for no subscription
-            margin: "10px 0",
-            padding: status === "ПРЕМИУМ" ? "10px 20px" : "5px 10px",
+                  ? "linear-gradient(135deg, #FFD700, #FFA500)" // Gold trial gradient
+                  : "linear-gradient(135deg, #E0E0E0, #CCCCCC)", // Dimmed gray for no subscription
+            color: "#ffffff",
+            borderRadius: "25px", // Smooth pill-like shape
+            textDecoration: "none",
             textAlign: "center",
-            borderRadius: status === "ПРЕМИУМ" ? "5px" : "3px",
-            border: status === "ПРЕМИУМ" ? "2px solid #FFD700" : "none",
+            fontWeight: "bold",
+            fontSize: "18px",
+            letterSpacing: "0.5px",
+            textTransform: "uppercase",
+            boxShadow:
+              status === "ПРЕМИУМ"
+                ? "0 4px 15px rgba(127, 97, 255, 0.5)" // Soft glow for premium
+                : status === "ПРОБНЫЙ ПЕРИОД"
+                  ? "0 4px 12px rgba(255, 165, 0, 0.5)" // Glow for trial
+                  : "0 4px 10px rgba(160, 160, 160, 0.3)", // Dim glow for no subscription
+            cursor: status === "ПРЕМИУМ" ? "default" : "pointer",
+            transition: "all 0.3s ease-in-out",
+          }}
+          onMouseEnter={(e) => {
+            if (status !== "ПРЕМИУМ") {
+              e.target.style.boxShadow = "0 6px 20px rgba(184, 87, 249, 0.6)";
+              e.target.style.transform = "scale(1.05)"; // Slight pop-out effect
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.boxShadow =
+              status === "ПРОБНЫЙ ПЕРИОД"
+                ? "0 4px 12px rgba(255, 165, 0, 0.5)"
+                : "0 4px 10px rgba(160, 160, 160, 0.3)";
+            e.target.style.transform = "scale(1)";
           }}
         >
-          {status}
-        </p>
-        {(status === "НЕТ ПОДПИСКИ" || status === "ПРОБНЫЙ ПЕРИОД") && (
-          <Link
-            to="/subscription-details"
-            style={{
-              display: "inline-block",
-              margin: "10px 0",
-              padding: "10px 20px",
-              backgroundColor: "#7a32d1",
-              color: "#ffffff",
-              borderRadius: "5px",
-              textDecoration: "none",
-              textAlign: "center",
-              fontWeight: "bold",
-              fontSize: "medium",
-            }}
-          >
-            Перейти на премиум
-          </Link>
-        )}
+          {status === "ПРЕМИУМ"
+            ? "✨ Премиум"
+            : status === "ПРОБНЫЙ ПЕРИОД"
+              ? "Пробный период"
+              : "Перейти на премиум"}
+        </Link>
+
+
 
         <p
           style={{

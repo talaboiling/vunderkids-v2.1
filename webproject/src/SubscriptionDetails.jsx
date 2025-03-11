@@ -37,7 +37,7 @@ const SubscriptionDetails = () => {
         const userData = await fetchUserData();
         setUser(userData);
 
-        if (userData.has_subscription) {
+        if (userData.has_subscription && !user.is_free_trial) {
           setHasSubscription(true);
         }
 
