@@ -16,6 +16,8 @@ const SubscriptionDetails = () => {
   const navigate = useNavigate();
   const [hasSubscription, setHasSubscription] = useState(false);
   const [user, setUser] = useState();
+  const [subscriptionExistsModal, setSubscriptionExistsModal] = useState(false);
+
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -35,10 +37,10 @@ const SubscriptionDetails = () => {
         const userData = await fetchUserData();
         setUser(userData);
 
-        // Assuming `userData` contains information about subscription status
         if (userData.has_subscription) {
           setHasSubscription(true);
         }
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -329,9 +331,18 @@ const SubscriptionDetails = () => {
                 {t("standardForStart")}
               </p>
               <button
-                onClick={() => handleSubscription("6-month")}
+                onClick={() => {
+                  if (isLoggedIn) {
+                    if (hasSubscription) {
+                      setSubscriptionExistsModal(true);
+                      return;
+                    }
+                    handleSubscription("6-month");
+                  } else {
+                    navigate("/login");
+                  }
+                }}
                 className="payBtn"
-                disabled={hasSubscription}
               >
                 {t("choose")}
               </button>
@@ -364,9 +375,18 @@ const SubscriptionDetails = () => {
                 {t("standardForStart")}
               </p>
               <button
-                onClick={() => handleSubscription("annual")}
+                onClick={() => {
+                  if (isLoggedIn) {
+                    if (hasSubscription) {
+                      setSubscriptionExistsModal(true);
+                      return;
+                    }
+                    handleSubscription("annual");
+                  } else {
+                    navigate("/login");
+                  }
+                }}
                 className="payBtn"
-                disabled={hasSubscription}
               >
                 {t("choose")}
               </button>
@@ -374,6 +394,17 @@ const SubscriptionDetails = () => {
           </div>
         </div>
       </div>
+      {subscriptionExistsModal && (
+        <dialog className="studmodal" open>
+          <div className="studmodal-content beautiful-modal">
+            <h2 className="modal-title">{t("subscriptionExistsTitle")}</h2>
+            <p className="modal-message">{t("subscriptionExistsMessage")}</p>
+            <button className="modal-close-button" onClick={() => setSubscriptionExistsModal(false)}>
+              {t("close")}
+            </button>
+          </div>
+        </dialog>
+      )}
     </div>
   );
 };
