@@ -13,6 +13,7 @@ import MergeCards from "../../assets/mergecards800450.webp"
 import MusicMahjong from "../../assets/musicmahjong800450.webp"
 import WaterSort from "../../assets/watersort800450.webp"
 import TrafficControl from "../../assets/trafficcontrol800450.webp"
+import lion_incorrect from "../../assets/lion_incorrect.webp";
 
 
 const Games = () => {
@@ -26,6 +27,9 @@ const Games = () => {
   const modalRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [notEnoughStarsModal, setNotEnoughStarsModal] = useState(false);
+
+  const GAME_COST = 20;
 
   useEffect(() => {
     loadData();
@@ -70,27 +74,27 @@ const Games = () => {
   const openGameWindow = async (path, isFullUrl = false) => {
     try {
       const savedTime = localStorage.getItem('time');
-  
+
       if (!savedTime || parseInt(savedTime, 10) <= 0) {
         const childId = localStorage.getItem("child_id");
         let response;
-  
+
         if (childId) {
           console.log(childId);
           response = await playGame(childId);
         } else {
           response = await playGame();
         }
-  
+
         if (!response.is_enough) {
-          alert(t('notEnoughStars'));
+          setNotEnoughStarsModal(true);
           return;
         }
-  
+
         await loadData();
         localStorage.setItem('time', 300);
       }
-  
+
       if (!open) {
         const updatedPath = isFullUrl ? path : (path.endsWith('/') ? `${path}index.html` : path);
         setGamePath(updatedPath);
@@ -101,8 +105,8 @@ const Games = () => {
       alert(error.message || "Something went wrong");
     }
   };
-  
-  
+
+
 
   const closeModal = () => {
     if (modalRef.current) {
@@ -116,27 +120,77 @@ const Games = () => {
     setOpen(false);
   };
 
-  if(loading) {
+  if (loading) {
     return <Loader />
   }
 
+
+
+
   return (
     <div className="rtdash rtrat gamesPage">
-      <Sidebar isMenuOpen={isMenuOpen}/>
+      <Sidebar isMenuOpen={isMenuOpen} />
       <div className="centralDash">
         <Navdash isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <div className="game-div">
-          <button onClick={() => openGameWindow("/games/3ryad/index.html")} className="game-button">Fantasy Forest</button>
-          <button onClick={() => openGameWindow("/games/duckhunt/index.html")} className="game-button">Duck Hunt</button>
+          {/* <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+            <button onClick={() => openGameWindow("/games/3ryad/index.html")} className="game-button">Fantasy Forest</button>
+          </div>
+          <div className="game-container"></div>
           <button onClick={() => openGameWindow("/games/gonki/index.html")} className="game-button">Gonki</button>
-          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/FindTheOddOneOut/", true)} className="game-button"><img src={OddOut} alt="" className="gameImg"/></button>
-          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TheWatermelonGame/", true)} className="game-button"><img src={Watermelon} alt="" className="gameImg"/></button>
-          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TapItAway3D/", true)} className="game-button"><img src={TapItAway} alt="" className="gameImg"/></button>
-          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MergeCards/", true)} className="game-button"><img src={MergeCards} alt="" className="gameImg"/></button>
-          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MusicMahjong/", true)} className="game-button"><img src={MusicMahjong} alt="" className="gameImg"/></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/FindTheOddOneOut/", true)} className="game-button"><img src={OddOut} alt="" className="gameImg" /></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TheWatermelonGame/", true)} className="game-button"><img src={Watermelon} alt="" className="gameImg" /></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TapItAway3D/", true)} className="game-button"><img src={TapItAway} alt="" className="gameImg" /></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MergeCards/", true)} className="game-button"><img src={MergeCards} alt="" className="gameImg" /></button>
+          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MusicMahjong/", true)} className="game-button"><img src={MusicMahjong} alt="" className="gameImg" /></button>
           {/* <button onClick={() => openGameWindow("https://cdn.htmlgames.com/WaterSort/", true)} className="game-button"><img src={WaterSort} alt="" /></button> */}
-          <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TrafficControl/", true)} className="game-button"><img src={TrafficControl} alt="" className="gameImg"/></button>
+          {/* <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TrafficControl/", true)} className="game-button"><img src={TrafficControl} alt="" className="gameImg" /></button> */}
           {/* <button onClick={() => openGameWindow("https://cdn.htmlgames.com/ConnectTheBlocks/", true)} className="game-button">Connect The Blocks</button> */}
+          <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+            <button onClick={() => openGameWindow("/games/3ryad/index.html")} className="game-button">Fantasy Forest</button>
+          </div>
+          <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+
+            <button onClick={() => openGameWindow("/games/duckhunt/index.html")} className="game-button">Duck Hunt</button>
+          </div>
+          <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+
+            <button onClick={() => openGameWindow("/games/gonki/index.html")} className="game-button">RACE GAME</button>
+          </div>
+          <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+
+            <button onClick={() => openGameWindow("https://cdn.htmlgames.com/FindTheOddOneOut/", true)} className="game-button"><img src={OddOut} alt="" className="gameImg" /></button>
+          </div>
+          <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+
+            <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TheWatermelonGame/", true)} className="game-button"><img src={Watermelon} alt="" className="gameImg" /></button>
+          </div>
+          <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+
+            <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TapItAway3D/", true)} className="game-button"><img src={TapItAway} alt="" className="gameImg" /></button>
+          </div>
+          <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+
+            <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MergeCards/", true)} className="game-button"><img src={MergeCards} alt="" className="gameImg" /></button>
+          </div>
+          <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+
+            <button onClick={() => openGameWindow("https://cdn.htmlgames.com/MusicMahjong/", true)} className="game-button"><img src={MusicMahjong} alt="" className="gameImg" /></button>
+          </div>
+          <div className="game-container">
+            <span className="game-cost">{GAME_COST} ⭐</span>
+
+            <button onClick={() => openGameWindow("https://cdn.htmlgames.com/TrafficControl/", true)} className="game-button"><img src={TrafficControl} alt="" className="gameImg" /></button>
+          </div>
           {/* https://cdn.htmlgames.com/embed.js?game=TheWatermelonGame&amp;bgcolor=white */}
           {/* https://cdn.htmlgames.com/TapItAway3D/ */}
           {/* https://cdn.htmlgames.com/MergeCards/ */}
@@ -147,40 +201,58 @@ const Games = () => {
           {/* https://cdn.htmlgames.com/TrafficControl/ */}
           {/* https://cdn.htmlgames.com/ConnectTheBlocks/ */}
         </div>
-        {open && (
-          <dialog className="studmodal" ref={modalRef}>
-            <div className="studmodal-content game-modal">
-              <div className="modalHeader" style={{ marginBottom: "20px" }}>
-                <h2 className="defaultStyle" style={{ color: "#666" }}>{t('game')}</h2>
-                <button
-                  style={{
-                    float: "right",
-                    backgroundColor: "lightgray",
-                    border: "none",
-                    borderRadius: "10px",
-                    color: "#666",
-                  }}
-                  onClick={closeModal}
-                >
-                  {t('close')}
-                </button>
+        {
+          open && (
+            <dialog className="studmodal" ref={modalRef}>
+              <div className="studmodal-content game-modal">
+                <div className="modalHeader" style={{ marginBottom: "20px" }}>
+                  <h2 className="defaultStyle" style={{ color: "#666" }}>{t('game')}</h2>
+                  <button
+                    style={{
+                      float: "right",
+                      backgroundColor: "lightgray",
+                      border: "none",
+                      borderRadius: "10px",
+                      color: "#666",
+                    }}
+                    onClick={closeModal}
+                  >
+                    {t('close')}
+                  </button>
+                </div>
+                <iframe
+                  width="1000"
+                  height="500"
+                  src={gamePath.startsWith('http') ? gamePath : `https://games.protosedu.kz${gamePath}`}
+                  title="Game"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="game-iframe"
+                ></iframe>
+                {open && <Timer isActive={open} onTimeUp={handleTimeUp} />}
               </div>
-              <iframe
-                width="1000"
-                height="500"
-                src={gamePath.startsWith('http') ? gamePath : `https://games.protosedu.kz${gamePath}`}
-                title="Game"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="game-iframe"
-              ></iframe>
-              {open && <Timer isActive={open} onTimeUp={handleTimeUp} />}
+            </dialog>
+          )
+        }
+
+        {notEnoughStarsModal && (
+          <dialog className="studmodal" open>
+            <div className="studmodal-content beautiful-modal">
+              <h2 className="modal-title">{t('notEnoughStarsTitle')}</h2>
+              <img src={lion_incorrect} alt="Lion Incorrect" className="modal-image" />
+              <p className="modal-message">{t('notEnoughStarsMessage')}</p>
+              <button className="modal-close-button" onClick={() => setNotEnoughStarsModal(false)}>
+                {t('close')}
+              </button>
             </div>
           </dialog>
         )}
-      </div>
-    </div>
+
+
+      </div >
+    </div >
+
   );
 };
 
