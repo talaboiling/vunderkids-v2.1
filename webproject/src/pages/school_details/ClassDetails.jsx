@@ -19,6 +19,7 @@ const ClassDetails = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
+    username: "",
     email: "",
     gender: "",
     phone_number: "",
@@ -127,12 +128,12 @@ const ClassDetails = () => {
             <div className="modal-content">
               <button
                 className="transBtn"
-                style={{ float: "right"}}
+                style={{ float: "right" }}
                 onClick={() => setShowModal(false)}
               >
                 <CloseIcon sx={{ color: "gray" }} />
               </button>
-              <form className="registrationInput" style={{marginTop:"40px"}} onSubmit={handleSubmit}>
+              <form className="registrationInput" style={{ marginTop: "40px" }} onSubmit={handleSubmit}>
                 <label htmlFor="first_name">Имя</label>
                 <input
                   type="text"
@@ -149,6 +150,16 @@ const ClassDetails = () => {
                   id="last_name"
                   name="last_name"
                   value={formData.last_name}
+                  onChange={handleFormChange}
+                  required
+                />
+
+                <label htmlFor="username">Имя пользователя</label>
+                <input
+                  type="username"
+                  id="username"
+                  name="username"
+                  value={formData.username}
                   onChange={handleFormChange}
                   required
                 />

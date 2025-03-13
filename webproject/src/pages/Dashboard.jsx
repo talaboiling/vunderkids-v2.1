@@ -52,11 +52,6 @@ const Dashboard = () => {
     const fetchData = async () => {
       const childId = localStorage.getItem("child_id");
       try {
-        // const [userData, coursesData, weeklyProgressData] = await [
-        //   fetchUserData(childId),
-        //   fetchCourses(childId),
-        //   fetchWeeklyProgress(childId),
-        // ];
         const userData = await fetchUserData(childId);
         console.log("userData", userData);
         setUser(userData);
@@ -64,8 +59,6 @@ const Dashboard = () => {
         setWeeklyProgress(weeklyProgressData.weekly_progress);
         const coursesData = await fetchCourses(childId);
         setCourses(coursesData);
-        const sectionsData = await fetchSections(childId);
-        setSections(sectionsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -234,11 +227,11 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-        <Profile
-          user={user}
-          isProfileSwitched={isProfileSwitched}
-          setIsProfileSwitched={setIsProfileSwitched}
-        />
+      <Profile
+        user={user}
+        isProfileSwitched={isProfileSwitched}
+        setIsProfileSwitched={setIsProfileSwitched}
+      />
     </div>
   );
 };
