@@ -44,6 +44,7 @@ import Ktp from "./pages/Ktp.jsx";
 import TestsPage from "./pages/admin_components/TestsPage.jsx";
 import QuestionsPage from "./pages/admin_components/QuestionsPage.jsx";
 import QuestionDetailPage from "./pages/admin_components/QuestionDetailPage.jsx";
+import TestsChild from "./pages/dashboard_sections/TestsChild.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
@@ -92,6 +93,12 @@ const router = createBrowserRouter([
     path: "/dashboard/lessons",
     element: (
       <AuthRoute element={<Lessons />} allowedRoles={["student", "parent"]} />
+    ),
+  },
+  {
+    path: "/dashboard/tests",
+    element: (
+      <AuthRoute element={<TestsChild />} allowedRoles={["student", "parent"]} />
     ),
   },
   {
