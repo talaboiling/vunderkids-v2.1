@@ -57,9 +57,11 @@ const ToolsBar = ({functions, canvas}) => {
   };
 
   const handleFileChange = (event) => {
+    console.log(event);
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const fileURL = URL.createObjectURL(file); // This is a string URL.
+      console.log(fileURL);
       addImage(fileURL);
     }
   };

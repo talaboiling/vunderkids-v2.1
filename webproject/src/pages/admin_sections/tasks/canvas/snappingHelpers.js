@@ -1,4 +1,4 @@
-import { Line } from "fabric";
+import {fabric} from "fabric";
 import React from 'react';
 
 const snappingDistance = 10;
@@ -104,7 +104,7 @@ export const clearGuidelines = (canvas) => {
 }
 
 export const createVerticalGuideline = (canvas, x, id) => {
-    return new Line([x,0,x, canvas.height], {
+    return new fabric.Line([x,0,x, canvas.height], {
         id, 
         stroke: "red",
         strokeWidth: 1,
@@ -116,7 +116,7 @@ export const createVerticalGuideline = (canvas, x, id) => {
 }   
 
 export const createHorizontalGuideline = (canvas, y, id) => {
-    return new Line([0,y,canvas.width,y], {
+    return new fabric.Line([0,y,canvas.width,y], {
         id,
         stroke: "red",
         strokeWidth: 1,

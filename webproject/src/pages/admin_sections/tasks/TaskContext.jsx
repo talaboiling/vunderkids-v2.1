@@ -91,8 +91,8 @@ const TaskInterfaceProvider = ({children, canvas, setCanvas, currentQuestion, se
               img.scaleToWidth(100);
               img.scaleToHeight(100);
               img.set({
-                left: canvas.width / 2 - img.width / 4,
-                top: canvas.height / 2 - img.height / 4,
+                left: (canvas.width - img.getScaledWidth()) / 2,
+                top: (canvas.height - img.getScaledHeight()) / 2,
                 selectable: true,
                 lockUniScaling: true,
               });
