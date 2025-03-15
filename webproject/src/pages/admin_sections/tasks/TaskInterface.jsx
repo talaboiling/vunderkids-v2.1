@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Canvas from './Canvas'
 import ToolsBar from './ToolsBar'
 import { initializeFabric, handleCanvasMouseDown, handleResize } from '../../../lib/canvas'
-import { Circle, Rect, IText } from 'fabric'
+import {fabric} from "fabric";
 import Settings from './canvas/Settings'
 import TaskInterfaceProvider from './TaskContext'
 
@@ -10,7 +10,8 @@ import TaskInterfaceProvider from './TaskContext'
 const TaskInterface = ({
     currentQuestion,
     handleSelectCorrectAnswer,
-    setContent
+    setContent,
+    handleCorrectAnswer
 }) => {
     const canvasRef = useRef(null);
     const fabricRef = useRef(null);
@@ -47,7 +48,7 @@ const TaskInterface = ({
 
     const addRectangle = () => {
         if (canvas){
-            const rectangle = new Rect({
+            const rectangle = new fabric.Rect({
                 top:100,
                 left:50,
                 width:100,
@@ -60,7 +61,7 @@ const TaskInterface = ({
 
     const addCircle = () => {
         if (canvas){
-            const circle = new Circle({
+            const circle = new fabric.Circle({
                 top:100,
                 left:50,
                 radius:50,
@@ -76,9 +77,10 @@ const TaskInterface = ({
         }
     }
 
+
     return (
         <div className="taskCreationHeader">
-            <TaskInterfaceProvider setContent={setContent} canvas={canvas} currentQuestion={currentQuestion}>
+            <TaskInterfaceProvider handleCorrectAnswer={handleCorrectAnswer} setContent={setContent} canvas={canvas} currentQuestion={currentQuestion}>
                 <Canvas onBackspace={onBackspace} canvasRef={canvasRef} currentQuestion={currentQuestion} handleSelectCorrectAnswer={handleSelectCorrectAnswer}/>
                 <ToolsBar canvas={canvas} functions={{addRectangle, addCircle}} />
             </TaskInterfaceProvider>

@@ -1,26 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Dimensions from './tools/Dimensions'
 import Text from './tools/Text'
 import Color from './tools/Color'
 import Export from './tools/Export'
-import {Square, MousePointer2} from "lucide-react"
+import {Square, MousePointer2, Cable} from "lucide-react"
 import { Circle } from 'lucide-react'
 import { CaseSensitive } from 'lucide-react'
 import Settings from './canvas/Settings'
 import LayerList from './canvas/LayersList'
-import { IText } from 'fabric'
+import {fabric} from "fabric";
 import { useContext } from 'react'
 import { TaskInterfaceContext } from './TaskContext'
 import DropZones from './DropZones'
-
+import { ImageUp } from 'lucide-react'
+import ImageGrid from './canvas/ImageGrid'
+import { Trash2 } from 'lucide-react'
 const ToolsBar = ({functions, canvas}) => {
   const {addRectangle, addCircle} = functions;
-  const {onFocus, setOnFocus, questionType, setIsChoosingDropZone, isChoosingDropZone, handleSaveClick} = useContext(TaskInterfaceContext);
+  const {onFocus, setOnFocus, questionType, setIsChoosingDropZone, 
+    isChoosingDropZone, handleSaveClick, addImage, removeObject,
+    isLinkingDnd, setIsLinkingDnd} = useContext(TaskInterfaceContext);
   console.log(questionType)
+
+  const fileInputRef = useRef(null);
 
   const addText = () => {
     if (canvas){
-        const iText = new IText("Double-click to edit", {
+        const iText = new fabric.IText("Double-click to edit", {
             left: 100,
             top: 100,
             fontSize: 24,
@@ -45,12 +51,32 @@ const ToolsBar = ({functions, canvas}) => {
   const handleDnDlogicClick = () => {
     setIsChoosingDropZone(true);
   }
+
+  function handleImageAdd(){
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const fileURL = URL.createObjectURL(file); // This is a string URL.
+      addImage(fileURL);
+    }
+  };
   return (
-    <section className="taskToolsBar">
+    <section className="taskToolsBar" style={{overflowY: "auto", height: "500px"}}>
       <div className='taskToolsBar_header'>
         <Square size={40} onClick={addRectangle}/>
         <Circle size={40} onClick={addCircle}/>
         <CaseSensitive size={40} onClick={addText}/>
+        <ImageUp size={38} onClick={handleImageAdd}/>
+        <Trash2 size={36} onClick={removeObject}/>
+        <input 
+          ref={fileInputRef} 
+          style={{display: "none"}} 
+          type='file'
+          onChange={handleFileChange} 
+        />
         {/* <Text/>
         <Color/>
         <Color/>
@@ -63,8 +89,15 @@ const ToolsBar = ({functions, canvas}) => {
           <p>Выбрать зону дропа</p>
         </div>
       }
+      {questionType==="drag_and_drop_images" && 
+        <div className='taskToolsBar_dropzone_options' style={{color: isLinkingDnd ? "orange" : "inherit"}} onClick={()=>setIsLinkingDnd(true)}>
+          <Cable/>
+          <p>Связать</p>
+        </div>
+      }
       <Settings canvas={canvas}/>
       <LayerList canvas={canvas}/>
+      <ImageGrid addImage={addImage}/>
       <button onClick={handleSaveClick}>
         Save
       </button>

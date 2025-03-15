@@ -13,9 +13,10 @@ import audioOff from "../../assets/notaskaudio.svg";
 import bgmusicOn from "../../assets/bgmusic_new.svg";
 import bgmusicOff from "../../assets/nobgmusic.svg";
 import CloseIcon from '@mui/icons-material/Close';
-import { Canvas, Rect, Circle, StaticCanvas } from "fabric";
+import {fabric} from "fabric";
 import classes from "./TaskModal.module.css"
 import DnDquestion from "./DragAndDrop/DnDquestion";
+import QuestionStudent from "./QuestionStudent";
 
 const TaskModal = ({
   user,
@@ -24,7 +25,6 @@ const TaskModal = ({
   selectedOption,
   setSelectedOption,
   feedbackMessage,
-  showFeedback,
   toggleAudio,
   isAudioPlaying,
   isMuted,
@@ -32,7 +32,6 @@ const TaskModal = ({
   volume,
   handleVolumeChange,
   handleOptionClick,
-  handleDragEnd,
   droppedOrder,
   handleSubmit,
   handleNextQuestion,
@@ -44,72 +43,10 @@ const TaskModal = ({
 }) => {
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-  const [content, setContent] = useState(null);
-  const [canvas, setCanvas] = useState(null);
-  const canvasRef = useRef(null);
-  const [dropZones, setDropZones] = useState(null);
 
-  console.log(currentQuestion)
-  useEffect(()=>{
-    if (currentQuestion){
-      setContent(currentQuestion.content);
-      loadCanvas(currentQuestion.content.canvasData, currentQuestion.content.dropZones);
-    }
+  console.log(currentQuestion);
 
-    return () => {
-      if (canvas){
-        canvas.dispose();
-      }
-    }
-  }, [currentQuestion]);
-
-  console.log(canvas);
-
-  useEffect(()=>{
-    if (canvas){
-      canvas.renderAll();
-    }
-  },[canvas]);
-
-  const loadCanvas = (canvasJson, dropZones) => {
-    const canvasElement = document.getElementById("clientcanvas");
-    
-    const newCanvas = new StaticCanvas(canvasRef.current, {
-      width: canvasElement?.clientWidth,
-      height: canvasElement?.clientHeight,
-    });
-
-    console.log(canvasJson, dropZones);
-
-
-    const nonDropZoneObjects = canvasJson.objects.filter(
-      (obj) => !obj.isDropZone
-    );
-    const filteredCanvasJson = { ...canvasJson, objects: nonDropZoneObjects };
-    
-    newCanvas.loadFromJSON(filteredCanvasJson, () => {
-      newCanvas.renderAll();
-      // Delay adding drop zones slightly to ensure loadFromJSON is fully done.
-      setTimeout(() => {
-        dropZones.forEach((dz) => {
-          const dropZone = new Rect({
-            left: dz.left,
-            top: dz.top,
-            width: dz.width,
-            height: dz.height,
-            fill: dz.fill || 'rgba(0,0,0,0.1)',
-            stroke: dz.stroke || 'blue',
-            strokeDashArray: dz.strokeDashArray || [5, 5],
-            selectable: false,
-            evented: false,
-          });
-          newCanvas.add(dropZone);
-        });
-        newCanvas.renderAll();
-        setCanvas(newCanvas);
-      }, 10); // adjust delay as needed
-    });
-  }
+  const [showFeedback, setShowFeedback] = useState(false);
 
 
   return (
@@ -193,201 +130,7 @@ const TaskModal = ({
             <CloseIcon></CloseIcon>
           </button>
         </div>
-        <div className={`studtaskDetails ${
-              currentQuestion?.template
-                ? `template-${currentQuestion.template}`
-                : ""
-            }`} style={{position: "relative"}}>
-          <canvas
-            id="clientcanvas"
-            ref={canvasRef}
-            style={{display: "block"}}
-          >
-          </canvas>
-          <div className={classes["overlay-content"]}>
-            {showFeedback && (
-              <div
-                className={`feedbackMessage ${
-                  feedbackMessage === "Correct!" ? "fbmcorrect" : "fbmincorrect"
-                }`}
-              >
-                <div className="feedbackContent">
-                  <img
-                    src={feedbackMessage === "Correct!" ? correctlion : wronglion}
-                    alt="lion mascot"
-                  />
-                  {feedbackMessage === "Correct!" ? (
-                    <p
-                      style={{
-                        color: "limegreen",
-                        fontSize: "xx-large",
-                        fontWeight: "700",
-                        textAlign: "center",
-                        backgroundColor: "white",
-                        padding: "10px",
-                        borderRadius: "15px",
-                        border: "5px solid green",
-                      }}
-                    >
-                      {t("correct")}
-                    </p>
-                  ) : feedbackMessage === "Incorrect!" ? (
-                    <p
-                      style={{
-                        color: "black",
-                        fontSize: "xx-large",
-                        fontWeight: "700",
-                        textAlign: "center",
-                        backgroundColor: "white",
-                        padding: "10px",
-                        borderRadius: "15px",
-                        border: "5px solid #fa3b3b",
-                      }}
-                    >
-                      {t("incorrect")}
-                    </p>
-                  ) : feedbackMessage === "Try Again" ? (
-                    <p
-                      style={{
-                        color: "orange",
-                        fontSize: "xx-large",
-                        fontWeight: "700",
-                        textAlign: "center",
-                        backgroundColor: "white",
-                        padding: "10px",
-                        borderRadius: "15px",
-                        border: "5px solid orange",
-                      }}
-                    >
-                      {t("tryAgain")}
-                    </p>
-                  ) : null}
-                </div>
-              </div>
-            )}
-            <div className="questionCarousel">
-              <div className="questionContent">
-                <ul
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    fontSize: "x-large",
-                    padding: "7px 0",
-                    gap: "1rem",
-                  }}
-                >
-                  <li key={currentQuestionIndex}>
-                    {/* <span
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        maxWidth: "500px",
-                        textAlign: "center",
-                      }}
-                    >
-                      <span
-                        className={`questionTitle ${
-                          currentQuestion?.template
-                            ? `qt-template-${currentQuestion.template}`
-                            : ""
-                        }`}
-                      >
-                        <strong>{currentQuestionIndex + 1}. </strong>
-                        <i>{currentQuestion.title}:</i> <br />
-                        <strong>
-                          {currentQuestion.question_text}
-                        </strong>
-                      </span>
-                      {currentQuestion.is_attempted && (
-                        <strong
-                          style={{
-                            color: "green",
-                            padding: "35px",
-                            backdropFilter: "blur(2px)",
-                          }}
-                        >
-                          {t("alreadyAnswered")}
-                        </strong>
-                      )}              
-                      <div
-                        style={{
-                          float: "right",
-                          position: "absolute",
-                          right: "0",
-                          display: "flex",
-                          flexDirection: "column",
-                        }}
-                      >
-                        
-                        <input
-                          type="range"
-                          id="volumeControl"
-                          min="0"
-                          max="1"
-                          step="0.01"
-                          value={volume}
-                          onChange={handleVolumeChange}
-                          style={{ scale: "0.6" }}
-                        />
-                      </div>
-                    </span> */}
-                    {currentQuestion.question_type.startsWith("drag_and_drop") ? (
-                      <DnDquestion 
-                        currentQuestion={currentQuestion} 
-                        droppedOrder={droppedOrder}
-                        handleDragEnd={handleDragEnd}
-                      />
-                    ) : (
-                      <ul
-                        className={
-                          currentQuestion.question_type === "multiple_choice_text"
-                            ? "studTaskOptions"
-                            : "studTaskImgs"
-                        }
-                      >
-                        {currentQuestion.options.map((option, idx) => (
-                          <li
-                            key={idx}
-                            className={
-                              currentQuestion.question_type ===
-                              "multiple_choice_text"
-                                ? `studTaskOption ${
-                                    selectedOption === option.id
-                                      ? "studTaskOptionSelected"
-                                      : ""
-                                  }`
-                                : `studTaskImg ${
-                                    selectedOption === option.id
-                                      ? "studTaskImgSelected"
-                                      : ""
-                                  }`
-                            }
-                            onClick={() => {
-                              handleOptionClick(option.id);
-                            }}
-                          >
-                            {currentQuestion.question_type ===
-                            "multiple_choice_images" ? (
-                              <img
-                                src={option.value}
-                                alt={`option-${idx}`}
-                                style={{ width: "100px", height: "100px" }}
-                              />
-                            ) : (
-                              option.value
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <QuestionStudent currentQuestion={currentQuestion} showFeedback={showFeedback}/>
         <div className="navigationButtons">
           <span
             style={{

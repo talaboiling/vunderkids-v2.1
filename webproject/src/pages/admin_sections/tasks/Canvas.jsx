@@ -7,15 +7,15 @@ const Canvas = ({
     handleSelectCorrectAnswer,
     canvasRef
 }) => {
-    const {onBackspace, onPaste, onFocus} = useContext(TaskInterfaceContext);
+    const {onPaste, onFocus, selectedObject} = useContext(TaskInterfaceContext);
     useEffect(() => {
         const handleKeyDown = (event) => {
             console.log(onFocus)
             if (!onFocus){
-                if (event.key === "Backspace") {
-                    console.log("Backspace pressed!");
-                    onBackspace();
-                }
+                // if (event.key === "Backspace") {
+                //     console.log("Backspace pressed!");
+                //     onBackspace();
+                // }
                 if ((event.ctrlKey || event.metaKey) && event.key === "c") {
                     console.log("Copy detected (Ctrl/Cmd + C)");
                 }
@@ -31,11 +31,11 @@ const Canvas = ({
         return () => {
           window.removeEventListener("keydown", handleKeyDown);
         };
-      }, [onBackspace, onFocus]);
+      }, [onFocus, selectedObject]);
     return (
         <canvas className={`taskPreview ${
             currentQuestion.template ? `template-${currentQuestion.template}` : ""
-        }`} id="canvas" ref={canvasRef}
+        }`} id="canvas" ref={canvasRef} style={{width: "640px"}}
         >
             <p
                 className="defaultStyle"

@@ -5,10 +5,11 @@ import { TaskInterfaceContext } from '../TaskContext';
 
 const Settings = ({canvas}) => {
     const {selectedObject, setSelectedObject, properties, setProperty, clearSettings, 
-        onFocus, setOnFocus, questionType, isChoosingDropZone, dropZones, addDropZone, setIsChoosingDropZone} = useContext(TaskInterfaceContext);
+        onFocus, setOnFocus, questionType, isChoosingDropZone, dropZones, addDropZone, 
+        setIsChoosingDropZone, isLinkingDnd, setIsLinkingDnd, links, setLinks} = useContext(TaskInterfaceContext);
     const colorRef = useRef();
     const {width, height, color, diameter} = properties;
-    console.log(isChoosingDropZone)
+    console.log(isChoosingDropZone, isLinkingDnd)
 
     useEffect(()=>{
         if (canvas){
@@ -52,7 +53,17 @@ const Settings = ({canvas}) => {
             // });
 
         }
-    }, [canvas, isChoosingDropZone]);
+    }, [canvas, isChoosingDropZone, isLinkingDnd, links]);
+
+    fabric.Object.prototype.toObject = (function (toObject) {
+        return function () {
+          return fabric.util.object.extend(toObject.call(this), {
+            id: this.id,
+            metadata: this.metadata,
+          });
+        };
+      })(fabric.Object.prototype.toObject);
+      
 
     const handleObjectSelection = (object) => {
         if (isChoosingDropZone){
@@ -60,6 +71,33 @@ const Settings = ({canvas}) => {
             addDropZone(object);
             setIsChoosingDropZone(false);
             console.log("chose drop zone, 12342134", selectedObject);
+        }
+        else if (isLinkingDnd){
+            console.log(links);
+            if (links.length==0 || links[links.length-1].answer){
+                
+                if ((links.length==0 || links[links.length-1].answer!=object.id) && links.findIndex(link=>link.item==object.id)==-1){
+                    object["metadata"]= {
+                        isLink: true,
+                        isDrop: true,
+                        isDrag: false
+                    }
+                    setLinks(prev=>[...prev, {item:object.id, answer:null}])
+                }
+            }
+            else{
+                const currentLinks = [...links]
+                if (currentLinks[links.length-1].item!=object.id){
+                    object["metadata"]= {
+                        isLink: true,
+                        isDrop: false,
+                        isDrag: true
+                    }
+                    currentLinks[links.length-1].answer=object.id;
+                    setLinks(currentLinks);
+                    setIsLinkingDnd(false);
+                }
+            }
         }
 
         console.log(object, isChoosingDropZone);

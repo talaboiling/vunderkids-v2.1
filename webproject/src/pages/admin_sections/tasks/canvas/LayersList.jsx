@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import { Canvas } from "fabric"
+import { fabric } from "fabric";
 import classes from "./LayersList.module.css"
 import { ArrowUp, ArrowDown } from "lucide-react";
 
@@ -60,7 +60,7 @@ function LayerList({canvas}){
         }
     }
 
-    Canvas.prototype.updateZIndices = function (){
+    fabric.Canvas.prototype.updateZIndices = function (){
         const objects = this.getObjects();
         objects.forEach((object, index)=>{
             addItToObject(object);

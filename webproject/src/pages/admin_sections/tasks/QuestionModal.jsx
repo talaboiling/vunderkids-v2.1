@@ -14,10 +14,14 @@ const QuestionModal = ({
     currentQuestion,
     handleSelectCorrectAnswer,
     handleQuestionSubmit,
-    handleImageUpload
+    handleImageUpload,
 }) => {
   const [content, setContent] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+
+  function handleCorrectAnswer(answer){
+    setCurrentQuestion(prev=>({...prev, correct_answer: answer}));
+  }
   
   return (
     <dialog
@@ -46,7 +50,10 @@ const QuestionModal = ({
                 : "Добавить вопрос"}
             </h2>
             <div className="taskConstructor">
-              <TaskInterface setContent={setContent} currentQuestion={currentQuestion} handleSelectCorrectAnswer={handleSelectCorrectAnswer}/>
+              <TaskInterface setContent={setContent} currentQuestion={currentQuestion} 
+                handleSelectCorrectAnswer={handleSelectCorrectAnswer} handleCorrectAnswer={handleCorrectAnswer}
+
+                />
 
               <div className="taskDetails">
                 <form onSubmit={(e)=> handleQuestionSubmit(e, content)}>

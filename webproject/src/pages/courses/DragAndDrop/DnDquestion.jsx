@@ -4,22 +4,15 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import DroppablePlaceholder from '../DroppablePlaceholder'
 import DraggableItem from '../DraggableItem'
 import CustomDragLayer from '../CustomDragLayer'
-import { DndContext } from '@dnd-kit/core'
+import { DndContext, useDraggable } from '@dnd-kit/core'
+import DraggableItem2 from '../DraggableItem2';
 
-const DnDquestion = ({currentQuestion, droppedOrder, handleDragEnd}) => {
+const DnDquestion = ({currentQuestion, drags, drops}) => {
 
     const [answers, setAnswers] = useState([]);
 
+    console.log(drags, drops);
 
-    useEffect(()=>{
-        if (currentQuestion){
-            const currentAnswers = [];
-            currentQuestion.question_text.split("_").map((part, idx)=>{
-                currentAnswers.push({id:idx, answer:null})
-            }); 
-            setAnswers(currentAnswers);
-        }
-    },[]);
 
     function handleDragEnd(event){
         const {active, over} = event;
@@ -32,16 +25,16 @@ const DnDquestion = ({currentQuestion, droppedOrder, handleDragEnd}) => {
         const optionId = active.id;
         const dropId = over.id;
         
-        const answerIds = answers.map(current=>current.id);
+        const answerIds = answers.map(current=>current.item);
         console.log(answerIds);
         if (answerIds.includes(dropId)){
             const index = answerIds.findIndex(element=> element===dropId);
             const currentAnswers = [...answers];
-            currentAnswers[index] = {id:dropId, answer: optionId}
+            currentAnswers[index] = {item:dropId, answer: optionId}
             console.log(index, currentAnswers); 
             setAnswers(currentAnswers);
         }else{
-            setAnswers(prev=>[...prev, {id:dropId, answer: optionId}]);
+            setAnswers(prev=>[...prev, {item:dropId, answer: optionId}]);
         }
     }; 
 
@@ -50,20 +43,37 @@ const DnDquestion = ({currentQuestion, droppedOrder, handleDragEnd}) => {
     return (
         <>
             <DndContext onDragEnd={handleDragEnd}>              
-                {answers.length>0 && answers.map((part) => {
-                    const droppedItem = part.answer;
-                    console.log(part);
+                {drops.length>0 && drops.map((drop) => {
+                    console.log(drop);
+                    const answer= answers.filter(ans=>ans.item==drop.id)[0];
                     return <DroppablePlaceholder
-                        index={part.id}
-                        droppedItem={droppedItem ? droppedItem : null}
+                        index={drop.id}
+                        id={drop.id}
+                        element={drop}
+                        answer={answer}
                     />
                 })} 
-            
-                <ul className="studTaskOptions">
-                    {currentQuestion.options.map((option, idx) => (
-                        <DraggableItem option={option} idx={idx}/>
-                    ))}
-                </ul>
+                <div style={{
+                        width: "30%", 
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                    {currentQuestion.question_type=="drag_and_drop_text" && <ul className="studTaskOptions">
+                        {currentQuestion.options.map((option, idx) => (
+                            <DraggableItem option={option} idx={idx}/>
+                        ))}
+                    </ul>}
+                    {currentQuestion.question_type=="drag_and_drop_images" && 
+                        <>
+                            {drags.map((element, idx) => (
+                                <DraggableItem2 element={element} id={element.id}/>
+                            ))}
+                        </>
+                    }
+                </div>
             </DndContext>
         </>
     )
