@@ -62,12 +62,51 @@ const Settings = ({canvas}) => {
             metadata: this.metadata,
           });
         };
-      })(fabric.Object.prototype.toObject);
+    })(fabric.Object.prototype.toObject);
+
+    fabric.IText.prototype.toObject = (function (toObject) {
+        return function () {
+          return fabric.util.object.extend(toObject.call(this), {
+            // Text content
+            text: this.text,
+            // Font properties
+            fontFamily: this.fontFamily,
+            fontSize: this.fontSize,
+            fontWeight: this.fontWeight,
+            fontStyle: this.fontStyle,
+            // Color and fill properties
+            fill: this.fill,
+            stroke: this.stroke,
+            strokeWidth: this.strokeWidth,
+            // Text alignment and decoration
+            textAlign: this.textAlign,
+            underline: this.underline,
+            overline: this.overline,
+            linethrough: this.linethrough,
+            // Spacing
+            lineHeight: this.lineHeight,
+            charSpacing: this.charSpacing,
+            // Background and shadow (if used)
+            backgroundColor: this.backgroundColor,
+            shadow: this.shadow,
+            // Inline styles (if any)
+            styles: this.styles,
+            // Any additional custom properties can be added here
+            metadata: this.metadata
+          });
+        };
+    })(fabric.IText.prototype.toObject);
+
       
 
     const handleObjectSelection = (object) => {
         if (isChoosingDropZone){
-            console.log(object.id, dropZones)
+            console.log(object.id, dropZones);
+            object["metadata"]= {
+                isLink: true,
+                isDrop: true,
+                isDrag: false
+            }
             addDropZone(object);
             setIsChoosingDropZone(false);
             console.log("chose drop zone, 12342134", selectedObject);

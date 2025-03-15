@@ -17,13 +17,12 @@ import {fabric} from "fabric";
 import classes from "./TaskModal.module.css"
 import DnDquestion from "./DragAndDrop/DnDquestion";
 import QuestionStudent from "./QuestionStudent";
+import click_audio from "../../assets/audio/click_sound.mp3";
 
 const TaskModal = ({
   user,
   questions,
   currentQuestionIndex,
-  selectedOption,
-  setSelectedOption,
   feedbackMessage,
   toggleAudio,
   isAudioPlaying,
@@ -31,7 +30,6 @@ const TaskModal = ({
   toggleMute,
   volume,
   handleVolumeChange,
-  handleOptionClick,
   droppedOrder,
   handleSubmit,
   handleNextQuestion,
@@ -47,6 +45,19 @@ const TaskModal = ({
   console.log(currentQuestion);
 
   const [showFeedback, setShowFeedback] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const clickSoundRef = useRef();
+
+  const handleOptionClick = (optionId) => {
+    setSelectedOption(optionId);
+    if (clickSoundRef.current) {
+      clickSoundRef.current.play();
+    }
+    if (optionId==currentQuestion.correct_answer){
+      handleSubmit();
+    }
+  };
 
 
   return (
@@ -130,7 +141,14 @@ const TaskModal = ({
             <CloseIcon></CloseIcon>
           </button>
         </div>
-        <QuestionStudent currentQuestion={currentQuestion} showFeedback={showFeedback}/>
+        <QuestionStudent 
+          currentQuestion={currentQuestion} 
+          showFeedback={showFeedback} 
+          handleSubmit={handleSubmit}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+          handleOptionClick={handleOptionClick}
+          />
         <div className="navigationButtons">
           <span
             style={{
@@ -169,6 +187,7 @@ const TaskModal = ({
           </span>
         </div>
       </div>
+      <audio ref={clickSoundRef} src={click_audio}></audio>
     </dialog>
   );
 };

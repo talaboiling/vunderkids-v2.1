@@ -81,7 +81,7 @@ function renderOutsideElement(obj, styles, children) {
 }
 
 
-const DroppablePlaceholder = ({ id, element, answer }) => {
+const DroppablePlaceholder = ({ id, element, answer, showAnswer}) => {
   // const [{ isOver, canDrop }, drop] = useDrop(() => ({
   //   accept: ItemTypes.OPTION,
   //   drop: (item) => {
@@ -130,7 +130,7 @@ const DroppablePlaceholder = ({ id, element, answer }) => {
     console.log(answer);
     return (
       <div id={id} ref={setNodeRef} style={commonStyle}>
-        {answer && <p>{answer.answer}</p>}
+        {answer && showAnswer && <p>{answer.answer}</p>}
       </div>
     );
   }

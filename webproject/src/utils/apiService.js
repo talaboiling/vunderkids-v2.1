@@ -757,7 +757,6 @@ export const answerQuestion = async (
   chapterId,
   taskId,
   questionId,
-  data,
   childId
 ) => {
   try {
@@ -767,18 +766,19 @@ export const answerQuestion = async (
       chapterId,
       taskId,
       questionId,
-      data,
       childId
     );
+    
     const endpoint = `/courses/${courseId}/sections/${sectionId}/chapters/${chapterId}/tasks/${taskId}/questions/${questionId}/answer/`;
     const requestData = {
-      answer: data,
+      is_correct: true,
       ...(childId && { child_id: childId }),
     };
     const response = await instance.post(endpoint, requestData);
     console.log(response.data);
     return response.data;
   } catch (error) {
+    console.log(error);
     throw new Error(error || "Something went wrong");
   }
 };

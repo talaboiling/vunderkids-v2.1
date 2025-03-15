@@ -59,12 +59,20 @@ const DraggableItem2 = ({element, id}) => {
             style={{ ...mergedStyle, objectFit: 'cover' }}
             {...listeners}
             {...attributes}
+            data-initial-left={bounds.left}
+            data-initial-top={bounds.top}
           />
         );
       }
     
       return (
-        <div id={id} ref={setNodeRef} style={mergedStyle} {...listeners} {...attributes} />
+        <div 
+            id={id} 
+            ref={setNodeRef} 
+            style={mergedStyle} 
+            data-initial-left={bounds.left}
+            data-initial-top={bounds.top}
+            {...listeners} {...attributes} />
       );
 }
 

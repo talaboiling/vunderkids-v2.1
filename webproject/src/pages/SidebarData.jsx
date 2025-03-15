@@ -6,6 +6,7 @@ import cert from "../assets/sideachieve.webp";
 import prog from "../assets/sideprog.webp";
 import game from "../assets/sidegame.webp";
 import { icon } from "@fortawesome/fontawesome-svg-core";
+import { BookCheck } from "lucide-react";
 
 export const SidebarData = [
   {
@@ -29,15 +30,15 @@ export const SidebarData = [
     link: "/dashboard/progress",
   },
   {
-    title: "МОДО",
-    icon: <img src={prog} alt="progress" />,
-    link: "/dashboard/modo",
-  },
-  {
     title: "Игры",
     icon: <img src={game} alt="games" />,
     link: "/dashboard/games",
   },
+  {
+    title: "Тесты",
+    icon: <BookCheck size={38}/>,
+    link: "/dashboard/tests",
+  }
   // {
   //     title: 'Подписки',
   //     icon: <SubscriptionsIcon/>,

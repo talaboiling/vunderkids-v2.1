@@ -7,7 +7,7 @@ import CustomDragLayer from '../CustomDragLayer'
 import { DndContext, useDraggable } from '@dnd-kit/core'
 import DraggableItem2 from '../DraggableItem2';
 
-const DnDquestion = ({currentQuestion, drags, drops}) => {
+const DnDquestion = ({currentQuestion, drags, drops, checkCorrectAnswer}) => {
 
     const [answers, setAnswers] = useState([]);
 
@@ -36,7 +36,65 @@ const DnDquestion = ({currentQuestion, drags, drops}) => {
         }else{
             setAnswers(prev=>[...prev, {item:dropId, answer: optionId}]);
         }
+        if (currentQuestion.question_type==="drag_and_drop_images"){
+
+            const existingAnswer = answers.find(answer => answer.item === over.id);
+            if (existingAnswer) {
+                // Get the draggable id that is already associated with this droppable.
+                const previousDraggableId = existingAnswer.answer;
+                const previousDraggableEl = document.getElementById(previousDraggableId);
+                if (previousDraggableEl) {
+                    const initialLeft = previousDraggableEl.getAttribute('data-initial-left');
+                    const initialTop = previousDraggableEl.getAttribute('data-initial-top');
+                    if (initialLeft !== null && initialTop !== null) {
+                        // Reset the previous draggable element to its initial coordinates.
+                        previousDraggableEl.style.left = `${initialLeft}px`;
+                        previousDraggableEl.style.top = `${initialTop}px`;
+                    }
+                }
+            }
+            const activeEl = document.getElementById(active.id);
+            const overEl = document.getElementById(over.id);
+            if (!activeEl || !overEl) return;
+
+            const parent = activeEl.parentElement;
+            const parentRect = parent.getBoundingClientRect();
+
+            const overRect = overEl.getBoundingClientRect();
+            const activeRect = activeEl.getBoundingClientRect();
+
+            Array.from(overEl.children).forEach(child => {
+                if (child.id !== active.id) {
+                  // Get the saved initial coordinates from data attributes.
+                  const initialLeft = child.getAttribute('data-initial-left');
+                  const initialTop = child.getAttribute('data-initial-top');
+                  if (initialLeft !== null && initialTop !== null) {
+                    // Reset the child's position to its initial coordinates.
+                    child.style.left = `${initialLeft}px`;
+                    child.style.top = `${initialTop}px`;
+                  }
+                }
+            });
+
+            const newLeft =
+                (overRect.left - parentRect.left) +
+                (overRect.width / 2) -
+                (activeRect.width / 2);
+            const newTop =
+                (overRect.top - parentRect.top) +
+                (overRect.height / 2) -
+                (activeRect.height / 2);
+
+            activeEl.style.left = `${newLeft}px`;
+            activeEl.style.top = `${newTop}px`;
+        }
     }; 
+
+    useEffect(()=>{
+        if (answers){
+            checkCorrectAnswer([...answers]);
+        }
+    }, [answers]);
 
     console.log(answers);
 
@@ -51,6 +109,7 @@ const DnDquestion = ({currentQuestion, drags, drops}) => {
                         id={drop.id}
                         element={drop}
                         answer={answer}
+                        showAnswer={currentQuestion.question_type==="drag_and_drop_text" ? true : false}
                     />
                 })} 
                 <div style={{

@@ -52,7 +52,7 @@ const QuestionModal = ({
             <div className="taskConstructor">
               <TaskInterface setContent={setContent} currentQuestion={currentQuestion} 
                 handleSelectCorrectAnswer={handleSelectCorrectAnswer} handleCorrectAnswer={handleCorrectAnswer}
-
+                content={content}
                 />
 
               <div className="taskDetails">

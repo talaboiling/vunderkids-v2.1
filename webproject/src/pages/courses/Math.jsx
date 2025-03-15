@@ -37,7 +37,6 @@ const Math = () => {
   const [taskContent, setTaskContent] = useState({});
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [showFeedback, setShowFeedback] = useState(false);
   const [isChild, setIsChild] = useState(false);
@@ -179,7 +178,6 @@ const Math = () => {
       setTaskContent(task);
       setQuestions(taskQuestions);
       setCurrentQuestionIndex(0);
-      setSelectedOption(null);
       setShowFeedback(false);
       setDroppedOrder(
         new Array(taskQuestions[0].correct_answer.length).fill(null)
@@ -212,12 +210,6 @@ const Math = () => {
     }
   };
 
-  const handleOptionClick = (optionId) => {
-    setSelectedOption(optionId);
-    if (clickSoundRef.current) {
-      clickSoundRef.current.play();
-    }
-  };
 
   const handleDragEnd = (result) => {
     if (!result.destination) {
@@ -320,52 +312,52 @@ const Math = () => {
     const currentQuestion = questions[currentQuestionIndex];
 
     // Check if the user has provided an answer
-    if (
-      (currentQuestion.question_type.startsWith("drag_and_drop") && !droppedOrder.length) ||
-      (!currentQuestion.question_type.startsWith("drag_and_drop") && selectedOption === null)
-    ) {
-      setFeedbackMessage("Please answer the question before submitting.");
-      setShowFeedback(true);
-      setTimeout(() => {
-        setShowFeedback(false);
-        setIsButtonDisabled(false);
-      }, 1500);
-      return;
-    }
+    // if (
+    //   (currentQuestion.question_type.startsWith("drag_and_drop") && !droppedOrder.length) ||
+    //   (!currentQuestion.question_type.startsWith("drag_and_drop") && selectedOption === null)
+    // ) {
+    //   setFeedbackMessage("Please answer the question before submitting.");
+    //   setShowFeedback(true);
+    //   setTimeout(() => {
+    //     setShowFeedback(false);
+    //     setIsButtonDisabled(false);
+    //   }, 1500);
+    //   return;
+    // }
 
-    let isCorrect;
+    // let isCorrect;
 
-    if (currentQuestion.question_type.startsWith("drag_and_drop")) {
-      isCorrect =
-        JSON.stringify(droppedOrder) ===
-        JSON.stringify(currentQuestion.correct_answer);
-    } else {
-      isCorrect = selectedOption === currentQuestion.correct_answer;
-    }
+    // if (currentQuestion.question_type.startsWith("drag_and_drop")) {
+    //   isCorrect =
+    //     JSON.stringify(droppedOrder) ===
+    //     JSON.stringify(currentQuestion.correct_answer);
+    // } else {
+    //   isCorrect = selectedOption === currentQuestion.correct_answer;
+    // }
 
-    if (!isCorrect && !isAttempted) {
-      setIsAttempted(true);
-      setFeedbackMessage("Try Again");
-      setShowFeedback(true);
-      if (incorrectSoundRef.current) {
-        incorrectSoundRef.current.play();
-      }
+    // if (!isCorrect && !isAttempted) {
+    //   setIsAttempted(true);
+    //   setFeedbackMessage("Try Again");
+    //   setShowFeedback(true);
+    //   if (incorrectSoundRef.current) {
+    //     incorrectSoundRef.current.play();
+    //   }
 
-      setTimeout(() => {
-        setShowFeedback(false);
-        setIsButtonDisabled(false);
-      }, 1500);
-      return;
-    }
+    //   setTimeout(() => {
+    //     setShowFeedback(false);
+    //     setIsButtonDisabled(false);
+    //   }, 1500);
+    //   return;
+    // }
 
-    setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
-    setShowFeedback(true);
+    // setFeedbackMessage(isCorrect ? "Correct!" : "Incorrect!");
+    // setShowFeedback(true);
 
-    if (isCorrect && correctSoundRef.current) {
-      correctSoundRef.current.play();
-    } else if (!isCorrect && incorrectSoundRef.current) {
-      incorrectSoundRef.current.play();
-    }
+    // if (isCorrect && correctSoundRef.current) {
+    //   correctSoundRef.current.play();
+    // } else if (!isCorrect && incorrectSoundRef.current) {
+    //   incorrectSoundRef.current.play();
+    // }
 
     try {
       setIsAttempted(false);
@@ -375,7 +367,6 @@ const Math = () => {
         taskContent.chapter,
         taskContent.id,
         currentQuestion.id,
-        selectedOption,
         childId
       );
 
@@ -543,8 +534,6 @@ const Math = () => {
           user={user}
           questions={questions}
           currentQuestionIndex={currentQuestionIndex}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
           feedbackMessage={feedbackMessage}
           showFeedback={showFeedback}
           toggleAudio={toggleAudio}
@@ -553,7 +542,6 @@ const Math = () => {
           toggleMute={toggleMute}
           volume={volume}
           handleVolumeChange={handleVolumeChange}
-          handleOptionClick={handleOptionClick}
           handleDragEnd={handleDragEnd}
           droppedOrder={droppedOrder}
           handleSubmit={handleSubmit}
@@ -574,7 +562,6 @@ const Math = () => {
       )}
 
       <audio ref={backgroundAudioRef} src={bgmusic} loop />
-      <audio ref={clickSoundRef} src={click_audio}></audio>
       <audio ref={correctSoundRef} src={correct_audio}></audio>
       <audio ref={incorrectSoundRef} src={incorrect_audio}></audio>
     </div>

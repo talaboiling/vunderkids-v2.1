@@ -3,7 +3,7 @@ export const TaskInterfaceContext = createContext(null);
 import { handleObjectMoving, clearGuidelines } from "./canvas/snappingHelpers";
 import { fabric } from "fabric";
 
-const TaskInterfaceProvider = ({children, canvas, setCanvas, currentQuestion, setContent,handleCorrectAnswer}) => {
+const TaskInterfaceProvider = ({children, canvas, setCanvas, currentQuestion, setContent,handleCorrectAnswer,content}) => {
     const [selectedObject, setSelectedObject] = useState(null);
     const [properties, setProperties] = useState({
         width: "",
@@ -141,13 +141,41 @@ const TaskInterfaceProvider = ({children, canvas, setCanvas, currentQuestion, se
                 canvasData: canvas
             });
         } else if (questionType=="drag_and_drop_images"){
-            setContent({
-                links: [...links],
-                canvasData: canvas
+
+            const linkIds = [];
+            links.forEach(link=>{
+                linkIds.push(link.item);
+                linkIds.push(link.answer);
+            })
+            
+            canvas._objects.forEach(item => {
+                if (item.type === "image" && !linkIds.includes(item.id)) {
+                    item.metadata = { isLink: true, isDrag: true, isDrop: false };
+                }
             });
-            handleCorrectAnswer([...links]);
+
+            const droppables = [];
+
+            const correctLinks = links.filter(link=>{
+                if (link.answer && !droppables.includes(link.item)){
+                    droppables.push(link.item);
+                    return link;
+                }
+            })
+            setContent({
+                links: [...correctLinks],
+                canvasData: canvas,
+                correctAnswer: [...correctLinks]
+            });
+            handleCorrectAnswer([...correctLinks]);
+        }else{
+            setContent({
+                canvasData: canvas,
+            });
         }
     }  
+
+    console.log(content, currentQuestion);
     
 
     console.log(links);

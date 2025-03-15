@@ -3,7 +3,8 @@ import classes from "./TaskModal.module.css";
 import DnDquestion from './DragAndDrop/DnDquestion';
 import Outside from './Outside';
 
-const QuestionStudent = ({currentQuestion, showFeedback}) => {
+const QuestionStudent = ({currentQuestion, showFeedback, handleSubmit, 
+    selectedOption, setSelectedOption, handleOptionClick}) => {
 
     const [content, setContent] = useState(null);
     const [canvas, setCanvas] = useState(null);
@@ -12,6 +13,24 @@ const QuestionStudent = ({currentQuestion, showFeedback}) => {
     const [outsideElements, setOutsideElements] = useState([]);
 
     console.log(currentQuestion);
+
+    function isProblemSolved(userAnswers) {
+        if (currentQuestion.question_type==="drag_and_drop_images"){
+            const currentCorrectAnswers = currentQuestion.content.correctAnswer;
+            return currentCorrectAnswers.every(correct => {
+            const userMapping = userAnswers.find(userAnswer => userAnswer.item === correct.item);
+            return userMapping && userMapping.answer === correct.answer;
+            });
+        }
+    }
+
+    function checkCorrectAnswer(userAnswers){
+        const solved = isProblemSolved(userAnswers);
+        console.log(solved);
+        if (solved){
+            handleSubmit();
+        }
+    }
 
     useEffect(()=>{
         if (currentQuestion){
@@ -46,9 +65,16 @@ const QuestionStudent = ({currentQuestion, showFeedback}) => {
     
     
         const nonDropZoneObjects = canvasJson.objects.filter(
-          (obj) => !obj.metadata && !obj.metadata.isDrop
+          (obj) => {
+            if (!obj.hasOwnProperty('metadata')) {
+                return obj;
+            }
+            if (!obj.metadata.hasOwnProperty('isDrop')){
+                return obj;
+            }
+          }
         );
-        const currentOutsideElements = canvasJson.objects.filter(obj=>obj.metadata.isDrop || obj.metadata.isDrag);
+        const currentOutsideElements = canvasJson.objects.filter(obj=>obj.hasOwnProperty('metadata') && (obj.metadata.isDrop || obj.metadata.isDrag));
         
         setOutsideElements([...currentOutsideElements]);
         const filteredCanvasJson = { ...canvasJson, objects: nonDropZoneObjects };
@@ -78,7 +104,7 @@ const QuestionStudent = ({currentQuestion, showFeedback}) => {
                 style={{display: "block"}}
             >
             </canvas>
-            <div style={{position:"absolute", width:"100%", height:"100%"}}>
+            {currentQuestion.question_type.startsWith("drag_and_drop") && <div style={{position:"absolute", width:"100%", height:"100%"}}>
                 <DnDquestion 
                     currentQuestion={currentQuestion} 
                     drags={outsideElements.filter(element=>{
@@ -91,9 +117,11 @@ const QuestionStudent = ({currentQuestion, showFeedback}) => {
                             return element
                         }
                     })}
+                    checkCorrectAnswer={checkCorrectAnswer}
                 />
-            </div>
-            {showFeedback &&<div className={classes["overlay-content"]} id="overlay-content">
+            </div>}
+
+            {currentQuestion.question_type.startsWith("multiple_choice_text") && <div className={classes["overlay-content"]} id="overlay-content">
                 {showFeedback && (
                 <div
                 className={`feedbackMessage ${
@@ -154,6 +182,7 @@ const QuestionStudent = ({currentQuestion, showFeedback}) => {
                 </div>
                 </div>
             )}
+            
             <div className="questionCarousel">
                 <div className="questionContent">
                 <ul
@@ -222,11 +251,7 @@ const QuestionStudent = ({currentQuestion, showFeedback}) => {
                         />
                         </div>
                     </span> */}
-                    {currentQuestion.question_type.startsWith("drag_and_drop") ? (
-                        <>
-                            {/* <Outside outsideElements={outsideElements}/> */}
-                        </>
-                    ) : (
+                    {(
                         <ul
                             className={
                                 currentQuestion.question_type === "multiple_choice_text"
